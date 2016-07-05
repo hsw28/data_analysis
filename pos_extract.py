@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import re
 
+#put data file name for test.json
 with open("test.json", "r") as js:
     raw_data = [d.strip() for d in js.readlines() if d.find("pos_xy") > 0]
 
