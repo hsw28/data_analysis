@@ -1,0 +1,41 @@
+---
+dateStr:   "032213"
+arteCorrectionFactor: 0.0245
+
+arteTrodes:
+  # trodeNames corresponding to arte tetrode numbers 0 through N_tetrodes
+  - dataFile:   raw/artedate.data
+    trodeNames: ["13", "11", "10", "09", "08", "07", "06", "05", 
+                "04", "03", "02", "01", "18arte", "17arte", "22", "21"]
+
+arteLfps:
+
+    # trodeNames correspond to arte's lfpBank channels 0 through N_chans in order
+  - lfpBankName:   0
+    dataFile:      raw/artedate.data
+    trodeNames:    ["13", "11", "10", "09", "08", "07", "06", "05"]
+
+  - lfpBankName:   1
+    dataFile:      raw/artedate.data
+    trodeNames:    ["04", "03", "02", "01", "18arte", "17arte", "22", "21"]
+
+
+adTrodes:
+  # list tetrodes recorded on AD computers
+  trodeNames: ["30","29","28","27","26","25","24","23",
+               "20","19","16","15","14","12"]
+
+adLfps:
+
+  - computerName: j
+    trodeNames:   ["30","29","28","27","26","25","24","23"]
+
+  - computerName: k
+    trodeNames:   ["20","19","18","17","16","15","14","12"]
+
+
+# List tetrodes that shouldn't be allowed in to analysis b/c of unsalvageable noise
+badTrodes: []
+
+# List tetrodes that may need special thresholding because they are noisy
+noisyTrodes: []

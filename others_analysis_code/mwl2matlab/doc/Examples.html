@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>examples</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 204);"><span
+ style="color: rgb(51, 51, 255); font-family: sans-serif;">mwl2matlab
+Toolbo<span style="font-weight: bold;">x</span></span> </td>
+    </tr>
+  </tbody>
+</table>
+<b style="font-family: sans-serif;"><span
+ style="font-family: sans-serif;"><br>
+Examples:<br>
+<br style="font-family: sans-serif;">
+</span></b><span style="font-family: sans-serif;"></span>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+<title></title>
+<meta name="GENERATOR" content="OpenOffice.org 1.1.0  (Linux)">
+<meta name="CREATED" content="20041102;13502400">
+<meta name="CHANGED" content="16010101;0">
+<style>
+	<!--
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		P { margin-bottom: 0.08in }
+	-->
+	</style>
+<p style="margin-bottom: 0in; font-family: sans-serif;">eegdata =
+eeg2mat( 'abcd12.eeg' , [1 2],
+'bs|', [1 1.1] )</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"> </p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><i>Retreives 2
+channels of data from
+abcd12.eeg. The data is 0.1 seconds long and the data starts 1
+second after the first recorded time in the file.</i></p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><br>
+p = pos2mat( 'pos12.pos', 'r', [100
+200] )</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"> </p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><i>This example
+retrieves 101 frames
+starting at frame 100.</i></p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><br>
+</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;">ttdata =
+tt2mat( 'abcd12.tt', 'ia',
+[1:2:1000] )</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"> </p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><i>Retrieves
+every other spike in the
+waveform file within the first 1000 records.</i></p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><br>
+</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;">pdata = p2mat(
+'pos12.p', 's|&gt;', [200
+100] )</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"> </p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><i>This example
+retrieves 100 seconds
+of diode position data starting 200 seconds after the first timestamp
+in the file.</i></p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><br>
+</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;">features =
+fv2mat( 'feat.pxyabw',
+{'pos_x','pos_y'}, 's', [101.5 115.5] )</p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"> </p>
+<p style="margin-bottom: 0in; font-family: sans-serif;"><i>This
+retrieves the id and the
+position of spikes between 101.5 to 115.5 seconds.</i></p>
+<br>
+</body>
+</html>

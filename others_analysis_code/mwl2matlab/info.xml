@@ -1,0 +1,22 @@
+<productinfo
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://www.mathworks.com/namespace/info/v1/info.xsd">
+<?xml-stylesheet type="text/xsl" href="http://www.mathworks.com/namespace/info/v1/info.xsl"?>
+
+<matlabrelease>13</matlabrelease>
+<name>Mwl2matlab</name>
+<type>toolbox</type>
+<icon>$toolbox/matlab/icons/matlabicon.gif</icon>
+<help_location>$docroot/toolbox/mwl2matlab</help_location>
+
+<list>
+
+<listitem>
+<label>Help</label>
+<callback>doc mwl2matlab/</callback>
+<icon>$toolbox/matlab/icons/book_mat.gif</icon>
+</listitem>
+
+</list>
+
+</productinfo>

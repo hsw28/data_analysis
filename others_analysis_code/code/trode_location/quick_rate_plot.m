@@ -1,0 +1,1 @@
+function the_plot = quick_rate_plot(sdat,tiwemin)

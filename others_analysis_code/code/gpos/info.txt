@@ -1,0 +1,11 @@
+gpos_*
+
+Functions that take various position data as input and convert them into gpos format.
+
+gpos.raw  is a struct of timeseries of x, y coordinates
+gpos.set_raw_opt is a struct of info about the track (epoch definitions, track dimensionality (lin vs. open field), pixel to meter conversions...)
+gpos.set_raw_opt should also contain some description of the track bounds
+
+gpos.render  is a render struct.  gpos treats occupancy as a continuous function of space on a track, with
+
+gpos.render_opt is a structure of parameters for rendering an occupancy field (data inclusion criteria like epoch, min velocity), and 'smoothing' parameters.

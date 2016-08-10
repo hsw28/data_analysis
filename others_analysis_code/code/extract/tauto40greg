@@ -1,0 +1,92 @@
+#!/bin/bash
+#going to work in the data directory for now
+working_dir=`pwd`
+base=`basename $working_dir`
+echo $base
+
+spike_file_count=`ls raw | grep -c .sgh`
+echo $spike_file_count
+if [[ $spike_file_count -gt 0 ]]
+then
+    echo inside if statement
+    spike_file_list=raw/*.sgh
+    echo "spike_file_list = $spike_file_list"
+fi
+
+for the_file in $spike_file_list
+do
+  echo "Processing file $the_file"
+  filename=`basename $the_file`
+  probe0=`echo $filename | cut -c1-4 `
+  probe1=`echo $filename | cut -c5-8 `
+  echo "Making directory: $probe0"
+  echo "Making directory: $probe1"
+  mkdir $probe0
+  mkdir $probe1
+  adextract -eslen40 -t -probe 0 $the_file -o $probe0/$probe0.tt
+#  if($status != 0)
+#      echo "failed to extract spikes"
+#  else
+#      echo "Successfully extracted spikes on $probe0"
+#  fi
+  adextract -eslen40 -t -probe 1 $the_file -o $probe1/$probe1.tt
+#  if($status != 0)
+#      echo "failed to extract spikes"
+#  else
+#      echo "Successfully extracted spikes on $probe1"
+#  fi
+
+echo "Extracting event strings from $the_file"
+
+adextract -eslen40 $the_file -e -o $the_file.es
+
+done
+echo "done with spike files"
+
+
+#Now do the position files
+position_count=`ls raw | grep -c .pgh`
+echo "$position_count position files to extract"
+position_files=raw/*.pgh
+for the_file in $position_files
+do
+  echo "extracting dual diode position information for $the_file"
+  posfile=`basename $the_file .pgh`.pos
+  pfile=`basename $the_file .pgh`.p
+  adextract -eslen40 $the_file -p -o $posfile
+  posextract $posfile -o $pfile
+done
+echo "done with position files"
+
+#now to do the eeg files
+eeg_count=`ls raw | grep -c .egh`
+echo "$eeg_count eeg files to be processed"
+eeg_files=raw/*.egh
+for the_file in $eeg_files
+do
+  outputfile=`basename $the_file .egh`.eeg
+  echo "extracting eeg file $the_file"
+  adextract -eslen40 $the_file -c -o $outputfile
+  echo "extracting event strings for $the_file"
+  adextract -eslen40 $the_file -e -o $outputfile.es
+done
+echo "done extracting eeg files"
+echo
+echo "Done with extraction :)"
+
+#now to do spikeparms
+for the_file in $spike_file_list
+do
+  tetrode1name=`basename $the_file .sgh | cut -c1-4`
+  tetrode2name=`basename $the_file .sgh | cut -c5-8`
+  parmsfile1=$tetrode1name/$tetrode1name.pxyabw
+  parmsfile2=$tetrode2name/$tetrode2name.pxyabw
+  ttfile1=$tetrode1name/$tetrode1name.tt
+  ttfile2=$tetrode2name/$tetrode2name.tt
+  spikeparms2 $ttfile1 -tetrode -parms t_px,t_py,t_pa,t_pb,t_maxwd,t_maxht,time -pos *.p -o $parmsfile1
+  echo "finished parming $ttfile1"
+  spikeparms2 $ttfile2 -tetrode -parms t_px,t_py,t_pa,t_pb,t_maxwd,t_maxht,time -pos *.p -o $parmsfile2
+  echo "finished parming $ttfile2"
+
+done
+echo "done extracting parameters :)"

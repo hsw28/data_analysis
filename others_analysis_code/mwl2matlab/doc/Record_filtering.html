@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Record filtering</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 204);"><span
+ style="color: rgb(51, 51, 255); font-family: sans-serif;">mwl2matlab
+Toolbo<span style="font-weight: bold;">x</span></span> </td>
+    </tr>
+  </tbody>
+</table>
+<b style="font-family: sans-serif;"><span
+ style="font-family: sans-serif;"><br>
+</span></b><b style="font-family: sans-serif;">Record filtering<br>
+</b><span style="font-family: sans-serif;"><br>
+The contents of most (if not all) MWL file types consist
+of a list of records. For example a waveform file contains as many
+records as
+spikes were recorded, and every records consists of a timestamp field
+and a waveform field. Several import functions supoort selection (i.e.
+filtering) of records in the file. This filtering can be done on record
+index, on spike index or on time (units can be timestamps or
+seconds). The indices used for filtering can be either specified in
+block format (i.e. start index and end index) or in array format
+(i.e. a vector of indices). In case of filtering on time, only block
+format can be used. The [option string] and [index] parameters are
+used to set the filtering behavior. The option string is a list of
+characters that set the following options:
+</span><br style="font-family: sans-serif;">
+<br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">filter type:</span><br
+ style="font-family: sans-serif;">
+<ul style="font-family: sans-serif;">
+  <li>(n)one &#8211; no filtering, get all
+records </li>
+  <li> spike (i)ndex &#8211; filter on spike
+index (only valid for tt2mat and fv2mat) </li>
+  <li> (r)ecord index &#8211; filter on record
+index (not valid for eeg2mat) </li>
+  <li> (t)imestamps &#8211; filter on time, using
+timestamps </li>
+  <li> (s)econds &#8211; filter on time using
+seconds </li>
+</ul>
+<span style="font-family: sans-serif;">indexing type:
+</span><br style="font-family: sans-serif;">
+<ul style="font-family: sans-serif;">
+  <li> (a)rray &#8211; indices are specified as a
+vector of indices (e.g. [1 4 7 9 3 1]) </li>
+  <li> (b)lock &#8211; indices or time boundaries
+are specifed as one or more blocks (i.e. 2- element vectors
+specifying start and end) (e.g. [ 0 100 ]) </li>
+</ul>
+<span style="font-family: sans-serif;">relative indexing:
+</span><br style="font-family: sans-serif;">
+<ul style="font-family: sans-serif;">
+  <li> (|) - indices / times are specified
+relative to the first index / time of first record in the file </li>
+  <li> (&gt;) - indices / times are specified
+relative to the first index / time specified in the [index]
+parameter. </li>
+</ul>
+<span style="font-family: sans-serif;">verbose level:
+</span><br style="font-family: sans-serif;">
+<ul style="font-family: sans-serif;">
+  <li> (0) &#8211; only error messages are
+displayed </li>
+  <li> (1) &#8211; error and warning messages are
+shown </li>
+  <li> (2) &#8211; error, warning and some info
+messages are shown </li>
+  <li> (3) &#8211; detailed information </li>
+</ul>
+<span style="font-family: sans-serif;">data returned:
+</span><br style="font-family: sans-serif;">
+<ul style="font-family: sans-serif;">
+  <li> (+) - return all data </li>
+  <li> (-) - return timestamps and id only</li>
+</ul>
+<span style="font-family: sans-serif;">See<a href="Examples.html">
+Examples</a> for how these parameters can be used to import only part
+of the data in a file</span><br>
+</body>
+</html>

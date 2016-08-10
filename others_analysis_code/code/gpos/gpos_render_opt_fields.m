@@ -1,0 +1,3 @@
+function a = gpos_render_opt_fields
+a = {'render_epochs','render_in_field_fn','render_samp_per_m','render_method',...
+    'render_method_square_wd_m','render_method_bin_x_edges','render_method_bin_y_edges'};

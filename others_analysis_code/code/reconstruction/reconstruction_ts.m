@@ -1,0 +1,6 @@
+function ts = reconstruction_ts(r_pos_array)
+
+ts = linspace(r_pos_array(1).tstart, ...
+              r_pos_array(1).tend,   ...
+              size(r_pos_array(1).pdf_by_t,2));
+          

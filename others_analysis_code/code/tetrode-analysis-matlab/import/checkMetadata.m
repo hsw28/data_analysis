@@ -1,0 +1,29 @@
+function b = checkMetadata(m)
+
+b = true;
+f = fieldnames(m);
+
+mustHave = {'today','basePath','loadTimewin','checkedArteCorrectionFactor',...
+    'arteCorrectionFactor',...
+    'pFileName','linearize_opts',...
+    'mua_filelist_fn','trode_groups',...
+    'ad_tts','arte_tts',...
+    'systemList','f1File','f1TrodeLabels','f1Inds',...
+    'f2File','f2TrodeLabels','f2Inds',...
+    'singleThetaChan',...
+    'keepGroups','width_window','threshold',...
+    'keep_list'};
+
+
+for n = 1:numel(mustHave)
+    if(~has(f,mustHave{n}))
+        b = false;
+        error('checkMetadata:missingField',['Missing field ',mustHave{n}]);
+    end
+end
+
+end
+
+function b = has(fieldNames,fieldName)
+b = any(strcmp(fieldNames,fieldName));
+end

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>pos2mat</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 204);"><span
+ style="color: rgb(51, 51, 255); font-family: sans-serif;">mwl2matlab
+Toolbo<span style="font-weight: bold;">x</span></span> </td>
+    </tr>
+  </tbody>
+</table>
+<br style="font-family: sans-serif;">
+<b style="font-family: sans-serif;">pos2mat<br>
+<br style="font-family: sans-serif;">
+</b><span style="font-family: sans-serif;"><span
+ style="color: rgb(153, 0, 0);">usage:</span><br>
+</span>
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">posdata
+= pos2mat( filename,
+[option string], [index] )
+</span><br style="font-family: sans-serif;">
+</div>
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">description:</span></span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px; font-family: sans-serif;">import raw
+position (i.e. thresholded
+pixels) from specified file<br>
+[option string] and [index] can be used to select certain position
+records, by filtering on record index or time. See <a
+ href="Record_filtering.html">record filtering</a> for more information.</div>
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">output:</span></span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">posdata.nitems
+is the number of
+threshold crossings in the frame</span><br
+ style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">posdata.frame is the id of the
+frame</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">posdata.timestamp is the
+timestamp
+array in seconds</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">posdata.pos is a structure array
+with the x,y coordinates</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">posdata.info is the structure
+containing info about position file.</span></div>
+</body>
+</html>

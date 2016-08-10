@@ -1,0 +1,12 @@
+How to look at gamma phase offsets along septo-temporal axis
+
+short_win_acorr( eeg_r or mua_r )
+example:
+acorr_by_t_eeg = short_win_acorr(eeg_r.raw.data(:,:)', conttimestamp(eeg_r.raw), 0.08, 'max_lags_secs', [],'timewin', [3050 3100]);
+scratch_acorr_movie( acorr_by_t_eeg, trodexy, 'phase_cdat',mua_r.phase,'framerate',50)
+
+xcorr_by_pos on reconstruction for topographical map
+r_pos_array = decode_pos_with_trode_pos(place_cells,pos_info,mrwolf_trode_groups,'r_tau',0.02,'fraction_overlap',0.5,'field_direction','outbound');
+plot_multi_r_pos(r_pos_array,pos_info)
+[ok_ind,~] = gh_find_reconstruction_timepoints(r_pos_array,'eeg_r',eeg_r,'eeg_min_env',0.075,'allowable_track_position',[0.5 3.0],'pos_info',pos_info)
+[xcorr_matrix_outbound, peak_offset_matrix_outbound] = reconstruction_xcorr_pos(r_pos_array,'r_pos_use_indices',ok_ind);

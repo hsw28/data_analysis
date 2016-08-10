@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>cb2mat</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 204);"><span
+ style="color: rgb(51, 51, 255); font-family: sans-serif;">mwl2matlab
+Toolbo<span style="font-weight: bold;">x</span></span> </td>
+    </tr>
+  </tbody>
+</table>
+<b style="font-family: sans-serif;"><br>
+cb2mat</b><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">usage:</span><br>
+</span>
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">bounds
+= cb2mat( filename,
+[clusters] )
+</span><br style="font-family: sans-serif;">
+</div>
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">description:</span></span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px; font-family: sans-serif;">import
+boundaries from the specified
+file<br>
+[clusters] can be a vector of cluster
+numbers for which to import the boundaries (if omitted the
+boundaries of all clusters will be loaded) </div>
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">output:</span></span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">bounds.clusterid
+contains the cluster
+number</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">bounds.polygons is an array of
+structures with the following fields:</span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">polygons.axis
+contains the
+projections in which boundary is defined</span><br
+ style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">polygons.axisnames contains the
+names of the projections</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">polygons.x1 is a vector of
+values
+along the first axis</span><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;">polygons.x2 is a vector of
+values
+along the second axis</span></div>
+</div>
+</body>
+</html>

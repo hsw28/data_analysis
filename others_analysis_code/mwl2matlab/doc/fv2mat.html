@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>fv2mat</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="2" border="0"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 204);"><span
+ style="color: rgb(51, 51, 255); font-family: sans-serif;">mwl2matlab
+Toolbo<span style="font-weight: bold;">x</span></span> </td>
+    </tr>
+  </tbody>
+</table>
+<b style="font-family: sans-serif;"><br>
+fv2mat</b><br style="font-family: sans-serif;">
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">usage:</span><br>
+</span>
+<div style="margin-left: 40px;"><span style="font-family: sans-serif;">features
+= fv2mat( filename,
+[features], [option string], [index] )
+<br>
+<br style="font-family: sans-serif;">
+</span></div>
+<span style="font-family: sans-serif; color: rgb(153, 0, 0);">
+description:</span><br style="font-family: sans-serif;">
+<div style="margin-left: 40px; font-family: sans-serif;">imports spike
+features from the
+specified file<br>
+[features] is a vector of features
+names that one wants to load. Special strings are: 'all' (include
+all features, which is the default if [features] is omitted),
+'amp' (include the features: 'id', 't_px', 't_py', 't_pa', 't_pb')
+and 'pos' (include the features: 'pos_x' and 'pos_y')<br>
+[option string] and [index] can be used to select certain spikes, by
+filtering on record index, spike index or time. See <a
+ href="Record_filtering.html">record filtering</a> for more information.<br>
+</div>
+<span style="font-family: sans-serif;"><br>
+<span style="color: rgb(153, 0, 0);">output:</span></span><br
+ style="font-family: sans-serif;">
+<div style="margin-left: 40px; font-family: sans-serif;">features.featurenames
+contains the
+features<br>
+features.featuredata is a NxM matrix
+containing N samples and M features<br>
+features.info contains additional
+information about the file</div>
+<p style="margin-bottom: 0in;"><br>
+</p>
+</body>
+</html>
