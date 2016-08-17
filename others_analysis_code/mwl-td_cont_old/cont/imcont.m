@@ -123,8 +123,8 @@ function c = imcont(varargin)
   
   if ~isempty(eegfh);
     
-    % come up with a default name
-    if isempty(a.name)
+    % come up with a default cont struct name
+    if isempty(c.name)
       c.name = [eegfh.filename '_ch' chanstr];
     end
     

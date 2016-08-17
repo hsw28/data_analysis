@@ -52,6 +52,13 @@ function eeg2mat()
 %  long and the data starts 1 second after the first timestamp
 %  in the file.
 %
+%
+%  Example:
+%  eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
+%  Takes channel 7 from data, uses timestamps (t), prints out all
+%  processes (3), and starts at first time stamp and ends at last. TS info
+%  and other stuff can be found by using the verbose print option 3
+%
 %  Copyright (c) 2003 David P. Nguyen and Fabian Kloosterman
 %  December 9, 2003
 
