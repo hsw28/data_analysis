@@ -378,7 +378,7 @@ smoothRpos.m
 
 /tetrode-analysis-matlab/ripples/
 burstSquarePlot.m	 
-eegRipples.m	 
+eegRipples.m - returns [cellarray of time intervals corresponding to ripples, array of ripple peak times]
 evalEegRipplesParams.m	 
 getBurstsOfArity.m	 
 groupInterRippleIntervalsByArity.m	 
@@ -386,7 +386,7 @@ orderOfBursts.m
 plotBurstsOnTimeseries.m	 
 plotOrderedBursts.m	 
 rippleBurstFirstOfArity.m	 
-rippleBursts.m	 
+rippleBursts.m - Take a list of ripple peak times, collect them by how many ripples in the burst.  One cell in top-level array for burst arity. One cell in each top-level cell for each burst.
 rippleMeanFreqsInSegments.m	 
 rippleSpectrogramFreq.m
 
