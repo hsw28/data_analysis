@@ -167,254 +167,322 @@ unwrap_by.m
 volume_conduction_demo.m
 
 /pos/
-assign_over_track.m	added more mwl specific code	5 days ago
-clean_raw_pos.m	added more mwl specific code	5 days ago
-gh_animate_pos.m	added more mwl specific code	5 days ago
-gh_interp_pos.m	added more mwl specific code	5 days ago
-gh_plot_pos.m	added more mwl specific code	5 days ago
-gh_track_to_patches.m	added more mwl specific code	5 days ago
-linearize_track.m	added more mwl specific code	5 days ago
-linearize_track2.m	added more mwl specific code	5 days ago
-linearize_track_rat3.m	added more mwl specific code	5 days ago
-p2gpos.m	added more mwl specific code	5 days ago
-velocity_cdat.m	added more mwl specific code	5 days ago
+assign_over_track.m	
+clean_raw_pos.m	
+gh_animate_pos.m	
+gh_interp_pos.m	
+gh_plot_pos.m	
+gh_track_to_patches.m	 
+linearize_track.m	 
+linearize_track2.m	 
+linearize_track_rat3.m	 
+p2gpos.m	 
+velocity_cdat.m	 
 velocity_state.m
 
-/rat_specific/
-DELETE
-
 /reconstruct_rem/
-decode_rem_time.m	added more mwl specific code	5 days ago
-delete_r_pos_diagonal.m	added more mwl specific code	5 days ago
+decode_rem_time.m	 
+delete_r_pos_diagonal.m	 
 rem_sort_units.m
 
 /reconstruction/
-chimeric_trig.m	added more mwl specific code	5 days ago
-decode_pos_with_trode_pos.m	added more mwl specific code	5 days ago
-gh_best_reconstruction_phase.m	added more mwl specific code	5 days ago
-gh_decode_around_theta_phase.m	added more mwl specific code	5 days ago
-gh_decode_independent_timepoints.m	added more mwl specific code	5 days ago
-gh_decode_pos.m	added more mwl specific code	5 days ago
-gh_find_reconstruction_timepoints.m	added more mwl specific code	5 days ago
-gh_find_reconstruction_timewins.m	added more mwl specific code	5 days ago
-gh_plot_rpos_stack.m	added more mwl specific code	5 days ago
-gh_triggered_reconstruction.m	added more mwl specific code	5 days ago
-gh_triggered_reconstruction_multiphase.m	added more mwl specific code	5 days ago
-gh_troughs_from_phase.m	added more mwl specific code	5 days ago
-plot_multi_r_pos.m	added more mwl specific code	5 days ago
-plot_pos_xcorr_matrix.m	added more mwl specific code	5 days ago
-plot_r_pos.m	added more mwl specific code	5 days ago
-plot_total_and_breakout_reconstruction.m	added more mwl specific code	5 days ago
-reconstructionAnalysis.m	added more mwl specific code	5 days ago
-reconstruction_ci.m	added more mwl specific code	5 days ago
-reconstruction_entropy.m	added more mwl specific code	5 days ago
-reconstruction_p_at_mode.m	added more mwl specific code	5 days ago
-reconstruction_pos_at_mode.m	added more mwl specific code	5 days ago
-reconstruction_simple_xcorr_by_time.m	added more mwl specific code	5 days ago
-reconstruction_ts.m	added more mwl specific code	5 days ago
-reconstruction_xcorr_pos.m	added more mwl specific code	5 days ago
-reconstruction_xcorr_shift.m	added more mwl specific code	5 days ago
-test_find_reconstruction_timepoints.m	added more mwl specific code	5 days ago
+chimeric_trig.m	 
+decode_pos_with_trode_pos.m	 
+gh_best_reconstruction_phase.m	 
+gh_decode_around_theta_phase.m	 
+gh_decode_independent_timepoints.m	 
+gh_decode_pos.m	 
+gh_find_reconstruction_timepoints.m	 
+gh_find_reconstruction_timewins.m	 
+gh_plot_rpos_stack.m	 
+gh_triggered_reconstruction.m	 
+gh_triggered_reconstruction_multiphase.m	 
+gh_troughs_from_phase.m	 
+plot_multi_r_pos.m	 
+plot_pos_xcorr_matrix.m	 
+plot_r_pos.m	 
+plot_total_and_breakout_reconstruction.m	 
+reconstructionAnalysis.m	 
+reconstruction_ci.m	 
+reconstruction_entropy.m	 
+reconstruction_p_at_mode.m	 
+reconstruction_pos_at_mode.m	 
+reconstruction_simple_xcorr_by_time.m	 
+reconstruction_ts.m	 
+reconstruction_xcorr_pos.m	 
+reconstruction_xcorr_shift.m	 
+test_find_reconstruction_timepoints.m	 
 trode_pos_color_map.m
 
 /ripple_analysis/
-do_ripple_analysis.m	added more mwl specific code	5 days ago
-do_ripple_analysis_arg.m	added more mwl specific code	5 days ago
-do_ripple_analysis_import.m	added more mwl specific code	5 days ago
-filterBurstsByBehavior.m	added more mwl specific code	5 days ago
-rippleBursts.m	added more mwl specific code	5 days ago
-ripplesFromEEG.m	added more mwl specific code	5 days ago
+do_ripple_analysis.m	 
+do_ripple_analysis_arg.m	 
+do_ripple_analysis_import.m	 
+filterBurstsByBehavior.m	 
+rippleBursts.m	 
+ripplesFromEEG.m	 
 ripplesFromMUARate.m
 
 /shift_and_reconstruct/
-shift_reconstruct.m	added more mwl specific code	5 days ago
+shift_reconstruct.m	 
 shift_sdat.m
 
 /sleep_score/
-depricated_gh_bridge_segs.m	added more mwl specific code	5 days ago
-depricated_gh_draw_segs.m	added more mwl specific code	5 days ago
-depricated_gh_intersection_segs.m	added more mwl specific code	5 days ago
-depricated_gh_invert_segs.m	added more mwl specific code	5 days ago
-depricated_gh_signal_to_segs.m	added more mwl specific code	5 days ago
-depricated_gh_union_segs.m	added more mwl specific code	5 days ago
-depricated_seg_criterion.m	added more mwl specific code	5 days ago
-sleep_states.m	added more mwl specific code	5 days ago
+depricated_gh_bridge_segs.m	 
+depricated_gh_draw_segs.m	 
+depricated_gh_intersection_segs.m	 
+depricated_gh_invert_segs.m	 
+depricated_gh_signal_to_segs.m	 
+depricated_gh_union_segs.m	 
+depricated_seg_criterion.m	 
+sleep_states.m	 
 theta_delta_ratio.m
 
 /spectrum_analysis/
-gh_cross_frequency_coupling.m	added more mwl specific code	5 days ago
-gh_cross_frequency_populate_array.m	added more mwl specific code	5 days ago
+gh_cross_frequency_coupling.m	 
+gh_cross_frequency_populate_array.m	 
 gh_spectrum.m
 
 /spike_analysis/
-assign_avg_waveform.m	added more mwl specific code	5 days ago
-assign_cdat_to_sdat.m	added more mwl specific code	5 days ago
-assign_cdat_to_sdat2.m	added more mwl specific code	5 days ago
-assign_field.m	added more mwl specific code	5 days ago
-assign_is_noise_cluster.m	added more mwl specific code	5 days ago
-assign_rate_by_time.m	added more mwl specific code	5 days ago
-assign_theta_phase.m	added more mwl specific code	5 days ago
-assign_waveforms.m	added more mwl specific code	5 days ago
-draw_phase_precession.m	added more mwl specific code	5 days ago
-drop_non_field_spikes.m	added more mwl specific code	5 days ago
-field_bounds.m	added more mwl specific code	5 days ago
-field_entry_phase_pref.m	added more mwl specific code	5 days ago
-field_extents.m	added more mwl specific code	5 days ago
-field_extents_raster.m	added more mwl specific code	5 days ago
-field_first_last_phase.m	added more mwl specific code	5 days ago
-gh_acorr_timecourse.m	added more mwl specific code	5 days ago
-gh_fix_compname.m	added more mwl specific code	5 days ago
-gh_fix_sdat_gains.m	added more mwl specific code	5 days ago
-gh_phase_precession_summary.m	added more mwl specific code	5 days ago
-gh_place_cell_xcorr.m	added more mwl specific code	5 days ago
-gh_plot_field.m	added more mwl specific code	5 days ago
-gh_polar_raster_points.m	added more mwl specific code	5 days ago
-gh_show_field_construction.m	added more mwl specific code	5 days ago
-gh_sig_acorr.m	added more mwl specific code	5 days ago
-gh_sig_xcorr.m	added more mwl specific code	5 days ago
-gh_spike_acorr.m	added more mwl specific code	5 days ago
-gh_spike_xcorr.m	added more mwl specific code	5 days ago
-immua.m	added more mwl specific code	5 days ago
-imspike.m	added more mwl specific code	5 days ago
-isolate_field_with_phase.m	added more mwl specific code	5 days ago
-mean_phase_precession.m	added more mwl specific code	5 days ago
-mua_at_date.m	added more mwl specific code	5 days ago
-mua_get_pyramidal.m	added more mwl specific code	5 days ago
-mua_sort_by_spike_width.m	added more mwl specific code	5 days ago
-newemptyclust.m	added more mwl specific code	5 days ago
-plot_rpos_and_fe_raster.m	added more mwl specific code	5 days ago
-quick_combine_raster_cdat.m	added more mwl specific code	5 days ago
-sdat_filt_on_data.m	added more mwl specific code	5 days ago
-sdat_filter_group.m	added more mwl specific code	5 days ago
-sdat_get.m	added more mwl specific code	5 days ago
-sdat_keep_one_cell_per_trode.m	added more mwl specific code	5 days ago
-sdat_raster.m	added more mwl specific code	5 days ago
-sdatflatten.m	added more mwl specific code	5 days ago
-sdatflatten_by_trode_group.m	added more mwl specific code	5 days ago
-sdatmergelikecomps.m	added more mwl specific code	5 days ago
-sdatmergelikenames.m	added more mwl specific code	5 days ago
-sdatslice.m	added more mwl specific code	5 days ago
-sort_sdat_by_field.m	added more mwl specific code	5 days ago
-spikechans.m	added more mwl specific code	5 days ago
-spiketime_to_phase.m	added more mwl specific code	5 days ago
-test_field_extents.m	added more mwl specific code	5 days ago
-trode_color.m	added more mwl specific code	5 days ago
-trode_group.m	added more mwl specific code	5 days ago
+assign_avg_waveform.m	 
+assign_cdat_to_sdat.m	 
+assign_cdat_to_sdat2.m	 
+assign_field.m	 
+assign_is_noise_cluster.m	 
+assign_rate_by_time.m	 
+assign_theta_phase.m	 
+assign_waveforms.m	 
+draw_phase_precession.m	 
+drop_non_field_spikes.m	 
+field_bounds.m	 
+field_entry_phase_pref.m	 
+field_extents.m	 
+field_extents_raster.m	 
+field_first_last_phase.m	 
+gh_acorr_timecourse.m	 
+gh_fix_compname.m	 
+gh_fix_sdat_gains.m	 
+gh_phase_precession_summary.m	 
+gh_place_cell_xcorr.m	 
+gh_plot_field.m	 
+gh_polar_raster_points.m	 
+gh_show_field_construction.m	 
+gh_sig_acorr.m	 
+gh_sig_xcorr.m	 
+gh_spike_acorr.m	 
+gh_spike_xcorr.m	 
+immua.m	 
+imspike.m	 
+isolate_field_with_phase.m	 
+mean_phase_precession.m	 
+mua_at_date.m	 
+mua_get_pyramidal.m	 
+mua_sort_by_spike_width.m	 
+newemptyclust.m	 
+plot_rpos_and_fe_raster.m	 
+quick_combine_raster_cdat.m	 
+sdat_filt_on_data.m	 
+sdat_filter_group.m	 
+sdat_get.m	 
+sdat_keep_one_cell_per_trode.m	 
+sdat_raster.m	 
+sdatflatten.m	 
+sdatflatten_by_trode_group.m	 
+sdatmergelikecomps.m	 
+sdatmergelikenames.m	 
+sdatslice.m	 
+sort_sdat_by_field.m	 
+spikechans.m	 
+spiketime_to_phase.m	 
+test_field_extents.m	 
+trode_color.m	 
+trode_group.m	 
 unwrap_linear_field.m
 
 /spike_view/
-spike_view.m	added more mwl specific code	5 days ago
-spike_view_controls.m	added more mwl specific code	5 days ago
-sv_add_cdat.m	added more mwl specific code	5 days ago
-sv_add_clust.m	added more mwl specific code	5 days ago
-sv_add_pos.m	added more mwl specific code	5 days ago
-sv_field_browse.m	added more mwl specific code	5 days ago
-sv_phase_pair.m	added more mwl specific code	5 days ago
-sv_plot_all_cells_phase_precession.m	added more mwl specific code	5 days ago
-sv_test.m	added more mwl specific code	5 days ago
+spike_view.m	 
+spike_view_controls.m	 
+sv_add_cdat.m	 
+sv_add_clust.m	 
+sv_add_pos.m	 
+sv_field_browse.m	 
+sv_phase_pair.m	 
+sv_plot_all_cells_phase_precession.m	 
+sv_test.m	 
 sv_xcorr_browse.m
 
 /staxis_fieldsize/
-staxis_fieldsize_array.m	added more mwl specific code	5 days ago
-staxis_fieldsize_plot.m	added more mwl specific code	5 days ago
+staxis_fieldsize_array.m	 
+staxis_fieldsize_plot.m	 
 staxis_stats.m
 
 /staxis_phase_precession/
-staxis_phase_precession_array.m	added more mwl specific code	5 days ago
-staxis_phase_precession_plot.m	added more mwl specific code	5 days ago
+staxis_phase_precession_array.m	 
+staxis_phase_precession_plot.m	 
 staxis_phase_precession_stats.m
 
 /stimulus_decode/
-compute_fields.m	added more mwl specific code	5 days ago
-decode_stimulus.m	added more mwl specific code	5 days ago
-find_stimulus_timewins.m	added more mwl specific code	5 days ago
-mk_stimulus.m	added more mwl specific code	5 days ago
-mk_stimulus_lin_track.m	added more mwl specific code	5 days ago
-mk_var_type.m	added more mwl specific code	5 days ago
+compute_fields.m	 
+decode_stimulus.m	 
+find_stimulus_timewins.m	 
+mk_stimulus.m	 
+mk_stimulus_lin_track.m	 
+mk_var_type.m	 
 smooth_fields.m
 
 /subthresh/
-gh_amps_to_angs.m	added more mwl specific code	5 days ago
-gh_plot_polar_spikes.m	added more mwl specific code	5 days ago
-gh_polar_3d_hist.m	added more mwl specific code	5 days ago
-gh_polar_clust.m	added more mwl specific code	5 days ago
-gh_polar_get_amps.m	added more mwl specific code	5 days ago
-gh_simple_trig_lfp.m	added more mwl specific code	5 days ago
+gh_amps_to_angs.m	 
+gh_plot_polar_spikes.m	 
+gh_polar_3d_hist.m	 
+gh_polar_clust.m	 
+gh_polar_get_amps.m	 
+gh_simple_trig_lfp.m	 
 plot_pre_spike.m
 
-/tetrode-analysis-matlab/
-chewArtifact	added more mwl specific code	5 days ago
-conv	added more mwl specific code	5 days ago
-eeg	added more mwl specific code	5 days ago
-import	added more mwl specific code	5 days ago
-mua	added more mwl specific code	5 days ago
-papers	added more mwl specific code	5 days ago
-position	added more mwl specific code	5 days ago
-prelude	added more mwl specific code	5 days ago
-reconstruction	added more mwl specific code	5 days ago
-ripples	added more mwl specific code	5 days ago
-rscDips	added more mwl specific code	5 days ago
-segments	added more mwl specific code	5 days ago
-stateScore	added more mwl specific code	5 days ago
-triggeredAverage
+/tetrode-analysis-matlab/chewArtifact/
+waveformHasChewArtifact.m
+
+/tetrode-analysis-matlab/conv/
+makeKernel.m 
+
+/tetrode-analysis-matlab/eeg/
+contZipWith.m	
+contmap.m	 
+eegByArea.m
+
+/tetrode-analysis-matlab/import/
+checkMetadata.m	 
+loadData.m	 
+loadMwlEpoch.m	 
+sampleDayLog.yaml
+
+/tetrode-analysis-matlab/mua/
+muaByArea.m
+
+/tetrode-analysis-matlab/position/
+defaultCamScales.m	 
+defaultEpochCams.m
+
+/tetrode-analysis-matlab/prelude/
+filterCell.m	 
+filterMapKeys.m	 
+flipCFun.m	 
+foldl.m	 
+mapCompose.m	 
+mapMap.m	 
+mapReduce.m	 
+sortBy.m
+
+/tetrode-analysis-matlab/reconstruction/
+smoothRpos.m
+
+/tetrode-analysis-matlab/ripples/
+burstSquarePlot.m	 
+eegRipples.m	 
+evalEegRipplesParams.m	 
+getBurstsOfArity.m	 
+groupInterRippleIntervalsByArity.m	 
+orderOfBursts.m	 
+plotBurstsOnTimeseries.m	 
+plotOrderedBursts.m	 
+rippleBurstFirstOfArity.m	 
+rippleBursts.m	 
+rippleMeanFreqsInSegments.m	 
+rippleSpectrogramFreq.m
+
+/tetrode-analysis-matlab/rscDips/
+find_dips_frames.m	 
+find_dips_frames_by_lfp.m	 
+rscDipsOutline.m
+
+/tetrode-analysis-matlab/segments/
+gh_bridge_segs.m	 
+gh_draw_segs.m	 
+gh_event_rate_in_segments.m	 
+gh_intersection_segs.m	 
+gh_invert_segs.m	 
+gh_points_are_in_segs.m	 
+gh_points_in_segs.m	 
+gh_signal_to_segs.m	 
+gh_split_segs_at_trough.m	 
+gh_subtract_segs.m	 
+gh_union_segs.m	 
+psth_in_windows.m	 
+seg_criterion.m
+
+/tetrode-analysis-matlab/stateScore/
+behavioralState.m	 
+drawStateScore.m	 
+readme.m	 
+readmeStateScore.m
+
+/tetrode-analysis-matlab/triggeredAverage/
+eegTriggeredAverage.m	 
+triggeredReconstructionMergeDirections.m
 
 /triggers/
-gh_find_trig.m	added more mwl specific code	5 days ago
-gh_trig_lfp.m	added more mwl specific code	5 days ago
+gh_find_trig.m	 
+gh_trig_lfp.m	 
 trig_shift_theta.m
 
 /trode_location/
-field_xcorr_by_trode_location	added more mwl specific code	5 days ago
-wrt_location	added more mwl specific code	5 days ago
-area_dists.m	added more mwl specific code	5 days ago
-assign_trode_info.m	added more mwl specific code	5 days ago
-collect_by_group.m	added more mwl specific code	5 days ago
-draw_trodes.m	added more mwl specific code	5 days ago
-first_phase_by_trode_pos.m	added more mwl specific code	5 days ago
-group_of_trode.m	added more mwl specific code	5 days ago
-mk_trode_st_dp.m	added more mwl specific code	5 days ago
-mk_trodexy.m	added more mwl specific code	5 days ago
-plot_phase_offsets.m	added more mwl specific code	5 days ago
-plot_spike_phase_by_trode_pos.m	added more mwl specific code	5 days ago
-quick_rate_plot.m	added more mwl specific code	5 days ago
-quick_time_plot.m	added more mwl specific code	5 days ago
-spike_mod_opt.m	added more mwl specific code	5 days ago
-test_plot_phase_offsets.m	added more mwl specific code	5 days ago
-trode_colors.m	added more mwl specific code	5 days ago
-trode_conv.m	added more mwl specific code	5 days ago
-trode_draw_locations.m	added more mwl specific code	5 days ago
+field_xcorr_by_trode_location	 
+wrt_location	 
+area_dists.m	 
+assign_trode_info.m	 
+collect_by_group.m	 
+draw_trodes.m	 
+first_phase_by_trode_pos.m	 
+group_of_trode.m	 
+mk_trode_st_dp.m	 
+mk_trodexy.m	 
+plot_phase_offsets.m	 
+plot_spike_phase_by_trode_pos.m	 
+quick_rate_plot.m	 
+quick_time_plot.m	 
+spike_mod_opt.m	 
+test_plot_phase_offsets.m	 
+trode_colors.m	 
+trode_conv.m	 
+trode_draw_locations.m	 
 trode_pos_and_color.m
 
-/wave_analysis/
+/wave_analysis/old_drafts/
+scratch_phase_pref.m
+sdat_phase_pref.m	
+sdat_phase_pref2.m
+sdat_vs_lfp.m
 
-..		
-old_drafts	added more mwl specific code	5 days ago
-quick_scratch	added more mwl specific code	5 days ago
-contwin_r.m	added more mwl specific code	5 days ago
-disp_reg_stats.m	added more mwl specific code	5 days ago
-find_theta_cycles.m	added more mwl specific code	5 days ago
-gh_circ_nlinfit.m	added more mwl specific code	5 days ago
-gh_clean_phase.m	added more mwl specific code	5 days ago
-gh_gen_test_wave.m	added more mwl specific code	5 days ago
-gh_long_mua_regress.m	added more mwl specific code	5 days ago
-gh_long_wave_regress.m	added more mwl specific code	5 days ago
-gh_reg_quiver.m	added more mwl specific code	5 days ago
-gh_short_wave_regress.m	added more mwl specific code	5 days ago
-gh_various_regress.m	added more mwl specific code	5 days ago
-mua_vs_lfp.m	added more mwl specific code	5 days ago
-new_eeg_from_model.m	added more mwl specific code	5 days ago
-phase_pref.m	added more mwl specific code	5 days ago
-plane_wave_guess_beta.m	added more mwl specific code	5 days ago
-plane_wave_model.m	added more mwl specific code	5 days ago
-plane_wave_params.m	added more mwl specific code	5 days ago
-plane_wave_regress_frame.m	added more mwl specific code	5 days ago
-plane_wave_regress_slide.m	added more mwl specific code	5 days ago
-plot_phase_pref.m	added more mwl specific code	5 days ago
-plot_plane_wave_fit.m	added more mwl specific code	5 days ago
-post_vm.m	added more mwl specific code	5 days ago
-predicted_time_offset.m	added more mwl specific code	5 days ago
-prep_eeg_for_regress.m	added more mwl specific code	5 days ago
-test_plane_wave_model.m	added more mwl specific code	5 days ago
+/wave_analysis/quick_scratch/ 
+quick_lfp_phases.m
+quick_mua_phases.m
+
+/wave_analysis/
+contwin_r.m	 
+disp_reg_stats.m	 
+find_theta_cycles.m	 
+gh_circ_nlinfit.m	 
+gh_clean_phase.m	 
+gh_gen_test_wave.m	 
+gh_long_mua_regress.m	 
+gh_long_wave_regress.m	 
+gh_reg_quiver.m	 
+gh_short_wave_regress.m	 
+gh_various_regress.m	 
+mua_vs_lfp.m	 
+new_eeg_from_model.m	 
+phase_pref.m	 
+plane_wave_guess_beta.m	 
+plane_wave_model.m	 
+plane_wave_params.m	 
+plane_wave_regress_frame.m	 
+plane_wave_regress_slide.m	 
+plot_phase_pref.m	 
+plot_plane_wave_fit.m	 
+post_vm.m	 
+predicted_time_offset.m	 
+prep_eeg_for_regress.m	 
+test_plane_wave_model.m	 
 wave_movie.m
 
 /wavelet_analysis/
