@@ -10,5 +10,19 @@ eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
 for ex: cont = imcont('eeg',eeg, 'timeunits','timestamps');
 %  this specifies unit is timestamps in accordance with above conversion
 
-3) make filter
+3) find out sample rate
+contstructure.samplerate
+(wtf unit is this??? says .0057/second but that is miniscule and means my nyquist frequency makes no sense. if i make it 5700 i get an error when i run contfilt.m that my frequencies don't match)
+
+4) make filter
 for ex: rip = filtoptdefs('ripple')
+OR do manually with sample rate
+rip = mkfiltopt('name','ripple','Fs',5700,'filttype','bandpass','F',[100 150 250 300])
+
+5) do something with contfilt.m kind of stuck bc of sample rate problems, see #3. tbc.....
+>> contyfilter = contfilt(cont,'filt',mkfiltout);
+	Error using contfilt>subf_contfilter (line 131) samplerate of 	
+	filter doesn't match data, use a filtopt struct instead
+
+
+

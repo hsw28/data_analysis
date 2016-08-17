@@ -11,6 +11,9 @@ function opt = mkfiltopt(varargin)
 %
 %  Below options only for high-/low-/band-pass filters
 %  'F': design frequencies, in Hz (as for firpmord, firpm)
+%       2 freqs for low/highpass (start/end of roll-off)
+%       4 freqs for bandpass (starts and ends of roll-off
+%       Freqs must be monotonically increasing
 %  'atten_db', -50
 %  'ripp_db', 1
 %  'datatype', 'single' 
