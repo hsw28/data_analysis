@@ -1,0 +1,14 @@
+steps to analyze eeg:
+1) use eeg2mat to convert file into an eeg structure
+for ex:
+eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
+%  Takes channel 7 from data, uses timestamps (t), prints out all
+%  processes (3), and starts at first time stamp and ends at last. TS info
+%  and other stuff can be found by using the verbose print option 3
+
+2) use imcont to convert to continuous structure
+for ex: cont = imcont('eeg',eeg, 'timeunits','timestamps');
+%  this specifies unit is timestamps in accordance with above conversion
+
+3) make filter
+for ex: rip = filtoptdefs('ripple')
