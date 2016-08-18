@@ -1,28 +1,37 @@
 steps to analyze eeg:
 1) use eeg2mat to convert file into an eeg structure
 for ex:
-eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
-%  Takes channel 7 from data, uses timestamps (t), prints out all
-%  processes (3), and starts at first time stamp and ends at last. TS info
-%  and other stuff can be found by using the verbose print option 3
+	eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
+	%  Takes channel 7 from data, uses timestamps (t), prints out all
+	%  processes (3), and starts at first time stamp and ends at last. TS info
+	%  and other stuff can be found by using the verbose print option 3
 
 2) use imcont to convert to continuous structure
-for ex: cont = imcont('eeg',eeg, 'timeunits','timestamps');
-%  this specifies unit is timestamps in accordance with above conversion
+for ex:
+	cont = imcont('eeg',eegdata, 'timeunits','timestamps');
+	%  this specifies unit is timestamps in accordance with above conversion
 
-3) find out sample rate
-contstructure.samplerate
-(wtf unit is this??? says .0057/second but that is miniscule and means my nyquist frequency makes no sense. if i make it 5700 i get an error when i run contfilt.m that my frequencies don't match)
+getting:
+** Warning: max error in computed timestamp will be greater than 50%
+of samplerate resolution!!!--try converting as subsets of data? 
+> In imcont (line 466) 
+
+3) find out sample rate from eeg2mat file
+	eeg.samplefreq
+Think the above will always be 750
+For some reason the cont filt prints it wrong-- doing cont.samplerate gives some weird small number
+Manually enter the samplerate using
+	cont.samplerate = 750
 
 4) make filter
-for ex: rip = filtoptdefs('ripple')
+for ex:
+	rip = filtoptdefs('ripple')
 OR do manually with sample rate
-rip = mkfiltopt('name','ripple','Fs',5700,'filttype','bandpass','F',[100 150 250 300])
+	rip = mkfiltopt('name','ripple','Fs',750,'filttype','bandpass','F',[100 150 250 300])
 
-5) do something with contfilt.m kind of stuck bc of sample rate problems, see #3. tbc.....
->> contyfilter = contfilt(cont,'filt',mkfiltout);
-	Error using contfilt>subf_contfilter (line 131) samplerate of 	
-	filter doesn't match data, use a filtopt struct instead
+5) filter with contfilt
+	filtered = contfilt(cont, 'filtopt',rip);
 
 
+PROBLEM-- for some channels the gains are being read in as 0 when you do eeg2mat
 

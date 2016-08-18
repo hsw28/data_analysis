@@ -165,6 +165,7 @@ function c = subf_contfilter(c,filt)
   
   % call the 'filter' method of dfilt object
   try
+    % c.data is showing as infinity here???
     c.data = filt.dfilt.filter(c.data);
   catch
     for k = 1:nchans

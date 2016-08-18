@@ -139,6 +139,7 @@ function c = imcont(varargin)
     % clock, not the master computer's clock) OK for seeking within file,
     % though.
     samplerate_reported = str2double(eegfh.header(2).rate)./nchannels;
+    samplerate_reported
     
     if ~isempty(a.data) && ~isempty(a.timestamp);
       if size(a.data,1) ~= (recsize * size(a.timestamp,1)),
@@ -208,8 +209,10 @@ function c = imcont(varargin)
     
     if ~isempty(a.dataunits)
       c.units = a.dataunits;
+      disp('if block 1')
+
     else
-      
+	disp('if block 2')      
       % it's in ADCunits; convert to mV;
       
       gains = getGains(eegfh);
@@ -222,6 +225,7 @@ function c = imcont(varargin)
           1./gains .*... % volts/ADCvolts (vector)
           1000; % mv/volt
       
+
       % when gain is 0, conversion factor should be 0, not inf
       adunits_to_mv_f(isinf(adunits_to_mv_f)) = 0;
       
@@ -258,6 +262,7 @@ function c = imcont(varargin)
       %convert to mV
       c.units = 'mV';
       
+
       % a vector of conversion factors per channel
       adunits_to_mv_f = ...
           1/diff(a.eeg.info.ADCrange) .* ... % ADCrange/ADCUnits (-2048 -> +2047)
