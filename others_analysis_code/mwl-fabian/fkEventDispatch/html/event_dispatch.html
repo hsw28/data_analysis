@@ -1,0 +1,154 @@
+<html><head><title>fkEventDispatch - event_dispatch</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="tab_axes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="ruler.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>event_dispatch</h2>
+<h3>synopsis</h3>
+setup figure to receive event notification
+<h3>syntax</h3><pre>
+    EVENT_DISPATCH
+    EVENT_DISPATCH ON
+    EVENT_DISPATCH OFF
+    EVENT_DISPATCH CLEAR
+    EVENT_DISPATCH(hFig)
+    EVENT_DISPATCH(hFig, command) runs command ('on', 'off', 'clear')
+    hFig=EVENT_DISPATCH( ... )
+</pre>
+<h3>description</h3>
+<p>
+EVENT_DISPATCH sets up event notifications for the current figure. If
+no figure exist a new one will be created.
+</p>
+<p>
+EVENT_DISPATCH ON sets up the current figure for event notifications.
+</p>
+<p>
+EVENT_DISPATCH OFF removes event notification framework from currrent
+figure
+</p>
+<p>
+EVENT_DISPATCH CLEAR disables mouse event notifications in all open
+figures and removes all evidence of the framework
+</p>
+<p>
+EVENT_DISPATCH(hFig) sets up event notifications for specified figure
+</p>
+<p>
+EVENT_DISPATCH(hFig, command) runs command ('on', 'off', 'clear') for
+specified figure
+</p>
+<p>
+hFig=EVENT_DISPATCH( ... ) returns figure handle.
+</p>
+<p>
+This event notification framework runs parallel to the native Matlab
+handle graphics object callbacks like 'Callback', 'ButtonDownFcn',
+'KeyPressFcn'. The framework only works for graphical objects on the
+figure canvas (so called canvas objects, i.e. the figure itself,
+uipanels, axes and children of axes), but NOT on any object that has
+an underlying Java component that handles the events (i.e. uicontrols,
+uitree, etc.).
+</p>
+<p>
+The following event callbacks exist:
+<dl>
+<dt>MyButtonDownFcn</dt><dd>called when a mouse button is pressed</dd>
+<dt>MyButtonUpFcn</dt><dd>called when a mouse button is released</dd>
+<dt>MyWheelMovedFcn</dt><dd>called when mouse wheel moved</dd>
+<dt>MyStartDragFcn</dt><dd>called when a drag operation starts</dd>
+<dt>MyStopDragFcn</dt><dd>called when a drag operation ends</dd>
+<dt>MyDragFcn</dt><dd>called when mouse is dragged</dd>
+<dt>MyKeyPressFcn</dt><dd>called when a key is pressed</dd>
+<dt>MyKeyreleaseFcn</dt><dd>called when key is released</dd>
+</dl>
+</p>
+<p>
+Event handling can be turned on for a graphical object by calling
+enable_events. For every canvas object event callbacks can be set and
+retrieved using the Matlab SET and GET commands. Alternatively, these
+properties can be set or removed using the helper functions
+ADD_CALLBACK and REMOVE_CALLBACK.
+</p>
+<p>
+A callback can be any of the following:
+<ol>
+<li>A string, which will evaluated in the base workspace. Since Matlab's gcbo function to get the current callback object doesn't work properly with this event framework, a temporary variable called gcbo is created in the base workspace and it is assigned the callback object's handle.</li>
+<li>A function handle or a cell array with the first cell either a function name or a function handle. The remaining cells in the cell array are optional user defined extra arguments that are passed on to the callback function. The signature of a callback function is: success = fcn( hObj, eventdata, ... extra arguments ...)</li>
+<li>A nx2 cell array of multiple callbacks. The first column of cells contains a string (as under 1.) or a callback function (as under 2.) and the second column of cells contains a ID to indentify the callback function. The ADD_CALLBACK and REMOVE_CALLBACK functions can be used to add and remove callback from this cell array.</li>
+</ol>
+</p>
+<p>
+The first argument of a callback function is the handle of the object
+that receives the event notification (i.e. the callback object). The
+second argument is an event data structure, with information about the
+event. The structure is translated from Java by Matlab with the
+following fields (this is only a partial list and not all field are
+present for each type of event):
+<dl>
+<dt>AltDown</dt><dd>'on'/'off' state of alt-key</dd>
+<dt>Button</dt><dd>which mouse button was pressed/released or started dragging</dd>
+<dt>ControlDown</dt><dd>'on'/'off' state of control-key</dd>
+<dt>KeyChar</dt><dd>character representation of key press</dd>
+<dt>KeyCode</dt><dd>key code</dd>
+<dt>MetaDown</dt><dd>'on'/'off' state of meta-key</dd>
+<dt>Modifiers</dt><dd>state of modifier keys and buttons that changed state</dd>
+<dt>ModifiersEx</dt><dd>state of modifier keys and buttons</dd>
+<dt>Point</dt><dd>x,y pixel coordinates of point clicked</dd>
+<dt>ShiftDown</dt><dd>'on'/'off' state of shift-key</dd>
+<dt>WheelRotation</dt><dd>wheel rotation steps (positive or negative)</dd>
+<dt>When</dt><dd>event timestamp The framework adds the following extra fields to the event data structure:</dd>
+<dt>HitObject</dt><dd>handle of the object that was directly under the mouse cursor when the event occurred and had its HitTest property set to 1. During dragging, HitObject is set to the object where dragging started</dd>
+<dt>HitPoint</dt><dd>local x,y coordinates of mouse cursor location (in HitObject coordinates)</dd>
+<dt>ClickedPoint</dt><dd>local x,y coordinates of mouse cursor location at the time of mouse press/release. While dragging ClickedPoint contains the coordinates of the point where dragging started.</dd>
+<dt>Dragging</dt><dd>0/1 indicates if the mouse is being dragged or not</dd>
+<dt>ActiveButtons</dt><dd>All pressed buttons</dd>
+</dl>
+</p>
+<p>
+The event dispatcher finds the object under the mouse cursor using
+Matlab's hittest function. This means that if an object has its
+HitTest property set to 0, it will be unable to receive events. The
+event dispatcher uses the following rules to determine which object
+will receive the event notification (and thus which callback function
+are being executed):
+MyButtonDown, MyButtonUp, MyWheelMoved events are sent to the object
+directly beneath the mouse cursor.
+MyKeyPress, MyKeyRelease events are sent to the figure's current
+object. If there is no current object, then it will be sent to the
+current axes. If there is no current axes, the event will be sent to
+the figure.
+MyStartDrag, MyDrag, MyStopDrag events are all sent to the object
+where dragging started
+</p>
+<p>
+Note that while dragging, all MyButtonDown, MyButtonUp and
+MyWheelMoved events are directed to the object where the drag
+operation started. For example, when a drag operation was started in
+the figure, but the mouse cursor was dragged over an axes, then still
+the figure will receive all drag related events and any additional
+MyButtonDown, MyButtonUp and MyWheelMoved events. For this example,
+the extra eventdata structure fields will contain the following:
+<dl>
+<dt>HitObject</dt><dd>figure handle</dd>
+<dt>HitPoint</dt><dd>current mouse cursor location in figure coordinates</dd>
+<dt>ClickedObject</dt><dd>figure handle</dd>
+<dt>ClickedPoint</dt><dd>mouse cursor location at time of first mouse press in figure (in figure coordinates)</dd>
+</dl>
+</p>
+<p>
+For objects that are descendents of an axes (i.e. plotting objects),
+the event notification will propagate up the hierarchy to the parent
+axes until the event is succesfully processed. Thus if a plotting
+object has no callbacks, then its parent will receive the event
+next. If any callback is a string or a function with no output
+arguments, then it is assumed that the event was successfully
+processed and the event does not propagate any further. Callback
+functions that do return an output argument have control over the
+propagation: if they return false, the event wasn't processed and if
+they return true the event was processed. For example if a patch
+object responds to left button clicks, it could test for the button
+pressed in its MyButtonUp callback and if any other button than the
+left obe was pressed it would return false, so that it parent axes can
+have a chance to process it (for example because the axes responds to
+a right button click).
+</p>
+<h3>see also</h3>
+scroll_zoom &mdash scroll_pan &mdash ruler &mdash tab_axes &mdash test_events &mdash demo_events &mdash enable_events 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="tab_axes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;tab_axes</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>ruler&nbsp;&nbsp;<a href="ruler.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

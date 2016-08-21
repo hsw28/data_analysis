@@ -1,0 +1,27 @@
+<html><head><title>fkUtilities - flattencurve</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="localshuffle.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="lazymatload.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>flattencurve</h2>
+<h3>synopsis</h3>
+flattening of 2D curve
+<h3>syntax</h3><pre>
+    xy=FLATTENCURVE(xy)
+    s=FLATTENCURVE(xy,param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+xy=FLATTENCURVE(xy) Flattens the curve defined by the nx2 matrix xy in
+25 steps. The output xy is a 3d matrix of the x,y coordinates of all
+intermediate curves, such that the first plane is the original curve
+and the last plane is the flattened curve. The curve is flattened until
+all line segments are colinear with the first segment.
+</p>
+<p>
+s=FLATTENCURVE(xy,param1,val1,...) Additional keyword/value pair options
+can be specified:
+<dl>
+<dt>path</dt><dd>can be a scalar that sets the number of steps over which the curve is flattened, or a vector that defines a motion path or a matrix with (#segments-1) rows that defines the motion path for each segment beyond the first one. Motion paths are relative to the original angle (i.e. 1 means the angle is identical to the original and 0 means completely flattened).</dd>
+<dt>startangle</dt><dd>either a scalar that defines the final angle of the first segment, or a vector that defines the motion path of the angle of the first segment (which should have the same number of steps as the path above).</dd>
+<dt>origin</dt><dd>either a 1x2 vector that defines the final x,y coordinates of the first point on the curve, or a nx2 matrix that defines the motion path of the origin (n should be identical to the numbe rof steps).</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="localshuffle.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;localshuffle</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>lazymatload&nbsp;&nbsp;<a href="lazymatload.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

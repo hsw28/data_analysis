@@ -1,0 +1,30 @@
+<html><head><title>fkUtilities - binfcn_gen</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="interlace.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="smoothn.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>binfcn_gen</h2>
+<h3>synopsis</h3>
+generator of binning functions
+<h3>syntax</h3><pre>
+    f=BINFCN_GEN(fcn_type,...)
+</pre>
+<h3>description</h3>
+<p>
+f=BINFCN_GEN(fcn_type,...) This function generates a function handle
+for a binning function. Arguments two and up are passed on to the
+binning function. The signature for a binning function is: binedges =
+fcn( time_window, ... ), where binedges is a nx2 matrix of bin
+edges. The argument fcn_type is one of:
+<dl>
+<dt>binsize</dt><dd>subdivide time window in equal size bins. Valid options: 'Overlap' (default = 0), 'BinSize' (required) nbins   - subdivide time window in fixed number of bins. Valid options: 'Overlap' (default = 0), 'MinBinSize' (default = 0), 'NBins' (required)</dd>
+<dt>nevents</dt><dd>subdivide time window into smaller windows that contain an equal number of events. Valid options: 'Overlap' (default = 0), 'MinBinSize' (default = 0), 'MinEvents' (default = 10), 'Events' (required)</dd>
+</dl>
+Explanation of binning function options:
+<dl>
+<dt>Overlap</dt><dd>fraction of overlap between adjacent bins</dd>
+<dt>BinSize</dt><dd>bin size</dd>
+<dt>NBins</dt><dd>number of bins</dd>
+<dt>MinBinSize</dt><dd>minimum bin size, other parameter will be adjusted to meet this requirement</dd>
+<dt>MinEvents</dt><dd>minimum number of events in a bin</dd>
+<dt>Events</dt><dd>column vector or cell array of column vectors with event times</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="interlace.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;interlace</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>smoothn&nbsp;&nbsp;<a href="smoothn.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

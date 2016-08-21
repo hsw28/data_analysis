@@ -1,0 +1,69 @@
+<html><head><title>fkEventDispatch - scroll_zoom</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="test_events.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a></td></tr></table><h2>scroll_zoom</h2>
+<h3>synopsis</h3>
+adds zoom capabilities to axes
+<h3>syntax</h3><pre>
+    SCROLL_ZOOM
+    SCROLL_ZOOM TOGGLE
+    SCROLL_ZOOM OFF
+    SCROLL_ZOOM ON
+    SCROLL_ZOOM X
+    SCROLL_ZOOM Y
+    SCROLL_ZOOM(hAx)
+    SCROLL_ZOOM(hAx, command)
+    SCROLL_ZOOM(hAx, parameter1, value1, ...)
+    [state, props]=SCROLL_ZOOM(...)
+</pre>
+<h3>description</h3>
+<p>
+SCROLL_ZOOM toggles zooming functionality for current axes. Scrolling
+the mouse wheel over the x-axis or y-axis zoom in/out by a factor of
+two. Alternatively, the cursor keys can be used for zooming. Pressing
+the page-up/page-down keys change the zoom factor by a factor of two.
+Pressing the x or y key toggles zooming along the x-axis or y-axis.
+</p>
+<p>
+SCROLL_ZOOM TOGGLE toggle zooming for current axes
+</p>
+<p>
+SCROLL_ZOOM OFF turns off zooming for current axes
+</p>
+<p>
+SCROLL_ZOOM ON turns off zooming for current axes
+</p>
+<p>
+SCROLL_ZOOM X turns on x-axis zooming for current axes
+</p>
+<p>
+SCROLL_ZOOM Y turns on y-axis zooming for current axes
+</p>
+<p>
+SCROLL_ZOOM(hAx) turns on zooming for axes with handle hAx
+</p>
+<p>
+SCROLL_ZOOM(hAx, command) runs zooming command ('toggle', 'on', 'off',
+'x', 'y') for axes with handle hAx
+</p>
+<p>
+SCROLL_ZOOM(hAx, parameter1, value1, ...) turns on zooming for axis
+hAx with additional properties as specified by parameter/value
+pairs. Valid paramters are:
+<dl>
+<dt>Factor</dt><dd>zoom factor, should be &gt;1 (default=2)</dd>
+<dt>Axis</dt><dd>allows zooming along the specified axis. Valid values are: 'x', 'y', 'xy'</dd>
+<dt>Modifier</dt><dd>sets a modifier key to access zooming functionality (e.g. shift = 1, control = 2, no modifier = 0).</dd>
+<dt>AxisOnly</dt><dd>when set to 1, restricts mouse wheel zooming to the cases when the mouse pointer is over the x-axis or y-axis. When set to 0, also allows zooming when mouse pointer is over axes drawing area. Note that this is only practical if zooming is limited to a single axis.</dd>
+</dl>
+</p>
+<p>
+[state, props]=SCROLL_ZOOM(...) returns the zooming state of an axes
+and its zoom properties.
+</p>
+<p>
+The zooming functionality provided by SCROLL_ZOOM depends on the extended
+event dispatching framework. The parent figure of the axes will be set
+up for this by a call to EVENT_DISPATCH.
+</p>
+<h3>see also</h3>
+event_dispatch 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="test_events.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;test_events</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right width="33%">&nbsp;</td></tr></table></body></html>

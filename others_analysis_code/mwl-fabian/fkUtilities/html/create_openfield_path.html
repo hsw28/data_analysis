@@ -1,0 +1,25 @@
+<html><head><title>fkUtilities - create_openfield_path</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="binsearch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="matrixfun.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>create_openfield_path</h2>
+<h3>synopsis</h3>
+create a random path
+<h3>description</h3>
+<p>
+Syntax
+
+P = create_openfield_path( nLoc, nVisits, nextLoc )
+</p>
+<p>
+Description
+
+Returns a vector of numbers between 1 and nLoc, where each number
+occurs at most nVisits times. nextLoc determines the valid next
+locations relative to the current location. Due to the random nature
+and the nextLoc restriction, it is possible that not all locations
+are visited exactly nVisits times.
+</p>
+<h3>example</h3><pre>
+
+P = create_openfield_path( 12, 12, 3:9 )
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="binsearch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;binsearch</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>matrixfun&nbsp;&nbsp;<a href="matrixfun.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

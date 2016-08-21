@@ -1,0 +1,84 @@
+function h=polarbar(varargin)
+%POLARBAR creates a polar bar plot
+%
+%  h=POLARBAR plots a polar bar plot of a sine function. A
+%  handle to a polar bar graphics object is returned.
+%
+%  h=POLARBAR(rho) plots a polar bar of radius data at equally spaced
+%  angles. If rho is a matrix, multiple bar plots will be created.
+%
+%  h=POLARBAR(theta,rho) plots a polar bar in the current axes using
+%  the angle and radius data. Theta and rho can be either vectors or
+%  matrices of the same size. Alternatively, theta can be a vector and
+%  rho can be a matrix with the same number of rows as the length of
+%  theta. In this case the function will create as many polar bar plots
+%  as there are columns in rho.
+%
+%  h=POLARBAR(hax,...) will plot in axes with handle hax.
+%
+%  h=POLARBAR(...,param1,val1,...) sets polar bar properties
+%  through parameter/value pairs. Execute set(h) to see a list of valid
+%  properties that can be modified.
+%
+
+%  Copyright 2008-2008 Fabian Kloosterman
+
+%get axes handle from arguments, if any
+[hAx,args,nargs] = axescheck(varargin{:});
+
+%check arguments, extract angle and radius data
+isnum1 = nargs>0 && isnumeric(args{1});
+isnum2 = nargs>1 && isnumeric(args{2});
+
+if ~isnum1
+  rho=[];
+  theta=[];
+elseif ~isnum2
+  rho=args{1};
+  theta=[];
+  args = args(2:end);
+else
+  theta = args{1};
+  rho = args{2};
+  args = args(3:end);
+end
+
+%make sure vectors are column vectors
+if isvector(rho)
+  rho=rho(:);
+end
+if isvector(theta)
+  theta=theta(:);
+end
+
+if isempty(rho) && isempty(theta)
+  hAx = newpolarplot( hAx );
+  h = fkGraphics.polarbar(args{:},'Parent',hAx);
+  return
+else
+  [npoints,nplots] = size(rho);
+  if isempty(theta)
+    theta = 2*pi*(0.5+(0:(npoints-1)))'/npoints;
+  end
+  if size(theta,1)~=npoints || (size(theta,2)~=nplots && ~isvector(theta))
+    error('polararea:invalidData', 'Angle and radius data size mismatch')
+  end
+end
+
+idx = linspace(1,size(theta,2),nplots);
+
+hAx = newpolarplot( hAx );
+
+for k=1:nplots
+  
+  h(k) = fkGraphics.polarbar(args{:},'AngleData',theta(:,idx(k)), ...
+                              'RadiusData', rho(:,k), 'Parent', hAx );
+  
+end
+
+hAx = handle(hAx);
+if isa(hAx,'fkGraphics.polaraxes')
+  rl = hAx.RadialLim;
+  set(hAx,'RadialLim',[rl(1) max(rl(2),max(rho(:)))]);
+end
+  

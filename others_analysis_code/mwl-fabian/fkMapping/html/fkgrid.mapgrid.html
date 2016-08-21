@@ -1,0 +1,26 @@
+<html><head><title>fkMapping - fkgrid.mapgrid</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.labels.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.names.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>mapgrid</h2>
+<h3>synopsis</h3>
+create a map
+<h3>description</h3>
+<p>
+m=MAP(grid,coords) make a histogram of the specified n-dimensional
+coordinates using the n-dimensional grid.
+</p>
+<p>
+m=MAP(grid,coords,param1,value1,...) takes extra options:
+<dl>
+<dt>Default</dt><dd>the default value for empty bins (default=NaN)</dd>
+<dt>Function</dt><dd>the function to create the map (default = @length)</dd>
+</dl>
+</p>
+<p>
+m=MAP(grid,coords,variable,...) uses the variable, which are values
+measured at the specified coordinates, to create the map.
+</p>
+<h3>example</h3><pre>
+grid = fkgrid( 1:0.01:1, 1:0.01:1 );
+m = map( grid, rand(50,2), 'Function', @mean)
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.labels.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;labels</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>names&nbsp;&nbsp;<a href="fkgrid.names.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

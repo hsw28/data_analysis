@@ -1,0 +1,57 @@
+<html><head><title>fkUtilities - randomize</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="exp_gen.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="padvector.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>randomize</h2>
+<h3>synopsis</h3>
+randomize a matrix
+<h3>syntax</h3><pre>
+    m=RANDOMIZE(m)
+    m=RANDOMIZE(m,dim)
+    m=RANDOMIZE(m,dim,groupdim)
+    m=RANDOMIZE(m,...,param1,val1,...)
+    [m,i]=RANDOMIZE(...)
+</pre>
+<h3>description</h3>
+<p>
+m=RANDOMIZE(m) randomize the values in matrix m along the first
+dimension.
+</p>
+<p>
+m=RANDOMIZE(m,dim) randomize along the specified dimension(s). If a
+vector of dimensions is given, the matrix is randomized along each
+of these dimensions.
+</p>
+<p>
+m=RANDOMIZE(m,dim,groupdim) dimensions listed in the vector groupdim
+are randomized together along the specified dimension(s) dim.
+</p>
+<p>
+m=RANDOMIZE(m,...,param1,val1,...) specifies optional parameters.
+<dl>
+<dt>method</dt><dd>shake/cycle randomizes by cycling or shaking along a given dimension. Only one dimension dim is allowed for the cycle method.</dd>
+<dt>adjust</dt><dd>none/mean/max adjust the mean/max of grouped dimensions.</dd>
+<dt>seed</dt><dd>seed for randomization</dd>
+</dl>
+</p>
+<p>
+[m,i]=RANDOMIZE(...) also returns the (linear) indexes of the
+randomized matrix into the original matrix.
+</p>
+<h3>example</h3><pre>
+m = [1 5
+3 2
+6 4];
+randomize(m)     %randomize along the row dimension, possible
+%output: [3 5
+%         6 4
+%         1 2]
+randomize(m,2)   %randomize along the column dimension, possible
+%output: [5 1
+%         2 3
+%         4 6]
+randomize(m,1,2) %randomize along the row dimension, but keeping
+%values together in the column dimension, possible
+%output: [6 4
+%         1 5
+%         3 2]
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="exp_gen.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;exp_gen</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>padvector&nbsp;&nbsp;<a href="padvector.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,31 @@
+<html><head><title>fkEvents - eventcorr</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEvents reference pages</td><td align="right">&nbsp;<a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="event2bin.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>eventcorr</h2>
+<h3>synopsis</h3>
+event correlation
+<h3>syntax</h3><pre>
+    t=EVENTCORR(trigger,events,lags)
+    t=EVENTCORR(...,'param',val,...)
+    [...,n]=EVENTCORR(...)
+</pre>
+<h3>description</h3>
+<p>
+t=EVENTCORR(trigger,events,lags) returns the relative times
+within the interval defined by lags of all events surrounding the
+trigger times. Both trigger and event vectors need to be sorted. The
+events can also be a sorted array of segment start and end times.
+</p>
+<p>
+t=EVENTCORR(...,'param',val,...) Specifies optional
+parmeter/value pairs. Valid parameters are:
+<dl>
+<dt>segments</dt><dd>correlation restricted to all trigger events that are within the specified segments. The function takes into account the interval lags, such that trigger events that are too close too a segment boundary are excluded. Default segments = [-Inf Inf].</dd>
+<dt>indices</dt><dd>0/1 if 1 returns the indices of the events surrounding the trigger events, rather than relative times (default = 0).</dd>
+<dt>biased</dt><dd>0/1 if 1 does not exclude triggers that are too close to segment boundaries (default = 0).</dd>
+</dl>
+</p>
+<p>
+[...,n]=EVENTCORR(...) returns the vector n containing the number of
+relative times for each trigger event.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>event2bin&nbsp;&nbsp;<a href="event2bin.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toc version="1.0">
+   <tocitem image="$toolbox/matlab/icons/book_mat.gif" target="fkSegments_product_page.html">fkSegmentsToolbox<tocitem image="$toolbox/matlab/icons/reficon.gif" target="reference.html">Functions -- alphabetical list</tocitem>
+      <tocitem image="$toolbox/matlab/icons/reficon.gif" target="reference1.html">Functions -- categorical list</tocitem>
+   </tocitem>
+</toc>

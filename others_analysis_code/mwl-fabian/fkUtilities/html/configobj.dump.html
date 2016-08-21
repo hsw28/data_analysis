@@ -1,0 +1,24 @@
+<html><head><title>fkUtilities - configobj.dump</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>configobj reference pages</td><td align="right"><a href="configobj.display.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="configobj.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="configobj.explore.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>dump</h2>
+<h3>synopsis</h3>
+dump configobj to a string
+<h3>syntax</h3><pre>
+    s=DUMP(c)
+    s=DUMP(c,name)
+    s=DUMP(c,name,level)
+</pre>
+<h3>description</h3>
+<p>
+s=DUMP(c) dumps the contents of a configobj to a string. This function
+calls itself recursively for all nested sections.
+</p>
+<p>
+s=DUMP(c,name) internal use only, specify the name of the current
+section that is written to the string.
+</p>
+<p>
+s=DUMP(c,name,level) internal use only, specify level of current
+section that is written to the string.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="configobj.display.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;display</td><td align=center width="34%"><a href="configobj.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;configobj</td><td align=right>explore&nbsp;&nbsp;<a href="configobj.explore.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

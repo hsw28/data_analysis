@@ -1,0 +1,40 @@
+<html><head><title>fkSegments - seg_select</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSegments reference pages</td><td align="right"><a href="seg_or.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="seg_not.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>seg_select</h2>
+<h3>synopsis</h3>
+select all data within segments
+<h3>syntax</h3><pre>
+    s=SEG_SELECT(segments,x)
+    s=SEG_SELECT(segments,xx)
+    [s,i]=SEG_SELECT(...)
+    [s,i,y]=SEG_SELECT(segment,x,data)
+    [...,n]=SEG_SELECT(...)
+    [...]=SEG_SELECT(...,'all')
+</pre>
+<h3>description</h3>
+<p>
+s=SEG_SELECT(segments,x) returns a cell array with for each segment
+the values in the column vector x that are within that segment.
+</p>
+<p>
+s=SEG_SELECT(segments,xx) where xx is a cell array of column vectors,
+returns a cell matrix with for each segment and each vector in xx the
+values in the vector that are within the segment.
+</p>
+<p>
+[s,i]=SEG_SELECT(...) also returns a cell matrix of indices.
+</p>
+<p>
+[s,i,y]=SEG_SELECT(segment,x,data) where data is a matrix or a cell
+array of matrices corresponding to the vectors in x. Returns for each
+segment and for each vector in x also the selected data.
+</p>
+<p>
+[...,n]=SEG_SELECT(...) returns for each segment the number of
+elements of the vectors x it contains.
+</p>
+<p>
+[...]=SEG_SELECT(...,'all') returns a concatenated array of all
+elements in the vectors x that are contained in any of the segments.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="seg_or.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;seg_or</td><td align=center width="34%"><a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>seg_not&nbsp;&nbsp;<a href="seg_not.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

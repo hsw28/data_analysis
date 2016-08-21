@@ -1,0 +1,31 @@
+<html><head><title>fkEvents - event_plot</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEvents reference pages</td><td align="right"><a href="event2bin.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="event2sound.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>event_plot</h2>
+<h3>synopsis</h3>
+raster plot of events
+<h3>syntax</h3><pre>
+    EVENT_PLOT(events)
+    EVENT_PLOT(events,parm1,val1,...)
+    h=EVENT_PLOT(...)
+</pre>
+<h3>description</h3>
+<p>
+EVENT_PLOT(events) plot events in a new figure.
+</p>
+<p>
+EVENT_PLOT(events,parm1,val1,...) set optional parameters. Valid
+parameters are:
+<dl>
+<dt>Axis</dt><dd>when empty (default) a new figure &amp; axis will be created, otherwise specified axis will be used</dd>
+<dt>YOffset</dt><dd>offset along the y-axis for each of the events; can be a scalar (i.e. all events are overlayed, with the specified y-offset) or a vector the same length as the number of events</dd>
+<dt>Symbol</dt><dd>style of the symbol, one of + o * . x s d ^ v &gt; &lt; p h | (default = |)</dd>
+<dt>SymbolSize</dt><dd>size of the symbol (for |, the height of the symbol); can be a scalar or a vector the same length as the number of events. If a new axis is created, the default is 1, otherwise the default is the height of the axis</dd>
+<dt>Color</dt><dd>color of the symbols, specified as RGB value (default: [0 0 0], i.e. black); either one color or as many colors as there are events can be specified</dd>
+<dt>XLim</dt><dd>limits of the x-axis (default: [], which means optimal scaling for new axis or current x limits for existing axis)</dd>
+<dt>Labels</dt><dd>cell array of event labels</dd>
+</dl>
+</p>
+<p>
+h=EVENT_PLOT(...) returns graphics handles
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="event2bin.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;event2bin</td><td align=center width="34%"><a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>event2sound&nbsp;&nbsp;<a href="event2sound.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

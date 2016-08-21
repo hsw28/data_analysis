@@ -1,0 +1,55 @@
+<html><head><title>fkUtilities - randswap</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="selectfields.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="inclPoints.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>randswap</h2>
+<h3>synopsis</h3>
+randomly swap elements of a matrix
+<h3>syntax</h3><pre>
+    y=RANDSWAP(x)
+</pre>
+<h3>description</h3>
+<p>
+y=RANDSWAP(x) randomly swaps the elements of vector X. For N-D
+matrices, RANDSWAP(X) randomly swaps the elements along the first
+non-singleton dimension of X.
+
+y=RANDSWAP(x,dim) randomly swaps the elements along the dimension
+dim. For instance, RANDSWAP(X,1) randomly interchanges the rows of x.
+
+y=RANDSWAP(x,'partial') swaps the elements for each of the
+non-singleton dimensions of x separately. Rows are interchanged first,
+then columns, then planes, etc. In this case, elements that belong to
+the same row, column, ... stay together.
+
+y=RANDSWAP(x,'full') randomly swaps all the elements in X.
+
+[y,i,j]=RANDSWAP(...) return index matrices i and j so that
+y=x(i) and x=y(j).
+
+x can be a numeric or a cell array.
+</p>
+<h3>example</h3><pre>
+% randomize a vector
+RANDSWAP(1:5) % -&gt; e.g. [3 5 1 2 4]
+
+% Randomize along first non-singleton dimension (rows)
+X = reshape(1:16,4,4) ; % test matrix
+RANDSWAP(X) % -&gt;  1     5     9    13
+%     3     7    11    15
+%     4     8    12    16
+%     2     6    10    14
+
+% Randomize along all dimensions (swap rows, then columns)
+X = reshape(1:9,3,3) ; % test matrix
+RANDSWAP(X,'partial') % -&gt;  2    8   5
+%     1    7   4
+%     3    9   6
+
+% Swap all elements
+X = reshape(1:9,3,3) ; % test matrix
+RANDSWAP(X,'full') % -&gt;  9    5     6
+%     4    1     8
+%     7    3     2
+
+See also RAND, RANDPERM, SHAKE
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="selectfields.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;selectfields</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>inclPoints&nbsp;&nbsp;<a href="inclPoints.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

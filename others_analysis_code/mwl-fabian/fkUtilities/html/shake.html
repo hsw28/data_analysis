@@ -1,0 +1,34 @@
+<html><head><title>fkUtilities - shake</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="topologicalsort.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="localmaximum.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>shake</h2>
+<h3>synopsis</h3>
+Randomize a matrix along a specific dimension
+<h3>syntax</h3><pre>
+    y=SHAKE(x)
+    y=SHAKE(x,dim)
+    [y,i,j]=SHAKE(x)
+</pre>
+<h3>description</h3>
+<p>
+y=SHAKE(x) randomizes the order of the elements in each column of the
+2D matrix. For N-D matrices it randomizes along the first non-singleton
+dimension.
+</p>
+<p>
+y=SHAKE(x,dim) randomizes along the dimension DIM.
+</p>
+<p>
+[y,i,j]=SHAKE(x) returns indices so that y=x(i) and x=y(j).
+</p>
+<h3>example</h3><pre>
+A = [1 2 3 ; 4 5 6 ; 7 8 9 ; 10 11 12] ; % see &lt;SLM&gt; on the FEX ...
+Dim = 2 ;
+B = shake(A,Dim)  % -&gt;, e.g.
+%  3     2     1
+%  6     4     5
+%  7     8     9
+% 11    10    12%
+C = sort(B,Dim) % -&gt; equals A!
+</pre>
+<h3>see also</h3>
+rand &mdash sort &mdash randperm &mdash randswap 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="topologicalsort.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;topologicalsort</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>localmaximum&nbsp;&nbsp;<a href="localmaximum.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

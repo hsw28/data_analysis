@@ -1,0 +1,39 @@
+<html><head><title>fkEvents - eventavg</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEvents reference pages</td><td align="right"><a href="demo_event2seg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="event2seg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>eventavg</h2>
+<h3>synopsis</h3>
+compute event triggered average
+<h3>syntax</h3><pre>
+    a=EVENTAVG(trigger,time,data)
+    a=EVENTAVG(...,parm1,val1,...)
+    [a,lags,b]=EVENTAVG(...)
+</pre>
+<h3>description</h3>
+<p>
+a=EVENTAVG(trigger,time,data) This will compute an event triggered
+average. The first argument is a vector of event times, the second
+argument is a vector of time values at which the data matrix is sampled.
+The first dimension of the data matrix should have the same length as
+the time vector (at least two time points are required). The data is
+interpolated for 2 seconds at 1/fs steps around each trigger, where fs
+is computed as mean(diff(time)). The size of the return value is nlags x
+size(data,2) x ... x size(data, ndims(data)).
+</p>
+<p>
+a=EVENTAVG(...,parm1,val1,...) Allows extra options to be set. Valid
+options are:
+<dl>
+<dt>lags</dt><dd>minimum and maximum lag (default=[-1 1])</dd>
+<dt>fs</dt><dd>sampling frequency (default=computed from time vector)</dd>
+<dt>interp</dt><dd>interpolation method (default='linear')</dd>
+<dt>method</dt><dd>slow/fast (default='fast') The slow method has lower memory overhead compared to the fast method, but does only support nanmean and nansum functions.</dd>
+<dt>function</dt><dd>string or function handle (default='nanmean'). The function should accept two arguments: fcn(matrix,dim), where dim is always 1.</dd>
+</dl>
+</p>
+<p>
+[a,lags,b]=EVENTAVG(...) returns a columns vector of lags and a matrix b
+that contains the interpolated data for each trigger. The size of b is
+ntriggers x nlags x size(data,2) x ... x size(data,ndims(data)).
+If method=='slow', output b is always empty.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="demo_event2seg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;demo_event2seg</td><td align=center width="34%"><a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>event2seg&nbsp;&nbsp;<a href="event2seg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

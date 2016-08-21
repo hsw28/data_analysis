@@ -1,0 +1,27 @@
+<html><head><title>fkSession - waveform_mean</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right"><a href="import_video.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="import_tetrode_info.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>waveform_mean</h2>
+<h3>synopsis</h3>
+calculate waveform mean
+<h3>syntax</h3><pre>
+    [wavemean,wavestd]=WAVEFORM_MEAN(ttfile,id)
+    [...]=WAVEFORM_MEAN(ttfile,id,maxchan)
+    [...]=WAVEFORM_MEAN(ttfile,id,maxchan,center)
+</pre>
+<h3>description</h3>
+<p>
+[wavemean,wavestd]=WAVEFORM_MEAN(ttfile,id) calculates the mean and
+standard deviation of the spike waveforms in the tt-file for the
+spikes records indicated by the id vector. The waveforms are centered
+at the peak of the waveform in the channels with the largest peak
+before calculating the mean. The peak is centered at the 10th sample.
+</p>
+<p>
+[...]=WAVEFORM_MEAN(ttfile,id,maxchan) uses the specified channel for
+finding the peak for centering.
+</p>
+<p>
+[...]=WAVEFORM_MEAN(ttfile,id,maxchan,center) centers the waveform at
+specified sample.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="import_video.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;import_video</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>import_tetrode_info&nbsp;&nbsp;<a href="import_tetrode_info.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

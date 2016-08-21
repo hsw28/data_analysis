@@ -1,0 +1,44 @@
+<html><head><title>fkUtilities - normalize</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="struct2tree.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="loadscript.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>normalize</h2>
+<h3>synopsis</h3>
+normalizes an array
+<h3>syntax</h3><pre>
+    m=NORMALIZE(m)
+    m=NORMALIZE(m,dimension)
+    m=NORMALIZE(m,dimension,option)
+    m=NORMALIZE(m,dim,option,1)
+</pre>
+<h3>description</h3>
+<p>
+m=NORMALIZE(m) normalize matrix m to the sum along the first
+dimension.
+</p>
+<p>
+m=NORMALIZE(m,dimension) normalize along the specified
+dimension(s). If dimension=0, then the matrix will be normalized
+as a whole. If dimensions is a vector, then normalization will
+occur within the subspace defined by those dimensions (e.g. for
+a 3-d matrix, setting dimension to [1 2] will normalize each x,y
+plane)
+</p>
+<p>
+m=NORMALIZE(m,dimension,option) normalize using the specified
+option. Valid options are:
+<dl>
+<dt>sum</dt><dd>normalize to the sum</dd>
+<dt>area</dt><dd>normalize to the area (i.e. sum of absolute values)</dd>
+<dt>mean</dt><dd>normalize to mean</dd>
+<dt>max</dt><dd>normalize to max</dd>
+<dt>min</dt><dd>normalize to min</dd>
+<dt>extreme</dt><dd>normalize to extreme value</dd>
+<dt>amp</dt><dd>normalize to maximum-minimum</dd>
+<dt>range</dt><dd>subtract minimum and normalize to maximum-minimum</dd>
+<dt>zscore</dt><dd>subtract mean and normalize to standard deviation</dd>
+<dt>detrend</dt><dd>subtract mean</dd>
+</dl>
+</p>
+<p>
+m=NORMALIZE(m,dim,option,1) ignores NaNs
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="struct2tree.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;struct2tree</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>loadscript&nbsp;&nbsp;<a href="loadscript.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,3 @@
+How to:howto
+ Load all session data:howto_loadall
+ Partial load:howto_loadpartial

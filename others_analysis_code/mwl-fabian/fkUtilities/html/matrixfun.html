@@ -1,0 +1,23 @@
+<html><head><title>fkUtilities - matrixfun</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="create_openfield_path.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="debugmsg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>matrixfun</h2>
+<h3>synopsis</h3>
+perform function on matrix for 1 or more dimensions
+<h3>syntax</h3><pre>
+    m=MATRIXFUN(m,function)
+    m=MATRIXFUN(m,function,dims)
+</pre>
+<h3>description</h3>
+<p>
+m=MATRIXFUN(m,function) for a n-d matrix m, will perform the specified
+function along the first dimension. The function argument should be a
+valid function handle that takes a matrix as the first input and the
+dimension along which to work as the second input. Functions that do not
+adhere to this convention should be wrapped into an anonymous function
+handle (i.e. @(m,d) var(m,1,d))
+</p>
+<p>
+m=MATRIXFUN(m,function,dims) will perform function on the collective
+dimensions specified in dims.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="create_openfield_path.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;create_openfield_path</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>debugmsg&nbsp;&nbsp;<a href="debugmsg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

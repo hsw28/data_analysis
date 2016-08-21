@@ -1,0 +1,24 @@
+<html><head><title>fkAnalysis - spatialinfo</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkAnalysis reference pages</td><td align="right"><a href="psdmat.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="create_filter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>spatialinfo</h2>
+<h3>synopsis</h3>
+calculate spatial information
+<h3>description</h3>
+<p>
+Syntax
+
+si = spatialinfo( spike_probability, occupancy_probability [, xlimits, tol])
+</p>
+<p>
+Description
+
+This function will calculate the spatial information of a spike train.
+The argument spike_prob is a vector of spike probabilities for a set
+of bins; argument occupancy_prob is the probability that the animal
+can be found in each bin. Alternatively spike_prob and occupancy_prob
+can be handles to function that calculate the probability density as a
+function of x. In this case, the xlimits is required to set the lower
+and upper boundaries of x. Optionally the tolerance for calculation of
+the integral can bet set (default = 1e-5).
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="psdmat.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;psdmat</td><td align=center width="34%"><a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>create_filter&nbsp;&nbsp;<a href="create_filter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

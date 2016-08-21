@@ -1,0 +1,53 @@
+<html><head><title>fkMapping - fkgrid.fkgrid</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.edges.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.iscategorical.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>fkgrid</h2>
+<h3>synopsis</h3>
+fkgrid object constructor
+<h3>syntax</h3><pre>
+    g=FKGRID
+    g=FKGRID(g)
+    g=FKGRID(grid_def1, ...)
+</pre>
+<h3>description</h3>
+<p>
+g=FKGRID default constructor
+</p>
+<p>
+g=FKGRID(g) copy constructor
+</p>
+<p>
+g=FKGRID(grid_def1, ...) returns a new fkgrid object with the
+specified grids for each dimension. A grid definition can be any of
+the following:
+<dl>
+<dt>vector</dt><dd>grid edges for a linear grid string,vector - the string can be either 'linear' or 'circular' and the vector specifies the grid edges</dd>
+<dt>cell</dt><dd>three element cell array: {'linear'/'circular', vector of grid edges, 'name'}</dd>
+</dl>
+</p>
+<p>
+An fkgrid object stores the grid edges for n-dimensions, which can be
+either linear or circular (like angles). Each dimension ahs a name
+associated with it. The following methods are defined for a fkgrid
+object:
+<dl>
+<dt>bin</dt><dd>get the bin indices for a set of coordinates</dd>
+<dt>binsizes</dt><dd>get binsizes</dd>
+<dt>centers</dt><dd>get bin centers</dd>
+<dt>edges</dt><dd>get bin edges</dd>
+<dt>iscategorical</dt><dd>tests for NaNs and Infs</dd>
+<dt>isuniform</dt><dd>test for uniform spacing and size  of bins</dd>
+<dt>labels</dt><dd>get bin edge labels</dd>
+<dt>map</dt><dd>create a map using the grid</dd>
+<dt>names</dt><dd>get dimension names</dd>
+<dt>ndims</dt><dd>get number of dimensions</dd>
+<dt>size</dt><dd>get the number of bins in each dimension</dd>
+</dl>
+</p>
+<p>
+fkgrid objects can be concatenated using the plus operator.
+</p>
+<h3>example</h3><pre>
+g = fkgrid( 'linear', 0:100, {'linear', -10:10, 'test'}, 1:50 );
+g2 = g + fkgrid( 'circular', (0:0.1:1)*pi );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.edges.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;edges</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>iscategorical&nbsp;&nbsp;<a href="fkgrid.iscategorical.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

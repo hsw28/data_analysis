@@ -1,0 +1,26 @@
+<html><head><title>fkEventDispatch - get_pointer_object</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="scroll_pan.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="isvalidcallback.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>get_pointer_object</h2>
+<h3>synopsis</h3>
+get object under mouse cursor
+<h3>syntax</h3><pre>
+    [hObj,local_point]=GET_POINTER_OBJECT(hFig, screen_point)
+    [hObj,point]=GET_POINTER_OBJECT(hObj, point, 1)
+</pre>
+<h3>description</h3>
+<p>
+[hObj,local_point]=GET_POINTER_OBJECT(hFig, screen_point) finds in the
+figure with handle hFig the front-most object at the location of the
+mouse cursor that has its HitTest property set to 1. The coordinates
+screen_point will be transformed to local coordinates local_point. For
+a figure or uipanel local coordinates mean the pixel coordinates
+relative to the bottom-left corner. For an axes it means the axes
+coordinate system. For other objects this means the local coordinates
+of their parent container (i.e. figure, uipanel or axes).
+</p>
+<p>
+[hObj,point]=GET_POINTER_OBJECT(hObj, point, 1) will only transform
+the screen coordinates to local coordinates for the object with handle
+hObj.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="scroll_pan.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;scroll_pan</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>isvalidcallback&nbsp;&nbsp;<a href="isvalidcallback.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

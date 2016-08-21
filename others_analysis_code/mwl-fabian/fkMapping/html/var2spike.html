@@ -1,0 +1,37 @@
+<html><head><title>fkMapping - var2spike</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkMapping reference pages</td><td align="right"><a href="ratemap_kde.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="bin2map.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>var2spike</h2>
+<h3>synopsis</h3>
+computes the value of variables at time of spikes
+<h3>syntax</h3><pre>
+    spikevar=VAR2SPIKE(spikes,vartime,variables)
+    spikevar=VAR2SPIKE(...,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+spikevar=VAR2SPIKE(spikes,vartime,variables) returns the value of the
+variables at the time of the spikes. The spike times argument can be a
+vector of event times or a cell array with event time vectors. The
+variable time argument should be a vector, the variables arguments
+should be a matrix with the same number of rows as vartime.
+</p>
+<p>
+spikevar=VAR2SPIKE(...,parm1,val1,...) uses the specified
+options. Valid options are:
+<dl>
+<dt>vartypes</dt><dd>specifies whether variables are linear (1) or circular (0). Either a scalar, a vector or a cell array.</dd>
+<dt>interp</dt><dd>interpolation method: nearest, linear, etc.</dd>
+<dt>addtime</dt><dd>0/1, include spike time in the output matrix</dd>
+</dl>
+</p>
+<p>
+This function will interpolate the variables at the spike times. For
+circular variables the variable will first be unwrapped, then
+interpolated and finally converted back to radians again.
+</p>
+<h3>example</h3><pre>
+vt = (0:100)';
+v = [v.^2 mod(vt,2*pi)];
+var2spike( 100*sort(rand(100,1)), vt, v, 'vartypes', {'l','c'})
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="ratemap_kde.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;ratemap_kde</td><td align=center width="34%"><a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>bin2map&nbsp;&nbsp;<a href="bin2map.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

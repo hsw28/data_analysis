@@ -1,0 +1,28 @@
+<html><head><title>fkUtilities - inrange</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="rgb2hex.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="struct2str.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>inrange</h2>
+<h3>synopsis</h3>
+test whether numbers are within range
+<h3>syntax</h3><pre>
+    b=INRANGE(x,range)
+    b=INRANGE(x,range,'imag')
+</pre>
+<h3>description</h3>
+<p>
+b=INRANGE(x,range) returns true for values in x that are within the
+specified range. The range is a two element vector specifying the
+lower and upper bounds of the range. if range(2)&lt;range(1) then the
+valid range is inverted. If range is scalar then the range will be set
+to [range Inf].
+</p>
+<p>
+b=INRANGE(x,range,'imag') returns true if both magnitude and angle are
+within range.
+</p>
+<h3>example</h3><pre>
+b=inrange(10, [5 9]); %returns 0
+b=inrange(10, [9 5]); %returns 1
+b=inrange(1+8i, [0 pi]); %returns 1
+</pre>
+<h3>see also</h3>
+circ_inrange 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="rgb2hex.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;rgb2hex</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>struct2str&nbsp;&nbsp;<a href="struct2str.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

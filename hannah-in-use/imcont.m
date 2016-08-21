@@ -119,6 +119,7 @@ function c = imcont(varargin)
     eegfh = mwlopen(a.eegfile);
   elseif ~isempty(a.mwlIOeegfh),
     eegfh = a.mwlIOeegfh;
+    eegfh
   end
   
   if ~isempty(eegfh);
@@ -261,7 +262,7 @@ function c = imcont(varargin)
     if strcmp(a.eeg.info.units, 'ADC');
       %convert to mV
       c.units = 'mV';
-      
+    
 
       % a vector of conversion factors per channel
       adunits_to_mv_f = ...
@@ -269,6 +270,7 @@ function c = imcont(varargin)
           diff(a.eeg.info.inputrange) .* ... % ADCvolts/ADCrange (-10 -> +10)
           1/a.eeg.info.gain .* ... % volts/ADCvolts (vector)
           1000; % mv/volt
+
           
       for k = 1:length(a.eeg.info.gain);
         c.data(:,k) = a.eeg.data(:,k) .* adunits_to_mv_f(k);
@@ -348,6 +350,9 @@ function c = imcont(varargin)
   % common to all inputs
   
   if size(c.data,1) ~= (recsize * size(timestamp,1)),
+    %recsize = 1
+    %size(timestamp,1) = 12087724
+    %size(c.data,1) = 8
     error('data size inconsistent with timestamps/recordsize');
   elseif ~isempty(a.chans) && (size(c.data,2) ~= length(a.chans)),
     error('data must have same # of columns as ''chans'' entries');

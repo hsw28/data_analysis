@@ -1,0 +1,55 @@
+<html><head><title>fkReconstruction - reconstructengine</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkReconstruction reference pages</td><td align="right"><a href="uireconstruction.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkReconstruction_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="reconstruct_basis.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>reconstructengine</h2>
+<h3>synopsis</h3>
+create a position reconstruction engine
+<h3>syntax</h3><pre>
+    e=RECONSTRUCTENGINE(spikes, behavior)
+</pre>
+<h3>description</h3>
+<p>
+e=RECONSTRUCTENGINE(spikes, behavior) returns a reconstruction engine
+and initialize it with a cell array of spike time vectors and a
+behavior structure. The behavior structure should contain the fields
+'timestamp' and 'variables' and 'varnames'.
+</p>
+<p>
+A reconstruction engine has the following inputs:
+<dl>
+<dt>viewport</dt><dd>sorted and non-overlapping list of time segments for which to do position reconstruction. (results for all viewports are concatenated).</dd>
+<dt>spikes</dt><dd>cell array of spike time vectors to use for reconstruction (by default uses the defaultspikes input)</dd>
+<dt>defaultspikes</dt><dd>cell array of spike time vector to use for tuning map construction.</dd>
+<dt>behavior</dt><dd>structure of behavioral timestamps, variables and names.</dd>
+</dl>
+</p>
+<p>
+A reconstruction engine contains the following engines:
+<dl>
+<dt>bin</dt><dd>for binning the time segments</dd>
+<dt>rate</dt><dd>for counting the number of spikes in each bin</dd>
+<dt>spikes</dt><dd>for selecting the source input for spikes</dd>
+<dt>grid</dt><dd>maintains sampling grid for behavioral variables</dd>
+<dt>basis</dt><dd>creates tuning maps</dd>
+<dt>reconstruct</dt><dd>bayesian reconstruction</dd>
+<dt>reshape_reconstruct</dt><dd>reshapes reconstruction matrix</dd>
+<dt>reshape_basis</dt><dd>reshapes tuning maps</dd>
+<dt>reshape_occupancy</dt><dd>reshapes occupancy map</dd>
+<dt>threshold</dt><dd>optionally thresholds position reconstruction matrix</dd>
+<dt>randomize</dt><dd>optionally randomizes spike counts, before reconstruction</dd>
+</dl>
+</p>
+<p>
+A reconstruction engine has the following outputs:
+<dl>
+<dt>bins</dt><dd>time bins used for position reconstruction</dd>
+<dt>spikecount</dt><dd>spike count matrix</dd>
+<dt>estimate</dt><dd>position reconstruction matrix</dd>
+<dt>tuningmaps</dt><dd>tuning maps</dd>
+<dt>occupancy</dt><dd>occupancy map</dd>
+<dt>spikes</dt><dd>same as default spikes input</dd>
+<dt>behavior</dt><dd>same as behavior input</dd>
+<dt>grid</dt><dd>sampling grid of behavioral variables</dd>
+<dt>nbins</dt><dd>for each viewport, the number of bins</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="uireconstruction.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;uireconstruction</td><td align=center width="34%"><a href="fkReconstruction_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>reconstruct_basis&nbsp;&nbsp;<a href="reconstruct_basis.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

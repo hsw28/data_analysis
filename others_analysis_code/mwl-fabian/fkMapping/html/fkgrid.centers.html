@@ -1,0 +1,23 @@
+<html><head><title>fkMapping - fkgrid.centers</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.binsizes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.deltas.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>centers</h2>
+<h3>synopsis</h3>
+get bin centers
+<h3>syntax</h3><pre>
+    c=CENTERS(grid)
+    c=CENTERS(grid,dim)
+</pre>
+<h3>description</h3>
+<p>
+c=CENTERS(grid) returns a cell array of vectors with for each
+dimension the bin centers of the grid.
+</p>
+<p>
+c=CENTERS(grid,dim) returns the bin centers only along dimension dim
+</p>
+<h3>example</h3><pre>
+grid = fkgrid('linear', 0:100);
+c = centers(grid);
+</pre>
+<h3>see also</h3>
+fkgrid/binsizes &mdash fkgrid/edges 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.binsizes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;binsizes</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>deltas&nbsp;&nbsp;<a href="fkgrid.deltas.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

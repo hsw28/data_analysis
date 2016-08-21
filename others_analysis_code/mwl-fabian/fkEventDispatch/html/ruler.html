@@ -1,0 +1,60 @@
+<html><head><title>fkEventDispatch - ruler</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="event_dispatch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="test_events.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>ruler</h2>
+<h3>synopsis</h3>
+add ruler capabilities to axes
+<h3>syntax</h3><pre>
+    RULER
+    RULER TOGGLE
+    RULER ON
+    RULER OFF
+    RULER(hAx)
+    RULER(hAx, command) runs ruler command ('toggle', 'on', 'off)
+    RULER(hAx, parameter1, value1, ...)
+    [state, props]=RULER(...)
+</pre>
+<h3>description</h3>
+<p>
+RULER toggles ruler functionality for current axes. Dragging the
+left mouse button will display the ruler and its basic measures
+(i.e. delta x, delta y, length and slope). Pressing the shift-key while
+dragging, restricts the ruler to a vertical line. Pressing the
+control-key while dragging restricts the ruler to a horizontal line.
+</p>
+<p>
+RULER TOGGLE toggles ruler for current axes
+</p>
+<p>
+RULER ON turns on ruler for current axes
+</p>
+<p>
+RULER OFF turns off ruler for current axis
+</p>
+<p>
+RULER(hAx) turn on ruler for the axes with handle hAx.
+</p>
+<p>
+RULER(hAx, command) runs ruler command ('toggle', 'on', 'off) for axes
+with handle hAx
+</p>
+<p>
+RULER(hAx, parameter1, value1, ...) turns on ruler for axis hAx with
+additional properties as specified by parameter/value pairs. Valid
+parameters are:
+<dl>
+<dt>Button</dt><dd>mouse button used to access ruler (left = 1, middle = 2, right = 3)</dd>
+<dt>TextProps</dt><dd>cell array of parameter/value pairs that customize the text display</dd>
+<dt>LineProps</dt><dd>cell array of parameter/value pairs that customize ruler line display</dd>
+</dl>
+</p>
+<p>
+[state, props]=RULER(...) returns the ruler state of an axes and the
+ruler properties
+</p>
+<p>
+The ruler functionality provided by RULER depends on the extended
+event dispatching framework. The parent figure of the axes will be set
+up for this by a call to EVENT_DISPATCH.
+</p>
+<h3>see also</h3>
+event_dispatch 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="event_dispatch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;event_dispatch</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>test_events&nbsp;&nbsp;<a href="test_events.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

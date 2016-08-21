@@ -1,0 +1,27 @@
+<html><head><title>fkUtilities - binsearch</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="loadconfig.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="create_openfield_path.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>binsearch</h2>
+<h3>synopsis</h3>
+binary vector search
+<h3>syntax</h3><pre>
+    idx=BINSEARCH(data,value)
+    idx=BINSEARCH(data,value,bias)
+</pre>
+<h3>description</h3>
+<p>
+idx=BINSEARCH(data,value) find the index of the element in the
+data vector that is nearest to the requested value using a fast
+binar search algorithm. Data should be sorted; this is not
+checked however (for performance reasons)
+</p>
+<p>
+idx=BINSEARCH(data,value,bias) specify a bias, which can be any
+of the following:
+<dl>
+<dt>nearest</dt><dd>return index of data element closest to value (default)</dd>
+<dt>post</dt><dd>return index of element equal to or larger than requested value or NaN if value&gt;last element in data</dd>
+<dt>pre</dt><dd>return index of element equal to or smaller than requested value or NaN if value&lt;first element in data</dd>
+<dt>strict</dt><dd>return index of element equal to value or NaN otherwise.</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="loadconfig.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;loadconfig</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>create_openfield_path&nbsp;&nbsp;<a href="create_openfield_path.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

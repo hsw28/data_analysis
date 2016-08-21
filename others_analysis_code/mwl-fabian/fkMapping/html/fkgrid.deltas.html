@@ -1,0 +1,24 @@
+<html><head><title>fkMapping - fkgrid.deltas</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.centers.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.edges.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>deltas</h2>
+<h3>synopsis</h3>
+returns grid spacing
+<h3>syntax</h3><pre>
+    delta=DELTAS(grid)
+    delta=DELTAS(grid,dim)
+</pre>
+<h3>description</h3>
+<p>
+delta=DELTAS(grid) returns the spacing for every linear uniform
+dimension in the grid, or 1 for categorical dimensions or NaN
+otherwise.
+</p>
+<p>
+delta=DELTAS(grid,dim) returns spacing for diension dim only
+</p>
+<h3>example</h3><pre>
+grid = fkgrid('linear', 0:3:30, 'linear', 10:2:80);
+delta = deltas(grid); %returns [3 2]
+</pre>
+<h3>see also</h3>
+fkgrid/isuniform 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.centers.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;centers</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>edges&nbsp;&nbsp;<a href="fkgrid.edges.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

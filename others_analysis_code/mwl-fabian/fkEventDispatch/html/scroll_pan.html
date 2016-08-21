@@ -1,0 +1,70 @@
+<html><head><title>fkEventDispatch - scroll_pan</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="add_callback.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="get_pointer_object.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>scroll_pan</h2>
+<h3>synopsis</h3>
+adds panning capabilities to axes
+<h3>syntax</h3><pre>
+    SCROLL_PAN
+    SCROLL_PAN TOGGLE
+    SCROLL_PAN OFF
+    SCROLL_PAN ON
+    SCROLL_PAN X
+    SCROLL_PAN Y
+    SCROLL_PAN(hAx)
+    SCROLL_PAN(hAx, command)
+    SCROLL_PAN(hAx, parameter1, value1, ...)
+    [state, props]=SCROLL_PAN(...)
+</pre>
+<h3>description</h3>
+<p>
+SCROLL_PAN toggles panning functionality for current axes. Scrolling the
+mouse wheel over the x-axis or y-axis pans that axis by 50% of its
+extent. Alternatively, the cursor keys can be used for
+panning. Pressing the page-up or page-down key changes the panning
+fraction by a factor 2. Pressing the x or y key toggles panning along
+the x-axis or y-axis.
+</p>
+<p>
+SCROLL_PAN TOGGLE toggles panning functionality for current axes.
+</p>
+<p>
+SCROLL_PAN OFF turns off panning for current axes
+</p>
+<p>
+SCROLL_PAN ON turns on panning for current axes
+</p>
+<p>
+SCROLL_PAN X turns on x-axis panning for current axis
+</p>
+<p>
+SCROLL_PAN Y turns on y-axis panning for curren axis
+</p>
+<p>
+SCROLL_PAN(hAx) turns on panning functionality for axes with handle hAx
+</p>
+<p>
+SCROLL_PAN(hAx, command) runs panning command ('toggle', 'on', 'off',
+'x', 'y') for axes with handle hAx
+</p>
+<p>
+SCROLL_PAN(hAx, parameter1, value1, ...) turns on panning for axis hAx
+with additional properties as specified by parameter/value
+pairs. Valid parameters are:
+<dl>
+<dt>Fraction</dt><dd>panning fraction, which determines the size of a panning step as a fraction of the current axis limits. The fraction should be &gt;0 (default = 0.5).</dd>
+<dt>Axis</dt><dd>allows panning along the specified axis. Valid values are: 'x', 'y', 'xy'.</dd>
+<dt>Modifier</dt><dd>sets a modifier key to access panning functionality (e.g. shift = 1, control = 2, no modifier = 0).</dd>
+<dt>AxisOnly</dt><dd>when set to 1, restricts mouse wheel panning to the cases when the mouse pointer is over the x-axis or y-axis. When set to 0, also allows panning when mouse pointer is over axes drawing area. Note that this is only practical if panning is limited to a single axis.</dd>
+</dl>
+</p>
+<p>
+[state, props]=SCROLL_PAN(...) returns the panning state of an axes
+and its panning properties.
+</p>
+<p>
+The panning functionality provided by SCROLL_PAN depends on the extended
+event dispatching framework. The parent figure of the axes will be set
+up for this by a call to EVENT_DISPATCH.
+</p>
+<h3>see also</h3>
+event_dispatch 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="add_callback.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;add_callback</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>get_pointer_object&nbsp;&nbsp;<a href="get_pointer_object.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,34 @@
+<html><head><title>fkHelp - toolbox2context</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkHelp reference pages</td><td align="right"><a href="toolbox2rst.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="parse_help.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>toolbox2context</h2>
+<h3>synopsis</h3>
+generate a context help document from a toolbox
+<h3>syntax</h3><pre>
+    TOOLBOX2CONTEXT
+    TOOLBOX2CONTEXT(path)
+    TOOLBOX2CONTEXT(path, name)
+    TOOLBOX2CONTEXT(path, name, destination_path)
+</pre>
+<h3>description</h3>
+<p>
+TOOLBOX2CONTEXT create a toolbox help document for the current
+working directory
+</p>
+<p>
+TOOLBOX2CONTEXT(path) create a help document for the toolbox in the
+specified path
+</p>
+<p>
+TOOLBOX2CONTEXT(path, name) specifies a custom name for the toolbox
+(by default the name of the toolbox directory is used)
+</p>
+<p>
+TOOLBOX2CONTEXT(path, name, destination_path) puts the resulting tex
+file in the specified destination path (by default the file is saved
+in &lt;toolbox path&gt;/tex)
+</p>
+<h3>example</h3><pre>
+toolbox_path = '/myhome/mymatlab/mytoolbox';
+toolbox2context( toolbox_path );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="toolbox2rst.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;toolbox2rst</td><td align=center width="34%"><a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>parse_help&nbsp;&nbsp;<a href="parse_help.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

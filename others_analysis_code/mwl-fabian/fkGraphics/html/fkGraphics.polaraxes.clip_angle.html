@@ -1,0 +1,27 @@
+<html><head><title>fkGraphics - fkGraphics.polaraxes.clip_angle</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics.polaraxes reference pages</td><td align="right">&nbsp;<a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics.polaraxes.clip_radius.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>clip_angle</h2>
+<h3>synopsis</h3>
+clip angles
+<h3>syntax</h3><pre>
+    t=CLIP_ANGLE(h,angles)
+    t=CLIP_ANGLE(h,angles,clip)
+    t=CLIP_ANGLE(h,angles,clip,limits)
+</pre>
+<h3>description</h3>
+<p>
+t=CLIP_ANGLE(h,angles) clip angles to angular limits of polar axes
+h. Values outside the limits are set to NaN.
+</p>
+<p>
+t=CLIP_ANGLE(h,angles,clip) specifies the clip method:
+<dl>
+<dt>nan</dt><dd>clipped values are set to NaN</dd>
+<dt>clip</dt><dd>clipped values are set to angular limits</dd>
+</dl>
+</p>
+<p>
+t=CLIP_ANGLE(h,angles,clip,limits) uses the specified angular limits
+rather than the limits of the polar axes.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkGraphics.polaraxes</td><td align=right>clip_radius&nbsp;&nbsp;<a href="fkGraphics.polaraxes.clip_radius.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

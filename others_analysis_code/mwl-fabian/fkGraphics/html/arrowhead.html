@@ -1,0 +1,40 @@
+<html><head><title>fkGraphics - arrowhead</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="releasefocus.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="polarbar.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>arrowhead</h2>
+<h3>synopsis</h3>
+draw arrowheads
+<h3>syntax</h3><pre>
+    h=ARROWHEAD(xy)
+    h=ARROWHEAD(xy,angle)
+    h=ARROWHEAD(...,param,value,...)
+</pre>
+<h3>description</h3>
+<p>
+h=ARROWHEAD(xy) where xy is a nx2 matrix of coordinates defining a
+polyline, this function will draw a black filled arrowhead at the
+center of each line segment, pointing from the first point to the
+second point of the line segment. The function returns a handle to a
+patch object.
+</p>
+<p>
+h=ARROWHEAD(xy,angle) where xy is a nx2 matrix defining a set of
+coordinates and angle is a length n vector of angles (in radians),
+this function will draw an arrowhead at each point with the specified
+angle.
+</p>
+<p>
+h=ARROWHEAD(...,param,value,...) Additional parameter/value
+pairs. Valid options are:
+<dl>
+<dt>color</dt><dd>set arrowhead color, can be any of 'r','g','b','c','m','y','k', or a vector with for each arrowhead an index into the current colormap, or a single [r g b] vector or a [r g b] matrix that specifies a color for each arrowhead.</dd>
+<dt>alpha</dt><dd>set arrowhead transparency, can be a scalar (0-1) or a vector that specifies an alpha value for each arrowhead.</dd>
+<dt>scale</dt><dd>set arrowhead size, can be a scalar or a two-element vector that specifies the scaling for width and length separately. Can also be a length n vector or nx2 matrix the specify the scaling for each arrowhead separately.</dd>
+<dt>refpoint</dt><dd>reference (zero) point in template coordinates</dd>
+<dt>offset</dt><dd>offset in world coordinates (i.e. after scaling)</dd>
+<dt>axis</dt><dd>parent axes handle</dd>
+<dt>template</dt><dd>2-by-n matrix specifying x and y coordinates for the shape of the arrow. Coordinates are scaled to fit within a 2-by-2 box around zero.</dd>
+</dl>
+In addition to the options listed above, all options that the patch
+function accepts are allowed as well.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="releasefocus.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;releasefocus</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>polarbar&nbsp;&nbsp;<a href="polarbar.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

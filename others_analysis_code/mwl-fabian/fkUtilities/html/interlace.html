@@ -1,0 +1,60 @@
+<html><head><title>fkUtilities - interlace</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="binpack.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="binfcn_gen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>interlace</h2>
+<h3>synopsis</h3>
+Insert Subarrays into Array
+<h3>syntax</h3><pre>
+    y=INTERLACE(a,b,ind,dim)
+    y=INTERLACE(a,c,ind,dim)
+</pre>
+<h3>description</h3>
+<p>
+y=INTERLACE(a,b,ind,dim) inserts the array b into array a after all indices
+given in the vector ind along dimension dim. If dim is not given, dim is
+set equal to the first nonsingleton dimension of a. b and a must have the
+same class. Numeric, logical, and character classes are supported. b must
+have the same dimensions as a along all dimensions except dim or b must
+be a scalar that is expanded to the correct size. When ind(k)=0, the
+array b is placed before the first index in a.
+</p>
+<p>
+y=INTERLACE(a,c,ind,dim) where c is a cell array containing length(ind)
+cells, inserts the contents of the k-th cell c{k} after the k-th index
+ind(k).
+</p>
+<h3>example</h3><pre>
+interlace(ones(3,4),1:4,2) %produces [1 1 1 1
+1 1 1 1
+1 2 3 4
+1 1 1 1]
+
+interlace(ones(3,4),[5 6 7],[1 2 3],2) %produces an error since B must be
+a column since dim=2 is the column dimension
+
+interlace(ones(3,4),[5;6;7],[1 2 3],2) %produces [1 5 1 5 1 5 1
+1 6 1 6 1 6 1
+1 7 1 7 1 7 1]
+interlace(ones(3,4),8,[0 3],1) %produces [8 8 8 8
+1 1 1 1
+1 1 1 1
+1 1 1 1
+8 8 8 8]
+
+interlace(ones(3,4),zeros(2,4),1) %produces [1 1 1 1
+0 0 0 0
+0 0 0 0
+1 1 1 1
+1 1 1 1]
+
+interlace(ones(3,4),{1:4, 4:-1:1},[1 3],1) %produces [1 1 1 1
+1 2 3 4
+1 1 1 1
+1 1 1 1
+4 3 2 1]
+
+interlace(ones(3,4),{[5;6;7],6,7},[1 1 3],2) %produces [1 5 6 1 1 7 1
+1 6 6 1 1 7 1
+1 7 6 1 1 7 1]
+</pre>
+<h3>see also</h3>
+repmat &mdash cat 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="binpack.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;binpack</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>binfcn_gen&nbsp;&nbsp;<a href="binfcn_gen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

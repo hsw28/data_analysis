@@ -1,0 +1,24 @@
+<html><head><title>fkGraphics - fkGraphics.polaraxes.clip_radius</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics.polaraxes reference pages</td><td align="right"><a href="fkGraphics.polaraxes.clip_angle.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics.polaraxes.polaraxes.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>clip_radius</h2>
+<h3>synopsis</h3>
+clip and normalize radius values
+<h3>syntax</h3><pre>
+    r=CLIP_RADIUS(h,radius)
+    r=CLIP_RADIUS(h,radius,clip)
+</pre>
+<h3>description</h3>
+<p>
+r=CLIP_RADIUS(h,radius) clip radius values and normalize to unit
+circle for use in polar axes h. By default values outside the radial
+limits of the axes are set to NaN.
+</p>
+<p>
+r=CLIP_RADIUS(h,radius,clip) specifies the clip method:
+<dl>
+<dt>nan</dt><dd>clipped values are set to NaN</dd>
+<dt>zero</dt><dd>clipped values are set to zero</dd>
+<dt>clip</dt><dd>clipped values are set to radial axes limits</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkGraphics.polaraxes.clip_angle.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;clip_angle</td><td align=center width="34%"><a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkGraphics.polaraxes</td><td align=right>polaraxes&nbsp;&nbsp;<a href="fkGraphics.polaraxes.polaraxes.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

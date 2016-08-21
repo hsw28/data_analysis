@@ -1,0 +1,27 @@
+<html><head><title>fkMapping - fkgrid.labels</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.isuniform.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.mapgrid.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>labels</h2>
+<h3>synopsis</h3>
+get bin edges labels
+<h3>syntax</h3><pre>
+    l=LABELS(grid)
+    l=LABELS(grid,dim)
+    l=LABELS(grid,dim,bins)
+</pre>
+<h3>description</h3>
+<p>
+l=LABELS(grid) return a cell array of cell array strings containing
+text representations of the bin edges for each dimension
+</p>
+<p>
+l=LABELS(grid,dim) return labels only for specified dimension
+</p>
+<p>
+l=LABELS(grid,dim,bins) return labels only for specified bins
+</p>
+<h3>example</h3><pre>
+grid = fkgrid(1:100);
+lbls = labels(grid);
+</pre>
+<h3>see also</h3>
+fkgrid/names &mdash fkgrid/edges 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.isuniform.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;isuniform</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>mapgrid&nbsp;&nbsp;<a href="fkgrid.mapgrid.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

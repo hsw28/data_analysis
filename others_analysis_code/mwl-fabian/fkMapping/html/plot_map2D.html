@@ -1,0 +1,43 @@
+<html><head><title>fkMapping - plot_map2D</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkMapping reference pages</td><td align="right"><a href="image2patch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="filtercoords.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>plot_map2D</h2>
+<h3>synopsis</h3>
+pretty plot of a 2D matrix
+<h3>syntax</h3><pre>
+    PLOT_MAP2D(m)
+    PLOT_MAP2D(m, parm1, val1, ...)
+    hAx=PLOT_MAP2D(...)
+</pre>
+<h3>description</h3>
+<p>
+PLOT_MAP2D(m) plot image of matrix
+</p>
+<p>
+PLOT_MAP2D(m, parm1, val1, ...) specify additional parameter/value
+arguments to set plotting options. Valid parameters are:
+<dl>
+<dt>ReplacePatch</dt><dd>handle of patch object that should be replaced</dd>
+<dt>MapCenters</dt><dd>centers of map elements</dd>
+<dt>MapEdges</dt><dd>edges of map elements</dd>
+<dt>Image</dt><dd>optional background image</dd>
+<dt>ImageSize</dt><dd>image size (in axes coordinates)</dd>
+<dt>Parent</dt><dd>parent axes, figure or uipanel</dd>
+<dt>ColorMap</dt><dd>vector of colors (default = hot(256))</dd>
+<dt>Scale</dt><dd>color scale</dd>
+<dt>Alpha</dt><dd>alpha value for map</dd>
+<dt>ImageAlpha</dt><dd>alpha value for background image</dd>
+<dt>BackgroundColor</dt><dd>optional background color</dd>
+<dt>Title</dt><dd>axes title</dd>
+<dt>Labels</dt><dd>labels for x axis, y axis and colorbar</dd>
+<dt>ColorBar</dt><dd>0/1 hide/show colorbar</dd>
+</dl>
+</p>
+<p>
+hAx=PLOT_MAP2D(...) returns the handle to the axes
+</p>
+<p>
+This function will plot a nice image of a matrix. Matrix elements that
+have a value of NaN are not plotted (i.e. transparent).
+</p>
+<h3>see also</h3>
+image2patch 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="image2patch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;image2patch</td><td align=center width="34%"><a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>filtercoords&nbsp;&nbsp;<a href="filtercoords.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

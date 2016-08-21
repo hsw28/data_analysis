@@ -1,0 +1,68 @@
+<html><head><title>fkUtilities - ismonotonic</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="lazymatload.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="struct_intersect.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>ismonotonic</h2>
+<h3>synopsis</h3>
+returns a boolean value indicating whether or not a vector is monotonic
+<h3>syntax</h3><pre>
+    b=ISMONOTONIC(x)
+    b=ISMONOTONIC(x,1)
+    b=ISMONOTONIC(x,0)
+    b=ISMONOTONIC(x,[],'increasing')
+    b=ISMONOTONIC(x,[],'decreasing')
+    b=ISMONOTONIC(x,[],'either')
+    b=ISMONOTONIC(x,[],[],dim)
+</pre>
+<h3>description</h3>
+<p>
+b=ISMONOTONIC(x) returns a boolean value indicating whether or not a vector is monotonic.
+By default, ISMONOTONIC returns true for non-strictly monotonic vectors,
+and both monotonic increasing and monotonic decreasing vectors. For
+matrices and N-D arrays, ISMONOTONIC returns a value for each column in
+x.
+</p>
+<p>
+b=ISMONOTONIC(x,1) works as above, but only returns true when x is
+strictly monotonically increasing, or strictly monotonically decreasing.
+</p>
+<p>
+b=ISMONOTONIC(x,0) works as ISMONOTONIC(x).
+</p>
+<p>
+b=ISMONOTONIC(x,[],'increasing') works as above, but returns true only
+when X is monotonically increasing.
+</p>
+<p>
+b=ISMONOTONIC(x,[],'decreasing') works as above, but returns true only
+when X is monotonically decreasing.
+</p>
+<p>
+b=ISMONOTONIC(x,[],'either') works as ISMONOTONIC(x, []).
+</p>
+<p>
+b=ISMONOTONIC(x,[],[],dim) works as above, but along dimension dim.
+</p>
+<p>
+NOTE: Third input variable is case insensitive, and partial matching is
+used, so 'd' would be recognised as 'decreasing' etc..
+</p>
+<p>
+SEE ALSO: is*
+</p>
+<h3>example</h3><pre>
+x = [1:4; 6:-2:2 3]
+ismonotonic(x)
+ismonotonic(x, [], 'i')
+ismonotonic(x, [], [], 2)
+
+x =
+1     2     3     4
+6     4     2     3
+ans =
+1     1     1     1
+ans =
+1     1     0     0
+ans =
+1
+0
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="lazymatload.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;lazymatload</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>struct_intersect&nbsp;&nbsp;<a href="struct_intersect.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

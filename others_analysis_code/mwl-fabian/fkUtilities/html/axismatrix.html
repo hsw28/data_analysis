@@ -1,0 +1,47 @@
+<html><head><title>fkUtilities - axismatrix</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="filefun.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="loadconfig.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>axismatrix</h2>
+<h3>synopsis</h3>
+create a matrix of axes
+<h3>description</h3>
+<p>
+Syntax
+
+h = axismatrix( nrows, ncolumns [, mask, ...] )
+</p>
+<p>
+Description
+
+Create a nrows x ncolumns matrix of axes in a figure. Optionally you
+can specify a binary mask that specifies in which location axes
+should be created. If mask is a scalar than it indicates the number
+of axes to create (in row order, starting from the top left).
+</p>
+<p>
+Options
+
+Parent = parent figure or other ui container (default = new figure)
+XOffset,YOffset = size of border between axes and parent (default = 0)
+XSpacing, YSpacing = size of spacing between axes (default = 0)
+Fcn = ui object create function (default = @axes). The function
+should accept 'Parent', 'Position' and 'Units' options, for
+example @uipanel.
+ArgIn = cell array of additional arguments to ui object create
+function.
+RowsPerPage = number of rows in a single figure. If nrows &gt;
+RowsPerPage than multiple figures (pages) are
+created. (default = nrows )
+Width = widths of axes. Can be either scalar or a ncolumns-length
+vector. Positive widths are variable (relative to container)
+and negative widths are fixed.
+Height = height of axes. Can be either a scalar or a RowsPerPage-length
+vector. Positive heights are variable (relative to
+container) and negative heights are fixed.
+Units = units of measurement (default = 'characters')
+</p>
+<p>
+Dependencies
+
+parseArgs, resizefcn
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="filefun.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;filefun</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>loadconfig&nbsp;&nbsp;<a href="loadconfig.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

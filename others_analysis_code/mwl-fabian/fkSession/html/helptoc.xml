@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toc version="1.0">
+   <tocitem image="$toolbox/matlab/icons/book_mat.gif" target="fkSession_product_page.html">fkSessionToolbox<tocitem image="$toolbox/matlab/icons/book_mat.gif" target="howto.html">How to<tocitem image="$toolbox/matlab/icons/book_mat.gif" target="howto_loadall.html">Load all session data</tocitem>
+         <tocitem image="$toolbox/matlab/icons/book_mat.gif" target="howto_loadpartial.html">Partial load</tocitem>
+      </tocitem>
+      <tocitem image="$toolbox/matlab/icons/reficon.gif" target="reference.html">Functions -- alphabetical list</tocitem>
+      <tocitem image="$toolbox/matlab/icons/reficon.gif" target="reference1.html">Functions -- categorical list</tocitem>
+   </tocitem>
+</toc>

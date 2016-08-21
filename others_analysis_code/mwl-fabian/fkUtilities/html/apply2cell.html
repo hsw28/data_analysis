@@ -1,0 +1,26 @@
+<html><head><title>fkUtilities - apply2cell</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="saveconfig.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fullpath.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>apply2cell</h2>
+<h3>synopsis</h3>
+apply function element-wise to cell arrays
+<h3>syntax</h3><pre>
+    [out1,out2,...]=APPLY2CELL(fcn,argin,cellA,cellB,...)
+</pre>
+<h3>description</h3>
+<p>
+[out1,out2,...]=APPLY2CELL(fcn,argin,cellA,cellB,...) applies a
+function element-wise to a set of cell arrays, which all should have
+the same dimensions. Argin should be a cell array with additional,
+fixed arguments for the function. For each element in the cell arrays,
+the function is called as: fcn( cellA(n), cellB(n), ..., argin{:} ).
+</p>
+<h3>example</h3><pre>
+X = { rand(10,1), rand(5,15) };
+[Y, I] = apply2cell( @sort, {1, 'descend'}, X );
+</pre>
+<h3>example</h3><pre>
+X = { 1, [5 10] };
+Y = { rand(10,1), [-3 6] };
+Z = apply2cell( @plus, [], X, Y );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="saveconfig.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;saveconfig</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>fullpath&nbsp;&nbsp;<a href="fullpath.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

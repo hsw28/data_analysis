@@ -1,0 +1,29 @@
+<html><head><title>fkUtilities - inclPoints</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="randswap.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="cell2str.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>inclPoints</h2>
+<h3>synopsis</h3>
+select 2D coordinates based on inclusive and exclusive regions
+<h3>syntax</h3><pre>
+    b=INCLPOINTS(coordinates,include)
+    b=INCLPOINTS(coordinates,include,exclude)
+</pre>
+<h3>description</h3>
+<p>
+b=INCLPOINTS(coordinates,include) for a nx2 matrix of 2d coordinates
+returns true if the coordinate lies within the include boundaries and
+false otherwise. Include boundaries can be a rectangle
+([x0,y0,width,height]) or polygon (nx2 list of node coordinates) or a
+cell array of rectangles and/or polygons. If no inclide region is
+specified, than the function returns true for all coordinates.
+</p>
+<p>
+b=INCLPOINTS(coordinates,include,exclude) returns true for all
+coordinates that are located within the include regions, but not
+inside the exclude regions.
+</p>
+<h3>example</h3><pre>
+incl = { [0 0 1 1] };
+excl = { [0 0 0.5 0.5] };
+p = inclPoints( rand(100,2), incl, excl );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="randswap.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;randswap</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>cell2str&nbsp;&nbsp;<a href="cell2str.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

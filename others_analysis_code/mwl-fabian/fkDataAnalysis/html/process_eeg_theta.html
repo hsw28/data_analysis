@@ -1,0 +1,28 @@
+<html><head><title>fkDataAnalysis - process_eeg_theta</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkDataAnalysis reference pages</td><td align="right"><a href="report_behavior.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkDataAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="process_eeg_filter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>process_eeg_theta</h2>
+<h3>synopsis</h3>
+theta oscillation detection
+<h3>syntax</h3><pre>
+    PROCESS_EEG_THETA(rootdir,epoch)
+    PROCESS_EEG_THETA(rootdir,epoch,Fs_new)
+    PROCESS_EEG_THETA(rootdir,epoch,Fs_new,param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+PROCESS_EEG_THETA(rootdir,epoch) find theta oscillations in all eeg
+signals for the specified epoch. Peaks, troughs and zero-crossings are
+detected after filtering in the theta band. The signal is then
+resampled at 100Hz and the envelope and phase is computed using the
+hilbert transform.
+</p>
+<p>
+PROCESS_EEG_THETA(rootdir,epoch,Fs_new) specifies the sampling
+frequency for the hilbert transform.
+</p>
+<p>
+PROCESS_EEG_THETA(rootdir,epoch,Fs_new,param1,val1,...) specifies
+additional eeg signal selection criteria, which are passed on to the
+select_eeg function.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="report_behavior.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;report_behavior</td><td align=center width="34%"><a href="fkDataAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>process_eeg_filter&nbsp;&nbsp;<a href="process_eeg_filter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,31 @@
+<html><head><title>fkUtilities - nearestpoint</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="plural.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="struct_setdiff.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>nearestpoint</h2>
+<h3>synopsis</h3>
+find the nearest value in y for x
+<h3>syntax</h3><pre>
+    idx=NEARESTPOINT(x,y)
+    [idx,dist]=NEARESTPOINT(x,y)
+    [...]=NEARESTPOINT(x,y,'pre')
+    [...]=NEARESTPOINT(x,y,'post')
+</pre>
+<h3>description</h3>
+<p>
+idx=NEARESTPOINT(x,y) for each element in x returns the index of the
+nearest value in y. Vector y should be sorted.
+</p>
+<p>
+[idx,dist]=NEARESTPOINT(x,y) also returns the distance between the
+value in x and the nearest value in y.
+</p>
+<p>
+[...]=NEARESTPOINT(x,y,'pre') for every element in x finds the
+nearest smaller element in y. If an element in x is smaller than any
+element in y, then NaN is returned.
+</p>
+<p>
+[...]=NEARESTPOINT(x,y,'post') for every element in x finds the
+nearest larger element in y. If an element in x is larger than any
+element in y, then NaN is returned.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="plural.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;plural</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>struct_setdiff&nbsp;&nbsp;<a href="struct_setdiff.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,26 @@
+<html><head><title>fkUtilities - batch_process</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="fill_dvd.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="delvarmat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>batch_process</h2>
+<h3>synopsis</h3>
+call function multiple times with different input arguments
+<h3>syntax</h3><pre>
+    varargout=BATCH_PROCESS(fcn,arg1,arg2,...)
+    varargout=BATCH_PROCESS(fcn,args)
+</pre>
+<h3>description</h3>
+<p>
+varargout=BATCH_PROCESS(fcn,arg1,arg2,...) calls a function multiple
+times with different input arguments and collects the results. Input
+arguments are cell vectors or numeric vectors, which share the same
+length or are scalars or strings. Character arrays are not supported.
+</p>
+<p>
+varargout=BATCH_PROCESS(fcn,args) arguments can be specified as a
+single cell matrix. The function will be called for every row in the
+cell matrix.
+</p>
+<h3>example</h3><pre>
+out = batch_process( @cat, 2, {'Peter', 'John'}, ' is a ', {'fool',
+'good fellow'} );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fill_dvd.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;fill_dvd</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>delvarmat&nbsp;&nbsp;<a href="delvarmat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

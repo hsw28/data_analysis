@@ -1,0 +1,23 @@
+<html><head><title>fkEvents - event2seg</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEvents reference pages</td><td align="right"><a href="eventavg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a></td></tr></table><h2>event2seg</h2>
+<h3>synopsis</h3>
+create a list of segments from two event series
+<h3>syntax</h3><pre>
+    seg=EVENT2SEG(on_event,off_event)
+    seg=EVENT2SEG(on_event,off_event,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+seg=EVENT2SEG(on_event,off_event) construct segments that start at
+on_event times and end at off_event times.
+</p>
+<p>
+seg=EVENT2SEG(on_event,off_event,parm1,val1,...) specifiy additional
+parameter/value options. Valid parameters are:
+<dl>
+<dt>GreedyStart</dt><dd>true/false, if more than one ON event occurs without an OFF event, then when GreedyStart is true (false) the first (last) ON event is taken as the start of the segment.</dd>
+<dt>GreedyEnd</dt><dd>tru/false, if more than one OFF event occurs without an ON event, then when GreedyEnd is true (false) the last (first) OFF event is taken as then end of the segment.</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="eventavg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;eventavg</td><td align=center width="34%"><a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right width="33%">&nbsp;</td></tr></table></body></html>

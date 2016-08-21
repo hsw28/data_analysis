@@ -1,0 +1,23 @@
+<html><head><title>fkAnalysis - clustermahal</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkAnalysis reference pages</td><td align="right"><a href="inspect_ica.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="process_eeg_ica.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>clustermahal</h2>
+<h3>synopsis</h3>
+mahalanobis distance between feature vectors and clusters
+<h3>syntax</h3><pre>
+    d2=CLUSTERMAHAL(features)
+    d2=CLUSTERMAHAL(features,cluster)
+</pre>
+<h3>description</h3>
+<p>
+d2=CLUSTERMAHAL(features) computes the mahalanobis distance between
+the feature vectors and the centroid of all features. Each row of the
+features matrix is a feature vector.
+</p>
+<p>
+d2=CLUSTERMAHAL(features,cluster) computes the mahalanobis distance
+between the feature vectors and the centroid of the subset of features
+identified by the cluster index vector. Cluster can also be a cell
+array of index vectors, in that case the return value is a matrix
+of distances.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="inspect_ica.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;inspect_ica</td><td align=center width="34%"><a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>process_eeg_ica&nbsp;&nbsp;<a href="process_eeg_ica.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

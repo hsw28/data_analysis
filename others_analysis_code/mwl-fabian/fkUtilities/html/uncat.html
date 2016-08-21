@@ -1,0 +1,47 @@
+<html><head><title>fkUtilities - uncat</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="struct_union.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="runfcn.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>uncat</h2>
+<h3>synopsis</h3>
+Unconcatenate Array
+<h3>syntax</h3><pre>
+    [a1,a2,...]=UNCAT(dim,a)
+</pre>
+<h3>description</h3>
+<p>
+[a1,a2,...]=UNCAT(dim,a) unconcatenates the array a along dimension
+dim. The number of left hand side arguments should match
+size(a,dim). All outputs are the same size as a, but have dimension 1
+along dimension dim.
+</p>
+<p>
+Note: CAT(dim,a1,a2,...) peforms the inverse operation.
+</p>
+<h3>example</h3><pre>
+[A,B,C] = UNCAT(1,eye(3,4)) returns the individual rows:
+A = [1 0 0 0]
+B = [0 1 0 0]
+C = [0 0 1 0]
+</pre>
+<h3>example</h3><pre>
+C = CELL(4,1);
+[C{:}] = UNCAT(2,eye(3,4)) returns the individual columns in cells:
+C{1} = [1 0 0 ]'
+C{2} = [0 1 0]'
+C{3} = [0 0 1]'
+C{4} = [0 0 0]'
+</pre>
+<h3>example</h3><pre>
+D = {'one','two',eye(3)};
+A = UNCAT(1,D) returns  A = D  since size(D,1)=1  but
+[A,B,C] = UNCAT(2,D) returns
+A = 'one'
+B = 'two'
+C = eye(3)
+</pre>
+<h3>example</h3><pre>
+[A,B] = UNCAT(3,ones(3,4,2)) returns
+A = ones(3,4);
+B = ones(3,4);
+</pre>
+<h3>see also</h3>
+cat &mdash deal &mdash num2cell &mdash mat2cell &mdash cell2mat 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="struct_union.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;struct_union</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>runfcn&nbsp;&nbsp;<a href="runfcn.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

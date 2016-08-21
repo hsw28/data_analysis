@@ -22,6 +22,7 @@ Think the above will always be 750
 For some reason the cont filt prints it wrong-- doing cont.samplerate gives some weird small number
 Manually enter the samplerate using
 	cont.samplerate = 750
+And manually change gains bc wtf
 
 4) make filter
 for ex:

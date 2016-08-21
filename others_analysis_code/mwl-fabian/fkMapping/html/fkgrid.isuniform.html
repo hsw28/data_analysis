@@ -1,0 +1,24 @@
+<html><head><title>fkMapping - fkgrid.isuniform</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.iscategorical.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.labels.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>isuniform</h2>
+<h3>synopsis</h3>
+test whether grid is uniform
+<h3>syntax</h3><pre>
+    b=ISUNIFORM(grid)
+    b=ISUNIFORM(grid,dim)
+</pre>
+<h3>description</h3>
+<p>
+b=ISUNIFORM(grid) returns 1 for each grid dimension that is uniform
+(i.e. uniform spacing and size of bins) or 0 for those that are
+not. This method is not implemented for circular grids.
+</p>
+<p>
+b=ISUNIFORM(grid,dim) performs test only on dimension dim
+</p>
+<h3>example</h3><pre>
+grid = fkgrid('linear', [0:100], 'linear', [0 10 30 70 100]);
+b=isuniform(grid);
+</pre>
+<h3>see also</h3>
+fkgrid/iscategorical 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.iscategorical.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;iscategorical</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>labels&nbsp;&nbsp;<a href="fkgrid.labels.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

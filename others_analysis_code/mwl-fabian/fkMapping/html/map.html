@@ -1,0 +1,39 @@
+<html><head><title>fkMapping - map</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkMapping reference pages</td><td align="right"><a href="filtercoords.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="ratemap_kde.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>map</h2>
+<h3>synopsis</h3>
+map a set of coordinates to a grid
+<h3>syntax</h3><pre>
+    m=MAP(coords)
+    m=MAP(coords,var)
+    m=MAP(coords,parm1,val1,...)
+    [m,grid]=MAP(...)
+</pre>
+<h3>description</h3>
+<p>
+m=MAP(coords) given a set of coordinates (columns are dimensions, and
+each row is a coordinate), this function will construct a nd histogram
+using a default grid. The argument coords can also be a cell array of
+matrices, in which case the maps will share the same grid and will be
+concatenated along the first available dimension.
+</p>
+<p>
+m=MAP(coords,var) applies the mapping function to the matrix of
+variables, rather than the coordinates. The var matrix should have the
+same number of rows as the coordinates matrix. By default the variable
+is [1] at each coordinate.
+</p>
+<p>
+m=MAP(coords,parm1,val1,...) uses the specified options. Valid options
+are:
+<dl>
+<dt>filters</dt><dd>set of filters that will be used filtercoords before computing the map.</dd>
+<dt>grid</dt><dd>mapping grid</dd>
+<dt>default</dt><dd>default value for empty bins</dd>
+<dt>function</dt><dd>function to apply to the vector of samples in each bin (default: @size)</dd>
+</dl>
+</p>
+<p>
+[m,grid]=MAP(...) returns the mapping grid as well.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="filtercoords.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;filtercoords</td><td align=center width="34%"><a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>ratemap_kde&nbsp;&nbsp;<a href="ratemap_kde.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

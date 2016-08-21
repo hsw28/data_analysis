@@ -1,0 +1,28 @@
+<html><head><title>fkGraphics - icircle</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="define_roi.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="formattext.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>icircle</h2>
+<h3>synopsis</h3>
+draw an editable circle
+<h3>syntax</h3><pre>
+    h=ICIRCLE(center,radius)
+    h=ICIRCLE(...,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+h=ICIRCLE(center,radius) draws a circle defined by center and radius
+and allows the user to interactively change the circle. The function
+returns a handle to the circle. Get(h,'circle') will return a
+structure with circle data. Dragging the center point of the circle
+will move the circle, dragging the circle itself will change its
+radius.
+</p>
+<p>
+h=ICIRCLE(...,parm1,val1,...) passes in extra parameter/value
+pairs. Valid paramters are:
+<dl>
+<dt>axes</dt><dd>handle of parent axes</dd>
+<dt>need_selection</dt><dd>circle can be edited only when it is selected</dd>
+<dt>selected</dt><dd>0/1 selected state of circle</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="define_roi.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;define_roi</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>formattext&nbsp;&nbsp;<a href="formattext.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

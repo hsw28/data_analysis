@@ -1,0 +1,22 @@
+<html><head><title>fkMapping - fkgrid.names</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.mapgrid.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.ndims.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>names</h2>
+<h3>synopsis</h3>
+return grid dimension names
+<h3>syntax</h3><pre>
+    n=NAMES(grid)
+    n=NAMES(grid,dim)
+</pre>
+<h3>description</h3>
+<p>
+n=NAMES(grid) returns the names of all dimensions
+</p>
+<p>
+n=NAMES(grid,dim) returns the name of dimension dim
+</p>
+<h3>example</h3><pre>
+grid = fkgrid({'linear', 1:100, 'test'), 1:100);
+n=names(grid);
+</pre>
+<h3>see also</h3>
+fkgrid/labels 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.mapgrid.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;mapgrid</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>ndims&nbsp;&nbsp;<a href="fkgrid.ndims.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

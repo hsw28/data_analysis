@@ -1,0 +1,47 @@
+<html><head><title>fkGraphics - layoutmanager.layoutmanager</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>layoutmanager reference pages</td><td align="right"><a href="layoutmanager.insert_row.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="layoutmanager.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="layoutmanager.remove_column.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>layoutmanager</h2>
+<h3>synopsis</h3>
+layoutmanager constructor
+<h3>syntax</h3><pre>
+    l=LAYOUTMANAGER
+    l=LAYOUTMANAGER(l)
+    l=LAYOUTMANAGER(h)
+    l=LAYOUTMANAGER(h,r,c)
+    l=LAYOUTMANAGER(h,r,c,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+l=LAYOUTMANAGER default constructor, create empty layout manager
+object.
+</p>
+<p>
+l=LAYOUTMANAGER(l) copy constructor
+</p>
+<p>
+l=LAYOUTMANAGER(h) creates a new layout manager object with a single
+axes in the figure or uipanel with handle h. Or, if the object with
+handle h already contains a layout manager, it will return that
+object.
+</p>
+<p>
+l=LAYOUTMANAGER(h,r,c) creates a new layout manager object with rxc
+axes in the container with handle h.
+</p>
+<p>
+l=LAYOUTMANAGER(h,r,c,parm1,val1,...) set optional parameters. Valid
+parameters are:
+<dl>
+<dt>xoffset</dt><dd>horizontal distance between container and its children</dd>
+<dt>yoffset</dt><dd>vertical distance between container and its children</dd>
+<dt>xspacing</dt><dd>horizontal spacing between children</dd>
+<dt>yspacing</dt><dd>vertical spacing between children</dd>
+<dt>fcn</dt><dd>creation function, eg @axes or @uipanel (default = @axes).</dd>
+<dt>argin</dt><dd>cell array with extra arguments for the creation function.</dd>
+<dt>width</dt><dd>scalar or vector with the relative widths for all columns.</dd>
+<dt>height</dt><dd>scalar or vector with the relative heights for all rows.</dd>
+<dt>z</dt><dd>number of levels, i.e. how many overlapping children at each row/column intersection.</dd>
+<dt>units</dt><dd>units (default = characters)</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="layoutmanager.insert_row.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;insert_row</td><td align=center width="34%"><a href="layoutmanager.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;layoutmanager</td><td align=right>remove_column&nbsp;&nbsp;<a href="layoutmanager.remove_column.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

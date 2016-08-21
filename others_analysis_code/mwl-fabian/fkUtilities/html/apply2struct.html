@@ -1,0 +1,26 @@
+<html><head><title>fkUtilities - apply2struct</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="normal_gen.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="struct2tree.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>apply2struct</h2>
+<h3>synopsis</h3>
+apply function to fields in structs
+<h3>syntax</h3><pre>
+    [out1,out2,...]=APPLY2STRUCT(fcn,argin,structA,structB,...)
+</pre>
+<h3>description</h3>
+<p>
+[out1,out2,...]=APPLY2STRUCT(fcn,argin,structA,structB,...) applies a
+function field-wise to a set of structures, which all should have
+the same fields. Argin should be a cell array with additional,
+fixed arguments for the function. For each field in the structures,
+the function is called as: fcn( structA(n), structB(n), ..., argin{:} ).
+</p>
+<h3>example</h3><pre>
+X = struct( 'a', rand(10,1), 'b', rand(10,1) );
+[Y, I] = apply2struct( @sort, {1, 'descend'}, X );
+</pre>
+<h3>example</h3><pre>
+X = struct( 'a', 1, 'b', [5 10] );
+Y = struct( 'a', rand(10,1), 'b', [-3 6] );
+Z = apply2struct( @plus, [], X, Y );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="normal_gen.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;normal_gen</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>struct2tree&nbsp;&nbsp;<a href="struct2tree.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

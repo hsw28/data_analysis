@@ -1,0 +1,29 @@
+<html><head><title>fkSegments - seg_filter</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSegments reference pages</td><td align="right"><a href="seg_excl.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="seg_filterlen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>seg_filter</h2>
+<h3>synopsis</h3>
+select segments
+<h3>syntax</h3><pre>
+    seg=SEG_FILTER(segments,events)
+    seg=SEG_FILTER(segments,events,nmin)
+    seg=SEG_FILTER(segments,events,nmin,nmax)
+    [seg,i]=SEG_FILTER(...)
+</pre>
+<h3>description</h3>
+<p>
+seg=SEG_FILTER(segments,events) returns all segments that contain at
+least one event.
+</p>
+<p>
+seg=SEG_FILTER(segments,events,nmin) returns all segments that
+contains at least nmin events.
+</p>
+<p>
+seg=SEG_FILTER(segments,events,nmin,nmax) returns all segments that
+contains at least nmin and at most nmax events.
+</p>
+<p>
+[seg,i]=SEG_FILTER(...) also returns the indices of the returned
+segments in the original segments list. I.e. seg=segments(i,:).
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="seg_excl.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;seg_excl</td><td align=center width="34%"><a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>seg_filterlen&nbsp;&nbsp;<a href="seg_filterlen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

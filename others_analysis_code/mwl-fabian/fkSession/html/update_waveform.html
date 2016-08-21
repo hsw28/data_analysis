@@ -1,0 +1,24 @@
+<html><head><title>fkSession - update_waveform</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right"><a href="import_env.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="save_event.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>update_waveform</h2>
+<h3>synopsis</h3>
+update spike waveform
+<h3>syntax</h3><pre>
+    [wavemean,wavestd,waveprops]=UPDATE_WAVEFORM(rootdir,ttfile,clusterfile)
+    [...]=UPDATE_WAVEFORM(...,maxchan)
+</pre>
+<h3>description</h3>
+<p>
+[wavemean,wavestd,waveprops]=UPDATE_WAVEFORM(rootdir,ttfile,clusterfile)
+loads previously calculated mean waveforms or, if cluster file is newer than
+wave file, calculates mean waveforms for the cluster file. Returns the
+mean, standard deviation and properties (peak, trough, etc.) of the
+waveform. Waveforms are centered at the peak of the waveform in the
+channel with the largest peak.
+</p>
+<p>
+[...]=UPDATE_WAVEFORM(...,maxchan) the specified channel is used to
+center the waveform, rather than finding the channel with the largest
+peak (saves computation).
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="import_env.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;import_env</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>save_event&nbsp;&nbsp;<a href="save_event.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,28 @@
+<html><head><title>fkEvents - event2sound</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEvents reference pages</td><td align="right"><a href="event_plot.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="psth.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>event2sound</h2>
+<h3>synopsis</h3>
+create sound wave from event times
+<h3>syntax</h3><pre>
+    w=EVENT2SOUND(events)
+    w=EVENT2SOUND(spikes,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+w=EVENT2SOUND(events) construct sound wave from vector of event times.
+</p>
+<p>
+w=EVENT2SOUND(spikes,parm1,val1,...) specifies additional
+options. Valid options are:
+<dl>
+<dt>segment</dt><dd>create sound wave for specified time segment only</dd>
+<dt>fs</dt><dd>desired sampling frequency</dd>
+<dt>slowmotion</dt><dd>slow motion factor</dd>
+<dt>slowkernel</dt><dd>true/false the kernels will be slowed down as well</dd>
+<dt>kernel</dt><dd>'box'/'gauss' or a custom kernel</dd>
+<dt>kernel_width</dt><dd>width/standard deviation of kernel</dd>
+<dt>kernel_fs</dt><dd>sampling frequency of custom kernel</dd>
+<dt>amplitude</dt><dd>vector of kernel amplitudes for each event</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="event_plot.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;event_plot</td><td align=center width="34%"><a href="fkEvents_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>psth&nbsp;&nbsp;<a href="psth.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

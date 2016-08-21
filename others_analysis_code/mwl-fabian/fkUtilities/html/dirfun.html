@@ -1,0 +1,31 @@
+<html><head><title>fkUtilities - dirfun</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="process_callbacks.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a></td></tr></table><h2>dirfun</h2>
+<h3>synopsis</h3>
+apply function to directories recursively
+<h3>description</h3>
+<p>
+DIRFCN(fcn) calls function for current working directory and every
+subdirectory in it. The first argument to the function will be the
+full path of the directory.
+</p>
+<p>
+dirs=DIRFCN(fcn) returns a list of processed subdirectories.
+</p>
+<p>
+[dirs,out1,out2,...]=DIRFCN(fcn) returns the outputs of the function.
+</p>
+<p>
+[...]=DIRFCN(fcn,parm1,val1,...) specifies optional parameters. Valid
+parameters are:
+<dl>
+<dt>Path</dt><dd>root directory (default = '.')</dd>
+<dt>Recurse</dt><dd>0/1 recurse into subdirectories</dd>
+<dt>MaxLevel</dt><dd>maximum recursion level (default=3)</dd>
+<dt>RegExp</dt><dd>regular expression for directory selection</dd>
+<dt>FullPath</dt><dd>0/1 return full path</dd>
+<dt>Argin</dt><dd>cell array of extra arguments for the function</dd>
+</dl>
+</p>
+<h3>see also</h3>
+filefun 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="process_callbacks.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;process_callbacks</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right width="33%">&nbsp;</td></tr></table></body></html>

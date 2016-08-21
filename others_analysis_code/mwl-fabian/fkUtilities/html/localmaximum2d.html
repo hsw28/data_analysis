@@ -1,0 +1,33 @@
+<html><head><title>fkUtilities - localmaximum2d</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="dist_point_segment.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="randdist.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>localmaximum2d</h2>
+<h3>synopsis</h3>
+find local maxima in matrix
+<h3>syntax</h3><pre>
+    [ix,iy]=LOCALMAXIMUM2D(m)
+    [ix,iy,z]=LOCALMAXIMUM2D(m)
+    [x,y,z]=LOCALMAXIMUM2D(mx,my,m)
+    [...]=LOCALMAXIMUM2D(...,param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+[ix,iy]=LOCALMAXIMUM2D(m) find x (column) and y (row) indices of
+the local maxima in the matrix m. NaNs are replace by -Inf.
+</p>
+<p>
+[ix,iy,z]=LOCALMAXIMUM2D(m) also returns the values at the maxima
+</p>
+<p>
+[x,y,z]=LOCALMAXIMUM2D(mx,my,m) where mx and my are vectors that
+specify the x (column) and y (row) coordinates of matrix m. The
+location of the maxima are returned in these coordinates.
+</p>
+<p>
+[...]=LOCALMAXIMUM2D(...,param1,val1,...) specify optional
+parmater/value pairs. Valid parameters are:
+<dl>
+<dt>threshold</dt><dd>minimum peak height</dd>
+<dt>mindist</dt><dd>minimum distance between peaks</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="dist_point_segment.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;dist_point_segment</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>randdist&nbsp;&nbsp;<a href="randdist.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

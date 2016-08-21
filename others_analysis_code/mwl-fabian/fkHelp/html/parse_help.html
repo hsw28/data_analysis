@@ -1,0 +1,96 @@
+<html><head><title>fkHelp - parse_help</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkHelp reference pages</td><td align="right"><a href="toolbox2context.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="generate_help.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>parse_help</h2>
+<h3>synopsis</h3>
+parse m-file help
+<h3>syntax</h3><pre>
+    PARSE_HELP(mfile)
+    PARSE_HELP(mfile, target)
+</pre>
+<h3>description</h3>
+<p>
+PARSE_HELP(mfile) parses the help in the specified m-file to html
+code.
+</p>
+<p>
+PARSE_HELP(mfile, target) parses the help to the specified target
+('html' or 'context' or 'rst').
+</p>
+<p>
+A m-file help section can optinally start with a H1 line, which should
+have the following format: %FUNCTION_IN_CAPS synopsis
+</p>
+<p>
+The parser will divide the help into paragraphs, which start with an
+empty line, followed by a line of text with 2 or less spaces
+between the % and the start of the text (i.e. an indentation &lt;= 2).
+</p>
+<p>
+Syntax paragraphs are special paragraphs that define a particular way
+of calling the m-file function. The first line of a syntax paragraph
+should contain the complete syntax, examples are:
+<ol>
+<li>FUNCTION</li>
+<li>FUNCTION ARG1</li>
+<li>outputs=FUNCTION</li>
+<li>FUNCTION(inputs)</li>
+<li>[out1, out2]=FUNCTION(arg1, arg2)</li>
+</ol>
+The rest of the paragraph may contains additional text to explain the
+syntax in more detail.
+</p>
+<p>
+Two other special paragraph types exist: examples and see also. The
+first line of an example paragraph should start with 'example' or
+'Example'. The remainder of the lines will be output unmodified. There
+can be multiple example paragraphs. A see also paragraph start with
+the words 'See also' or 'see also' followed by a space or semi-colon
+and a list of space or comma separated function names. Only one see
+also paragraph is allowed.
+</p>
+<p>
+The parser is able to recognize enumerated lists, definition lists and
+tables in paragraphs. An item in an enumerated list starts with a
+number followed by a period and a space. All following lines that have
+at least the same amount of identation as the first line are included
+in the list item text. Thus, to continue a paragraph after a list, the
+list has to be indented.
+</p>
+<p>
+An item in a definition list starts with a single word followed by a
+space, a dash and another space. The text that follows and any
+following lines are part of the definition text. For example:
+<dl>
+<dt>Alpha</dt><dd>the first letter of the Greek alphabet</dd>
+<dt>Omega</dt><dd>the last letter of the Greek alphabet. The character that represents omega is also used in physics to indicate the units for electrical resistance (Ohm).</dd>
+</dl>
+</p>
+<p>
+Simple tables can be created. A single line holds a single row in a
+table. Table cells are separated by '|'. Each table row should start
+and end with '|'. If the first row is followed by a line of just
+dashes, then it will become the table header. For example:
+
+<table>
+<tr>
+<th> Column 1 </th>
+<th> Column 2 </th>
+<th> Column 3 </th>
+</tr>
+<tr>
+<td>  (1,1)   </td>
+<td>  (1,2)   </td>
+<td>  (1,3)   </td>
+</tr>
+<tr>
+<td>  (2,1)   </td>
+<td>  (2,2)   </td>
+<td>  (2,3)   </td>
+</tr>
+</table>
+</p>
+<p>
+If the target is 'html' then the function returns html code, but
+without any &lt;html&gt; or &lt;body&gt; tags.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="toolbox2context.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;toolbox2context</td><td align=center width="34%"><a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>generate_help&nbsp;&nbsp;<a href="generate_help.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

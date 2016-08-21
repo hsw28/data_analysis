@@ -1,0 +1,2 @@
+demo pan/zoom/ruler:demo_events:demoicon
+test event framework:test_events:boardicon

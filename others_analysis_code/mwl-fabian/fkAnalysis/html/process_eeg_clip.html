@@ -1,0 +1,16 @@
+<html><head><title>fkAnalysis - process_eeg_clip</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkAnalysis reference pages</td><td align="right"><a href="lratio.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a></td></tr></table><h2>process_eeg_clip</h2>
+<h3>synopsis</h3>
+find out of range values in eeg data
+<h3>syntax</h3><pre>
+    PROCESS_EEG_CLIP(time,data,expansion)
+</pre>
+<h3>description</h3>
+<p>
+PROCESS_EEG_CLIP(time,data,expansion) returns all time segments when
+the eeg data has been clipped (i.e. abs( data ) &gt;= 2047). The
+expansion argument specifies how many samples on either side of
+clipped values will be included as well (default=5).
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="lratio.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;lratio</td><td align=center width="34%"><a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right width="33%">&nbsp;</td></tr></table></body></html>

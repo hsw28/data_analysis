@@ -1,0 +1,29 @@
+<html><head><title>fkSession - load_props</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right"><a href="import_session.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="for_each_cluster.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>load_props</h2>
+<h3>synopsis</h3>
+load property data
+<h3>syntax</h3><pre>
+    props=LOAD_PROPS(rootdir,target)
+    props=LOAD_PROPS(rootdir,target,'var1','var2',...)
+    props=LOAD_PROPS(rootdir,target,{'var1','var2',...})
+    propnames=LOAD_PROPS(rootdir,target,0)
+</pre>
+<h3>description</h3>
+<p>
+props=LOAD_PROPS(rootdir,target) returns a structure with all
+variables contained in the property data file rootdir/target.props
+</p>
+<p>
+props=LOAD_PROPS(rootdir,target,'var1','var2',...) loads only the
+selected variables from property data file.
+</p>
+<p>
+props=LOAD_PROPS(rootdir,target,{'var1','var2',...}) loads only the
+selected variables from property data file.
+</p>
+<p>
+propnames=LOAD_PROPS(rootdir,target,0) returns a list of the names of
+all variables in the property data file.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="import_session.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;import_session</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>for_each_cluster&nbsp;&nbsp;<a href="for_each_cluster.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

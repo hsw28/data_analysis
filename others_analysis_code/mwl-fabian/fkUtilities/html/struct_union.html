@@ -1,0 +1,17 @@
+<html><head><title>fkUtilities - struct_union</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="pstruct.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="uncat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>struct_union</h2>
+<h3>synopsis</h3>
+return the union of two structures
+<h3>syntax</h3><pre>
+    s=STRUCT_UNION(s1,s2)
+</pre>
+<h3>description</h3>
+<p>
+s=STRUCT_UNION(s1,s2) returns the union of two structures. If a field
+is present in both s1 and s2 and at least one of the fields is not a
+struct then the field from s2 is added. If both fields are structs the
+function recurses. s1 and s2 should have the same dimensions.
+</p>
+<h3>see also</h3>
+struct_setdiff &mdash struct_intersect 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="pstruct.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;pstruct</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>uncat&nbsp;&nbsp;<a href="uncat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

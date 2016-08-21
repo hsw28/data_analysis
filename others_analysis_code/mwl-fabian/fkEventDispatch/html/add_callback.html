@@ -1,0 +1,35 @@
+<html><head><title>fkEventDispatch - add_callback</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right">&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="scroll_pan.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>add_callback</h2>
+<h3>synopsis</h3>
+add callbacks to object
+<h3>syntax</h3><pre>
+    ADD_CALLBACK(hObj, callback_name, fcn)
+    id=ADD_CALLBACK(hObj, callback_name, fcn)
+    id=ADD_CALLBACK(hObj, callback_name, fcn, id)
+</pre>
+<h3>description</h3>
+<p>
+ADD_CALLBACK(hObj, callback_name, fcn) adds the specified callback
+function to the object with handle hObj. The callback function can
+be one of: 1. string to be evaluated, 2. function handle, 3. cell
+array with first cell function handle or function name and remaining
+cells extra arguments.
+</p>
+<p>
+id=ADD_CALLBACK(hObj, callback_name, fcn) returns the callback
+function IDassigned to the callback function. This ID can be used with
+REMOVE_CALLBACK to remove the callback function from the list.
+</p>
+<p>
+id=ADD_CALLBACK(hObj, callback_name, fcn, id) specifies a
+custom callback function ID.
+</p>
+<h3>example</h3><pre>
+hFig = figure;
+event_dispatch( hFig );
+fcn = @(hObj, eventdata) fprintf( 'Wheel moved\n' );
+add_callback( hFig, 'MyWheelMovedFcn', fcn );
+</pre>
+<h3>see also</h3>
+event_dispatch &mdash remove_callback 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>scroll_pan&nbsp;&nbsp;<a href="scroll_pan.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

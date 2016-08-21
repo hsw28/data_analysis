@@ -1,0 +1,21 @@
+<html><head><title>fkUtilities - sortedhist</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="fcorrcoef.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="nanquad.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>sortedhist</h2>
+<h3>synopsis</h3>
+histogram of sorted variable X
+<h3>syntax</h3><pre>
+    count=SORTEDHIST(x,bins)
+</pre>
+<h3>description</h3>
+<p>
+count=SORTEDHIST(x,bins) returns the number of elements in x that fall
+in each bin. x should be a sorted vector. Bins are specified as nx2
+matrix, each row contains the lower and upper bin edges. Bins should
+be sorted according to their lower edges, but they are allowed to
+overlap. For each bin the lower edge is inclusive, but not the upper
+edge.
+</p>
+<h3>example</h3><pre>
+H = sortedhist( 1:100, [1 10; 25 80; 50 90] );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fcorrcoef.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;fcorrcoef</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>nanquad&nbsp;&nbsp;<a href="nanquad.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

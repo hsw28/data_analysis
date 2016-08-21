@@ -1,0 +1,34 @@
+<html><head><title>fkHelp - toolbox2rst</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkHelp reference pages</td><td align="right">&nbsp;<a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="toolbox2context.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>toolbox2rst</h2>
+<h3>synopsis</h3>
+generate a reStructuredText document from a toolbox
+<h3>syntax</h3><pre>
+    TOOLBOX2RST
+    TOOLBOX2RST(path)
+    TOOLBOX2RST(path, name)
+    TOOLBOX2RST(path, name, destination_path)
+</pre>
+<h3>description</h3>
+<p>
+TOOLBOX2RST create a toolbox help document for the current
+working directory
+</p>
+<p>
+TOOLBOX2RST(path) create a help document for the toolbox in the
+specified path
+</p>
+<p>
+TOOLBOX2RST(path, name) specifies a custom name for the toolbox
+(by default the name of the toolbox directory is used)
+</p>
+<p>
+TOOLBOX2RST(path, name, destination_path) puts the resulting rst
+file in the specified destination path (by default the file is saved
+in &lt;toolbox path&gt;/rst)
+</p>
+<h3>example</h3><pre>
+toolbox_path = '/myhome/mymatlab/mytoolbox';
+toolbox2rst( toolbox_path );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkHelp_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>toolbox2context&nbsp;&nbsp;<a href="toolbox2context.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

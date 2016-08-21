@@ -1,0 +1,23 @@
+<html><head><title>fkMapping - fkgrid.iscategorical</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkgrid reference pages</td><td align="right"><a href="fkgrid.fkgrid.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkgrid.isuniform.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>iscategorical</h2>
+<h3>synopsis</h3>
+checks whether grid is categorical or numerical
+<h3>syntax</h3><pre>
+    b=ISCATEGORICAL(grid)
+    b=ISCATEGORICAL(grid,dim)
+</pre>
+<h3>description</h3>
+<p>
+b=ISCATEGORICAL(grid) returns a 1 for each dimension that is
+categorical (i.e. contains NaNs or Infs) and 0 for those that are not.
+</p>
+<p>
+b=ISCATEGORICAL(grid,dim) performs the test only on dimension dim.
+</p>
+<h3>example</h3><pre>
+grid = fkgrid([-Inf 0 Inf]);
+b = iscategorical(grid);
+</pre>
+<h3>see also</h3>
+fkgrid/isuniform 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkgrid.fkgrid.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=center width="34%"><a href="fkgrid.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkgrid</td><td align=right>isuniform&nbsp;&nbsp;<a href="fkgrid.isuniform.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,97 @@
+<html><head><title>fkUtilities - debugmsg</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="matrixfun.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="alpha_gen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>debugmsg</h2>
+<h3>synopsis</h3>
+write message to screen or file
+<h3>syntax</h3><pre>
+    DEBUGMSG(message)
+    DEBUGMSG(id,message)
+    DEBUGMSG(...,level)
+</pre>
+<h3>description</h3>
+<p>
+DEBUGMSG(message) prints the message to screen or file. The level of
+the message is 1. The message is only printed if the level is smaller
+than or equal to the debug level.
+</p>
+<p>
+DEBUGMSG(id,message) adds an optional message identifier to the
+message.
+</p>
+<p>
+DEBUGMSG(...,level) sets the level of the message.
+</p>
+<p>
+Several variables affect printing of a debug message:
+<dl>
+<dt>DEBUG</dt><dd>debug level, only messages with a level &lt;= DEBUG will be printed (default = 0)</dd>
+<dt>DEBUG_MSG_LEVEL</dt><dd>if no message level is specified in the function call, then it is set to the value of this variable (default = 1)</dd>
+<dt>DEBUG_MSG_ID</dt><dd>if no message id is specified in the function call, then it is set to the value of this variable (default = '')</dd>
+<dt>DEBUG_SINK</dt><dd>vector of file IDs or cell array of file IDs or file names. Messages are printed to each file. The file IDs 1 and 2 are special since they represent stdout and stderr respectively (default = 1).</dd>
+</dl>
+</p>
+<p>
+These variables are searched for in the following order:
+caller workspace, base workspace, DEBUG group in preferences
+</p>
+<p>
+The debug_fmt string in the DEBUG preference group allows
+for customization of the message format. Special tokens in the
+string are replaced by their values, according to the following
+table:
+
+<table>
+<tr>
+<th>  token   </th>
+<th>  replace by                     </th>
+</tr>
+<tr>
+<td>  [msg]   </td>
+<td>  message                        </td>
+</tr>
+<tr>
+<td> [msgid]  </td>
+<td>  message identifier             </td>
+</tr>
+<tr>
+<td>[msglevel]</td>
+<td>  message level                  </td>
+</tr>
+<tr>
+<td> [debug]  </td>
+<td>  debug level                    </td>
+</tr>
+<tr>
+<td> [time]   </td>
+<td>  time when message was printed  </td>
+</tr>
+<tr>
+<td> [date]   </td>
+<td>  date when message was printed  </td>
+</tr>
+</table>
+The default format is: '[msgid] :: [msg] (level [msglevel])'
+</p>
+<h3>example</h3><pre>
+DEBUG = 1;
+debugmsg( 'message' );
+debugmsg( 'this message won''t be printed', 2 );
+
+DEBUG_MSG_ID = 'debug';
+debugmsg( 'message' );
+debugmsg( 'my_message_id', 'message' );
+
+DEBUG_MSG_LEVEL = 2;
+debugmsg( 'this message won''t be printed' );
+
+clear DEBUG_MSG_LEVEL;
+fid = fopen( 'test.log', 'w' );
+DEBUG_SINK = [1 fid];
+debugmsg( 'message is sent to both standard out and test.log' )
+
+setpref( 'DEBUG', 'debug_fmt', 'the following message: [msg], occurred at [time]' )
+debugmsg( 'custom formatted message' )
+fclose(fid)
+rmpref( 'DEBUG', 'debug_fmt')
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="matrixfun.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;matrixfun</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>alpha_gen&nbsp;&nbsp;<a href="alpha_gen.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

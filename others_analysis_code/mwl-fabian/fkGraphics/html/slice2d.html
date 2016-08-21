@@ -1,0 +1,28 @@
+<html><head><title>fkGraphics - slice2d</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="line2patch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="demo_cursor.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>slice2d</h2>
+<h3>synopsis</h3>
+get a 2d slice from a n-dimensional matrix
+<h3>syntax</h3><pre>
+    slice=SLICE2D(m)
+    slice=SLICE2D(m,options)
+</pre>
+<h3>description</h3>
+<p>
+slice=SLICE2D(m) returns a slice of matrix m defined in the first two
+dimensions and index=1 in all other dimensions.
+</p>
+<p>
+slice=SLICE2D(m,options) where options is a struct with the following
+fields:
+<dl>
+<dt>x</dt><dd>dimension of m that defines the x-dimension of the slice</dd>
+<dt>y</dt><dd>dimension of m that defines the y-dimension of the slice</dd>
+<dt>z</dt><dd>dimension of m that defines the rgb dimension of the slice (z=0 for a non-color slice)</dd>
+<dt>slice_index</dt><dd>for each dimension of m the index for the slice. In case z&gt;0, this determines the red color component.</dd>
+<dt>slice_index2</dt><dd>for each dimension of m the index of the green color component (only used if z&gt;0).</dd>
+<dt>slice_index3</dt><dd>for each dimension of m the index of the blue color component (only used if z&gt;0).</dd>
+<dt>slice_method</dt><dd>one of 'slice', 'sum', 'max'. For 'sum' and 'max' the slice is the sum/max of along all dimensions but the x and y dimensions. The rgb dimension of the slice is only supported for the 'slice' method.</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="line2patch.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;line2patch</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>demo_cursor&nbsp;&nbsp;<a href="demo_cursor.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

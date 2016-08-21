@@ -1,0 +1,57 @@
+<html><head><title>fkEventDispatch - tab_axes</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="enable_events.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="event_dispatch.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>tab_axes</h2>
+<h3>synopsis</h3>
+axes tabbing
+<h3>syntax</h3><pre>
+    TAB_AXES
+    TAB_AXES TOGGLE
+    TAB_AXES ON
+    TAB_AXES OFF
+    TAB_AXES NEXT
+    TAB_AXES PREVIOUS
+    TAB_AXES CURRENT
+    TAB_AXES(hFig)
+    TAB_AXES(hFig, command)
+    state = TAB_AXES(...)
+</pre>
+<h3>description</h3>
+<p>
+TAB_AXES toggles axes tabbing for current figure. Pressing 't' tabs
+between axes. Pressing 'shift-t' show current axes.
+</p>
+<p>
+TAB_AXES TOGGLE toggles axes tabbing for current figure
+</p>
+<p>
+TAB_AXES ON turns on axes tabbing for current figure
+</p>
+<p>
+TAB_AXES OFF turns off axes tabbing for current figure
+</p>
+<p>
+TAB_AXES NEXT selects next axes
+</p>
+<p>
+TAB_AXES PREVIOUS selects previous axes
+</p>
+<p>
+TAB_AXES CURRENT shows current axes
+</p>
+<p>
+TAB_AXES(hFig) turns on axes tabbing for specified figure
+</p>
+<p>
+TAB_AXES(hFig, command) runs specified command ('toggle', 'on', 'off',
+'next', 'previous', 'current') for figure with handle hFig
+</p>
+<p>
+state = TAB_AXES(...) returns the axes tabbing state
+</p>
+<p>
+The panning functionality provided by SCROLL_PAN depends on the extended
+event dispatching framework. The parent figure of the axes will be set
+up for this by a call to EVENT_DISPATCH.
+</p>
+<h3>see also</h3>
+event_dispatch 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="enable_events.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;enable_events</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>event_dispatch&nbsp;&nbsp;<a href="event_dispatch.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

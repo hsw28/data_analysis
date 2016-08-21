@@ -1,0 +1,37 @@
+<html><head><title>fkUtilities - dist_point_segment</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="makequote.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="localmaximum2d.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>dist_point_segment</h2>
+<h3>synopsis</h3>
+calculate distance between points and a line segment
+<h3>syntax</h3><pre>
+    dist=DIST_POINT_SEGMENT(coordinates,segment)
+    [dist,project]=DIST_POINT_SEGMENT(coordinates,segment)
+    [...]=DIST_POINT_SEGMENT(coordinates,segment,false)
+</pre>
+<h3>description</h3>
+<p>
+dist=DIST_POINT_SEGMENT(coordinates,segment) returns the distance
+between 2d-coordinates (nx2 matrix) and a line segment defined by
+start and end coordinates in a 2x2 matrix. The distance can be
+positive or negative, depending on which side of the segment the
+coordinate is located on. (Imagine walking on the segment from the
+start to the end point, coordinates located on your right have a
+negative distance, coordinates located on your left have a positive
+distance)
+</p>
+<p>
+[dist,project]=DIST_POINT_SEGMENT(coordinates,segment) also returns
+for each coordinate the projected point onto the line segment,
+i.e. the point on the line segment that is closest to the coordinate.
+</p>
+<p>
+[...]=DIST_POINT_SEGMENT(coordinates,segment,false) treats the line segment
+as a infinitely long line, such that the projected point can be
+outside the specified line segment.
+</p>
+<h3>example</h3><pre>
+p = [1 1.5];
+seg = [0 0; 4 4];
+[dist, pp] = dist_point_segment( p, seg );
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="makequote.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;makequote</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>localmaximum2d&nbsp;&nbsp;<a href="localmaximum2d.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,36 @@
+<html><head><title>fkGraphics - ipolyline</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="polarbar.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="lineplot.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>ipolyline</h2>
+<h3>synopsis</h3>
+draw an editable polyline
+<h3>syntax</h3><pre>
+    h=IPOLYLINE(nodes)
+    h=IPOLYLINE(struct)
+    h=IPOLYLINE(...,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+h=IPOLYLINE(nodes) draws the polyline defined by the nx2 matrix of
+node coordinates and allows the user to interactively change the
+polyline. The function returns a handle. Get(h,'polyline') will return
+a structure with polyline data. Nodes can be dragged to new locations
+by the left mouse button. New nodes can be created by a middle mouse
+button click one of the edges. A right mouse button click will show a
+popup menu in which the user will be able to set the 'closed' and
+'spline' flags.
+</p>
+<p>
+h=IPOLYLINE(struct) draws the polyline defined by the structure with
+required field 'nodes', which is a nx2 matrix. Optional fields are
+'isclosed' and 'isspline'.
+</p>
+<p>
+h=IPOLYLINE(...,parm1,val1,...) passes in extra parameter/value
+pairs. Valid paramters are:
+<dl>
+<dt>axes</dt><dd>handle of parent axes</dd>
+<dt>need_selection</dt><dd>polyline can be edited only when it is selected</dd>
+<dt>selected</dt><dd>0/1 selected state of polyline</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="polarbar.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;polarbar</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>lineplot&nbsp;&nbsp;<a href="lineplot.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

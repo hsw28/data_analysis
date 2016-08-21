@@ -1,0 +1,37 @@
+<html><head><title>fkMapping - bin2map</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkMapping reference pages</td><td align="right"><a href="var2spike.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="segmentfilter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>bin2map</h2>
+<h3>synopsis</h3>
+create histogram of variables at binned coordinates
+<h3>syntax</h3><pre>
+    m=BIN2MAP(bins)
+    m=BIN2MAP(bins,vars)
+    m=BIN2MAP(bins,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+m=BIN2MAP(bins) constructs a histogram given the set of bins. Each row
+in the bin matrix is a binned coordinate (i.e. an index into a grid),
+each column is a dimension. By default the number of bins in the
+histogram for each coordinate dimension is max( bins ).
+</p>
+<p>
+m=BIN2MAP(bins,vars) applies the mapping function to the variable. The
+variable matrix should have the same number of rows as the bins
+matrix and can have an arbitrary number of additional
+dimensions. Generally, the variable is a scalar and the vars
+argument is a column vector. However, the variable can be any
+n-d matrix, in which case the vars argument would be a
+nrows-by-m-by-n-by... matrix. By default the var argument is a
+column vector of ones.
+</p>
+<p>
+m=BIN2MAP(bins,parm1,val1,...) uses specified options. Valid options
+are:
+<dl>
+<dt>default</dt><dd>default value for empty bins (default = NaN)</dd>
+<dt>function</dt><dd>function to apply to variables in each bin (default = @size). The function should do its computation along the first dimension of the input matrix. To enforce this for some common functions (e.g. mean), the second argument is always 1. Functions for which the dim argument is not the second argument should be wrapped in an anonymous function. For example: @(x,dim) std(x,0,dim).</dd>
+<dt>size</dt><dd>size of histogram (i.e. vector of maximum bin index for each dimension)</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="var2spike.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;var2spike</td><td align=center width="34%"><a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>segmentfilter&nbsp;&nbsp;<a href="segmentfilter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

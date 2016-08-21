@@ -1,0 +1,31 @@
+<html><head><title>fkEventDispatch - remove_callback</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkEventDispatch reference pages</td><td align="right"><a href="isvalidcallback.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="demo_events.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>remove_callback</h2>
+<h3>synopsis</h3>
+removes callbacks from object
+<h3>syntax</h3><pre>
+    REMOVE_CALLBACK(hObj, callback_name)
+    REMOVE_CALLBACK(hObj, callback_name, callback_id)
+    n=REMOVE_CALLBACK(...)
+</pre>
+<h3>description</h3>
+<p>
+REMOVE_CALLBACK(hObj, callback_name) removes all callback functions
+from the object with handle hObj.
+</p>
+<p>
+REMOVE_CALLBACK(hObj, callback_name, callback_id) removes all callback
+functions with the specified callback ID from the object with handle hObj.
+</p>
+<p>
+n=REMOVE_CALLBACK(...) returns the number of callback functions removed
+</p>
+<h3>example</h3><pre>
+hFig = figure;
+event_dispatch( hFig );
+fcn = @(hObj, eventdata) fprintf( 'Wheel moved\n' );
+fcn_id = add_callback( hFig, 'MyWheelMovedFcn', fcn );
+remove_callback( hFig, 'MyWheelMoved', fcn_id );
+</pre>
+<h3>see also</h3>
+event_dispatch &mdash add_callback 
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="isvalidcallback.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;isvalidcallback</td><td align=center width="34%"><a href="fkEventDispatch_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>demo_events&nbsp;&nbsp;<a href="demo_events.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

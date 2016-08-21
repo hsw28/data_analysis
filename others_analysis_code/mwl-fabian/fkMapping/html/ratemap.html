@@ -1,0 +1,31 @@
+<html><head><title>fkMapping - ratemap</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkMapping reference pages</td><td align="right"><a href="segmentfilter.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="rangefilter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>ratemap</h2>
+<h3>synopsis</h3>
+create rate maps
+<h3>syntax</h3><pre>
+    ratemaps=RATEMAP(spike_behavior,behavior)
+    ratemaps=RATEMAP(...,parm1,val1,...)
+    [ratemaps,grid,occupancy]=RATEMAP(...)
+</pre>
+<h3>description</h3>
+<p>
+ratemaps=RATEMAP(spike_behavior,behavior) computes the non-smoothed
+rate maps from a the behavior at spike times and the complete
+behavior.
+</p>
+<p>
+ratemaps=RATEMAP(...,parm1,val1,...) uses specified options. Valid
+options are:
+<dl>
+<dt>grid</dt><dd>mapping grid</dd>
+<dt>smooth</dt><dd>st.dev. of smoothing kernels</dd>
+<dt>samplefreq</dt><dd>sampling frequency</dd>
+<dt>normalize</dt><dd>true/false return rate or counts</dd>
+</dl>
+</p>
+<p>
+[ratemaps,grid,occupancy]=RATEMAP(...) also returns the grid and
+occupancy map.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="segmentfilter.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;segmentfilter</td><td align=center width="34%"><a href="fkMapping_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>rangefilter&nbsp;&nbsp;<a href="rangefilter.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

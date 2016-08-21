@@ -1,0 +1,97 @@
+<html><head><title>fkUtilities - verbosemsg</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="fullpath.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="zerocrossing.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>verbosemsg</h2>
+<h3>synopsis</h3>
+write message to screen or file
+<h3>syntax</h3><pre>
+    VERBOSEMSG(message)
+    VERBOSEMSG(id,message)
+    VERBOSEMSG(...,level)
+</pre>
+<h3>description</h3>
+<p>
+VERBOSEMSG(message) prints the message to screen or file. The level of
+the message is 1. The message is only printed if the level is smaller
+than or equal to the debug level.
+</p>
+<p>
+VERBOSEMSG(id,message) adds an optional message identifier to the
+message.
+</p>
+<p>
+VERBOSEMSG(...,level) sets the level of the message.
+</p>
+<p>
+Several variables affect printing of a verbose message:
+<dl>
+<dt>VERBOSE</dt><dd>debug level, only messages with a level &lt;= VERBOSE will be printed (default = 0)</dd>
+<dt>VERBOSE_MSG_LEVEL</dt><dd>if no message level is specified in the function call, then it is set to the value of this variable (default = 1)</dd>
+<dt>VERBOSE_MSG_ID</dt><dd>if no message id is specified in the function call, then it is set to the value of this variable (default = '')</dd>
+<dt>VERBOSE_SINK</dt><dd>vector of file IDs or cell array of file IDs or file names. Messages are printed to each file. The file IDs 1 and 2 are special since they represent stdout and stderr respectively (default = 1).</dd>
+</dl>
+</p>
+<p>
+These variables are searched for in the following order:
+caller workspace, base workspace, VERBOSE group in preferences
+</p>
+<p>
+The verbose_fmt string in the VERBOSE preference group allows
+for customization of the message format. Special tokens in the
+string are replaced by their values, according to the following
+table:
+
+<table>
+<tr>
+<th>  token   </th>
+<th>  replace by                     </th>
+</tr>
+<tr>
+<td>  [msg]   </td>
+<td>  message                        </td>
+</tr>
+<tr>
+<td> [msgid]  </td>
+<td>  message identifier             </td>
+</tr>
+<tr>
+<td>[msglevel]</td>
+<td>  message level                  </td>
+</tr>
+<tr>
+<td> [debug]  </td>
+<td>  debug level                    </td>
+</tr>
+<tr>
+<td> [time]   </td>
+<td>  time when message was printed  </td>
+</tr>
+<tr>
+<td> [date]   </td>
+<td>  date when message was printed  </td>
+</tr>
+</table>
+The default format is: '[msgid] :: [msg] (level [msglevel])'
+</p>
+<h3>example</h3><pre>
+VERBOSE = 1;
+verbosemsg( 'message' );
+verbosemsg( 'this message won''t be printed', 2 );
+
+VERBOSE_MSG_ID = 'verbose';
+verbosemsg( 'message' );
+verbosemsg( 'my_message_id', 'message' );
+
+VERBOSE_MSG_LEVEL = 2;
+verbosemsg( 'this message won''t be printed' );
+
+clear VERBOSE_MSG_LEVEL;
+fid = fopen( 'test.log', 'w' );
+VERBOSE_SINK = [1 fid];
+verbosemsg( 'message is sent to both standard out and test.log' )
+
+setpref( 'VERBOSE', 'verbose_fmt', 'the following message: [msg], occurred at [time]' )
+verbosemsg( 'custom formatted message' )
+fclose(fid)
+rmpref( 'VERBOSE', 'verbose_fmt')
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fullpath.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;fullpath</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>zerocrossing&nbsp;&nbsp;<a href="zerocrossing.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

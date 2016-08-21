@@ -1,0 +1,41 @@
+<html><head><title>fkSegments - inseg</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSegments reference pages</td><td align="right"><a href="detect_mountains.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="seg_check.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>inseg</h2>
+<h3>synopsis</h3>
+test whether events/segments are contained in a set of reference segments
+<h3>syntax</h3><pre>
+    b=INSEG(s,t)
+    [b,n]=INSEG(s,t)
+    [b,n,rnk]=INSEG(s,t)
+    [u,i,rnk]=INSEG(...,'expand')
+    [...]=INSEG(...,'partial')
+</pre>
+<h3>description</h3>
+<p>
+b=INSEG(s,t) where t can be a vector of events or a list of
+segments. This function returns true for each event/segment that lies
+within at least one of the segments in s and false otherwise.
+</p>
+<p>
+[b,n]=INSEG(s,t) also returns for each segment s the number of
+segments/events in t that it contains.
+</p>
+<p>
+[b,n,rnk]=INSEG(s,t) also returns for each event/segment in t the
+relative order in the containing segment. A value of 0 indicates that
+event/segment t is not contained in any reference segment s. If
+segments in s overlap, it is possible that events/segments in t are
+contained in multiple segments s. In that case the values in rnk are
+invalid and a warning will be given.
+</p>
+<p>
+[u,i,rnk]=INSEG(...,'expand') returns cell arrays with for
+each segment in s the events/segments in t that it contains (u),
+their index (i) and their relative order (rnk).
+</p>
+<p>
+[...]=INSEG(...,'partial') only when t is a segment list, this also
+returns true for segment that only partially overlap with any of the
+reference segments in s.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="detect_mountains.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;detect_mountains</td><td align=center width="34%"><a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>seg_check&nbsp;&nbsp;<a href="seg_check.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

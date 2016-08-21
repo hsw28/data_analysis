@@ -1,0 +1,23 @@
+<html><head><title>fkUtilities - applyfcn</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="tostr.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fill_dvd.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>applyfcn</h2>
+<h3>synopsis</h3>
+apply function to cell array or all fields of structure
+<h3>description</h3>
+<p>
+Syntax
+
+result = applyfcn( fcn, argin, A, B, ... )
+</p>
+<p>
+Description
+
+Applies a function to all cells in a set of cell arrays or all
+fields in a set of structs. The function fcn is called repetitively
+for each cell or field and should have the following signature:
+output = fcn( A_cell_n, B_cell_n, ..., argin1, argin2, ...)
+output = fcn( A_field_n, B_field_n, ..., argin1, argin2, ...)
+Thus all of the cell arrays should have the same dimensions and
+size, likewise, all structs should have the same fields.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="tostr.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;tostr</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>fill_dvd&nbsp;&nbsp;<a href="fill_dvd.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

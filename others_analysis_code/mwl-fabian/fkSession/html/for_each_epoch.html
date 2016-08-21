@@ -1,0 +1,18 @@
+<html><head><title>fkSession - for_each_epoch</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right"><a href="import_waveform.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="import_sources_and_signals.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>for_each_epoch</h2>
+<h3>synopsis</h3>
+execute function for each epoch
+<h3>syntax</h3><pre>
+    result=FOR_EACH_EPOCH(rootdir,fcn)
+</pre>
+<h3>description</h3>
+<p>
+result=FOR_EACH_EPOCH(rootdir,fcn) executes the specified function for
+each epoch defined in rootdir/epochs/epochs.def. The signature of the
+function is: result=fcn(epoch_info, ...), where epoch_info is a
+structure with the name and start and end times of the epoch. The
+output is a cell array with the results of the function for each
+epoch.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="import_waveform.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;import_waveform</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>import_sources_and_signals&nbsp;&nbsp;<a href="import_sources_and_signals.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

@@ -1,0 +1,31 @@
+<html><head><title>fkGraphics - getpolyline</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="polaraxes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="slicemat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>getpolyline</h2>
+<h3>synopsis</h3>
+let's you define a new polyline
+<h3>syntax</h3><pre>
+    p=GETPOLYLINE
+    p=GETPOLYLINE(param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+p=GETPOLYLINE opens a new figure and axes in which you can select
+a polyline using the mouse. Left mouse button will add a point, middle
+mouse button will remove the last point. The right mouse button or
+hitting 'Enter' will end the polyline selection. Pressing 'Esc' will
+abort the polyline selection. Pressing 'c' will toggle the closed
+state of the polyline. Pressing 's' will toggle the spline state of
+the polyline. The function returns a structure with the nodes of the
+polyline and the closed and spline flags.
+</p>
+<p>
+p=GETPOLYLINE(param1,val1,...) additional options. Valid options are:
+<dl>
+<dt>closed</dt><dd>0/1 initial closed state</dd>
+<dt>axes</dt><dd>handle of parent axes</dd>
+<dt>maxnodes</dt><dd>maximum number of nodes</dd>
+<dt>minnodes</dt><dd>minimum number of nodes</dd>
+<dt>spline</dt><dd>0/1 initial spline state</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="polaraxes.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;polaraxes</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>slicemat&nbsp;&nbsp;<a href="slicemat.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

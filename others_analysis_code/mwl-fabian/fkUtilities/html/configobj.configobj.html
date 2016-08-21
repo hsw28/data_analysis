@@ -1,0 +1,47 @@
+<html><head><title>fkUtilities - configobj.configobj</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>configobj reference pages</td><td align="right"><a href="configobj.config2struct.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="configobj.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="configobj.display.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>configobj</h2>
+<h3>synopsis</h3>
+configobj constructor
+<h3>syntax</h3><pre>
+    c=CONFIGOBJ()
+    c=CONFIGOBJ(c)
+    c=CONFIGOBJ(struct)
+    c=CONFIGOBJ(filename)
+</pre>
+<h3>description</h3>
+<p>
+c=CONFIGOBJ() default constructor
+</p>
+<p>
+c=CONFIGOBJ(c) copy constructor
+</p>
+<p>
+c=CONFIGOBJ(struct) create configobj from structure.
+</p>
+<p>
+c=CONFIGOBJ(filename) read configobj from file.
+</p>
+<p>
+A configobj can be used to create configuration files in a format
+similar to the windows ini-files. In contrast to ini-files a configobj
+supports infinitely nested sections and can store and retrieve some
+(simple) matlab constructs like cells and matrices. Multiple comments
+and one inline comment can be associated with a section or a
+variable.
+</p>
+<h3>example</h3><pre>
+An example configuration file:
+
+A = 1
+#comment for B
+B = {'test'}
+
+#comment for section LEVEL1
+[LEVEL1]  #inline comment for LEVEL1
+C = [1 2 3]
+
+[[LEVEL2]]  #nested section
+D = {'one', 'two', 'three'}  #cell array of strings
+</pre>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="configobj.config2struct.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;config2struct</td><td align=center width="34%"><a href="configobj.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;configobj</td><td align=right>display&nbsp;&nbsp;<a href="configobj.display.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

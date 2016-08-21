@@ -1,0 +1,24 @@
+<html><head><title>fkUtilities - localmaximum</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="shake.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="flattenstruct.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>localmaximum</h2>
+<h3>synopsis</h3>
+find local maxima
+<h3>syntax</h3><pre>
+    peak_i=LOCALMAXIMUM(x)
+    peak_i=LOCALMAXIMUM(x,'method', 'gradient')
+    peak_t=LOCALMAXIMUM(t,x,...)
+</pre>
+<h3>description</h3>
+<p>
+peak_i=LOCALMAXIMUM(x) returns indices of local maxima in the vector x.
+</p>
+<p>
+peak_i=LOCALMAXIMUM(x,'method', 'gradient') uses a method that detects
+zerocrossings in the gradient of x and returns the (interpolated)
+indices of the local maxima.
+</p>
+<p>
+peak_t=LOCALMAXIMUM(t,x,...) returns (interpolated) time values from
+vector t instead of indices.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="shake.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;shake</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>flattenstruct&nbsp;&nbsp;<a href="flattenstruct.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

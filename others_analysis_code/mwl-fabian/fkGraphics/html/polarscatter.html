@@ -1,0 +1,40 @@
+<html><head><title>fkGraphics - polarscatter</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="additime.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="line2patch.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>polarscatter</h2>
+<h3>synopsis</h3>
+creates a polar scatter plot
+<h3>syntax</h3><pre>
+    h=POLARSCATTER
+    h=POLARSCATTER(theta,rho)
+    h=POLARSCATTER(theta,rho,size)
+    h=POLARSCATTER(theta,rho,size,color)
+</pre>
+<h3>description</h3>
+<p>
+h=POLARSCATTER plots a polar scatter plot of random data. A
+handle to a polar scatter graphics object is returned.
+</p>
+<p>
+h=POLARSCATTER(theta,rho) plots a polar scatter plot in the current
+axes using the angle and radius data. Theta and rho should be vector
+of the same length.
+</p>
+<p>
+h=POLARSCATTER(theta,rho,size) sets size data for each marker, which
+can either be a scalar or a vector the same size as theta and rho.
+</p>
+<p>
+h=POLARSCATTER(theta,rho,size,color) sets color for each marker, which
+can either be an index into the colormap, a rgb color vector or a
+color string. The color argument can be a scalar or should be the same
+length as theta and rho.
+</p>
+<p>
+h=POLARBAR(hax,...) will plot in axes with handle hax.
+</p>
+<p>
+h=POLARBAR(...,param1,val1,...) sets polar scatter properties
+through parameter/value pairs. Execute set(h) to see a list of valid
+properties that can be modified.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="additime.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;additime</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>line2patch&nbsp;&nbsp;<a href="line2patch.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

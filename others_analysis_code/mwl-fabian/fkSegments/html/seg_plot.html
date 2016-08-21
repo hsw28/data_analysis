@@ -1,0 +1,39 @@
+<html><head><title>fkSegments - seg_plot</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSegments reference pages</td><td align="right"><a href="logical2seg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="seg2bin.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>seg_plot</h2>
+<h3>synopsis</h3>
+plot segments
+<h3>syntax</h3><pre>
+    SEG_PLOT(segments)
+    h=SEG_PLOT(segments)
+    h=SEG_PLOT(segments,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+SEG_PLOT(segments) plots segments (either a matrix of segments or a
+cell array with segment lists) in a new axis in the current
+figure. Segments containing -Inf or Inf are not drawn.
+</p>
+<p>
+h=SEG_PLOT(segments) returns for every segment list the handles of the
+plot objects.
+</p>
+<p>
+h=SEG_PLOT(segments,parm1,val1,...) sets optional parameters. Valid
+parameters are:
+<dl>
+<dt>Axis</dt><dd>handle of destination axes (default = [] (new axes) ).</dd>
+<dt>XLim</dt><dd>x axis limits (default = []; if 'Axis' parameter is specified this will leave x limits unchanged, if a new axes is created this will set the x limits to show all the segments).</dd>
+<dt>PlotArea</dt><dd>segments are plotted as two vertical lines, connected by a horizontal line (PlotArea=0) or as rectangles (PlotArea=1) with optional fill color and alpha value. (default = 1).</dd>
+<dt>YOffset</dt><dd>y offset of bottom of rectangles or of horizontal line segments (default = []; if 'Axis' parameter is specified this will be set to the lower y axis limit, if a new axes is created this will be 0). If segments is a cell array, YOffset can also be an array of the same length, specifying variable offsets for each segment list.</dd>
+<dt>Height</dt><dd>height of rectangles or vertical line segments (default = []; if 'Axis' parameter is specified this will be set to (max y limit - YOffset), otherwise it is set to 1). If segments is a cell array, Height can also be an array of the same length, specifying variable heights for each segment list.</dd>
+<dt>FaceColor</dt><dd>1x3 vector specifying the color (rgb) of the segment rectangles. If segments is a cell array, FaceColor can also be a nx3 array (n = length of cell array), specifying variable colors for each segment list. (default = [1 0 0]). This parameter is only used when PlotArea = 1.</dd>
+<dt>EdgeColor</dt><dd>1x3 vector specifying the color (rgb) of lines. If segments is a cell array, EdgeColor can also be a nx3 array (n = length of cell array), specifying variable edge colors for each segment list. (default = 'none').</dd>
+<dt>Alpha</dt><dd>Scalar specifying the alpha value for segment rectangles. If segments is a cell array, Alpha can also be an array of the same length, specifying variable alphas for each segment list. (default = 0.5). This parameter is only used when PlotArea = 1.</dd>
+<dt>LineWidth</dt><dd>width of lines (default = 2). This parameter is only used when PlotArea = 0. LineStyle = style of lines (default = '-'). This parameter is only used when PlotArea = 0. SegNames = cell array of segment names, same length as the number of segment lists (default = {''}).</dd>
+<dt>TextOffset</dt><dd>Verical offset of text, relative to bottom of segment rectangles or horizontal lines (default = 0).</dd>
+<dt>ShowText</dt><dd>0/1 hide/show segment names (default = 0).</dd>
+<dt>TextColor</dt><dd>Color of text, either a single RGB value or a matrix of RGB values to specify color for each segment separately (default = [], which means the same as EdgeColor).</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="logical2seg.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;logical2seg</td><td align=center width="34%"><a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>seg2bin&nbsp;&nbsp;<a href="seg2bin.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

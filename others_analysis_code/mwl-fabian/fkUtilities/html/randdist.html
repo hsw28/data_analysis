@@ -1,0 +1,30 @@
+<html><head><title>fkUtilities - randdist</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkUtilities reference pages</td><td align="right"><a href="localmaximum2d.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="super.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>randdist</h2>
+<h3>synopsis</h3>
+will compute the randomization distribution
+<h3>syntax</h3><pre>
+    d=RANDDIST(fcn,data)
+    d=RANDDIST(fcn,data,n)
+    d=RANDDIST(fcn,data,n,argin)
+    d=RANDDIST(fcn,data,n,argin,permfcn)
+</pre>
+<h3>description</h3>
+<p>
+d=RANDDIST(fcn,data) returns the randomization distribution by calling
+the function fcn 1000 times with random row permutations of data. The
+function should return a scalar.
+</p>
+<p>
+d=RANDDIST(fcn,data,n) performs n permutations.
+</p>
+<p>
+d=RANDDIST(fcn,data,n,argin) provides a cell array of extra arguments
+to the function.
+</p>
+<p>
+d=RANDDIST(fcn,data,n,argin,permfcn) uses a custom permutation
+function that takes data as input and returns a permuted (randomized)
+version of data.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="localmaximum2d.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;localmaximum2d</td><td align=center width="34%"><a href="fkUtilities_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>super&nbsp;&nbsp;<a href="super.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

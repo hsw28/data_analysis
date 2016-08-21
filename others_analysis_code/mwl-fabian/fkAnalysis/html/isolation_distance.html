@@ -1,0 +1,18 @@
+<html><head><title>fkAnalysis - isolation_distance</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkAnalysis reference pages</td><td align="right">&nbsp;<a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="eeg_clip.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>isolation_distance</h2>
+<h3>synopsis</h3>
+compute isolation distance measure
+<h3>syntax</h3><pre>
+    d=ISOLATION_DISTANCE(distances,idx)
+</pre>
+<h3>description</h3>
+<p>
+d=ISOLATION_DISTANCE(distances,idx) where distances is a vector of
+mahalanobis distances between feature vectors and the centroid of a
+subset (i.e. cluster) of feature vectors (given by the indices idx).
+Returns the isolation distance between the cluster and the remaining
+spikes. if idx is a cell array of indices for c different clusters,
+then distances should be a n-by-c matrix.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkAnalysis_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>eeg_clip&nbsp;&nbsp;<a href="eeg_clip.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

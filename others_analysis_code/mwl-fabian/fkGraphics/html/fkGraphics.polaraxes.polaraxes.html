@@ -1,0 +1,64 @@
+<html><head><title>fkGraphics - fkGraphics.polaraxes.polaraxes</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics.polaraxes reference pages</td><td align="right"><a href="fkGraphics.polaraxes.clip_radius.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics.polaraxes.refresh.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>polaraxes</h2>
+<h3>synopsis</h3>
+polar axes constructor
+<h3>syntax</h3><pre>
+    h=POLARAXES(param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+h=POLARAXES(param1,val1,...) constructs a polar axes object with
+properties set by the parameter/value pairs. Valid parameters are:
+<dl>
+<dt>AngleUnits</dt><dd>radians/degrees, determines how angle values of properties during set/get operations should be interpreted</dd>
+<dt>AngleLim</dt><dd>angle axis limits (default=[0 2*pi])</dd>
+<dt>RadialLim</dt><dd>radial axis limits (default=[0 1])</dd>
+<dt>AxesRotation</dt><dd>rotation of axes (default=0)</dd>
+<dt>RadialDir</dt><dd>direction of radial axis (default='normal')</dd>
+<dt>AngleDir</dt><dd>direction of angular axis (default='ccw')</dd>
+<dt>FontColor</dt><dd>font color (default=[0 0 0])</dd>
+<dt>FontAngle</dt><dd>font angle (default='normal')</dd>
+<dt>FontName</dt><dd>font name (default='helvetica')</dd>
+<dt>FontUnits</dt><dd>font units (default='points')</dd>
+<dt>FontSize</dt><dd>font size (default=10)</dd>
+<dt>FontWeight</dt><dd>font weight (default='normal')</dd>
+<dt>RadialAxisRotation</dt><dd>rotation of radial axis (default=5*pi/12)</dd>
+<dt>RadialAxisLineStyle</dt><dd>line style of radial axis (default='-')</dd>
+<dt>RadialAxisColor</dt><dd>radial axis color (default=[0 0 0]);</dd>
+<dt>RadialAxisLineWidth</dt><dd>radial axis line width (default=1)</dd>
+<dt>RadialAxisVisible</dt><dd>show/hide radial axis (default='on')</dd>
+<dt>RadialTickUnits</dt><dd>units of radial ticks (default='')</dd>
+<dt>RadialTickValues</dt><dd>radial tick values (default='auto')</dd>
+<dt>RadialTickLength</dt><dd>length of tick marks (0-1) (default=0.025)</dd>
+<dt>RadialTickDir</dt><dd>radial tick direction ('+','-','both') (default='both')</dd>
+<dt>RadialTickLabels</dt><dd>labels for radial ticks (default='auto')</dd>
+<dt>RadialTickLabelsVisible</dt><dd>show/hide radial tick labels (default='on')</dd>
+<dt>RadialTickLabelsOffset</dt><dd>normalized offset of radial tick labels (default=[0 0.03])</dd>
+<dt>RadialTickLabelsAngle</dt><dd>rotation of radial tick labels (default='auto')</dd>
+<dt>RadialGridLineStyle</dt><dd>line style of radial grid (default=':')</dd>
+<dt>RadialGridColor</dt><dd>radial grid color (default=[0.5 0.5 0.5])</dd>
+<dt>RadialGridLineWidth</dt><dd>radial grid line width (default=1)</dd>
+<dt>RadialGridVisible</dt><dd>show/hide radial grid (default='on')</dd>
+<dt>AngleAxisLineStyle</dt><dd>line style of angular axis (default='-')</dd>
+<dt>AngleAxisColor</dt><dd>angular axis color (default=[0 0 0])</dd>
+<dt>AngleAxisLineWidth</dt><dd>line width of angular axis (default=1)</dd>
+<dt>AngleAxisVisible</dt><dd>show/hide angular axis (default='on')</dd>
+<dt>AngleTickUnits</dt><dd>units of angular ticks (default='radians')</dd>
+<dt>AngleTickValues</dt><dd>angular tick values (default='auto')</dd>
+<dt>AngleTickLabels</dt><dd>angular tick labels (default='auto')</dd>
+<dt>AngleTickLength</dt><dd>normalized angular tick length (default = 0.025)</dd>
+<dt>AngleTickDir</dt><dd>angular tick direction (default='both')</dd>
+<dt>AngleTickLabelsVisible</dt><dd>show/hide angular tick labels (default='on')</dd>
+<dt>AngleTickLabelsOffset</dt><dd>normalized offset of angular tick labels (default=0.1)</dd>
+<dt>AngleTickSign</dt><dd>signed/unsigned angular values (default='unsigned')</dd>
+<dt>AngleGridLineStyle</dt><dd>angular grid line style (default='-')</dd>
+<dt>AngleGridColor</dt><dd>angular grid color (default=[0.5 0.5 0.5])</dd>
+<dt>AngleGridLineWidth</dt><dd>angular grid line width (default=1)</dd>
+<dt>AngleGridVisible</dt><dd>show/hide angular grid (default='on')</dd>
+<dt>Style</dt><dd>set polar axes style, this a convenience property that sets AngleDir and AxesRotation properties to match a 'compass'/'watch' style or a 'cartesian' style (default='cartesian')</dd>
+</dl>
+Polar axes have an additional read-only property CurrentPolarPoint,
+which contains the current point in polar coordinates.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="fkGraphics.polaraxes.clip_radius.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;clip_radius</td><td align=center width="34%"><a href="fkGraphics.polaraxes.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;fkGraphics.polaraxes</td><td align=right>refresh&nbsp;&nbsp;<a href="fkGraphics.polaraxes.refresh.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

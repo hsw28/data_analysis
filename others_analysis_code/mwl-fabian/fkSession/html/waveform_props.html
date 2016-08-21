@@ -1,0 +1,22 @@
+<html><head><title>fkSession - waveform_props</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right">&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="load_epochs.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>waveform_props</h2>
+<h3>synopsis</h3>
+waveform properties
+<h3>syntax</h3><pre>
+    props=WAVEFORM_PROPS(wavemean)
+</pre>
+<h3>description</h3>
+<p>
+props=WAVEFORM_PROPS(wavemean) calculates the waveform peak and trough
+amplitudes (in ad units), the width and half width (in samples). All
+these properties are calculated for the channel with the largest peak
+only and are defines as:
+<dl>
+<dt>peak_amp</dt><dd>largest value in waveform</dd>
+<dt>trough_amp</dt><dd>smallest value in waveform, following the peak</dd>
+<dt>width</dt><dd>time (in samples) between peak and trough</dd>
+<dt>half_width</dt><dd>waveform width at half peak height (in samples)</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%">&nbsp;</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>load_epochs&nbsp;&nbsp;<a href="load_epochs.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

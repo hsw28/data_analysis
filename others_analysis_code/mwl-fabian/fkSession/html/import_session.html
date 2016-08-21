@@ -1,0 +1,36 @@
+<html><head><title>fkSession - import_session</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSession reference pages</td><td align="right"><a href="export_sources_and_signals.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="load_props.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>import_session</h2>
+<h3>synopsis</h3>
+import a session worth of data
+<h3>syntax</h3><pre>
+    session=IMPORT_SESSION(rootdir)
+</pre>
+<h3>description</h3>
+<p>
+session=IMPORT_SESSION(rootdir) imports data of a recording session
+stored in rootdir and returns a structure with the following fields:
+<dl>
+<dt>info</dt><dd>session information</dd>
+<dt>tetrodes</dt><dd>tetrode information (epochname) - for each epoch a structure with data</dd>
+</dl>
+Each epoch structure has the following fields:
+<dl>
+<dt>info</dt><dd>epoch information</dd>
+<dt>environment</dt><dd>track and trajectory information</dd>
+<dt>position</dt><dd>behavior data</dd>
+<dt>clusters</dt><dd>cluster data and boundaries</dd>
+<dt>eeg</dt><dd>eeg inforamtion</dd>
+<dt>events</dt><dd>event data</dd>
+<dt>segments</dt><dd>segment data</dd>
+</dl>
+</p>
+<p>
+session-IMPORT_SESSION(rootdir,param1,val1,...) sets optional
+parameters. Valid paramaters are:
+<dl>
+<dt>Epochs</dt><dd>name or cell array of names of epoch(s) to be imported</dd>
+<dt>Sections</dt><dd>cell array of data to import; valid entries are: 'tetrodes', 'environment', 'position', 'clusters', 'eeg', 'events', 'segments'</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="export_sources_and_signals.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;export_sources_and_signals</td><td align=center width="34%"><a href="fkSession_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>load_props&nbsp;&nbsp;<a href="load_props.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

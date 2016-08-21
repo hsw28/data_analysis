@@ -1,0 +1,38 @@
+<html><head><title>fkGraphics - polarbar</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkGraphics reference pages</td><td align="right"><a href="arrowhead.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="ipolyline.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>polarbar</h2>
+<h3>synopsis</h3>
+creates a polar bar plot
+<h3>syntax</h3><pre>
+    h=POLARBAR
+    h=POLARBAR(rho)
+    h=POLARBAR(theta,rho)
+    h=POLARBAR(hax,...)
+    h=POLARBAR(...,param1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+h=POLARBAR plots a polar bar plot of a sine function. A
+handle to a polar bar graphics object is returned.
+</p>
+<p>
+h=POLARBAR(rho) plots a polar bar of radius data at equally spaced
+angles. If rho is a matrix, multiple bar plots will be created.
+</p>
+<p>
+h=POLARBAR(theta,rho) plots a polar bar in the current axes using
+the angle and radius data. Theta and rho can be either vectors or
+matrices of the same size. Alternatively, theta can be a vector and
+rho can be a matrix with the same number of rows as the length of
+theta. In this case the function will create as many polar bar plots
+as there are columns in rho.
+</p>
+<p>
+h=POLARBAR(hax,...) will plot in axes with handle hax.
+</p>
+<p>
+h=POLARBAR(...,param1,val1,...) sets polar bar properties
+through parameter/value pairs. Execute set(h) to see a list of valid
+properties that can be modified.
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="arrowhead.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;arrowhead</td><td align=center width="34%"><a href="fkGraphics_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>ipolyline&nbsp;&nbsp;<a href="ipolyline.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

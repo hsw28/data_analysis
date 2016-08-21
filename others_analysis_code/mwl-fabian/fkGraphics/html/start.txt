@@ -1,0 +1,2 @@
+cursor demo:demo_cursor:demoicon
+polar plots:demo_polar:demoicon

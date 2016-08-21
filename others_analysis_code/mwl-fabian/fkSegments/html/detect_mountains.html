@@ -1,0 +1,39 @@
+<html><head><title>fkSegments - detect_mountains</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkSegments reference pages</td><td align="right"><a href="seg_sort.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="inseg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>detect_mountains</h2>
+<h3>synopsis</h3>
+find segments containing peaks
+<h3>syntax</h3><pre>
+    segs=DETECT_MOUNTAINS(sig)
+    segs=DETECT_MOUNTAINS(x,sig)
+    segs=DETECT_MOUNTAINS(...,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+segs=DETECT_MOUNTAINS(sig) detects mountains in vector sig and returns
+the start and end indices.
+</p>
+<p>
+segs=DETECT_MOUNTAINS(x,sig) detects the mountains in a signal as a
+function of x and returns the starts and ends.
+</p>
+<p>
+segs=DETECT_MOUNTAINS(...,parm1,val1,...) set optional parameters for
+mountain detection. Valid parameters are:
+<dl>
+<dt>threshold</dt><dd>threshold, either a single threshold or a lower and a higher threshold. (default = 90% percentile of signal)</dd>
+<dt>span_interval</dt><dd>maximum inter-segment interval for combining segments. (default = 0)</dd>
+<dt>width_lim</dt><dd>exclude mountains based on width, either a scalar that specifies the lower limit or a two element vector that specifies lower and upper limits. (default = [])</dd>
+<dt>order</dt><dd>order of operations, 1=apply upper threshold, 2=apply width limits, 3=combine small intervals. (default = [1 2 3])</dd>
+</dl>
+</p>
+<p>
+The general procedure is as follows:
+<ol>
+<li>find all stretches in the data that are above the lower threshold.</li>
+<li>eliminate mountains that never cross the upper threshold (if exists)</li>
+<li>eliminate mountains that are either too wide or too narrow.</li>
+<li>combine mountains that are close together</li>
+</ol>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="seg_sort.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;seg_sort</td><td align=center width="34%"><a href="fkSegments_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>inseg&nbsp;&nbsp;<a href="inseg.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

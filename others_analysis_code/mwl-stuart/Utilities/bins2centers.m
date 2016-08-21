@@ -1,0 +1,1 @@
+function cent = bins2centers(
