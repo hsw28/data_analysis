@@ -33,6 +33,14 @@ OR do manually with sample rate
 5) filter with contfilt
 	filtered = contfilt(cont, 'filtopt',rip);
 
+6) find ripples? starting points:
+mwl-fabian/fkDataAnalysis/process_eeg_ripples.m
+mwl-stuart/thesis-analysis-code/Ripple_Figures/detectRipples.m
+mwl-stuart/thesis-analysis-code/MultiUnitRipplesAndSpindles/detect_ripples.m (multiunit)
+mwl-stuart/thesis-analysis-code/Utilities/find_rip_burst.m
+mwl-gh-code/ripple_analysis/ripplesFromEEG.m
+mwl-gh-code/tetrode-analysis-matlab/ripples/eegRipples.m
+
 
 PROBLEM-- for some channels the gains are being read in as 0 when you do eeg2mat
 
