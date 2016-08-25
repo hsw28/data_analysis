@@ -10,7 +10,8 @@ mkfilt.m: makes a filter
 oat2pos.n: imports OATE position csv made from extract_pos_no_HD_Arte. uses the same x and y value for front and back LEDs
 
 OTHER
-extract_pos_no_HD_Arte: extracts position from oate into a csv file
+extract_OATpos.py: extracts position from oate into a csv file. use this for importing to matlab
+pos_extract.py: extracts position into seperate doctuments
 
 
 look into:
