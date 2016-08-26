@@ -11,7 +11,7 @@ function [timestamp,new_data,cdat] = gh_debuffer(filename,varargin)
 % If you want to load the entire file, you can use [0 Inf], I think
 %
 % ex:
-% eeg = gh_debuffer('arte_lfp1.eeg', 'system','arte','gains',5000, 'chans', [7],'timewin',[0,inf]);
+% [lfp.timestamp, lfp.data, ~] = gh_debuffer('arte_lfp1.eeg', 'system','arte','gains',5000, 'chans', [7],'timewin',[0,inf]);
 
 
 
