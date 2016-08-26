@@ -1,4 +1,19 @@
 steps to analyze eeg:
+
+---- For ARTE:
+1) Use gh_debuffer to import file to matlab format
+[lfp.timestamp, lfp.data, ~] = gh_debuffer('filename.eeg','system', 'arte', 'gains',5000,'timewin',[start end]);
+time is in seconds, can use 0, inf for time to import all
+
+
+
+
+
+
+
+
+
+---- For AD:
 1) use eeg2mat to convert file into an eeg structure
 for ex:
 	eegdata = eeg2mat('arte_lfp1.eeg', [7], 'bt|3',[0 276971379831008359]);
