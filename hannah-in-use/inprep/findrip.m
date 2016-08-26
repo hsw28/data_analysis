@@ -26,9 +26,9 @@ for k = 1:(size(trans))
 		% we've found something above threshold, now need to find surrounding times when it's back at mean		
 		i = k;
 		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time		
-		%while abs(trans(i)-mn) > (st./2)
-			%i=i-1;
-		%end
+		while abs(trans(i)-mn) > (st./2)
+			i=i-1;
+		end
 		% looks to see when value returns to half a std dev above mean, this is the end of the ripple time		
 		while abs(trans(k)-mn) > (st./2)
 			k=k+1;
