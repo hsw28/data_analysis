@@ -1,5 +1,5 @@
 
-function rip = findrip(c,d);
+function p = findrip(c,d);
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >3 dev above mean (is 3 good? that catches 3x more points than 4x above mean)
 % input data and timestamp structures from gh_debuffer
 % ex:
@@ -19,6 +19,7 @@ m = mn + (st.*3);
 
 %makes empty vector to hold times of ripples
 rt=[];
+peaktime=[];
 
 % permute through transformed data and find when data is three std devs above mean
 for k = 1:(size(trans))
@@ -29,14 +30,27 @@ for k = 1:(size(trans))
 		while abs(trans(i)-mn) > (st./2) && i > 0
 			i=i-1;
 		end
+		j = k;
 		% looks to see when value returns to half a std dev above mean, this is the end of the ripple time		
 		while abs(trans(k)-mn) > (st./2)
-			k=k+1;
+			j=j+1;
 		end
 		
-		%adds to vector ripple start and stop times, in pairs
-		rt(end+1) = d(i);
-		rt(end+1) = d(k);	
+		%adds to vector ripple start, trigger, and end times		
+		%rt(end+1) = d(i);
+		%rt(end+1) = d(j);
+		k = j;		
+		
+		making a vector with all the data points of the ripple
+		pt=[];
+		for n = i:j	
+			pt(end+1) = c(n);
+		end
+		[peak,index] = max(pt);
+		index = index+i-1;
+
+		peaktime(end+1) = d(index);
+
 	end
 end
 
@@ -44,7 +58,7 @@ end
 % want to get rid of multiple times super close to eachother
 % stick these new times in a new vector
 
-rip=rt;
+p=peaktime;
 
 
 
