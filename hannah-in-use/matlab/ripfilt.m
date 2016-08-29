@@ -1,7 +1,7 @@
 function y = ripfilt(x)
 
 % RIPFILT Filters input x and returns output y.
-% filters in ripple frequency range. import eeg data from gh_debuffer
+% filters in ripple frequency range 100-300. import eeg data from gh_debuffer
 % example: 
 % data = ripfilt(lfp.data);
 
