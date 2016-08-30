@@ -29,20 +29,19 @@ rate = zeros(size(time_v));
 
 m = size((time_v),2)
 s = 1;
-q = 1;
+n = 1;
 
 %for the full length of time, go through all the time points and see if they fit in the ms bin
 % if they fit, add a tally in the rate vector for that time point
-for n = 1:(m-1)
-	r = 0;
-	while s <= (size((tv),1))
-		if tv(s) >= time_v(n) && tv(s) < time_v(n+1)
-			rate(n) = rate(n)+1;
-			q = s;
+
+while n <= (m-1) %for all the times
+	while s <= (size((tv),1)) %go through the spikes
+		if tv(s) >= time_v(n) && tv(s) < time_v(n+1) %if the spike S is within the time window
+			rate(n) = rate(n)+1; %add a tally to the rate vector
+			s = s+1; %go to next spike
+			n = n+1; %go to next time
 		end
-		s = s+1;
 	end
-	s = q;
 end
 
 muar = rate;
