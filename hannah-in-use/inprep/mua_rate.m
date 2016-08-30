@@ -39,9 +39,11 @@ while n <= (m-1) %for all the times
 		if tv(s) >= time_v(n) && tv(s) < time_v(n+1) %if the spike S is within the time window
 			rate(n) = rate(n)+1; %add a tally to the rate vector
 			s = s+1; %go to next spike
-			n = n+1; %go to next time
+		elseif tv(s) >= time_v(n+1)
+			s = s+1;
 		end
 	end
+	n=n+1;
 end
 
 muar = rate;
