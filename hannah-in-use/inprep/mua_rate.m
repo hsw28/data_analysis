@@ -1,4 +1,4 @@
-function muar = mua_rate(file, start_time, end_time, t);
+function [tm, rt] = mua_rate(file, start_time, end_time, t);
 
 % finds rate of MUA
 % function muar = mua_rate(file, start_time, end_time, t);
@@ -7,7 +7,7 @@ function muar = mua_rate(file, start_time, end_time, t);
 % t is bin in seconds (for ex, .01 for 10ms)
 %
 % ex:
-% r = mua_rate(maze_cl_2, 455.8529, 24855.7439, .01);
+% >> [mua.time, mua.rate] = mua_rate(cluster, 455.8529, 24855.7439, 1);
 
 tv = file(:,8);
 %make a vector of firing times
@@ -44,21 +44,24 @@ while n <= (m) %for all the times
 			end
 		end
 		if n == m
-			if tv(s) >= time_v(n)
+			if tv(s) >= time_v(n) && tv(s) <= end_time
+				tv(s)
 				rate(n) = rate(n)+1;
 			end
 		end
 		s = s+1;
 	end
-	n=n+1
+	n=n+1;
 	s=q;
 
 end
 
-muar = rate;
-			
+%output time and rate
+tm = time_v;
+rt = rate;
+		
 	
-% time one, go through all spikes and see if match	
+
 
 
 
