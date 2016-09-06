@@ -9,8 +9,9 @@ thetafilt.m: bandpass filters in the theta band (6-10)
 
 findrip.m: takes eeg data from gh_debuffer, filters it in ripple band, does a hilbert transformation, and returns times of ripple peaks
 getHeaderGains.m: gets gains from eeg file after opening with mwlopen
-gh_debuffer: imports an ARTE .eeg file
-oat2pos.n: imports OATE position csv made from extract_pos_no_HD_Arte. uses the same x and y value for front and back LEDs
+gh_debuffer.m: imports an ARTE .eeg file
+oat2pos.m: imports OATE position csv made from extract_pos_no_HD_Arte. uses the same x and y value for front and back LEDs
+mua_rate.m: finds rate of MUA, outputs as number of spikes per time bin
 
 OTHER
 extract_OATpos.py: extracts position from oate into a csv file. use this for importing to matlab
@@ -27,7 +28,4 @@ imcont: converts to eeg2mat file to continuous structure
 mkfiltopt.m: makes filter options objects for use by mkfilt
 mkfilt.m: makes a filter
 
-
-look into:
-ripple detection: mwl-gh-code/tetrode-analysis-matlab/ripples/eegRipples.m
 

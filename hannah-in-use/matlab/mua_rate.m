@@ -1,6 +1,6 @@
 function [tm, rt] = mua_rate(file, start_time, end_time, t);
 
-% finds rate of MUA
+% finds rate of MUA, outputs as number of spikes per time bin
 % function muar = mua_rate(file, start_time, end_time, t);
 %
 % file should be the loaded file
