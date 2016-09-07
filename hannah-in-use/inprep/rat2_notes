@@ -7,5 +7,5 @@ to load clusters use
 load('maze-cl-1')
 
 >> r = mua_rate(maze_cl_2, 455.8529, 24855.7439);
-
+1	2	3	4	5	6	7	8	9	10	11
 id	t_px	t_py	t_pa,	t_pb	t_maxwd	t_maxht	time	pos_x	pos_y	velocity

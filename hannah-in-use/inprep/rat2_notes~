@@ -1,9 +1,0 @@
-
-Rat2 - tetrode 15
-[lfpmaze.timestamp, lfpmaze.data, ~] = gh_debuffer('arte_lfp1.eeg', 'system','arte','gains',5000, 'chans', [7],'timewin',[455.8529,24855.7439]);
-[lfpbox.timestamp, lfpbox.data, ~] = gh_debuffer('arte_lfp1.eeg', 'system','arte','gains',5000, 'chans', [7],'timewin',[24855.7439,150299.4]);
-
-to load clusters use
-load('maze-cl-1')
-
-id	t_px	t_py	t_pa,	t_pb	t_maxwd	t_maxht	time	pos_x	pos_y	velocity
