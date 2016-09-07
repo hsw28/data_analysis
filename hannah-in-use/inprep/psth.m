@@ -1,6 +1,8 @@
 function varargout=psth(varargin)
 %PSTH peri-stimulus time histogram
 %
+% all inputs must be in columns
+%
 %  h=PSTH(trigger,events) returns the psth for the events, given the in
 %  the interval [-1 1] around the trigger events. The number of bins in
 %  the histogram is 51. The trigger should be a sorted vector, the events
@@ -19,7 +21,7 @@ function varargout=psth(varargin)
 %   
 
 %get options
-options = struct('lags', linspace(-1,1,52), ...
+options = struct('lags', linspace(-1,1,52), ...  %change here for seconds around and bins
                  'segments', [], ...
                  'normalization', 'none');
 

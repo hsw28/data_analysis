@@ -146,7 +146,7 @@ void mexFunction( int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[] )
   /* mexPrintf("nseg: %d\n", nseg); */
 
   /* estimate final output size */
-  est_n_events = nref * (lag_max-lag_min) * nevent / (pevent[nevent-1]-pevent[0]) + 100;
+  est_n_events = nref * (lag_max-lag_min) * nevent / (nevent == 1 ? 1 : pevent[nevent-1]-pevent[0]) + 100;
   /*  mexPrintf("est_n_events: %ld\n", est_n_events);*/
 
   /* create arrays */

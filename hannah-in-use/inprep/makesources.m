@@ -21,7 +21,7 @@ end
 target = lower(target);
 
 
-mex src/eventcorr_c.c
+mex -g GCC='/usr/bin/gcc-4.7' src/eventcorr_c.c
 
 %example  
 %if (ismember('p2mat', target) | ismember('all', target))
