@@ -1,6 +1,6 @@
 
-function p = findrip(c,d,y);
-% finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector with the time of each ripple peak
+function p = abovetheta(c,d,y);
+% finds peaks from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector with the time of each ripple peak
 %
 % findrip(datavector,timevector,dev-above-mean)
 % input data and timestamp structures from gh_debuffer.
@@ -8,7 +8,7 @@ function p = findrip(c,d,y);
 % findrip(lfp.data, lfp.timestamp, 4);
 
 
-filtdata = ripfilt(c);
+filtdata = thetafilt(c);
 % filters data with bandpass filter between 100-300hz
 
 % does a hilbert transformation on the data
@@ -18,7 +18,7 @@ trans = abs(h);
 % finds three std devs above mean
 mn = mean(trans);
 st = std(trans);
-m = mn + (st.*y);
+m = mn + (st.*(y));
 
 %makes empty vector to hold times of ripples
 rt=[];
@@ -54,14 +54,14 @@ for k = 1:(size(trans))
 			for n = i:j	
 				%goes through data and adds data (NOT TIME) to vector
 				pt(end+1) = c(n);
-				
 			end
 
+	
 		[peak,index] = max(pt);
 		index = index+i-1;
-
 		peaktime(end+1) = d(index);
 		end
+
 
 	end
 end

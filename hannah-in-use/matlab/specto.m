@@ -5,7 +5,8 @@ S = abs(s);
 
 %imagesc(x,y,C) 
 
-imagesc(t,f,S')
+imagesc(t,f,S)
 axis xy
+colorbar
 set(gca,'ylim',[0,300]);
-set(gca,'clim',[0,2]);
+set(gca,'clim',[0,3]);
