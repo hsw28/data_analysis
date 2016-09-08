@@ -1,15 +1,23 @@
 function v = velocity(file);
 
-time = file(1, :)
-xpos = file(2, :)
-ypos = file(3, :)
-velvector = []
+%computes velocity. input a [3,#ofpoints] vector, where first column is time, second is x, third is y
+% returns velocities per ms
 
-for i = 2:size(time)
+t = file(1, :);
+xpos = file(2, :);
+ypos = file(3, :);
+velvector = [0];
+
+s = size(t,2)
+
+for i = 2:s
+	%find distance travelled
 	hypo = hypot(xpos(i), ypos(i));
-	vel = hypo./(time(i)-time(i-1));
+	vel = hypo./((t(i)-t(i-1)./10000));
 	velvector(end+1) = vel;
 end
 
-v = velvector
+
+
+v = smooth(velvector);
 	
