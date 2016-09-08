@@ -21,14 +21,18 @@ for line in open(file_in):
 posT = []
 posX = []
 posY = []
+myInt = 10000.0000
 
 for i in range(len(data)):
     if data[i]["pos_ok"] == True:
-        posT.append(data[i]["time"])
+        posT.append((data[i])["time"])
         posX.append(data[i]["pos_xy"][0])
         posY.append(data[i]["pos_xy"][1])
 
 
+newposT = [x / myInt for x in posT]
+
+
 with open(file_out,'w') as f:
     writer = csv.writer(f,delimiter='\t')
-    writer.writerows(zip(posT,posX,posY))
+    writer.writerows(zip(newposT,posX,posY))
