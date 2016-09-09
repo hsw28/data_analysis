@@ -19,7 +19,8 @@ getHeaderGains.m: gets gains from eeg file after opening with mwlopen
 gh_debuffer.m: imports an ARTE .eeg file
 kw.m: performs a Kruskal-Wallis test on two groups of data
 mua_rate.m: finds rate of MUA, outputs as number of spikes per time bin
-oat2pos.m: imports OATE position csv made from extract_pos_no_HD_Arte. uses the same x and y value for front and back LEDs
+oat2pos.m: imports OATE position csv to binary. uses the same x and y value for front and back LEDs
+placeevent: if you have event times, this will match with place data to get place cells or whatever
 psth.m: makes a psth graph of events around a trigger point
 specto.m: creates a spectograph from raw lfps
 
