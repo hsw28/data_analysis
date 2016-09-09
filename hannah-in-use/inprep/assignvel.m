@@ -22,8 +22,10 @@ while i<=tfs
 	newn;
 	m=[];
 	for n = newn:vfs
-		
-		m(end+1) = (abs(timefile(i)-(timevector(n)./10000)));
+		m(end+1) = (abs(timefile(i)-(timevector(n))));
+
+		% or use the next line if time data hasn't been divided to seconds
+		% m(end+1) = (abs(timefile(i)-(timevector(n)./10000)));
 		
 		if size(m,2) == 1
 			closestv = velvector(n);

@@ -2,6 +2,7 @@ function v = velocity(file1);
 
 %computes velocity. input a [3,#ofpoints] vector, where first column is time, second is x, third is y
 % returns velocities per ms and time stamp vector
+% smooths velocities and does hilbert filtering
 
 file = file1';
 
@@ -22,8 +23,12 @@ for i = 2:s
 	timevector(end+1) = t(i);
 end
 
+#transforms
+hil = abs(hilbert(velvector);
 
-velo = smooth(velvector);
+#smooths with moving average, window 3
+velo = smooth(hil,3);
+
 v = [velo'; timevector];
 
 	
