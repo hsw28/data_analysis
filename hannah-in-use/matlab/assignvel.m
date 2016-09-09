@@ -1,9 +1,10 @@
 function f = assignvel(timefile, velo);
 
 %takes input of velocity matric from velocity.m
-% makes a vector of velocities at every time stamp so you can make a graph
-% ex:
-% f = assignvel(tet11.timestamp, velocitymatrix)
+% makes a vector of velocities at every time stamp so you can make a graph against all time points
+% transforms and smooths data
+%
+% ex: f = assignvel(tet11.timestamp, velocitymatrix)
 
 
 tfs = size(timefile,2);
@@ -49,9 +50,13 @@ i=i+1;
 
 end
 
-f = closestvel;
+a = closestvel;
 
-			
+%transforms
+hil = abs(hilbert(a));
+
+%smooths with moving average, window 3
+f = smooth(hil,3);			
 		
 		
 		

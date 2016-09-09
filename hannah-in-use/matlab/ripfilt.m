@@ -1,6 +1,7 @@
 function y = ripfilt(x)
 
 % RIPFILT Filters input x and returns output y.
+% hilbert transforms output
 % filters in ripple frequency range 100-300. import eeg data from gh_debuffer
 % example: 
 % data = ripfilt(lfp.data);
@@ -197,7 +198,8 @@ if isempty(Hd)
         9.08466204519207e-09 0]);
 end
 
-y = step(Hd,x);
+d = step(Hd,x);
+y = abs(hilbert(d));
 
 
 % [EOF]

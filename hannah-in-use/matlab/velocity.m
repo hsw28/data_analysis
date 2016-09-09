@@ -1,8 +1,12 @@
 function v = velocity(file1);
 
-%computes velocity. input a [3,#ofpoints] vector, where first column is time, second is x, third is y
+%computes velocity. input a [#ofpoints, 3] vector, where first column is time, second is x, third is y
+% you can import your csv file as such:
+% x = load('pos.csv');
+% v = velocity(x);
+%
 % returns velocities per ms and time stamp vector
-% smooths velocities and does hilbert filtering
+% doesn't smooth or transform-- do that later when you assign velocities
 
 file = file1';
 
@@ -23,12 +27,8 @@ for i = 2:s
 	timevector(end+1) = t(i);
 end
 
-#transforms
-hil = abs(hilbert(velvector);
 
-#smooths with moving average, window 3
-velo = smooth(hil,3);
 
-v = [velo'; timevector];
+v = [velvector; timevector];
 
 	
