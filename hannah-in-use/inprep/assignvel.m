@@ -13,31 +13,41 @@ vfs = size(timevector,2);
 
 closestvel=[];
 
-for i = 1:tfs
-	m = [];
-	for n = 1:vfs
-		m(end+1) = (abs(timefile(i)-timevector(n)));
+newn=1;
+i=1;
+
+tfs;
+
+while i<=tfs
+	newn;
+	m=[];
+	for n = newn:vfs
+		
+		m(end+1) = (abs(timefile(i)-(timevector(n)./10000)));
 		
 		if size(m,2) == 1
 			closestv = velvector(n);
+			closestvel(i) = closestv;
 		end
 
 		if size(m,2)>1
-			if m(end)>=m(end-1)
+			if m(end)<=m(end-1)
+				
 				closestv = velvector(n);
+				newn=n;
+				closestvel(i) = closestv;
 			end
-		end
-
-		if m<=.005
-			break
-		end
-			
+			if m(end)>m(end-1)
+				break
+			end
+		end	
 	end
-closestvel(i) = closestv;
+
+i=i+1;
 
 end
 
-f = closestv;
+f = closestvel;
 
 			
 		
