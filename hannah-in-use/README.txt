@@ -9,6 +9,7 @@ thetafilt.m: bandpass filters in the theta band (6-10)
 
 velocity.m: finds velocity from position data
 assignvel.m: assigns velocities to every time point
+assigntic.m: assigns a tic number from the video to an event
 
 abovetheta.m: finds points an inputed number of std devs above theta
 belowtheta.m: finds points an inputed number of std devs below theta
