@@ -72,7 +72,7 @@ i=i+1;
 
 end
 
-image
+
 quiver(xposvector, yposvector, fxvector, fyvector)
 v = [timevector; xposvector; yposvector; fxvector; fyvector];
 
