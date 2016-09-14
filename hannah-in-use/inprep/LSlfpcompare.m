@@ -1,10 +1,11 @@
-function f = LSlfpcompare(LS_lfp_data, LS_lfp_timestamp, other_LFP_data, other_LFP_data);
+function f = LSlfpcompare(LS_lfp_data, LS_lfp_timestamp, other_LFP_data, timestamp);
 
 % takes raw LS LFP and finds the weird LS events and the time and duration
 % plots the LFP for the other thing youre looking for during the same time
+% all inputs must be same length
 
 c = LS_lfp_data
-d = LS_lfp_timestamp
+d = timestamp
 
 
 filtdata = thetafilt(c);
@@ -22,6 +23,11 @@ m = mn + (st.*(4));
 %makes empty vector to hold times of ripples
 rt=[];
 peaktime=[];
+LSevent=[];
+Otherevent=[];
+timeevent=[];
+
+numevents = 0;
 
 % permute through transformed data and find when data is four std devs above mean
 for k = 1:(size(trans))
@@ -48,9 +54,23 @@ for k = 1:(size(trans))
 
 		%only include events longer than 30ms
 		if d(j)-d(i) > .03
-			%making a vector start and end times
-			pt=[];
-			pt(end+1) = (d(i), d(j));
+			numevents = numevents+1;
+			%making a vector with event points, with a ~45ms buffer around (equal to 7 time points)
+			for n = (i-7):(j+7)	
+				%goes through data and adds data (NOT TIME) to vector for LS event. 
+				LSevent(end+1) = c(n);
+				% finds other event points
+				Otherevent(end+1) = c(n);
+				% finds all time points
+				timeevent(end+1) = d(n)
+
+				%THEN EITHER HAVE TO PLOT RIGHT HERE WHICH IS A PROBLEM BC YOU DONT KNOW HOW MANY PLOTS TO MAKE
+				%OR YOU NEED TO SAVE THE DATA SEPERATED FROM FUTURE POINTS AND PLOT IT LATER
+				% EITHER SEPERATE DATA WITH A 0 OR OTHERWISE, OR IN SEPERATE VECTORS FOR EACH ITERATION
+				% BUT HOW DO YOU DEFINE VARIABLES YOU DONT KNOW YOU'LL NEED??
+				% TO BE CONTINUED....
+
+			end
 		end
 
 
@@ -59,15 +79,14 @@ end
 
 %pt vector contains two rows, which have start and stop times
 % now want to plot those times and some surrounding times
+% first have to get surrounding data
+
 
 % this is the number of plots we will need
-plotsize = size(pt);
-
+plotsize = size(numevents);
 figure
-subplot(plotsize, 1, 1);
-
 for n = 1:plotsize
-	
+	subplot(numevents, 1, n);
 
 
 %find 
