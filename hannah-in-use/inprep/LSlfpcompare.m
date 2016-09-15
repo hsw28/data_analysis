@@ -1,15 +1,19 @@
-function f = LSlfpcompare(LS_lfp_data, LS_lfp_timestamp, other_LFP_data, timestamp);
+function f = LSlfpcompare(LS_lfp_data, other_LFP_data, timestamp);
 
 % takes raw LS LFP and finds the weird LS events and the time and duration
 % plots the LFP for the other thing youre looking for during the same time
 % all inputs must be same length
+% ex
+% LSlfpcompare(LS.data, HPC.data, maze.timestamp);
 
-c = LS_lfp_data
-d = timestamp
+c = LS_lfp_data;
+d = timestamp;
+a = other_LFP_data;
 
 
 filtdata = thetafilt(c);
 % filters data with bandpass filter between 100-300hz
+% might want to change this to a low pass filter
 
 % does a hilbert transformation on the data
 h = hilbert(filtdata);
@@ -26,6 +30,7 @@ peaktime=[];
 LSevent=[];
 Otherevent=[];
 timeevent=[];
+endpoints=[];
 
 numevents = 0;
 
@@ -34,13 +39,13 @@ for k = 1:(size(trans))
 	if trans(k) > m
 		% we've found something above threshold, now need to find surrounding times when it's back at mean		
 		
-		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
+		% looks to see when value returns to half a std dev above mean, this is the start of the event time
 		i = k;
 		while abs(trans(i)-mn) >= (st./2) && i > 0
 			i=i-1;
 		end
 		
-		% looks to see when value returns to half a std dev above mean, this is the end of the ripple time		
+		% looks to see when value returns to half a std dev above mean, this is the end of the event time		
 		j = k;
 		while abs(trans(j)-mn) >= (st./2)
 			j=j+1;
@@ -55,40 +60,38 @@ for k = 1:(size(trans))
 		%only include events longer than 30ms
 		if d(j)-d(i) > .03
 			numevents = numevents+1;
-			%making a vector with event points, with a ~45ms buffer around (equal to 7 time points)
-			for n = (i-7):(j+7)	
-				%goes through data and adds data (NOT TIME) to vector for LS event. 
-				LSevent(end+1) = c(n);
-				% finds other event points
-				Otherevent(end+1) = c(n);
-				% finds all time points
-				timeevent(end+1) = d(n)
-
-				%THEN EITHER HAVE TO PLOT RIGHT HERE WHICH IS A PROBLEM BC YOU DONT KNOW HOW MANY PLOTS TO MAKE
-				%OR YOU NEED TO SAVE THE DATA SEPERATED FROM FUTURE POINTS AND PLOT IT LATER
-				% EITHER SEPERATE DATA WITH A 0 OR OTHERWISE, OR IN SEPERATE VECTORS FOR EACH ITERATION
-				% BUT HOW DO YOU DEFINE VARIABLES YOU DONT KNOW YOU'LL NEED??
-				% TO BE CONTINUED....
-
-			end
+			%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
+			endpoints(end+1)=(i-7);
+			endpoints(end+1)=(j+7);
 		end
 
 
 	end
 end
 
-%pt vector contains two rows, which have start and stop times
-% now want to plot those times and some surrounding times
-% first have to get surrounding data
+%now you have vector 'endpoints' where all the odd numbered values are start points and even are end points
+%now we want to plot them
 
-
-% this is the number of plots we will need
-plotsize = size(numevents);
 figure
-for n = 1:plotsize
-	subplot(numevents, 1, n);
+
+while n <= size(endpoints);
+	p = ((n.*2)-1)
+	start = endpoints(n);
+	finish = endpoints(n+1);
+	subplot(numevents, 1, p);
+	% plots LS event
+	plot(d(start:finish), c(start:finish)
+	hold on
+	% plots other LFP event
+	plot(d(start:finish), a(start:finish)
+	hold off
+	n = n+2;
+end
 
 
-%find 
+
+
+
+
 
 
