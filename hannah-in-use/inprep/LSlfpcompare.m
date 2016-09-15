@@ -76,22 +76,23 @@ end
 %now you have vector 'endpoints' where all the odd numbered values are start points and even are end points
 %now we want to plot them
 
-figure
+f = figure
 n=1;
 size(endpoints,2);
 while n <= size(endpoints,2);
 	p = ((n+1)./2);
 	start = endpoints(n);
 	finish = endpoints(n+1);
-	subplot(numevents, 1, p);
+	subplot(ceil(numevents./5), 5, p);
 	% plots LS event
 	plot(d(start:finish), c(start:finish))
 	hold on
 	% plots other LFP event
-	plot(d(start:finish), a(start:finish))
+	plot(d(start:finish), a(start:finish), 'r')
 	hold off
 	n = n+2;
 end
+
 
 
 
