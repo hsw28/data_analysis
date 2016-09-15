@@ -56,34 +56,39 @@ for k = 1:(size(trans))
 		%end time is d(j);
 		k = j;		
 		
-
+		
 		%only include events longer than 30ms
 		if d(j)-d(i) > .03
-			numevents = numevents+1;
-			%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
-			endpoints(end+1)=(i-7);
-			endpoints(end+1)=(j+7);
+			if ismember((i-7),endpoints)==0 && ismember((j+7),endpoints)==0
+				numevents = numevents+1;
+				%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
+				endpoints(end+1)=(i-7);
+				endpoints(end+1)=(j+7);
+			end
 		end
 
 
 	end
 end
 
+
+
 %now you have vector 'endpoints' where all the odd numbered values are start points and even are end points
 %now we want to plot them
 
 figure
-
-while n <= size(endpoints);
-	p = ((n.*2)-1)
+n=1;
+size(endpoints,2);
+while n <= size(endpoints,2);
+	p = ((n+1)./2);
 	start = endpoints(n);
 	finish = endpoints(n+1);
 	subplot(numevents, 1, p);
 	% plots LS event
-	plot(d(start:finish), c(start:finish)
+	plot(d(start:finish), c(start:finish))
 	hold on
 	% plots other LFP event
-	plot(d(start:finish), a(start:finish)
+	plot(d(start:finish), a(start:finish))
 	hold off
 	n = n+2;
 end
