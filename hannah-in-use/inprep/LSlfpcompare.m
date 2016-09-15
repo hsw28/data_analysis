@@ -31,6 +31,8 @@ LSevent=[];
 Otherevent=[];
 timeevent=[];
 endpoints=[];
+startpoints=[];
+duration=[];
 
 numevents = 0;
 
@@ -62,8 +64,9 @@ for k = 1:(size(trans))
 			if ismember((i-7),endpoints)==0 && ismember((j+7),endpoints)==0
 				numevents = numevents+1;
 				%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
-				endpoints(end+1)=(i-7);
+				startpoints(end+1)=(i-7);
 				endpoints(end+1)=(j+7);
+				duration(end+1)=(d(j+7)-d(i-7));
 			end
 		end
 
@@ -71,27 +74,36 @@ for k = 1:(size(trans))
 	end
 end
 
+allpoints = [startpoints;endpoints;duration];
+[X, Y] = sort(allpoints(3,:));
+sortedpoints = allpoints(:,Y);
 
+%sortedpoints(1,:) is start time, (2,:) is end time, (3,:) is duration
 
-%now you have vector 'endpoints' where all the odd numbered values are start points and even are end points
-%now we want to plot them
 
 f = figure
 n=1;
-size(endpoints,2);
-while n <= size(endpoints,2);
-	p = ((n+1)./2);
-	start = endpoints(n);
-	finish = endpoints(n+1);
-	subplot(ceil(numevents./5), 5, p);
+q=2;
+
+
+
+while n <= size(sortedpoints,2);
+	start = sortedpoints(1,n);
+	finish = sortedpoints(2,n);
+	duration = sortedpoints(3,n);
+	div = finish-start;
 	% plots LS event
-	plot(d(start:finish), c(start:finish))
+	plot(d(1:div+1)-d(1), c(start:finish)+q, 'b')
+	%plot(d(start:finish), c(start:finish)+q)
 	hold on
 	% plots other LFP event
-	plot(d(start:finish), a(start:finish), 'r')
-	hold off
-	n = n+2;
+	plot(d(1:div+1)-d(1), a(start:finish)+q, 'r')
+	q = q+2;
+	n = n+1;
 end
+
+ylim([-10 ((size(sortedpoints,2).*2)+10)]);
+xlim([-1 max(duration)+1])
 
 
 
