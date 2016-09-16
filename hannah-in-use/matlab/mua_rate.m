@@ -1,15 +1,18 @@
-function [tm, rt] = mua_rate(file, start_time, end_time, t);
+function r = mua_rate(muatimes, start_time, end_time, t);
 
 % finds rate of MUA, outputs as number of spikes per time bin
 % function muar = mua_rate(file, start_time, end_time, t);
+% MUA must be format [1, evemts]
 %
 % file should be the loaded file
 % t is bin in seconds (for ex, .01 for 10ms)
 %
 % ex:
 % >> [mua.time, mua.rate] = mua_rate(cluster, 455.8529, 24855.7439, 1);
+%
+% returns a [2, :] matrix of spikes and times
 
-tv = file(:,8);
+tv = muatimes(:);
 %make a vector of firing times
 
 ms_time = (end_time-start_time);
@@ -57,10 +60,8 @@ while n <= (m) %for all the times
 end
 
 %output time and rate
-tm = time_v;
-rt = rate;
-		
-	
+r = [rate; time_v];
+
 
 
 

@@ -1,13 +1,13 @@
-function f = LSlfpcompare(LS_lfp_data, MUAtim, timestamp);
+function rr = LSmuacompare(LS_lfp_data, LStimestamp, MUAtimes);
 
 % takes raw LS LFP and finds the weird LS events and MUA activity during the time
-% NEED TO WORK ON BC NOW STILL FOR LFP
+% MUA times should be format [1, events]
 
 % LSlfpcompare(LS.data, HPC.data, maze.timestamp);
 
 c = LS_lfp_data;
-d = timestamp;
-a = other_LFP_data;
+d = LStimestamp;
+
 
 
 filtdata = thetafilt(c);
@@ -66,6 +66,8 @@ for k = 1:(size(trans))
 				startpoints(end+1)=(i-7);
 				endpoints(end+1)=(j+7);
 				duration(end+1)=(d(j+7)-d(i-7));
+				
+				
 			end
 		end
 
@@ -79,12 +81,14 @@ sortedpoints = allpoints(:,Y);
 
 %sortedpoints(1,:) is start time, (2,:) is end time, (3,:) is duration
 
+%now for MUA
 
-f = figure
+rr = figure
 n=1;
 q=2;
 
 
+c = lowpass300(c);
 
 while n <= size(sortedpoints,2);
 	start = sortedpoints(1,n);
@@ -94,14 +98,15 @@ while n <= size(sortedpoints,2);
 	% plots LS event
 	plot(d(1:div+1)-d(1), c(start:finish)+q, 'b')
 	hold on
-	% plots other LFP event
-	plot(d(1:div+1)-d(1), a(start:finish)+q, 'r')
-	q = q+2;
+	%nowMUA
+	mua = mua_rate(MUAtimes, d(start), d(finish), duration/50);
+	plot(((mua(2,:))-(mua(2,1))), (((mua(1,:)))+q), 'r')
+	q = q+5;
 	n = n+1;
 end
 
-ylim([-10 ((size(sortedpoints,2).*2)+10)]);
-xlim([-1 max(duration)+1])
+ylim([-10 ((size(sortedpoints,2).*5)+10)]);
+xlim([-.1 max(duration)+.1]);
 
 
 

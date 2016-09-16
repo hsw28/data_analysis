@@ -1,26 +1,17 @@
-
-PLOT LFP DURING CHANGE IN VELOCITY
-SEE IF IT MATCHES LS THINGS
-
+shade actual accel times (or dont shade and shade start to peak and peak to end)
+mark max accel point
 -- 
 
 look at out of skull refer (#5) and see if events there
 
---
-fix lowpass velocity filter
 
 ----------------------------------
 
 
 LS---
-lowpass filter up to 300 
-threshold peeks
-what happens around 
 whats frequency
 interpeak interval
 fix window beginning and end
-
-do a stack plot with LS thing and event
 
 
 --
