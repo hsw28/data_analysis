@@ -19,19 +19,23 @@ timevector = [];
 
 s = size(t,2);
 
-for i = 2:s
+for i = 2:s-1
 	%find distance travelled
-	hypo = hypot(xpos(i), ypos(i));
-	vel = hypo./((t(i)-t(i-1)));
-	velvector(end+1) = vel;
-	timevector(end+1) = t(i);
+	if t(i)~=t(i-1)
+		hypo = hypot((xpos(i-1)-xpos(i+1)), (ypos(i-1)-xpos(i+1)));
+		vel = hypo./((t(i+1)-t(i-1)));
+		velvector(end+1) = vel;
+		timevector(end+1) = t(i);
+	end	
 end
 
-[z, p, k] = butter(2, 1/30, 'low');
+
+
+[z, p, k] = butter(2, .005, 'low');
 sos = zp2sos(z,p,k);
 v = sosfilt(sos,velvector);
 
-%velvector = smooth(velvector);
-v = [v; timevector];
+v = smooth(v);
+v = [v'; timevector];
 
 	

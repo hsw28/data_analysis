@@ -6,7 +6,6 @@ function a = accel(file);
 % doesn't smooth or transform-- do that later when you assign velocities
 
 v = velocity(file);
-v(1,:) = smooth(v(1,:));
 
 vel = v(1, :);
 t = v(2, :);
@@ -16,11 +15,12 @@ timevector = [];
 
 s = size(t,2);
 
-for i = 2:s-1
-	vchange = vel(i+1)-vel(i-1);
-	accel = vchange/(t(i+1)-t(i-1));
+for i = 3:s-2
+	vchange = vel(i+2)-vel(i-2);
+	accel = vchange/(t(i+2)-t(i-2));
 	accvector(end+1) = accel;
 	timevector(end+1) = t(i);
 end
 
-a = [accvector; timevector];
+accvector = smooth(accvector);
+a = [accvector'; timevector];
