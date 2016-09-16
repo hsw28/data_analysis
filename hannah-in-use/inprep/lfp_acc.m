@@ -9,6 +9,7 @@ function f = lfp_acc(lfpdata, lfptimestamp, pos);
 c=lfpdata;
 d=lfptimestamp;
 
+
 acc = accel(pos);
 acc = assignvel(lfptimestamp, acc);
 
@@ -30,7 +31,7 @@ for k = 1:(size(acc,2))
 		
 		% looks to see when value returns this is the end of the acc time		
 		j = k;
-		while acc(j) > 50 || acc(j) < -50 && j<=(size(acc,2))
+		while acc(j) > 50 || acc(j) < -50 && j<=(size(acc,2)-1)
 			j=j+1;
 		end
 
@@ -43,10 +44,22 @@ for k = 1:(size(acc,2))
 			if ismember((i-10),endpoints)==0 && ismember((j+10),endpoints)==0
 				numevents = numevents+1;
 				%making a vector with start and end indices, with a ~60ms buffer around (equal to 7 time points)
-				startpoints(end+1)=(i-10);
-				endpoints(end+1)=(j+10);
-				duration(end+1)=(d(j+10)-d(i-10));
-				accmag(end+1) = mean(acc(i):acc(j));
+				if (size(d,2)-j)>=10 && i>10	
+					startpoints(end+1)=(i-10);
+					endpoints(end+1)=(j+10);
+					duration(end+1)=(d(j+10)-d(i-10));
+					accmag(end+1) = mean(acc(i):acc(j));
+				elseif i<=10
+					startpoints(end+1)=(1);
+					endpoints(end+1)=(j+10);
+					duration(end+1)=(d(j+10)-d(1));
+					accmag(end+1) = mean(acc(i):acc(j));
+				elseif size(d,2)-j >=1
+					startpoints(end+1)=(i-10);
+					endpoints(end+1)=size(d,2);
+					duration(end+1)=(d(end)-d(i-10));
+					accmag(end+1) = mean(acc(i):acc(j))
+				end
 			end
 		end
 	end
@@ -73,7 +86,7 @@ while n <= size(sortedpoints,2);
 	% plots LS event
 	plot(d(1:div+1)-d(1), lp(start:finish)+q, 'b')
 	% plot acc event
-	plot(d(1:div+1)-d(1)+duration(n), acc(start:finish)+q, 'r')
+	plot(d(1:div+1)-d(1)+duration(n), acc(start:finish)+q, 'r')  %ERROR Index exceeds matrix dimensions. if statement this shit
 	hold on
 	q = q+2;
 	n = n+1;
