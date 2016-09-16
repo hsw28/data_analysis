@@ -1,6 +1,15 @@
-5hz
 
-rant events by duration
+PLOT LFP DURING CHANGE IN VELOCITY
+SEE IF IT MATCHES LS THINGS
+
+-- 
+
+look at out of skull refer (#5) and see if events there
+
+--
+fix lowpass velocity filter
+
+----------------------------------
 
 
 LS---
@@ -17,3 +26,6 @@ do a stack plot with LS thing and event
 --
 
 plot HPC delta and ripples seperately to compare to slow waves
+
+----
+

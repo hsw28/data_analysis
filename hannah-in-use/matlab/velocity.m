@@ -27,8 +27,11 @@ for i = 2:s
 	timevector(end+1) = t(i);
 end
 
+[z, p, k] = butter(2, 1/30, 'low');
+sos = zp2sos(z,p,k);
+v = sosfilt(sos,velvector);
 
-
-v = [velvector; timevector];
+%velvector = smooth(velvector);
+v = [v; timevector];
 
 	

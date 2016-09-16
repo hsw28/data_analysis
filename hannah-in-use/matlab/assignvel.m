@@ -1,4 +1,5 @@
 function f = assignvel(timefile, velo);
+tic
 
 %takes input of velocity matric from velocity.m
 % makes a vector of velocities at every time stamp so you can make a graph against all time points
@@ -53,7 +54,8 @@ end
 f = closestvel;
 
 %smooths with moving average, window 3
-f = smooth(a,5);			
+%f = smooth(a');			
+toc
 		
 		
 		
