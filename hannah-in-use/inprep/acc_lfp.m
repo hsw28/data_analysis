@@ -98,7 +98,7 @@ while n <= size(sortedpoints,2);
 	% plot acc event
 	hold on
 	%if (div+1) <= size(d) 
-		plot(d(1:div+1)-d(1)+duration+3, (acc(start:finish)/1000)+q-acc(start), 'r')
+		plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
 	%else
 		%div
 		%size(d)
@@ -110,7 +110,7 @@ while n <= size(sortedpoints,2);
 end
 
 ylim([-10 ((size(sortedpoints,2).*2)+10)]);
-
-xlim( [-1 (max(duration*2)+5)]);
+xlim( [-1 inf]);
+%xlim( [-1 (max(duration*2)+5)]);
 
 
