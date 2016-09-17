@@ -81,10 +81,10 @@ sortedpoints = allpoints(:,Y);
 
 %sortedpoints(1,:) is start time, (2,:) is end time, (3,:) is duration
 
-f = figure
+f = figure;
 n=1;
 q=2;
-numevents
+numevents;
 
 lp = lowpass300(c);
 d = d';
@@ -93,18 +93,20 @@ while n <= size(sortedpoints,2);
 	finish = sortedpoints(2,n);
 	duration = sortedpoints(3,n);
 	div = finish-start;
+
+	%....shade acc start and stop times
+	%maybe i should just go back and make a vector for these. then i could even plot it in a different color over the current line instead of shading
+	xp = [d(11)-d(1) (div-9)-d(1) (div-9)-d(1) d(11)-d(1) ];	%ORDERS OF MAG OFF. UNSURE WHY. WILL LOOK LATER YOLO	
+	yp = [q+1 q+1 q-1 q-1];
+	fill(xp,yp,'b','LineStyle','none');
+	alpha(.3);
+
 	% plots LS event
-	plot(d(1:div+1)-d(1), lp(start:finish)+q, 'b')
+	plot(d(1:div+1)-d(1), lp(start:finish)+q, 'k')
 	% plot acc event
 	hold on
-	%if (div+1) <= size(d) 
-		plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
-	%else
-		%div
-		%size(d)
-		%condition = 0000;
-		%plot(d(1:div)-d(1)+duration, acc(start:finish)+q, 'r')
-	%end
+	%add next line back in if you wanna plant accell
+	%plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
 	q = q+2;
 	n = n+1;
 end
