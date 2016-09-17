@@ -89,17 +89,27 @@ while n <= size(sortedpoints,2);
 	start = sortedpoints(1,n);
 	finish = sortedpoints(2,n);
 	duration = sortedpoints(3,n);
+	mag = sortedpoints(4,n);
 	div = finish-start;
 
 	% plots whole LS event
-	plot(d(1:div+1)-d(1), lp(start:finish)+q, 'k')
+	%plot(d(1:(div+1))-d(1), lp(start:finish)+q, 'k')
+	plot(d(start:finish)-d(start), lp(start:finish)+q, 'k')
 	hold on
-	% plot during duration of acc
+	%mark max accell
+	
+	%max accell
+	[mx,ind]=max(abs(acc(start:finish)));
+	%plot(d(ind)-d(start), lp(ind)+q,'-.xr')
+	plot(d(ind)-d(start), lp(ind)+q,'-.xr')
+
+	% plot during duration of acc (was so small this was stupid)
 	%plot(d(11:div-9)-d(1), lp(start+10:finish-10)+q, 'r')
 	
 	% plot acc event
 	%add next line back in if you wanna plant accell
 	%plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
+	%plot(d(1:div+1)-d(1), (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
 	q = q+2;
 	n = n+1;
 end
