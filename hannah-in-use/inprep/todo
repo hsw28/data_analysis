@@ -1,6 +1,4 @@
-shade actual accel times (or dont shade and shade start to peak and peak to end)
-mark max accel point
--- 
+
 
 look at out of skull refer (#5) and see if events there
 
@@ -9,10 +7,10 @@ look at out of skull refer (#5) and see if events there
 
 
 LS---
-whats frequency
-interpeak interval
-fix window beginning and end
+whats frequency, periodicity, etc -- ftt, pwelch, etc. have israel help
 
+interpeak interval -- can find some stuff of interest in mwl-fabian/fkAnalysis/intervals/
+how many peaks per cycle? does it correlate with anything
 
 --
 

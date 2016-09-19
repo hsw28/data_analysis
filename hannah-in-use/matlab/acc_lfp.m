@@ -5,7 +5,6 @@ function f = acc_lfp(lfpdata, lfptimestamp, pos);
 % ex
 % lfp_acc(lfp.data, lfp.timestamp, pos);
 
-tic
 c=lfpdata;
 d=lfptimestamp;
 
@@ -95,9 +94,6 @@ while n <= size(sortedpoints,2);
 	% plots whole LS event
 	%plot(d(1:(div+1))-d(1), lp(start:finish)+q, 'k')
 	plot(d(start:finish)-d(start), lp(start:finish)+q, 'k')
-	LS = [d(start:finish)-d(start); lp(start:finish)+q]
-	start
-	finish
 	hold on
 	%mark max accell
 	
@@ -105,8 +101,7 @@ while n <= size(sortedpoints,2);
 	[mx,ind]=max(abs(acc(start:finish)));
 	%plot(d(ind)-d(start), lp(ind)+q,'-.xr')
 	plot(d(ind+start)-d(start), lp(ind+start)+q,'-.xr')
-	ind
-	mx = [d(ind+start)-d(start); lp(ind+start)+q]
+
 
 	% plot during duration of acc (was so small this was stupid)
 	%plot(d(11:div-9)-d(1), lp(start+10:finish-10)+q, 'r')
@@ -121,7 +116,6 @@ end
 
 ylim([-10 ((size(sortedpoints,2).*2)+10)]);
 xlim( [-1 inf]);
-toc
 %xlim( [-1 (max(duration*2)+5)]);
 
 

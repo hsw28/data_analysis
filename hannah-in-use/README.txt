@@ -14,6 +14,8 @@ abovetheta.m: finds points an inputed number of std devs above theta
 belowtheta.m: finds points an inputed number of std devs below theta
 
 POS/VEL/ACCEL
+accel.m: finds acceleration for position data
+acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
 direction.m: takes an timestamps and finds the animal's direction at times
@@ -21,10 +23,12 @@ velocity.m: finds velocity from position data
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 
 COMPARISIONS
+acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and duration, then plots the LFP for the other thing youre looking for during the same time
 orderLSevent.m: plots LS events in order by duration
 
 RANDOM
+boundedline.m: shades bounds around a line
 eventcorr.m -- not sure (lol)
 getHeaderGains.m: gets gains from eeg file after opening with mwlopen
 gh_debuffer.m: imports an ARTE .eeg file
