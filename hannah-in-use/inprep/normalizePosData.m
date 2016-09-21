@@ -1,16 +1,24 @@
-function rate = normalizePosData(posData,eventData,size)
+function rate = normalizePosData(eventData,posData,dim)
 
-%This function takes a position data set with columns [time,x,y] and a bin
-%size in cm as arguments then outputs a matrix with entries that represent the
-%number of time instances in each bin
-%only square bins are supported
-psize = 6.3 * size; %some made up ratio of pixels to cm
+%This function bins event data based on a user input bin size and
+%normalizes based on total time spent in bin
+%Args:
+%   eventData: A timeseries of cell firings (e.g. the output of abovetheta)
+%   posData: The matrix of overall position data with columns [time,x,y]
+%   dim: Bin size in cm (only square bins are supported)
+%Output:
+%   rate: A discritized matrix of cell events per second
+%   heatmap: A heatmap of the rate matrix
+
+ls = placeevent(eventData,posData);
+ls = ls';
+psize = 3.75 * dim; %some made up ratio of pixels to cm
 xmax = max(posData(:,2));
 ymax = max(posData(:,3));
 xbins = ceil(xmax/psize);
 ybins = ceil(ymax/psize);
-time = zeros(xbins,ybins);
-events = zeros(xbins,ybins);
+time = zeros(ybins,xbins);
+events = zeros(ybins,xbins);
 xstep = xmax/xbins;
 ystep = ymax/ybins;
 tstep = 1/30;
@@ -27,8 +35,8 @@ end
 
 for i = 1:xbins
     for j = 1:ybins
-        A1 = eventData(:,2)>((i-1)*xstep) & eventData(:,2)<=(i*xstep); %finds all rows that are in the current x axis bin
-        A2 = eventData(:,3)>((j-1)*ystep) & eventData(:,3)<=(j*ystep); %finds all rows that are in the current y axis bin
+        A1 = ls(:,2)>((i-1)*xstep) & ls(:,2)<=(i*xstep); %finds all rows that are in the current x axis bin
+        A2 = ls(:,3)>((j-1)*ystep) & ls(:,3)<=(j*ystep); %finds all rows that are in the current y axis bin
         A = [A1 A2]; %merge results
         B = sum(A,2); %find the rows that satisfy both previous conditions
         C = B > 1;
@@ -37,3 +45,11 @@ for i = 1:xbins
 end
 
 rate = events./(time*tstep);
+
+%heat map stuff
+[nr,nc] = size(events);
+colormap('parula');
+pcolor([rate nan(nr,1); nan(1,nc+1)]);
+shading flat;
+set(gca, 'ydir', 'reverse');
+colorbar;
