@@ -44,27 +44,15 @@ for k = 1:(size(acc,2))
 
 		%only include events longer than 500ms
 		if d(j)-d(i) > .5
-			if ismember((i-10),startpoints)==0 && ismember((j+10),endpoints)==0 && ismember((j),endpoints)==0
+			if ismember((i),startpoints)==0 && ismember((j),endpoints)==0
 				numevents = numevents+1;
 				%making a vector with start and end indices
 				%if (size(d,2)-j)>=10 && i>10
-					condition = 1;	
-					startpoints(end+1)=(i);
-					endpoints(end+1)=(j);
-					duration(end+1)=(d(j)-d(i));
-					accmag(end+1) = mean(acc(i:j));
-				%elseif i<=10
-				%	condition = 2	
-				%	startpoints(end+1)=(1);
-				%	endpoints(end+1)=(j+10);
-				%	duration(end+1)=(d(j+10)-d(1));
-				%	accmag(end+1) = mean(acc(i:j));
-				%elseif size(d,2)-j <=10
-				%	startpoints(end+1)=(i-10);
-				%	endpoints(end+1)=size(d,2);
-				%	duration(end+1)=(d(end)-d(i-10));
-				%	accmag(end+1) = mean(acc(i:j));
-				%end
+				condition = 1;	
+				startpoints(end+1)=(i);
+				endpoints(end+1)=(j);
+				duration(end+1)=(d(j)-d(i));
+				accmag(end+1) = mean(acc(i:j));
 			end
 		end
 	end
@@ -110,6 +98,8 @@ while n <= size(sortedpoints,2);
 	%add next line back in if you wanna plant accell
 	%plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
 	%plot(d(1:div+1)-d(1), (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
+	start
+	finish
 	q = q+2;
 	n = n+1;
 end
