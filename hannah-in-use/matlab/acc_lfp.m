@@ -98,8 +98,6 @@ while n <= size(sortedpoints,2);
 	%add next line back in if you wanna plant accell
 	%plot(d(1:div+1)-d(1)+duration+.25, (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
 	%plot(d(1:div+1)-d(1), (acc(start:finish)/1000)+q-(acc(start)/1000), 'r')
-	start
-	finish
 	q = q+2;
 	n = n+1;
 end

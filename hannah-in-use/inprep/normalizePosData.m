@@ -47,6 +47,7 @@ end
 rate = events./(time*tstep);
 
 %heat map stuff
+figure
 [nr,nc] = size(events);
 colormap('parula');
 pcolor([rate nan(nr,1); nan(1,nc+1)]);
