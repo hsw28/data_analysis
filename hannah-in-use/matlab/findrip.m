@@ -31,7 +31,7 @@ for k = 1:(size(trans))
 		
 		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
 		i = k;
-		while abs(trans(i)-mn) > (st./2) && i > 0
+		while i>0 && abs(trans(i)-mn) > (st./2)
 			i=i-1;
 		end
 		
@@ -47,11 +47,13 @@ for k = 1:(size(trans))
 		k = j;		
 		
 		%only include events longer than 30ms
-		if d(j)-d(i) > .03
+ 
+		if i>0 && d(j)-d(i) > .03
 			%making a vector with all the data points of the ripple
 			pt=[];
 
 			for n = i:j	
+            
 				%goes through data and adds data (NOT TIME) to vector
 				pt(end+1) = c(n);
 				
