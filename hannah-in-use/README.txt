@@ -4,9 +4,12 @@ MATLAB
 FILTERING
 deltafilt.m: lowpass filters in the delta band (<4)
 gammafilt.m: bandpass filters in the gamma band (20-100)
+lowpass20.m: lowpass filters below 20
+lowpass50.m: lowpass filters below 50
 lowpass300.m: lowpass filters below 300
 ripfilt.m: bandpass filters in the ripple band (100-300)
 thetafilt.m: bandpass filters in the theta band (6-10)
+
 
 FANCIER FILTERING
 findrip.m: takes eeg data from gh_debuffer and returns times of ripple peaks
@@ -16,6 +19,7 @@ belowtheta.m: finds points an inputed number of std devs below theta
 POS/VEL/ACCEL
 accel.m: finds acceleration for position data
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
+assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
 direction.m: takes an timestamps and finds the animal's direction at times

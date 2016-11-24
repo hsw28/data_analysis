@@ -13,7 +13,7 @@ d = timestamp;
 
 
 
-fil = thetafilt(c);
+fil = lowpass300(c);
 % filters data with bandpass filter between 100-300hz
 % might want to change this to a low pass filter
 
