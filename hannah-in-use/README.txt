@@ -10,7 +10,6 @@ lowpass300.m: lowpass filters below 300
 ripfilt.m: bandpass filters in the ripple band (100-300)
 thetafilt.m: bandpass filters in the theta band (6-10)
 
-
 FANCIER FILTERING
 findrip.m: takes eeg data from gh_debuffer and returns times of ripple peaks
 abovetheta.m: finds points an inputed number of std devs above theta
@@ -23,11 +22,13 @@ assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
 direction.m: takes an timestamps and finds the animal's direction at times
+normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 velocity.m: finds velocity from position data
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 
-COMPARISIONS
+COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
+findLSFrequencies: finds all LS events and makes a frequency plot of them
 LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and duration, then plots the LFP for the other thing youre looking for during the same time
 orderLSevent.m: plots LS events in order by duration
 

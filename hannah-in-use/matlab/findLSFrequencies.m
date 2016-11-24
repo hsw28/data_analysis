@@ -1,4 +1,4 @@
-function avg_transform = findFrequencies(LS_lfp_data, timestamp)
+function avg_transform = findLSFrequencies(LS_lfp_data, timestamp)
 
 % takes raw LS LFP and finds the weird LS events and the time and duration
 % plots the lowpass filtered (<300) LFP in order of duration

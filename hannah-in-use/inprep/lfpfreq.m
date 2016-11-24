@@ -18,5 +18,6 @@ P1(2:end-1) = 2*P1(2:end-1);
 transforms = P1; %accumulate transform
 
 freq = Fs*(0:(L/2))/L; %generate frequency axis
+
 avg_transform = [freq',transforms];
 plot(freq,transforms); %plot average frequency response of LS events
