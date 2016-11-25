@@ -53,4 +53,5 @@ colormap('parula');
 pcolor([rate nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
+set(gca,'clim',[0,5]);
 colorbar;
