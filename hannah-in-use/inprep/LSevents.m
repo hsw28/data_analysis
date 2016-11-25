@@ -43,11 +43,11 @@ for k = 1:(size(trans))
 			if abs(trans(j)-mn) >= (st./2)
 				j=j+1;
 			
-			elseif size(trans,1)-j-1>=0 && abs(all(trans(j:j+1)-mn)<(st./2))
-				2
+			elseif size(trans,1)-j-200>=0 && all(abs(trans(j:j+200)-mn)<(st./2))
+		
 				break
-			elseif size(trans,1)-j-1<0 && all(abs(trans(j:end))-mn)<(st./2)
-				3
+			elseif size(trans,1)-j-200<0 && all(abs(trans(j:end)-mn)<(st./2))
+				
 				break
 			else
 				j = j+1;
