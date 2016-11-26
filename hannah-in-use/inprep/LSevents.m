@@ -24,8 +24,9 @@ rt=[];
 peaktime=[];
 tst = 0;
 
+k=1;
 % permute through transformed data and find when data is three std devs above mean
-for k = 1:(size(trans))
+while k<=(size(trans,1))
 	if trans(k) > m
 		% we've found something above threshold, now need to find surrounding times when it's back at mean		
 		
@@ -37,16 +38,16 @@ for k = 1:(size(trans))
 		
 	
 
-		% looks to see when value returns to half a std dev above mean and mantains this for 10 points, this is the end of the ripple time		
+		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
 		while j<size(trans,1)
 			if abs(trans(j)-mn) >= (st./2)
 				j=j+1;
 			
-			elseif size(trans,1)-j-200>=0 && all(abs(trans(j:j+200)-mn)<(st./2))
+			elseif size(trans,1)-j-100>=0 && all(abs(trans(j:j+100)-mn)<(st./2))
 		
 				break
-			elseif size(trans,1)-j-200<0 && all(abs(trans(j:end)-mn)<(st./2))
+			elseif size(trans,1)-j-100<0 && all(abs(trans(j:end)-mn)<(st./2))
 				
 				break
 			else
@@ -61,7 +62,7 @@ for k = 1:(size(trans))
 		%adds to vector ripple start, trigger, and end times		
 		%start time is d(i);
 		%end time is d(j);
-		k = j;		
+		k = j;	
 		
 
 		%only include events longer than .15s
@@ -80,7 +81,10 @@ for k = 1:(size(trans))
 		peaktime(end+1) = d(index);
 		end
 
-
+		k = k+1;
+		
+	elseif trans(k) <= m
+		k = k+1;
 	end
 end
 
