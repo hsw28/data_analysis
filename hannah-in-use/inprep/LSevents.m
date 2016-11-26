@@ -32,7 +32,7 @@ while k<=(size(trans,1))
 		
 		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
 		i = k;
-		while abs(trans(i)-mn) >= (st./2) && i > 0
+		while abs(trans(i)-mn) >= (st./1.5) && i > 0 %STD DEV
 			i=i-1;
 		end
 		
@@ -41,13 +41,13 @@ while k<=(size(trans,1))
 		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
 		while j<size(trans,1)
-			if abs(trans(j)-mn) >= (st./2)
+			if abs(trans(j)-mn) >= (st./1) %STD DEV
 				j=j+1;
 			
-			elseif size(trans,1)-j-100>=0 && all(abs(trans(j:j+100)-mn)<(st./2))
+			elseif size(trans,1)-j-230>=0 && all(abs(trans(j:j+230)-mn)<(st./1.5)) %STD DEV
 		
 				break
-			elseif size(trans,1)-j-100<0 && all(abs(trans(j:end)-mn)<(st./2))
+			elseif size(trans,1)-j-230<0 && all(abs(trans(j:end)-mn)<(st./1.5)) %STD DEV
 				
 				break
 			else
@@ -66,7 +66,7 @@ while k<=(size(trans,1))
 		
 
 		%only include events longer than .15s
-		if d(j)-d(i) > .15
+		if d(j)-d(i) > .2
 			%making a vector with all the data points of the ripple
 			pt=[];
 
