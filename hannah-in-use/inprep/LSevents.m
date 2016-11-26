@@ -25,6 +25,7 @@ peaktime=[];
 tst = 0;
 start = [];
 stop = [];
+duration = [];
 
 k=1;
 % permute through transformed data and find when data is three std devs above mean
@@ -76,6 +77,7 @@ while k<=(size(trans,1))
 			for n = (i):(j)	
 				%goes through data and adds data (NOT TIME) to vector
 				pt(end+1) = c(n);
+				duration(end+1)=d(n);
 			end
 
 	
@@ -97,46 +99,15 @@ end
 
 
 
-%vector should have all peak times
+%uncomment to return peak times
 %p=peaktime;
+%LStimes=p'
 
-%spits out start times
-p = start;
-p=p';
+%uncomment to return start times
+%p = start;
+%LStimes=p';
 
-s = size(p,1);
-ls = [];
+%uncomment to return duration times
+p = duration;
+LStimes=p;
 
-%removing points within one second of eachother and averaging them
-%for n = 1:s
-%	l = 1;
-%	s = size(p,1);
-%	if n+l<=s & (p(n+l)-p(n) <= 1)
-%		while n+l<s & (p(n+l)-p(n) <= 1)		
-%			l=l+1;
-%		end
-%		
-%		m = n+l;
-%		r = 0;
-%		sm = 0;
-%	
-%		for q = n:m
-%			sm = sm+p(q);
-%			r= r+1;
-%		end
-%
-%		new = sm/r;
-%		ls(end+1) = new;
-%	else
-%	ls(end+1) = p(n);
-%	end
-%
-%	ls
-%	n=n+l;
-%		
-%end
-
-
-
-
-LStimes = p';
