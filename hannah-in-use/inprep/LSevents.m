@@ -23,6 +23,8 @@ m = mn + (st.*(y));
 rt=[];
 peaktime=[];
 tst = 0;
+start = [];
+stop = [];
 
 k=1;
 % permute through transformed data and find when data is three std devs above mean
@@ -69,6 +71,7 @@ while k<=(size(trans,1))
 		if d(j)-d(i) > .2
 			%making a vector with all the data points of the ripple
 			pt=[];
+			
 
 			for n = (i):(j)	
 				%goes through data and adds data (NOT TIME) to vector
@@ -78,7 +81,11 @@ while k<=(size(trans,1))
 	
 		[peak,index] = max(pt);
 		index = index+i-1;
+		%adds start time to vector
+		start(end+1) = d(i);
+		%adds peak time to vector
 		peaktime(end+1) = d(index);
+		% start time and peak time should have the same index
 		end
 
 		k = k+1;
@@ -90,8 +97,11 @@ end
 
 
 
-%vector should have all peak times after getting rid of duplicates
-p=unique(peaktime);
+%vector should have all peak times
+%p=peaktime;
+
+%spits out start times
+p = start;
 p=p';
 
 s = size(p,1);
