@@ -1,4 +1,4 @@
-function rate = normalizePosData(eventData,posData,dim)
+function rate = normalizePosData(eventData,posData,dim, lim)
 
 %This function bins event data based on a user input bin size and
 %normalizes based on total time spent in bin
@@ -6,6 +6,10 @@ function rate = normalizePosData(eventData,posData,dim)
 %   eventData: A timeseries of cell firings (e.g. the output of abovetheta)
 %   posData: The matrix of overall position data with columns [time,x,y]
 %   dim: Bin size in cm (only square bins are supported)
+%   lim: limit for heat map colors
+%
+%   ex: map = normalizePosData(lsevents, pos, 4, 3)
+%
 %Output:
 %   rate: A discritized matrix of cell events per second
 %   heatmap: A heatmap of the rate matrix
@@ -53,5 +57,5 @@ colormap('parula');
 pcolor([rate nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
-set(gca,'clim',[0,4]);
+set(gca,'clim',[0,lim]);
 colorbar;
