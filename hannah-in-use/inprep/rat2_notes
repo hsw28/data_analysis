@@ -9,3 +9,12 @@ load('maze-cl-1')
 >> r = mua_rate(maze_cl_2, 455.8529, 24855.7439);
 1	2	3	4	5	6	7	8	9	10	11
 id	t_px	t_py	t_pa,	t_pb	t_maxwd	t_maxht	time	pos_x	pos_y	velocity
+
+---
+
+day 7-03
+9 s cells
+2 are sparse, maybe place cells (19c2, 30c1)
+3 coordinate with  events (19c3, 19c4, 29c1)
+3 don't coordinate (t21c1m t26c3 t26c2) <-- the cooresponding LFPs DONT show correlation with acceleration and look 100% different than other LFPs. theta everywhere. probably medial septum
+1 is unclear if coordinates (t22c1)

@@ -27,6 +27,10 @@ normalizePosData.m: normalizes position data for time spent in each part of the 
 velocity.m: finds velocity from position data
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 
+SINGLE UNIT
+placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+spiketrain.m: makes a spike train of data
+
 COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 corr.m: finds the cross correlation and plots
