@@ -14,6 +14,10 @@ function rate = normalizePosData(eventData,posData,dim, lim)
 %   rate: A discritized matrix of cell events per second
 %   heatmap: A heatmap of the rate matrix
 
+if size(eventData, 1)>size(eventData,2)
+	eventData = eventData';
+end
+
 ls = placeevent(eventData,posData);
 ls = ls';
 psize = 3.75 * dim; %some made up ratio of pixels to cm
@@ -58,4 +62,5 @@ pcolor([rate nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
 set(gca,'clim',[0,lim]);
+axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
 colorbar;

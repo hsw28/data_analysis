@@ -3,6 +3,9 @@ function v = direction(event, posfile)
 % inputs
 % posfile (# points, 3)
 % even time file (1, times)
+%
+% ex: direction(ripple, pos)
+%
 % outputs
 % vector = [timevector xposvector yposvector fxvector fyvector];
 
@@ -72,7 +75,7 @@ i=i+1;
 
 end
 
-
+figure
 quiver(xposvector, yposvector, fxvector, fyvector)
 v = [timevector; xposvector; yposvector; fxvector; fyvector];
 
