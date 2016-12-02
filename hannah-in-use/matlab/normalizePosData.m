@@ -20,7 +20,7 @@ end
 
 ls = placeevent(eventData,posData);
 ls = ls';
-psize = 3.75 * dim; %some made up ratio of pixels to cm
+psize = 3.5 * dim; %some REAL ratio of pixels to cm
 xmax = max(posData(:,2));
 ymax = max(posData(:,3));
 xbins = ceil(xmax/psize);

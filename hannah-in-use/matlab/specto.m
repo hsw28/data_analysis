@@ -3,7 +3,7 @@ function sp = specto(data, minfreq, maxfreq, colorlimit);
 % enter data, frequency min, frequency max, color bar limit
 % ex: specto(hpc.data, 0, 300, 12)
 
-[s, f, t] = spectrogram(abs(data), 2000, 1000, 1000, 2000);
+[s, f, t] = spectrogram(abs(data), chebwin(2000, 60), 1000, 4000, 2000);
 
 S = abs(s);
 
