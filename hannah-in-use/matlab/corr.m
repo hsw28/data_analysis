@@ -15,6 +15,6 @@ twonorm = two-mean(two);
 figure
 plot(lag, cor)
 
-size(cor)
-size(lag)
+size(cor);
+size(lag);
 x = [cor'; lag];
