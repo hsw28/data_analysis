@@ -17,4 +17,4 @@ plot(lag, cor)
 
 size(cor)
 size(lag)
-x = [cor; lag'];
+x = [cor'; lag];
