@@ -1,3 +1,11 @@
+
+function f = assignvel(vel);
+%takes input of velocity vector and upsamples from 60hz to 2000hz
+
+velvector = vel(1,:);
+f = resample(velvector, 2000, 60);
+
+%{
 function f = assignvel(timefile, velo);
 
 
@@ -6,6 +14,8 @@ function f = assignvel(timefile, velo);
 % smooths data
 %
 % ex: f = assignvel(tet11.timestamp, velocitymatrix)
+
+
 
 
 tfs = size(timefile,2);
@@ -55,7 +65,7 @@ f = closestvel;
 
 %smooths with moving average, window 3
 %f = smooth(a');			
-
+%}
 		
 		
 		
