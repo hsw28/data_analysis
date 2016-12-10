@@ -1,16 +1,14 @@
-function [] = plotRaster(spikeMat, tVec)
-% spikeMat is spikes and tVec is time vector
-% xlabel('Time (ms)');
-% ylabel('Trial Number')
-%
+function [] = plotRaster(spikematrix)
+% spike matrix should be a matrix where [num of cells, spike times]
 % started from https://praneethnamburi.wordpress.com/2015/02/05/simulating-neural-spike-trains/
 
 hold all;
-for trialCount = 1:size(spikeMat,1)
-    spikePos = tVec(spikeMat(trialCount, :));
-    for spikeCount = 1:length(spikePos)
-        plot([spikePos(spikeCount) spikePos(spikeCount)], ...
+for cellCount = 1:numoftrains
+    spikePos = tm(numoftrains(cellCount, :));
+    for cellCount = 1:length(spikePos)
+        plot([spikePos(cellCount) spikePos(cellCount)], ...
             [trialCount-0.4 trialCount+0.4], 'k');
     end
 end
-ylim([0 size(spikeMat, 1)+1]);
+
+ylim([0 size(spikematrix, 1)+1]);
