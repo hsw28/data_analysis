@@ -58,13 +58,13 @@ while k<=(size(trans,1))
 		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
 		while j<size(trans,1)
-			if abs(trans(j)-mn) >= (st./1.5) %STD DEV
+			if abs(trans(j)-mn) >= (st./1.2) %STD DEV
 				j=j+1;
 			
-			elseif size(trans,1)-j-225>=0 && all(abs(trans(j:j+225)-mn)<(st./1.5)) %STD DEV
+			elseif size(trans,1)-j-225>=0 && all(abs(trans(j:j+225)-mn)<(st./1.2)) %STD DEV
 		
 				break
-			elseif size(trans,1)-j-225<0 && all(abs(trans(j:end)-mn)<(st./1.5)) %STD DEV
+			elseif size(trans,1)-j-225<0 && all(abs(trans(j:end)-mn)<(st./1.2)) %STD DEV
 				
 				break
 			else

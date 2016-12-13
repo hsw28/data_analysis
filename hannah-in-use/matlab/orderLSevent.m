@@ -29,6 +29,8 @@ start = [];
 stop = [];
 duration = [];
 lengths = [];
+startindex = [];
+endindex = [];
 
 k=1;
 % permute through transformed data and find when data is three std devs above mean
@@ -44,16 +46,16 @@ while k<=(size(trans,1))
 		
 	
 
-		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
+		% looks to see when value returns to st/1.5 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
 		while j<size(trans,1)
-			if abs(trans(j)-mn) >= (st./1.5) %STD DEV
+			if abs(trans(j)-mn) >= (st./1.2) %STD DEV
 				j=j+1;
 			
-			elseif size(trans,1)-j-225>=0 && all(abs(trans(j:j+225)-mn)<(st./1.5)) %STD DEV
+			elseif size(trans,1)-j-225>=0 && all(abs(trans(j:j+225)-mn)<(st./1.2)) %STD DEV
 		
 				break
-			elseif size(trans,1)-j-225<0 && all(abs(trans(j:end)-mn)<(st./1.5)) %STD DEV
+			elseif size(trans,1)-j-225<0 && all(abs(trans(j:end)-mn)<(st./1.2)) %STD DEV
 				
 				break
 			else
@@ -96,6 +98,8 @@ while k<=(size(trans,1))
 				stop(end+1)=d(j);
 				% start time and peak time should have the same index
 				lengths(end+1) = (d(j)-d(i));
+				startindex(end+1) = i;
+				endindex(end+1) = j;
 			end
 		end
 
@@ -106,7 +110,7 @@ while k<=(size(trans,1))
 	end
 end
 
-allpoints = [start;stop;lengths];
+allpoints = [start;stop;lengths;startindex;endindex];
 [X, Y] = sort(allpoints(3,:));
 sortedpoints = allpoints(:,Y);
 
@@ -124,9 +128,11 @@ while n <= size(sortedpoints,2);
 	start = sortedpoints(1,n);
 	finish = sortedpoints(2,n);
 	lengths = sortedpoints(3,n);
-	div = finish-start;
+	startindex = sortedpoints(4,n);
+	endindex = sortedpoints(5,n);
+	div = endindex-startindex;
 	% plots LS event
-	plot(d(1:div+1)-d(1), lp(start:finish)+q, 'b')
+	plot(d(1:div+1)-d(1), lp(startindex:endindex)+q, 'b')
 	%getting error with above line bc not integers for start:finish. instead need to find index values for start and finish and use those
 	hold on
 	q = q+2;
@@ -134,7 +140,7 @@ while n <= size(sortedpoints,2);
 end
 
 ylim([-10 ((size(sortedpoints,2).*2)+10)]);
-xlim([-.1 max(duration)+.1])
+xlim([-.1 max(lengths)+.1])
 
 
 

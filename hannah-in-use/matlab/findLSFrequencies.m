@@ -56,13 +56,13 @@ while k<=(size(filtdata,1))
 		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
 		while j<size(filtdata,1)
-			if abs(filtdata(j)-mn) >= (st./1.5) %STD DEV
+			if abs(filtdata(j)-mn) >= (st./1.2) %STD DEV
 				j=j+1;
 			
-			elseif size(filtdata,1)-j-225>=0 && all(abs(filtdata(j:j+225)-mn)<(st./1.5)) %STD DEV
+			elseif size(filtdata,1)-j-225>=0 && all(abs(filtdata(j:j+225)-mn)<(st./1.2)) %STD DEV
 		
 				break
-			elseif size(filtdata,1)-j-225<0 && all(abs(filtdata(j:end)-mn)<(st./1.5)) %STD DEV
+			elseif size(filtdata,1)-j-225<0 && all(abs(filtdata(j:end)-mn)<(st./1.2)) %STD DEV
 				
 				break
 			else
