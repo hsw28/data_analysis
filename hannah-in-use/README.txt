@@ -15,6 +15,10 @@ findrip.m: takes eeg data from gh_debuffer and returns times of ripple peaks
 abovetheta.m: finds points an inputed number of std devs above theta
 belowtheta.m: finds points an inputed number of std devs below theta
 
+THETA SHIT
+LSphase: finds theta peak closest to cell firing for LS LFP and plots in a histogram
+thetaphaseLS.m: returns times of peaks in LS
+
 POS/VEL/ACCEL
 accel.m: finds acceleration for position data
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
@@ -29,7 +33,9 @@ placeevent.m: if you have event times, this will match with place data to get pl
 
 SINGLE UNIT
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+rasterplot.m: makes a raster plot
 spiketrain.m: makes a spike train of data
+STA.m: finds spike triggered average
 
 COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
@@ -40,6 +46,7 @@ LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and
 orderLSevent.m: plots LS events in order by duration
 
 RANDOM
+binning.m: bins stuff
 boundedline.m: shades bounds around a line
 eventcorr.m -- not sure (lol)
 getHeaderGains.m: gets gains from eeg file after opening with mwlopen
