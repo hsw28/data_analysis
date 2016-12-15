@@ -9,7 +9,7 @@ function f = STA(eventtimes, lfp, time, binsize)
 
 figure;
 hold on;
-lfp = lfp.*lfp;
+%lfp = lfp.*lfp;
 
 if size(eventtimes, 2) > size(eventtimes, 1)
 	eventtimes = eventtimes';
@@ -91,7 +91,7 @@ while i <= size(trimmedevents,1)
 	size(binnedLFP);
 
 	
-	%plot(((-size(binnedLFP,1))+1:0), currentLFP', 'Color', 	[0.5 0.5 0.5]);
+	%plot(((-size(binnedLFP)/2):size(binnedLFP)/2-1)/2000, currentLFP', 'Color', 	[0.5 0.5 0.5]);
 	currentLFP = [];
 
 i = i+1;
@@ -104,13 +104,13 @@ binnedLFPaverage = (binnedLFP./size(trimmedevents,1));
 f= binnedLFPaverage;
 
 
-size(-size(binnedLFPaverage)+1:0);
-size(binnedLFPaverage);
+size((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2)-1
+size(binnedLFPaverage)
 
 hold on
 
 %plot((((-size(binnedLFPaverage)))/(binsize)+1:0), binnedLFP', 'k');
-plot((((-size(binnedLFPaverage)))+1:0), binnedLFPaverage', 'k');
+plot(((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2-1)/2000, binnedLFPaverage', 'k');
 
 f= binnedLFPaverage';
 
