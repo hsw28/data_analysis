@@ -4,6 +4,8 @@ function f = STA(eventtimes, lfp, time, binsize)
 % bin size in seconds
 % f = STA(eventtimes, lfp, time, binsize) 
 
+figure;
+hold on;
 if size(eventtimes, 2) > size(eventtimes, 1)
 	eventtimes = eventtimes';
 end
@@ -18,6 +20,7 @@ i = 1;
 bintimes = [];
 binnedLFP = zeros(binsize*2000,1);
 q=1;
+currentLFP = zeros(binsize*2000,1);
 
 
 while i <= size(trimmedevents,1)
@@ -25,6 +28,7 @@ while i <= size(trimmedevents,1)
 	% time of event
 	q = trimmedevents(i);
 	%find index for start of event
+	
 	timeendevent = find(abs(time-q)<.0001);
 	
 	timestartevent = timeendevent-(binsize*2000);
@@ -35,22 +39,34 @@ while i <= size(trimmedevents,1)
 	
 	z = 1;
 
+	size(binnedLFP);
+	size(lfp);
 	while z<= binsize*2000
-		binnedLFP(z) = binnedLFP(z) + lfp((n-1+z));
+		binnedLFP(z);
+		lfp((n-1+z));
+		binnedLFP(z) = binnedLFP(z) + lfp(n-1+z);
+		currentLFP(z) = lfp((n-1+z));
 		z = z+1;
 	end
+
+	size(currentLFP);
+	size(binnedLFP);
+
+	plot(((-size(binnedLFP,1))/binsize+1:0), currentLFP', 'Color', 	[0.5 0.5 0.5]);
+	currentLFP = [];
+
 i = i+1;
 end
 
 %finds average
 
-binnedLFPaverage = binnedLFP./size(trimmedevents,1);
+binnedLFPaverage = (binnedLFP./size(trimmedevents,1));
 f= binnedLFPaverage;
 
 (-size(binnedLFPaverage));
 
-figure
-plot(((-size(binnedLFPaverage))+1/binsize:0), binnedLFPaverage');
+hold on
+plot(((-size(binnedLFPaverage))+1/binsize:0), binnedLFPaverage', 'k');
 
 
 
