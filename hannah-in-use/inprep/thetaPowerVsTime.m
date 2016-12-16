@@ -30,7 +30,7 @@ for x = 1:M
 end
 
 time = time(1:R:M*R);
-info = [time, spectro];
+info = [time', spectro];
 figure;
 plot(time,spectro);
 xlabel('Time (s)');
