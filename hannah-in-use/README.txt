@@ -16,8 +16,8 @@ abovetheta.m: finds points an inputed number of std devs above theta
 belowtheta.m: finds points an inputed number of std devs below theta
 
 THETA SHIT
-LSphase: finds theta peak closest to cell firing for LS LFP and plots in a histogram
-thetaphaseLS.m: returns times of peaks in LS
+firingphase.m: finds and plots the theta phase of spike data
+thetaphase.m: returns times of peaks in theta (0 degrees)
 
 POS/VEL/ACCEL
 accel.m: finds acceleration for position data

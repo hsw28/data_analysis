@@ -1,4 +1,4 @@
-function f = LSphase(firingtimes, lfp)
+function f = firingphase(firingtimes, lfp)
 
 %input lfp, cell firing and lfp
 
@@ -85,7 +85,7 @@ end
 f = phase;
 figure;
 
-histogram(phase, 90)
+histogram(phase, 60)
 xlim([0 360]);
 ylabel('Number of Cells')
 xlabel('Theta Phase')
