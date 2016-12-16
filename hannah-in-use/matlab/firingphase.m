@@ -1,11 +1,11 @@
-function f = firingphase(firingtimes, lfp)
+function f = firingphase(firingtimes, lfp, tme)
 
 %input lfp, cell firing and lfp
 
 %finds theta peak closest peak to cell firing for LS LFP
 % plots histogram
 
-peaktimes = thetaphaseLS(lfp);
+peaktimes = thetaphase(lfp, tme);
 
 phase = [];
 
