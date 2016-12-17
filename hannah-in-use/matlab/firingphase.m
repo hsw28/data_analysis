@@ -1,15 +1,19 @@
-function f = firingphase(firingtimes, lfp, tme)
+function f = firingphase(firingtimes, lfp, timevector, above)
 
-%input lfp, cell firing and lfp
+%input lfp, cell firing, time vector, and how many std devs above mean you want a peak to be to be counted in theta
 
 %finds theta peak closest peak to cell firing for LS LFP
 % plots histogram
+%
+% returns [phase, time]
 
-peaktimes = thetaphase(lfp, tme);
+tme = timevector;
+peaktimes = thetaphase(lfp, tme, above);
 
 phase = [];
 
 %peaktimes(312:313)
+ftimes = [];
 
 
 i = 1;
@@ -57,6 +61,7 @@ while i<= size(firingtimes,1)
 					
 					dis = firingtimes(i)-point;
 					phase(end+1) = dis*360 / peaklength;
+					ftimes(end+1) = firingtimes(i);
 					%dis/peaklength
 				end
 					
@@ -69,6 +74,7 @@ while i<= size(firingtimes,1)
 				if peaklength >= .08 & peaklength <= .17 & previouspoint<firingtimes(i)
 					dis = firingtimes(i)-previouspoint;
 					phase(end+1) = dis*360 / peaklength;
+					ftimes(end+1) = firingtimes(i);
 					
 				end
 			else
@@ -82,7 +88,7 @@ while i<= size(firingtimes,1)
 		end
 end
 
-f = phase;
+f = [phase; ftimes];
 figure;
 
 histogram(phase, 60)

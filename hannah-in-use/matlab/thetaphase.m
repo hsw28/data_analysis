@@ -1,11 +1,12 @@
-function f = thetaphase(lfp, tme);
+function f = thetaphase(lfp, tme, above);
 
 %input raw unfiltered LFP. filters in theta band returns times of peaks in theta
+% input for above is how many st devs above mean you want peak to be to be counted
 
 lfp = thetafilt(lfp);
 
-%st = mean(lfp)+(1*std(lfp));
-st = mean(lfp);
+st = mean(lfp)+(above*std(lfp));
+
 
 start = tme(1);
 

@@ -1,21 +1,39 @@
-% Inputs:
-%   1. dataMatrix: variables (X1,X2,...,X_M) in the columns
-%   2. windowSize: number of samples to include in the moving window
-%   3. indexColumn: the variable X_i against which correlations should be 
-% returned
-%
-% Output:
-%   1. correlationTS: correlation between X_{indexColumn} and X_j for j !=
-% indexColumn from windowSize+1 to the number of observations.  The first
-% windowSize rows are NaN.
+function f = movingcorr(lfp, windowlength)
 
-function correlationTS = movingcorr(dataMatrix, windowSize, indexColumn)
+%window length is in time points
 
-[N,M] = size(dataMatrix);
-correlationTS = nan(N, M-1);
+len=length(lfp);
+%nwin = floor(len./windowlength);
+nwin = windowlength;
+moving_window = [1:nwin]';
 
-for t = windowSize+1:N
-    C = corrcoef(dataMatrix(t-windowSize:t, :));
-    idx = setdiff(1:M, [indexColumn]);
-    correlationTS(t, :) = C(indexColumn, idx);
+noverlap=floor(0.9*nwin);
+
+%amount not yet covdred / window
+k=floor((len-noverlap)/(nwin-noverlap));
+
+cor = [];
+j = 1;
+q = 1;
+index=1:nwin;
+indextwo = 1:nwin;
+
+while j<=k & indextwo(end) <= len-nwin
+	q = 1;
+	index=1:nwin;
+	while q<=k & index(end) <= len-nwin
+		cr=xcorr(lfp(index)-mean(lfp(index)),lfp(indextwo)-mean(lfp(indextwo)), 'coeff'); 
+		cor(j, q) = mean(cr); 	% do you average? do you take the peak? NO ONE KNOWS
+      		index=index+(nwin-noverlap);
+		q=q+1;
+	end
+indextwo=indextwo+(nwin-noverlap);
+j=j+1;
 end
+
+f=cor;
+heatmap(cor);
+
+
+
+

@@ -1,10 +1,12 @@
 function info = thetaPowerVsTime(lfpdata,time,L,R)
 %lfpdata = lfp.data
 %time = lfp.timestamp*7.75
-%L = window length
-%R = decimation rate (how many samples to skip between windows
+%L = window length in samples (ex 200 is .1)
+%R = decimation rate (how many samples to skip between windows (ex 20 is .01)
 %    R = L is abutted windows, DO NOT MAKE R > L
-%info = [timestamps, power_ratio_vector]
+%info = [power_ratio_vector, time];
+% can plug into assign vel to get power ratio for all points
+
 Q = length(lfpdata);
 
 Fs = 2000;
@@ -18,6 +20,7 @@ times = (6 < freq) & (freq < 12);
 for x = 1:M
     subset = lfpdata((x-1)*R+1:x*R+L-R);
     subset = subset - mean(subset);
+
     data = subset.*window;
     Y = fft(data,N);
     P2 = (Y.*conj(Y))/(L*U);
@@ -30,7 +33,7 @@ for x = 1:M
 end
 
 time = time(1:R:M*R);
-info = [time', spectro];
+info = [spectro'; time ];
 figure;
 plot(time,spectro);
 xlabel('Time (s)');
