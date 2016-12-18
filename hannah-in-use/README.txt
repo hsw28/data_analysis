@@ -17,33 +17,45 @@ belowtheta.m: finds points an inputed number of std devs below theta
 
 THETA SHIT
 firingphase.m: finds and plots the theta phase of spike data
+powerMap.m: plots power by location
+powerVsFiringRate.m: plots theta against firing rate
 thetaphase.m: returns times of peaks in theta (0 degrees)
+thetaPowerVsTime.m: plots theta power against time
 
 POS/VEL/ACCEL
 accel.m: finds acceleration for position data
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
+accelVsFiringRate.m: plots accel versus firing rate
 assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
 normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
-velocity.m: finds velocity from position data
+phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+velocity.m: finds velocity from position data
 
 SINGLE UNIT
+accelVsFiringRate.m: plots accel versus firing rate
+firingphase.m: finds and plots the theta phase of spike data
+isi.m: finds interspike interval
+phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+powerVsFiringRate.m: plots theta against firing rate
 rasterplot.m: makes a raster plot
 spiketrain.m: makes a spike train of data
 STA.m: finds spike triggered average
 
 COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
+compareISI.m: compares and plots some thing (acc, phase, power, etc) to ISI
 corr.m: finds the cross correlation and plots
 findLSFrequencies: finds all LS events and makes a frequency plot of them
 LSevents.m: finds LS events
 LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and duration, then plots the LFP for the other thing youre looking for during the same time
 orderLSevent.m: plots LS events in order by duration
+powerMap.m: plots power by location
 
 RANDOM
 binning.m: bins stuff
