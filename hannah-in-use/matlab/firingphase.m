@@ -91,7 +91,7 @@ end
 f = [phase; ftimes];
 figure;
 
-histogram(phase, 60)
+histogram(phase, 24)
 xlim([0 360]);
 ylabel('Number of Cells')
 xlabel('Theta Phase')
