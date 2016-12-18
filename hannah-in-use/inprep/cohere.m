@@ -1,4 +1,4 @@
-function meancoh = cohere(lfpone, lfptwo, time)
+function f = cohere(lfpone, lfptwo, time)
 %put in two signals. filter them before if ya want
 % does in one second periods
 
@@ -37,6 +37,6 @@ figure
 
 %plotting average coherence v time
 
-size(time(1:i-2000))
+f = [meancoh; (time(1:i-2000))];
 
 plot(time(1:i-2000), meancoh);

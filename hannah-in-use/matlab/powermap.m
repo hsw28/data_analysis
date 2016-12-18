@@ -1,7 +1,12 @@
 function rate = powermap(powerdata,posData, lim)
 
 % plot a heat map based on the power of the signal
+% can also be used to heat map coherence, etc
 %input powerdata and pos and your color limit (rec .55 for LS and .45 for HPC)
+
+if size(powerdata,1)<size(powerdata,2)
+	powerdata=powerdata';
+end
 
 dim = 3.5;
 
