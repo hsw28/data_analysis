@@ -28,7 +28,7 @@ fastest = max(rate);
 figure
 scatter(powers,rate/t)
 xlabel('Theta Power Ratio');
-ylabel('Firing rate');
+ylabel('Firing rate/Sec.');
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
@@ -51,10 +51,10 @@ end
 figure
 scatter(average,(0:fastest)/t)
 xlabel('Average Theta Power Ratio');
-ylabel('Firing rate');
+ylabel('Firing rate/Sec.');
 lsline
 % figure
 % scatter(deviation, (0:fastest)/t)
 % xlabel('Deviation of Theta Power Ratio');
-% ylabel('Firing rate');
+% ylabel('Firing rate/Sec');
 thingy = [average,deviation,(0:fastest)'/t];

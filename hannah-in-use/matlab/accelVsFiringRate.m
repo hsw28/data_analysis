@@ -22,8 +22,8 @@ fastest = max(rate);
 m = length(rate);
 a = accel(posdata);
 acceldata = abs(assignvel(time,a));
-length(acceldata)
-length(time)
+length(acceldata);
+length(time);
 avg_accel = zeros(m,1);
 for i = 1:m
     avg_accel(i) = mean(acceldata((time > start+t*(i-1)) & (time < start+t*i)));
@@ -35,7 +35,7 @@ end
 figure
 scatter(avg_accel,rate/t)
 xlabel('Average Acceleration');
-ylabel('Firing rate');
+ylabel('Firing rate/Sec.');
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
@@ -57,8 +57,8 @@ end
 
 figure
 scatter(average,(0:fastest)/t)
-xlabel('Average Average Acceleration');
-ylabel('Firing rate');
+xlabel('Average Acceleration');
+ylabel('Firing rate/Sec.');
 lsline
 % figure
 % scatter(deviation, (0:fastest)/t)
