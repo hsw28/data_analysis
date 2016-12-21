@@ -111,6 +111,9 @@ hold on
 
 %plot((((-size(binnedLFPaverage)))/(binsize)+1:0), binnedLFP', 'k');
 plot(((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2-1)/2000, binnedLFPaverage', 'k');
+xlabel('Sec.')
+ylabel('LFP')
+
 
 f= binnedLFPaverage';
 

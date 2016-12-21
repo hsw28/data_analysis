@@ -1,6 +1,7 @@
-function f = firingphase(firingtimes, lfp, timevector, above)
+function f = firingphase(firingtimes, lfp, timevector, above, bins)
 
 %input lfp, cell firing, time vector, and how many std devs above mean you want a peak to be to be counted in theta
+%bins is in number of degrees per bin (ex 60 for sixty degrees per bin)
 
 %finds theta peak closest peak to cell firing for LS LFP
 % plots histogram
@@ -91,7 +92,9 @@ end
 f = [phase; ftimes];
 figure;
 
-histogram(phase, 24)
+bincount = 360/bins;
+
+histogram(phase, bincount)
 xlim([0 360]);
 ylabel('Number of Cells')
 xlabel('Theta Phase')

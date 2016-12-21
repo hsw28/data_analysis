@@ -1,5 +1,6 @@
-function f = cohere(lfpone, lfptwo, time)
+function f = cohere(lfpone, lfptwo, time, lowband, highband)
 %put in two signals. filter them before if ya want
+% input low and high bands you wanna look at
 % does in one second periods
 
 sz = size(lfpone,1);
@@ -12,7 +13,7 @@ seconds = 0;
 while i<=sz
 	[wcoh,wcs,f] = wcoherence(lfpone(i-1999:i,1), lfptwo(i-1999:i,1), 2000);
 	%find INDEX of values of frequency in theta band
-	indx = find(f>6 & f<12);
+	indx = find(f>lowband & f<highband);
 	%those index values are the ones we wanna keep for wcoh
 	wcoh = wcoh(indx, :);
 	allcoh = horzcat(allcoh,wcoh);
