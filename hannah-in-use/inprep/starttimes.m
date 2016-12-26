@@ -14,7 +14,7 @@ ypos = ypos';
 
 %find INDEX of points in forced arms
 xend = find(xpos<460);
-yend = find(ypos<350 | ypos>370);
+yend = find(ypos<300 | ypos>400);
 %find indices that appear in both
 bothindex = intersect(xend, yend);
 %assign these to points
@@ -29,9 +29,7 @@ i = 2;
 %now can seperate into runs basically based on the amount of time between points
 %adds the first time point after a lapse to runnum matrix
 while i <= size(timeend,1)
-		timeend(i);
-		timeend(i-1);
-		if timeend(i)-timeend(i-1) > 1
+		if timeend(i)-timeend(i-1) > 2
 				runnum(end+1) = timeend(i);
 		end
 i=i+1;
@@ -53,20 +51,20 @@ while i<=size(runnum,1)
 		if i<size(runnum,1)
 			timeranges = find(tme>runnum(i) & tme<runnum(i+1));
 			%finds x when on correct side
-			xranges = find(xpos<460);
+			xranges = find(xpos<500);
 			both = intersect(xranges, timeranges);
 			both = both';
 			%finds most extreme y
-			[value, index] = (max(ypos(both(1):both(end))));
+			[value, index] = (max(ypos(both)));
 			index = index + both(1);
 			%yranges = find(max(abs(360-(ypos(min(timeranges):max(timeranges))))))
 		elseif i == size(runnum,1)
 			timeranges = find(pos(:,1)>runnum(i) & pos(:,1)<max(tme));
-			xranges = find(xpos<460);
+			xranges = find(xpos<500);
 			both = intersect(xranges, timeranges);
 			both = both';
 			%finds most extreme y
-			[value, index] = (max(ypos(both(1):both(end))));
+			[value, index] = (max(ypos(both)));
 			index = index + both(1);
 		  end
 %add times to matrix
