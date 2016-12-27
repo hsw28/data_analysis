@@ -5,7 +5,10 @@ function t = starttimes(pos)
 %end times are when the animal finishes at the choice arm (and is about to go down the center stem to the forced arm)
 % output alternates between start and end times
 % so to analyze data you would want to do overlapping pairs: (a,b), the (b,c), then (c,d), etc
-% output is [index of start, start time]
+% output is [start time]
+%
+% can plug into cohereruns.m to get coherence for runs
+
 % may want to add in trial end also
 
 
@@ -97,4 +100,4 @@ i = i+1;
 end
 
 
-t = [timestart; tme(timestart)];
+t = [tme(timestart)];

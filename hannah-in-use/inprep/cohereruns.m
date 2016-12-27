@@ -4,15 +4,15 @@ function fs = cohereruns(lfpone, lfptwo, starttimesfile, time, lowband, highband
 figure
 i = 2;
 means = [];
-bounds = ceil(size(starttimesfile,2)./2);
+bounds = ceil(size(starttimesfile,2)./2)
 size(starttimesfile,2);
 while i<= size(starttimesfile,2)
     starttimes = [];
     endtimes = [];
     firstlfp = [];
     secondlfp =[];
-    starting = starttimesfile(2,(i-1));
-    ending = starttimesfile(2,(i));
+    starting = starttimesfile(1,(i-1));
+  ending = starttimesfile(1,(i));
     starttimes = find(abs(time-starting)<=.0001);
     endtimes = find(abs(time-ending)<=.0001);
     firstlfp = lfpone(starttimes:endtimes);

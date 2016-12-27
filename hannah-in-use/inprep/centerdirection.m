@@ -33,12 +33,8 @@ towardreward =[];
 awayfromreward = [];
 for i=1:size(dir,2)
 	if dir(4,i) > 0;
-		towardreward(end+1) = dir(1,i); 
+		towardreward(end+1) = dir(1,i);
 	elseif dir(4,i) < 0;
 		awayfromreward(end+1) = dir(1,i);
 	end
 end
-
-
-
-	
