@@ -29,7 +29,7 @@ i = 2;
 %now can seperate into runs basically based on the amount of time between points
 %adds the first time point after a lapse to runnum matrix
 while i <= size(timeend,1)
-		if timeend(i)-timeend(i-1) > 2
+		if timeend(i)-timeend(i-1) > 1
 				runnum(end+1) = timeend(i);
 		end
 i=i+1;
