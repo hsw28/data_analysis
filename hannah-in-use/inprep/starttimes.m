@@ -63,7 +63,7 @@ while i<=size(runnum,1)
 			both = both';
 			%finds most extreme y
 			[value, index] = (max(ypos(both)));
-			index = index + both(1)
+			index = index + both(1);
 		elseif i == size(runnum,1)
 			timeranges = find(pos(:,1)>runnum(i) & pos(:,1)<max(tme));
 			xranges = find(xpos<500);
