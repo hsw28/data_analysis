@@ -10,7 +10,9 @@ ypos = pos(:,3);
 ypos = ypos';
 
 %find INDEX of points in middle
-xmid = find(xpos>460 & xpos<820);
+%xmid = find(xpos>450 & xpos<850); %FOR MIDDLE ARM FULL
+%xmid = find(xpos>450& xpos<650); %FOR MIDDLE ARM FIRST HALF
+xmid = find(xpos>650 & xpos<850); %FOR MIDDLE ARM SECOND HALF
 ymiddle = find(ypos>350 & ypos<370);
 %find indices that appear in both
 bothindex = intersect(xmid, ymiddle);
@@ -39,10 +41,10 @@ end
 %then add the finishing point
 runnum(end+1) = timemiddle(end);
 
-% check to make sure every foray into the middle is >1 seconds like (takes ~2 seconds to run through middle)
+% check to make sure every foray into the middle is >.5 seconds like (takes ~2 seconds to run through middle)
 i = 2;
 while i <=size(runnum,2)
-	 if runnum(i)-runnum(i-1) < .5
+	 if runnum(i)-runnum(i-1) < .4 | runnum(i)-runnum(i-1) > 8
 		  runnum(i) = 0;
 			runnum(i-1) = 0;
 		end
