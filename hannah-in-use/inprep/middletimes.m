@@ -1,6 +1,6 @@
-function f = middletimes(pos);
-% getting too many points now (like ones that dont fit the x bounds) but i need ZZZzzzz
-%finds start and stop times for travelling in middle arm (they alternate)
+function [toreward, awayreward] = middletimes(pos);
+%finds start and stop times for travelling in middle arm
+%returns two vectors-- times going toward reward and times away
 
 tme = pos(:,1);
 tme = tme';
@@ -10,7 +10,7 @@ ypos = pos(:,3);
 ypos = ypos';
 
 %find INDEX of points in middle
-xmid = find(xpos>420 & xpos<860);
+xmid = find(xpos>460 & xpos<820);
 ymiddle = find(ypos>350 & ypos<370);
 %find indices that appear in both
 bothindex = intersect(xmid, ymiddle);
@@ -18,6 +18,7 @@ bothindex = intersect(xmid, ymiddle);
 timemiddle = tme(bothindex);
 xmiddle = xpos(bothindex);
 ymiddle = ypos(bothindex);
+
 
 
 
@@ -39,9 +40,9 @@ end
 runnum(end+1) = timemiddle(end);
 
 % check to make sure every foray into the middle is >1 seconds like (takes ~2 seconds to run through middle)
-i = 2
+i = 2;
 while i <=size(runnum,2)
-	 if runnum(i)-runnum(i-1) < 1
+	 if runnum(i)-runnum(i-1) < .5
 		  runnum(i) = 0;
 			runnum(i-1) = 0;
 		end
@@ -50,6 +51,23 @@ end
 
 %delete all elemts with zero
 mids = runnum(runnum~=0);
+mids = mids';
+tme = tme';
+xpos = xpos';
 
-
-f = [mids];
+%now find direction of animal
+i=2;
+toreward = [];
+awayreward = [];
+while i <=size(mids,1)
+	startmid = find(abs(mids(i-1)-tme)<.001);
+	endmid = find(abs(mids(i)-tme)<.001);
+	if xpos(endmid)-xpos(startmid) > 0 %towards reward
+			toreward(end+1) = tme(startmid);
+			toreward(end+1) = tme(endmid);
+	else
+		awayreward(end+1) = tme(startmid);
+		awayreward(end+1) = tme(endmid);
+	end
+i=i+2;
+end

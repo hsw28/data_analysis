@@ -8,7 +8,8 @@ if size(powerdata,1)<size(powerdata,2)
 	powerdata=powerdata';
 end
 
-dim = 3.5;
+%dim = 3.5;
+dim = 5;
 
 powerdata = powerdata';
 tme = posData(:,1);
@@ -37,7 +38,7 @@ for i = 1:xbins
 end
 
 %heat map stuff
-figure
+%figure
 [nr,nc] = size(avpower);
 colormap('parula');
 pcolor([(avpower) nan(nr,1); nan(1,nc+1)]);
@@ -46,5 +47,3 @@ set(gca, 'ydir', 'reverse');
 set(gca,'clim',[0,lim]);
 axis([16 (size(avpower, 2)+5) -4 (size(avpower,1))]);
 colorbar;
-
-

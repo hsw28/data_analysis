@@ -1,4 +1,4 @@
-function fs = cohereruns(lfpone, lfptwo, inputfile, time, lowband, highband, datatype)
+function fs = cohereruns(lfpone, lfptwo, inputfile, pos, time, lowband, highband, datatype)
 %computes coherence from a starttimes or middletimes file, graphs them all together and returns a vector with mean coherence for each run
 % datatype 1 = from starttimes file
 % datatype 2 = from middletimes file
@@ -7,7 +7,7 @@ figure
 
 
   if datatype == 1
-      bounds = ceil(size(inputfile,2)./2);
+      bounds = ceil(size(inputfile,2)-1);
   elseif datatype == 2
      bounds = ceil(size(inputfile,2)./4);
   end
@@ -26,8 +26,10 @@ figure
     firstlfp = lfpone(starttimes:endtimes);
     secondlfp = lfptwo(starttimes:endtimes);
     if datatype ==1
-      subplot(bounds,2, i-1);
+      subplot(bounds,2, 2*i-3);
       r = cohere(firstlfp, secondlfp, 1:size(firstlfp), lowband, highband);
+      subplot(bounds,2, 2*i-2)
+      powermap(r, pos, .7)
       means(end+1) = mean(r(1,:));
       i = i+1;
     elseif datatype ==2

@@ -35,6 +35,9 @@ coh = allcoh;
 %pcolor(t,freq,allcoh);
 
 %plotting average coherence v time
+
+%fs = [meancoh; 1:size(meancoh)-1];
 fs = [meancoh; (time(1:i-1000))];
 
+%plot(1:size(meancoh)-1, meancoh)
 plot(time(1:i-1000), meancoh);
