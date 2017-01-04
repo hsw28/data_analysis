@@ -11,8 +11,8 @@ ypos = ypos';
 
 %find INDEX of points in middle
 %xmid = find(xpos>450 & xpos<850); %FOR MIDDLE ARM FULL
-%xmid = find(xpos>450& xpos<650); %FOR MIDDLE ARM FIRST HALF
-xmid = find(xpos>650 & xpos<850); %FOR MIDDLE ARM SECOND HALF
+xmid = find(xpos>450& xpos<650); %FOR MIDDLE ARM FIRST HALF
+%xmid = find(xpos>650 & xpos<850); %FOR MIDDLE ARM SECOND HALF
 ymiddle = find(ypos>350 & ypos<370);
 %find indices that appear in both
 bothindex = intersect(xmid, ymiddle);

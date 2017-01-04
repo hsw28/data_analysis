@@ -40,4 +40,13 @@ coh = allcoh;
 fs = [meancoh; (time(1:i-1000))];
 
 %plot(1:size(meancoh)-1, meancoh)
-plot(time(1:i-1000), meancoh);
+plot(time(1:i-1000), meancoh, 'LineWidth', 3);
+
+x= time(1:i-1000);
+coeffs = polyfit(x, meancoh, 1);
+% Get fitted values
+fittedX = linspace(min(x), max(x), 200);
+fittedY = polyval(coeffs, fittedX);
+% Plot the fitted line
+hold on;
+plot(fittedX, fittedY, 'r-', 'LineWidth', 2);

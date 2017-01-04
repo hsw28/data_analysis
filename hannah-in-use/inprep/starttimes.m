@@ -54,7 +54,7 @@ ystart = [];
 ypos = abs(360-ypos);
 
 while i<=size(runnum,1)
-		%finds start times in range -- this is when the rat is at the end of forced choice
+		%finds start times in range -- this is when the rat is at the end of forced choice arm
 		if i<size(runnum,1)
 			timeranges = find(tme>runnum(i) & tme<runnum(i+1));
 			%finds x when on correct side
