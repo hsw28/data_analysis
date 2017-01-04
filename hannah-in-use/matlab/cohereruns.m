@@ -1,7 +1,7 @@
 function fs = cohereruns(lfpone, lfptwo, inputfile, pos, time, lowband, highband, datatype)
-%computes coherence from a starttimes or middletimes file, graphs them all together and returns a vector with mean coherence for each run
+%computes coherence from a starttimes, goal times, or middletimes file, graphs them all together and returns a vector with mean coherence for each run
 % datatype 1 = from starttimes file
-% datatype 2 = from middletimes file or goaltimes file 
+% datatype 2 = from middletimes file or goaltimes file
 
 figure
 

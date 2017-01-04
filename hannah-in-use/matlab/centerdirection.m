@@ -1,6 +1,7 @@
 function [towardreward, awayfromreward] = centerdirection(pos)
 
 %finds direction on the center stem if the animal is going towards or away from the reward arms
+% sort of depricated, recommend using middletimes.m instead as that computes run by run and this is point by point
 
 
 tme = pos(:,1);
