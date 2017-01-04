@@ -1,5 +1,8 @@
 function f= goaltimes(pos);
 
+%finds start and end times the rat is in the goal box
+%not perfect, needs to be checked against pos data
+
 tme = pos(:,1);
 tme = tme';
 xpos = pos(:,2);
@@ -22,7 +25,7 @@ runnum = timegoal(1);
 index = 1;
 i=2;
 while i <= size(timegoal,2)
-		if timegoal(i)-timegoal(i-1) > 2
+		if timegoal(i)-timegoal(i-1) > 1
 				%index(end+1) = i-1;
 				%index(end+1) = i;
 				runnum(end+1) = timegoal(i-1);  %this is the last point that the animal is in the box

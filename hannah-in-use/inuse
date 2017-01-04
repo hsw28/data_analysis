@@ -1,7 +1,7 @@
 function fs = cohere(lfpone, lfptwo, time, lowband, highband)
 %put in two signals. filter them before if ya want
 % input low and high bands you wanna look at
-% does in one half second abutting periods-- may want to later change that to overlapping periods
+% does in one second periods
 
 sz = size(lfpone,1);
 
