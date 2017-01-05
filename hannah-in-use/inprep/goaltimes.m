@@ -25,7 +25,7 @@ runnum = timegoal(1);
 index = 1;
 i=2;
 while i <= size(timegoal,2)
-		if timegoal(i)-timegoal(i-1) > 1
+		if goal(i)-goal(i-1) > 40
 				%index(end+1) = i-1;
 				%index(end+1) = i;
 				runnum(end+1) = timegoal(i-1);  %this is the last point that the animal is in the box
