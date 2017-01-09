@@ -8,6 +8,11 @@ function f = firingphase(firingtimes, lfp, timevector, above, bins)
 %
 % returns [phase, time]
 
+if size(firingtimes,2)>size(firingtimes,1)
+    firingtimes = firingtimes';
+end
+
+
 tme = timevector;
 peaktimes = thetaphase(lfp, tme, above);
 
@@ -32,7 +37,7 @@ while i<= size(firingtimes,1)
 				r = 1;
 				z = 100;
 				closer = [];
-				while r<=size(x,1)				
+				while r<=size(x,1)
 					if  abs(firingtimes(i) - peaktimes(x(r))) < z
 						z = abs(firingtimes(i) - peaktimes(x(r)));
 						closer = x(r);
@@ -48,24 +53,24 @@ while i<= size(firingtimes,1)
 			% if point is before or on firing time, firing time - point will be 0 or positive
 			if firingtimes(i)-point >= 0 %point is before
 				%find next point
-				
+
 				if x+1 >= size(peaktimes,1)
 					break
 				end
-				
+
 				nextpoint = peaktimes(x+1);
 				peaklength = abs(point-nextpoint);
 				%now need to make sure the distance between the two points are 6-12hz and that the next point is further than the firing point
-				 
-				
+
+
 				if peaklength >= .08 & peaklength <= .17 & nextpoint>firingtimes(i)
-					
+
 					dis = firingtimes(i)-point;
 					phase(end+1) = dis*360 / peaklength;
 					ftimes(end+1) = firingtimes(i);
 					%dis/peaklength
 				end
-					
+
 
 			elseif firingtimes(i)-point < 0 % point is after
 				% find previous point
@@ -76,14 +81,14 @@ while i<= size(firingtimes,1)
 					dis = firingtimes(i)-previouspoint;
 					phase(end+1) = dis*360 / peaklength;
 					ftimes(end+1) = firingtimes(i);
-					
+
 				end
 			else
 				firingtimes(i)-point
 			end
-			
 
-		
+
+
 
 		i = i+1;
 		end

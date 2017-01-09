@@ -1,8 +1,8 @@
-function f = STA(eventtimes, lfp, time, binsize) 
+function f = STA(eventtimes, lfp, time, binsize)
 
 % finds spike triggered average
 % bin size in seconds
-% f = STA(eventtimes, lfp, time, binsize) 
+% f = STA(eventtimes, lfp, time, binsize)
 
 
 % want LFP forward of spike also i think... will need to eliminate events that fall in last bin too
@@ -53,7 +53,7 @@ while i <= size(trimmedevents,1)
 	% time of event
 	q = trimmedevents(i);
 	%find index for start of event
-	
+
 	(q+binsize);
 	if find((abs(time-(q+binsize))<.0001))
 		%timeendevent = find((abs(time-(q+binsize))<.0001))
@@ -65,13 +65,13 @@ while i <= size(trimmedevents,1)
 		timeendevent = timeendevent + binsize*2000;
 	end
 
-	
+
 	timestartevent = timeendevent-((binsize*2000)*2);
 	% add LFP data to a row of binned LFP, each row is for a different spikee
 
 	n=(timestartevent);
 	timeendevent;
-	
+
 	z = 1;
 
 	size(binnedLFP);
@@ -90,8 +90,8 @@ while i <= size(trimmedevents,1)
 	size(currentLFP);
 	size(binnedLFP);
 
-	
-	%plot(((-size(binnedLFP)/2):size(binnedLFP)/2-1)/2000, currentLFP', 'Color', 	[0.5 0.5 0.5]);
+
+	plot(((-size(binnedLFP)/2):size(binnedLFP)/2-1)/2000, currentLFP', 'Color', 	[0.5 0.5 0.5]);
 	currentLFP = [];
 
 i = i+1;
@@ -103,10 +103,6 @@ binnedLFPaverage = (binnedLFP./size(trimmedevents,1));
 %binnedLFPaverage = (binnedLFP);
 f= binnedLFPaverage;
 
-
-size((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2)-1
-size(binnedLFPaverage)
-
 hold on
 
 %plot((((-size(binnedLFPaverage)))/(binsize)+1:0), binnedLFP', 'k');
@@ -116,8 +112,3 @@ ylabel('LFP')
 
 
 f= binnedLFPaverage';
-
-
-
-
-
