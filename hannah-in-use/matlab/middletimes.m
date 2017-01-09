@@ -1,6 +1,11 @@
-function [toreward, awayreward] = middletimes(pos);
+function [toreward, awayreward] = middletimes(pos, whatpartofmiddle);
 %finds start and stop times for travelling in middle arm
 %returns two vectors-- times going toward reward and times away
+%
+% for what part of track:
+% 1 = full middle arm
+% 2 = first half of middle arm
+% 3 = second half of middle arm
 
 tme = pos(:,1);
 tme = tme';
@@ -10,9 +15,13 @@ ypos = pos(:,3);
 ypos = ypos';
 
 %find INDEX of points in middle
-%xmid = find(xpos>450 & xpos<850); %FOR MIDDLE ARM FULL
-xmid = find(xpos>450& xpos<650); %FOR MIDDLE ARM FIRST HALF
-%xmid = find(xpos>650 & xpos<850); %FOR MIDDLE ARM SECOND HALF
+if whatpartofmiddle == 1
+		xmid = find(xpos>450 & xpos<850); %FOR MIDDLE ARM FULL
+elseif whatpartofmiddle == 2
+		xmid = find(xpos>450& xpos<650); %FOR MIDDLE ARM FIRST HALF
+elseif whatpartofmiddle == 3
+		xmid = find(xpos>650 & xpos<850); %FOR MIDDLE ARM SECOND HALF
+end
 ymiddle = find(ypos>350 & ypos<370);
 %find indices that appear in both
 bothindex = intersect(xmid, ymiddle);

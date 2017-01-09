@@ -12,7 +12,7 @@ ypos = ypos';
 
 %find INDEX of points in goalboxes
 xgoal = find(xpos>800 & xpos<950);
-ygoal = find(ypos>566 | ypos<154);
+ygoal = find(ypos>566 | ypos<145);
 goal = intersect(xgoal, ygoal);
 %assign values
 timegoal = tme(goal);
