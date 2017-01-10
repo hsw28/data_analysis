@@ -98,8 +98,8 @@ f = [phase; ftimes];
 figure;
 
 bincount = 360/bins;
-
-histogram(phase, bincount)
+histogram(phase, bincount, 'BinWidth', bins)
 xlim([0 360]);
+
 ylabel('Number of Cells')
 xlabel('Theta Phase')
