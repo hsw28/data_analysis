@@ -52,6 +52,7 @@ while i <= size(trimmedevents,1)
 	% get index for binning in time
 	% time of event
 	q = trimmedevents(i);
+	
 	%find index for start of event
 
 	(q+binsize);
@@ -60,14 +61,16 @@ while i <= size(trimmedevents,1)
 		timeendevent = find((abs(time-(q))<.0001));
 		timeendevent = timeendevent + binsize*2000;
 	else
-		timeendevent = find((abs(time-(q))<.00025));
+		timeendevent = find((abs(time-(q))<.0025));
 		timeendevent = timeendevent(1);
 		timeendevent = timeendevent + binsize*2000;
+
 	end
 
 
 	timestartevent = timeendevent-((binsize*2000)*2);
 	% add LFP data to a row of binned LFP, each row is for a different spikee
+
 
 	n=(timestartevent);
 	timeendevent;
@@ -80,6 +83,7 @@ while i <= size(trimmedevents,1)
 		binnedLFP(z);
 		(n-1+z);
 		lfp((n-1+z));
+		binnedLFP(z);
 		binnedLFP(z) = binnedLFP(z) + lfp(n-1+z);
 		currentLFP(z) = lfp((n-1+z));
 		z = z+1;
@@ -91,7 +95,7 @@ while i <= size(trimmedevents,1)
 	size(binnedLFP);
 
 
-	plot(((-size(binnedLFP)/2):size(binnedLFP)/2-1)/2000, currentLFP', 'Color', 	[0.5 0.5 0.5]);
+%	plot(((-size(binnedLFP)/2):size(binnedLFP)/2-1)/2000, currentLFP', 'Color', 	[0.5 0.5 0.5]);
 	currentLFP = [];
 
 i = i+1;

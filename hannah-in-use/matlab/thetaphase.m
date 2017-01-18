@@ -13,7 +13,7 @@ start = tme(1);
 
 [pks,locs] = findpeaks(thetafilt(lfp), 2000, 'MinPeakDistance', .08, 'MinPeakHeight', st , 'WidthReference', 'halfprom');
 
+findpeaks(thetafilt(lfp), 2000, 'MinPeakDistance', .08, 'MinPeakHeight', st , 'WidthReference', 'halfprom', 'Annotate', 'extents');
+
+
 f = locs+start;
-
-
-

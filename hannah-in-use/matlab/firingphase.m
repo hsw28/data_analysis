@@ -14,11 +14,10 @@ end
 
 
 tme = timevector;
+%determines peaks of theta
 peaktimes = thetaphase(lfp, tme, above);
 
 phase = [];
-
-%peaktimes(312:313)
 ftimes = [];
 
 
@@ -27,13 +26,12 @@ size(firingtimes);
 while i<= size(firingtimes,1)
 	x = find( abs(peaktimes-firingtimes(i)) < .17);
 	%makes sure we only have one point. point is the time of the closest peak
-		if size(x,1) == 0
+		if size(x,1) == 0 %this means no peaks satisfy
 			i = i+1;
-		else
-
-			if size(x,1) == 1
+		else %if some peaks satisfy
+			if size(x,1) == 1 %if one peak only satisfies, you're golden
 				point = peaktimes(x);
-			elseif size(x,1) > 1
+			elseif size(x,1) > 1 % if more than one peak satisfies, take the closer point
 				r = 1;
 				z = 100;
 				closer = [];
@@ -49,7 +47,7 @@ while i<= size(firingtimes,1)
 				x = closer;
 				point = peaktimes(closer);
 			end
-			%have one point, have to see if it's before or after the firing time
+			% have one point, have to see if it's before or after the firing time
 			% if point is before or on firing time, firing time - point will be 0 or positive
 			if firingtimes(i)-point >= 0 %point is before
 				%find next point
