@@ -1,4 +1,4 @@
-function f = eventunits(LSevent, units)
+function f = eventunits(units, LSevent)
 %events must be in format start,stop,start,stop,etc
 % outputs a vector of spikes that occur during LSevents
 

@@ -1,5 +1,5 @@
 function f = firingphase(firingtimes, lfp, timevector, above, bins)
-
+% DONT PUT IN A FILTERED LFP, THE CODE DOES THAT FOR YOU
 %input lfp, cell firing, time vector, and how many std devs above mean you want a peak to be to be counted in theta
 %bins is in number of degrees per bin (ex 60 for sixty degrees per bin)
 
@@ -16,15 +16,18 @@ end
 tme = timevector;
 %determines peaks of theta
 peaktimes = thetaphase(lfp, tme, above);
+troughtimes = thetaphase(lfp.*-1, tme, above);
 
 phase = [];
 ftimes = [];
+test = 0;
 
 
 i = 1;
 size(firingtimes);
 while i<= size(firingtimes,1)
 	x = find( abs(peaktimes-firingtimes(i)) < .17);
+
 	%makes sure we only have one point. point is the time of the closest peak
 		if size(x,1) == 0 %this means no peaks satisfy
 			i = i+1;
@@ -63,10 +66,26 @@ while i<= size(firingtimes,1)
 
 				if peaklength >= .08 & peaklength <= .17 & nextpoint>firingtimes(i)
 
-					dis = firingtimes(i)-point;
-					phase(end+1) = dis*360 / peaklength;
-					ftimes(end+1) = firingtimes(i);
-					%dis/peaklength
+          tt = find(troughtimes < nextpoint & troughtimes > point); %finds minima
+          tt = troughtimes(tt);
+          % if troughtime minus point is negative, trough comes first. if positive, point comes first
+          if tt-firingtimes(i) < 0 & size(tt,1) == 1; % trough is first
+              dis = firingtimes(i)-tt;
+              phase(end+1) = (dis*180 / abs(tt-nextpoint) + 180);
+              ftimes(end+1) = firingtimes(i);
+          elseif tt-firingtimes(i) > 0 & size(tt,1) == 1; % point is first
+              dis = firingtimes(i)-point;
+              phase(end+1) = (dis*180 / abs(tt-point));
+              ftimes(end+1) = firingtimes(i);
+          elseif tt-firingtimes(i) == 0 & size(tt,1) == 1; % point is on trough
+            phase(end+1) = 180;
+            ftimes(end+1) = firingtimes(i);
+          else
+            dis = firingtimes(i)-point;
+					  phase(end+1) = dis*360 / peaklength;
+					  ftimes(end+1) = firingtimes(i);
+          end
+
 				end
 
 
@@ -75,15 +94,35 @@ while i<= size(firingtimes,1)
 				previouspoint = peaktimes(x-1);
 				peaklength = abs(point-previouspoint);
 				%now need to make sure the distance between the two points are 6-12hz. if not, move on
+
 				if peaklength >= .08 & peaklength <= .17 & previouspoint<firingtimes(i)
-					dis = firingtimes(i)-previouspoint;
-					phase(end+1) = dis*360 / peaklength;
-					ftimes(end+1) = firingtimes(i);
+          tt = find(troughtimes < point & troughtimes > previouspoint); %finds minima
+          tt = troughtimes(tt);
+
+          if tt-firingtimes(i) < 0 & size(tt,1) == 1; % trough is first
+              dis = firingtimes(i)-tt;
+              phase(end+1) = (dis*180 / abs(tt-point) + 180);
+              ftimes(end+1) = firingtimes(i);
+          elseif tt-firingtimes(i) > 0 & size(tt,1) == 1; % point is first
+              dis = firingtimes(i)-previouspoint;
+              phase(end+1) = (dis*180 / abs(tt-previouspoint));
+              ftimes(end+1) = firingtimes(i);
+          elseif tt-firingtimes(i) == 0 & size(tt,1) == 1; % point is on trough
+            phase(end+1) = 180;
+            ftimes(end+1) = firingtimes(i);
+          else
+            dis = firingtimes(i)-previouspoint;
+				  	phase(end+1) = dis*360 / peaklength;
+				  	ftimes(end+1) = firingtimes(i);
+         end
+          end
+
+
+
 
 				end
-			else
-				firingtimes(i)-point
-			end
+
+
 
 
 
@@ -91,6 +130,7 @@ while i<= size(firingtimes,1)
 		i = i+1;
 		end
 end
+
 
 f = [phase; ftimes];
 figure;
