@@ -1,7 +1,7 @@
 function y = thetafilt(x)
 
 % filters in theta frequency range 6-10. import eeg data from gh_debuffer.
-% then hilbert transforms data and returns transformation
+% 
 % example: 
 % data = thetafilt(lfp.data);
 
@@ -196,6 +196,6 @@ if isempty(Hd)
         3.61698506155789e-07 9.01368143995459e-08 0]);
 end
 
-d = step(Hd,x);
-y = abs(hilbert(d));
+
+y = step(Hd,x);
 

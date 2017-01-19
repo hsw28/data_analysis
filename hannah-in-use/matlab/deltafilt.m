@@ -1,7 +1,7 @@
 function y = deltafilt(x)
 
 % lowpass filters in delta frequency range 0-4. import eeg data from gh_debuffer
-% hilbert transforms output
+% 
 % example: 
 % data = deltafilt(lfp.data);
 
@@ -195,8 +195,8 @@ if isempty(Hd)
         2.56023087856813e-09 3.18714260155108e-10 0]);
 end
 
-d = step(Hd,x);
-y = abs(hilbert(d));
+y = step(Hd,x);
+
 
 
 % [EOF]

@@ -42,8 +42,8 @@ for k = 1:(size(acc,2))
 			j = size(d,2);
 		end
 
-		%only include events longer than 500ms
-		if d(j)-d(i) > .5
+		%only include events longer than 1s
+		if d(j)-d(i) > 1
 			if ismember((i),startpoints)==0 && ismember((j),endpoints)==0
 				numevents = numevents+1;
 				%making a vector with start and end indices
@@ -62,10 +62,11 @@ end
 allpoints = [startpoints;endpoints;duration;accmag];
 [X, Y] = sort(allpoints(4,:));
 sortedpoints = allpoints(:,Y);
+f = sortedpoints;
 
 %sortedpoints(1,:) is start time, (2,:) is end time, (3,:) is duration
 
-f = figure;
+figure;
 n=1;
 q=2;
 numevents;

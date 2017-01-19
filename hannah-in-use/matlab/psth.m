@@ -21,7 +21,7 @@ function varargout=psth(varargin)
 %   
 
 %get options
-options = struct('lags', linspace(-5,5,100), ...  %change here for seconds around and bins
+options = struct('lags', linspace(-1,1, 300), ...  %change here for seconds around and bins
                  'segments', [], ...
                  'normalization', 'none');
 

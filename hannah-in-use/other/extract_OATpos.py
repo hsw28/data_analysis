@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # to use: python extract_OATpos.py oate-file.txt output-file.csv
+#converts to correct timestamp
 
 
 import sys
@@ -30,7 +31,7 @@ for i in range(len(data)):
         posY.append(data[i]["pos_xy"][1])
 
 
-newposT = [x / myInt for x in posT]
+newposT = [x / myInt * 7.75e-2 for x in posT]
 
 
 with open(file_out,'w') as f:

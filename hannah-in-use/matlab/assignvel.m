@@ -1,3 +1,5 @@
+
+
 function f = assignvel(timefile, velo);
 
 
@@ -6,6 +8,8 @@ function f = assignvel(timefile, velo);
 % smooths data
 %
 % ex: f = assignvel(tet11.timestamp, velocitymatrix)
+
+
 
 
 tfs = size(timefile,2);

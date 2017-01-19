@@ -1,4 +1,4 @@
-function avg_transform = findFrequencies(LS_lfp_data, timestamp)
+function avg_transform = findLSFrequencies(LS_lfp_data, timestamp)
 
 % takes raw LS LFP and finds the weird LS events and the time and duration
 % plots the lowpass filtered (<300) LFP in order of duration
@@ -13,7 +13,7 @@ d = timestamp;
 
 
 
-fil = thetafilt(c);
+fil = lowpass300(c);
 % filters data with bandpass filter between 100-300hz
 % might want to change this to a low pass filter
 
@@ -24,7 +24,7 @@ filtdata = abs(h);
 % finds four std devs above mean
 mn = mean(filtdata);
 st = std(filtdata);
-m = mn + (st.*(4));
+m = mn + (st.*(3));
 
 %makes empty vector to hold times of ripples
 rt=[];
@@ -35,46 +35,80 @@ timeevent=[];
 endpoints=[];
 startpoints=[];
 duration=[];
+durr=[];
 
 numevents = 0;
 
-% permute through transformed data and find when data is four std devs above mean
-for k = 1:(size(filtdata))
+k=1;
+% permute through transformed data and find when data is three std devs above mean
+while k<=(size(filtdata,1))
 	if filtdata(k) > m
 		% we've found something above threshold, now need to find surrounding times when it's back at mean		
 		
-		% looks to see when value returns to half a std dev above mean, this is the start of the event time
+		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
 		i = k;
-		while abs(filtdata(i)-mn) >= (st./2) && i > 0
+		while abs(filtdata(i)-mn) >= (st./1.5) && i > 0 %STD DEV
 			i=i-1;
 		end
 		
-		% looks to see when value returns to half a std dev above mean, this is the end of the event time		
+	
+
+		% looks to see when value returns to 1/2 a std dev > mean & mantains this for 10 points, this is the end of event time		
 		j = k;
-		while abs(filtdata(j)-mn) >= (st./2)
-			j=j+1;
+		while j<size(filtdata,1)
+			if abs(filtdata(j)-mn) >= (st./1.2) %STD DEV
+				j=j+1;
+			
+			elseif size(filtdata,1)-j-225>=0 && all(abs(filtdata(j:j+225)-mn)<(st./1.2)) %STD DEV
+		
+				break
+			elseif size(filtdata,1)-j-225<0 && all(abs(filtdata(j:end)-mn)<(st./1.2)) %STD DEV
+				
+				break
+			else
+				j = j+1;
+				
+			end
+		
+		
 		end
 		
+
 		%adds to vector ripple start, trigger, and end times		
 		%start time is d(i);
 		%end time is d(j);
-		k = j;		
+		k = j;	
 		
-		
-		%only include events longer than 30ms
-		if d(j)-d(i) > .03
-			if ismember((i-7),endpoints)==0 && ismember((j+7),endpoints)==0
-				numevents = numevents+1;
-				%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
-				startpoints(end+1)=(i-7);
-				endpoints(end+1)=(j+7);
-				duration(end+1)=(d(j+7)-d(i-7));
+
+		%only include events longer than 1.25s
+		if d(j)-d(i) > 1.25
+			%making a vector with all the data points of the ripple
+			pt=[];
+			
+
+			for n = (i):(j)	
+				%goes through data and adds data (NOT TIME) to vector
+				pt(end+1) = c(n);
+				durr(end+1)=d(n);
 			end
+
+	
+		[peak,index] = max(pt);
+		index = index+i-1;
+		%making a vector with start and end indices, with a ~45ms buffer around (equal to 7 time points)
+		startpoints(end+1)=(i);
+		endpoints(end+1)=(j);
+		duration(end+1)=(d(j)-d(i));
 		end
 
-
+		k = k+1;
+		
+	elseif filtdata(k) <= m
+		k = k+1;
 	end
 end
+
+
 
 allpoints = [startpoints;endpoints;duration];
 [X, Y] = sort(allpoints(3,:));
