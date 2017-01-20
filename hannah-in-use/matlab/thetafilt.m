@@ -194,9 +194,7 @@ end
 
 y = step(Hd,double(x));
 y = circshift(y, -250);
-size(y)
-y = y(1:end-250);
-size(y)
+y = y(1:end-250, 1);
 
 
 % [EOF]

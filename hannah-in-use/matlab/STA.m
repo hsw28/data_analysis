@@ -1,6 +1,6 @@
 function f = STA(eventtimes, lfp, time, binsize)
 
-% finds spike triggered average
+% finds spike triggered average -- filter yourself if you want to filter LFP
 % bin size in seconds
 % f = STA(eventtimes, lfp, time, binsize)
 
@@ -52,7 +52,7 @@ while i <= size(trimmedevents,1)
 	% get index for binning in time
 	% time of event
 	q = trimmedevents(i);
-	
+
 	%find index for start of event
 
 	(q+binsize);
@@ -113,6 +113,7 @@ hold on
 plot(((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2-1)/2000, binnedLFPaverage', 'k');
 xlabel('Sec.')
 ylabel('LFP')
+
 
 
 f= binnedLFPaverage';
