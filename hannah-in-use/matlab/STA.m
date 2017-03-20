@@ -7,7 +7,7 @@ function f = STA(eventtimes, lfp, time, binsize)
 
 % want LFP forward of spike also i think... will need to eliminate events that fall in last bin too
 
-figure;
+%figure;
 hold on;
 %lfp = lfp.*lfp;
 
@@ -30,22 +30,6 @@ binnedLFP = zeros(binsize*2000*2,1);
 q=1;
 currentLFP = zeros(binsize*2000*2,1);
 
-%FOR TESTING
-%{
-p = 1;
-testvec = [];
-while p<size(trimmedevents,1)
-	q = 1;
-	testvec(end+1) = trimmedevents(p);
-	while abs(trimmedevents(p)-trimmedevents(p+q))<.5 & p+q<size(trimmedevents,1)
-		q = q+1; %for testing
-	end
-	p=p+q;
-end
-trimmedevents=testvec';
-size(trimmedevents)
-%END TESTING
-%}
 
 while i <= size(trimmedevents,1)
 
@@ -110,7 +94,7 @@ f= binnedLFPaverage;
 hold on
 
 %plot((((-size(binnedLFPaverage)))/(binsize)+1:0), binnedLFP', 'k');
-plot(((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2-1)/2000, binnedLFPaverage', 'k');
+plot(((-size(binnedLFPaverage)/2):size(binnedLFPaverage)/2-1)/2000, binnedLFPaverage');
 xlabel('Sec.')
 ylabel('LFP')
 
