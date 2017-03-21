@@ -1,12 +1,17 @@
-function f = spikeprobrun(time, vel, event)
+function f = spikeprobrun(time, vel, event, cond)
 %bin velocity / acc then find spike probability for that vel or accel
+%cond for condition - 1 is not abs value, 2 is abs value
 
-%vel = abs(vel);
+if cond ==2
+  vel = abs(vel);
+end
 v = assignvel(time, vel);
-v = smooth(v,500);
+v = smooth(v,50);
 
 %ten bins
-binsize = (max(v)-min(v))./10;
+
+binsize = (100-min(v))./10;
+
 m = min(v);
 % finds velocities that fall within values, then finds what time points
 timea = time(find(v <= m+binsize));
@@ -19,6 +24,7 @@ timeg = time(find(v > m+binsize.*6 & v <= m+binsize.*7));
 timeh = time(find(v > m+binsize.*7 & v <= m+binsize.*8));
 timei = time(find(v > m+binsize.*8 & v <= m+binsize.*9));
 timej = time(find(v > m+binsize.*9 & v <= m+binsize.*10));
+
 
 % now need to find spiking probabilities within those times
 % can do this to see when each time overlaps with a spike time, then dividing by total number of times
@@ -83,5 +89,8 @@ probj = pj ./ size(timej,1);
 
 
 figure
-bar([proba, probb, probc, probd, probe, probf, probg, probh, probi, probj])
+norm = (mapminmax([proba, probb, probc, probd, probe, probf, probg, probh, probi, probj],0,1));
+bar([(m+binsize.*1), (m+binsize.*2), (m+binsize.*3), (m+binsize.*4), (m+binsize.*5), (m+binsize.*6), (m+binsize.*7), (m+binsize.*8), (m+binsize.*9), (m+binsize.*10)], norm)
+%bar([proba, probb, probc, probd, probe, probf, probg, probh, probi, probj])
+%line([m+binsize.*1, m+binsize.*2, m+binsize.*3, m+binsize.*4, m+binsize.*5, m+binsize.*6, m+binsize.*7, m+binsize.*8, m+binsize.*9, m+binsize.*10], [proba, probb, probc, probd, probe, probf, probg, probh, probi, probj])
 f= ([proba, probb, probc, probd, probe, probf, probg, probh, probi, probj]);

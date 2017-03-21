@@ -22,6 +22,7 @@ rate = r(2,:);
 fastest = max(rate);
 m = length(rate);
 %a = accel(posdata);
+
 acceldata = abs(assignvel(time,accelORvel));
 length(acceldata);
 length(time);
@@ -35,6 +36,7 @@ end
 
 figure
 scatter(avg_accel,rate/t)
+
 xlabel('Average Acceleration');
 ylabel('Firing rate/Sec.');
 average = zeros(fastest+1,1);
