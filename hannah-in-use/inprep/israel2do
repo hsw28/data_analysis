@@ -2,3 +2,4 @@ Figure out how to lowpass and denoise velocity and acceleration data
 Rerun all my claims with fixed velocity script
 cap velocity/acc in accelVsFiringRate (might be taken care of by doing the above)
 rewrite spikeprobrun to be modular
+figure out lag btwn hpc and ls: https://www.ncbi.nlm.nih.gov/pubmed/20600317
