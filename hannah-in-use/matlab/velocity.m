@@ -31,9 +31,7 @@ end
 
 
 
-[z, p, k] = butter(2, .005, 'low');
-sos = zp2sos(z,p,k);
-v = sosfilt(sos,velvector);
 
-v = smooth(v);
+
+v = smooth(velvector);
 v = [v'/3.5; timevector];
