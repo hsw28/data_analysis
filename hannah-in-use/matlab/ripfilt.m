@@ -199,6 +199,8 @@ if isempty(Hd)
 end
 
 d = step(Hd,x);
+delay = mean(grpdelay(Hd));
+d(1:delay) = [];
 y = abs(hilbert(d));
 
 

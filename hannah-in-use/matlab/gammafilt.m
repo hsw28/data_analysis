@@ -1,6 +1,6 @@
 function y = gammafilt(x)
 %GAMMAFILT Filters input x and returns output y.
-# hilbert transforms output
+% hilbert transforms output
 % filters in gamma frequency range 20-100. import eeg data from gh_debuffer
 % example: 
 % data = gammafilt(lfp.data);
@@ -193,6 +193,8 @@ if isempty(Hd)
 end
 
 d = step(Hd,x);
+delay = mean(grpdelay(Hd));
+d(1:delay) = [];
 y = abs(hilbert(d));
 
 

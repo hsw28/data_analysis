@@ -191,10 +191,9 @@ if isempty(Hd)
         8.03987388296356e-08 4.1102717826122e-08 1.73046203575215e-08 ...
         5.1139178308147e-09 6.37217673709085e-10 0]);
 end
-
+delay = mean(grpdelay(Hd));
 y = step(Hd,double(x));
-y = circshift(y, -250);
-y = y(1:end-250, 1);
+y(1:delay) = [];
 
 
 % [EOF]
