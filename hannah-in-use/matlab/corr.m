@@ -12,7 +12,7 @@ twonorm = two-mean(two);
 
 [cor, lag] = xcorr(onenorm, twonorm, 'coeff');
 
-figure
+
 plot(lag./2000, cor)
 
 size(cor);

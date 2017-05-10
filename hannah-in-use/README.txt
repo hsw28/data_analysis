@@ -45,7 +45,7 @@ placeevent.m: if you have event times, this will match with place data to get pl
 starttimes.m: finds time animal starts each trial and returns a matrix of all start & end times and index values
 velocity.m: finds velocity from position data
 
-SINGLE UNIT
+UNITS
 accelVsFiringRate.m: plots accel versus firing rate
 firingphase.m: finds and plots the theta phase of spike data
 isi.m: finds interspike interval
@@ -66,6 +66,8 @@ LSevents.m: finds LS events
 LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and duration, then plots the LFP for the other thing youre looking for during the same time
 orderLSevent.m: plots LS events in order by duration
 powerMap.m: plots power by location
+psth.m: makes a psth graph of events around a trigger point
+spikehisto.m: makes a histogram of spikes in binned time
 
 RANDOM
 binning.m: bins stuff
