@@ -13,6 +13,7 @@ dim = 5;
 
 powerdata = powerdata';
 tme = posData(:,1);
+size(tme)
 Power = assignvel(tme', powerdata);
 Power = Power';
 

@@ -34,5 +34,6 @@ size(isidata);
 compare = assignvel(isidata(2,:), comparething);
 
 size(compare);
-scatter(isidata(1,:), compare(1,:))
-
+scatter(compare(1,:), isidata(1,:))
+xlabel('Compared Value');
+ylabel('ISI (sec)');

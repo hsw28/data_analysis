@@ -5,8 +5,9 @@ function v = velocity(file1);
 % x = load('pos.csv');
 % v = velocity(x);
 %
+% removes velocity outliers using a hempal filter
 % returns velocities in cm/s and time stamp vector
-% doesn't smooth or transform-- do that later when you assign velocities
+%
 
 file = file1';
 
@@ -32,6 +33,5 @@ end
 
 
 
-
-v = smooth(velvector);
-v = [v'/3.5; timevector];
+v = hampel(velvector, 30, 3);
+v = [v/3.5; timevector];

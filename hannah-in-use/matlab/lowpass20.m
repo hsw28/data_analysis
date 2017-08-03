@@ -13,7 +13,7 @@ function y = lowpass20(x)
 persistent Hd;
 
 if isempty(Hd)
-    
+
     % The following code was used to design the filter coefficients:
     % % FIR Window Lowpass filter designed using the FIR1 function.
     %
@@ -29,7 +29,7 @@ if isempty(Hd)
     %
     % % Calculate the coefficients using the FIR1 function.
     % b  = fir1(N, Fc/(Fs/2), 'low', win, flag);
-    
+
     Hd = dsp.FIRFilter( ...
         'Numerator', [0 -1.83339603468987e-08 -1.48033856006376e-07 ...
         -5.03997202566392e-07 -1.20451271731102e-06 -2.37069263537704e-06 ...
@@ -100,8 +100,11 @@ if isempty(Hd)
         -1.48033856006376e-07 -1.83339603468987e-08 0]);
 end
 
-y = step(Hd,x);
+
+
 delay = mean(grpdelay(Hd));
+y = step(Hd,(x));
 y(1:delay) = [];
+
 
 % [EOF]

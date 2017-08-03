@@ -12,10 +12,10 @@ end
 i = 1;
 highvel = [];
 
-while i<=size(vel,2)
-  if vel(i) > 5000
+while i<size(vel,2)
+  if vel(i) > 5
       highvel(end+1) = tme(i); %start time
-      while vel(i) > 5000
+      while vel(i) > 5 && i<size(vel,2)
         i = i+1;
       end
       highvel(end+1) = tme(i); % end time

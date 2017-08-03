@@ -37,3 +37,4 @@ while i<=(sz)
 end
 
 x = train;
+bar(x)

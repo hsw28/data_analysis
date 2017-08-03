@@ -5,7 +5,6 @@ function thingy = powerVsFiringRate(lfpdata,time, firingdata, L)
 % length of the time window is determined by actual sampling rate and
 % integer # of window samples. There is a print statement that returns
 % window length in seconds
-% powerVsFiringRate(lfpmaze19.data,lfpmaze19.timestamp*7.75e-2,[mazet19c3;mazet19c4;mazet29c1]*7.75e-2,350);
 
 
 % close all;

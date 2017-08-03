@@ -5,8 +5,7 @@ function thingy = accelVsFiringRate(posdata,time, accelORvel, firingdata, t)
 % length of the time window is determined by actual sampling rate and
 % integer # of window samples. There is a print statement that returns
 % window length in seconds
-% accelVsFiringRate(pos,lfpmaze19.timestamp*7.75e-2,[mazet19c3;mazet19c4;mazet29c1]*7.75e-2,.1736);
-%can also use for velocity
+% can also use for velocity
 
 % close all;
 % posdata = pos;
@@ -23,7 +22,7 @@ fastest = max(rate);
 m = length(rate);
 %a = accel(posdata);
 
-acceldata = abs(assignvel(time,accelORvel));
+acceldata = (assignvel(time,accelORvel));
 length(acceldata);
 length(time);
 avg_accel = zeros(m,1);

@@ -192,7 +192,7 @@ if isempty(Hd)
         5.1139178308147e-09 6.37217673709085e-10 0]);
 end
 delay = mean(grpdelay(Hd));
-y = step(Hd,double(x));
+y = step(Hd,(x));
 y(1:delay) = [];
 
 

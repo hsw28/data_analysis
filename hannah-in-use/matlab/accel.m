@@ -23,4 +23,4 @@ for i = 2:s-2
 end
 
 accvector = smooth(accvector);
-a = [accvector'; timevector];
+a = [accvector'./3.5; timevector];
