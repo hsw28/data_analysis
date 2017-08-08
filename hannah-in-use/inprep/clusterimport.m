@@ -1,7 +1,8 @@
-function f = clusterimport(array);
+function f = clusterimport;
   %makes an structure of all the cluster times for easier manipulation
   %import a cell array of file paths names using uipickfiles
 
+array = uipickfiles;
 array = array';
 
 
