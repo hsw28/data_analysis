@@ -8,13 +8,16 @@ for k=1:length(array)
   %imports path name as string and trunctates string so it's not so long
   name = char(array(k));
   name = strsplit(name,'Data/');
-  name = (name(1,2));
+  name = char(name(1,2));
+  name = strsplit(name,'/pos.csv')
+  name = (name(1,1));
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
-  posname = strcat('position_', name)
-  velname = strcat('vel_', name)
-  accname = strcat('acc_', name)
+  name = strcat('date_', name);
+  posname = strcat(name, '_position')
+  velname = strcat(name, '_vel')
+  accname = strcat(name, '_acc')
   posname = char(posname);
   velname = char(velname);
   accname = char(accname);
@@ -24,9 +27,9 @@ for k=1:length(array)
   vel = velocity(pos);
   acc = accel(pos);
   %assigns pos structure
-  myStruct.(posname) = pos;
-  myStruct.(velname) = vel;
-  myStruct.(accname) = acc;
+  myStruct(k).(posname) = pos;
+  myStruct(k).(velname) = vel;
+  myStruct(k).(accname) = acc;
 
 end
 
