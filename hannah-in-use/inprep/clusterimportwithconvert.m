@@ -1,10 +1,8 @@
-function f = clusterimportwithconvert(lfp);
+function f = clusterimportwithconvert(array, lfp);
   %makes an structure of all the cluster times for easier manipulation
   %converts bad timestamps if needed (input lfp or lfptimestamps) and also saves conversion factor for if you need it later
-  %at the start of function you pick your clusters using uipickfiles
+  %input array of files using uipickfiles
 
-
-array = uipickfiles;
 array = array';
 
 %finds conversion factor
