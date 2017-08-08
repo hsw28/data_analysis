@@ -1,18 +1,25 @@
-function f = clusterimport(myfolder)
-  %put in parent folder. imports all the clusters in that folder and names them with the path
+function f = clusterimport(array);
+  %makes an structure of all the cluster times for easier manipulation
+  %import a cell array of file paths names using uipickfiles
 
-% store the data in a cell array
+array = array';
 
-cd myfolder;
-% number of files with cl in directory
-foldersize = size(dir('../cl*'));
-% puts the path in a vector
-[pathstr,name,ext] = fileparts(dir('../cl*'));
-% makes a matrix of file names
- names = (pathstr);
 
-for k=1:foldersize
-  name = char(names(k));
-  myStruct.name = load(pathstr(k)));
-  myStruct.name = myStruct.name(:,8);
+for k=1:length(array)
+  %imports path name as string and trunctates string so it's not so long
+  name = char(array(k));
+  name = strsplit(name,'Data/');
+  name = (name(1,2));
+  %replaces characters that cant be in structure names
+  name = strrep(name, '/', '_');
+  name = strrep(name, '-', '_');
+  name = strcat('cluster_', name)
+  name = char(name);
+  %loads data
+  x = load(char(array(k)));
+  x = x(:,8);
+  %assigns to structure
+  myStruct.(name) = x;
 end
+
+f = myStruct;
