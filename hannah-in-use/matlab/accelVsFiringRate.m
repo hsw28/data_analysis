@@ -1,4 +1,4 @@
-function thingy = accelVsFiringRate(posdata,time, accelORvel, firingdata, t)
+function thingy = accelVsFiringRate(time, accelORvel, firingdata, t)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
 % Produces plots that relate Firing Rate in window to acceleration
 % in window
@@ -8,7 +8,6 @@ function thingy = accelVsFiringRate(posdata,time, accelORvel, firingdata, t)
 % can also use for velocity
 
 % close all;
-% posdata = pos;
 % time = lfpmaze19.timestamp*7.75e-2;
 % firingdata = [mazet19c3;mazet19c4;mazet29c1]*7.75e-2;
 % t = .1736;
@@ -20,7 +19,6 @@ r = mua_rate(firingdata,start,ending,t);
 rate = r(2,:);
 fastest = max(rate);
 m = length(rate);
-%a = accel(posdata);
 
 acceldata = (assignvel(time,accelORvel));
 length(acceldata);
