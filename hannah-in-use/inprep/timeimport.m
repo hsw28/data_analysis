@@ -9,13 +9,13 @@ for k=1:length(array)
   name = char(array(k));
   name = strsplit(name,'Data/');
   name = char(name(1,2));
-  name = strsplit(name,'/arte_lfp')
+  name = strsplit(name,'/arte_lfp');
   name = (name(1,1));
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
   name = strcat('date_', name);
-  name = strcat(name, '_time')
+  name = strcat(name, '_time');
   name = char(name);
 
   %loads data

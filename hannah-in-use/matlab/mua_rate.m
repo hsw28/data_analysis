@@ -28,8 +28,3 @@ end
 
 %output time and rate
 r = [time_v; rate];
-
-
-
-
-

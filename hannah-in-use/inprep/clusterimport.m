@@ -1,4 +1,4 @@
-function f = clusterimport;
+function f = clusterimport(array);
   %outputs a structure of all the cluster times for easier manipulation
   %input array of files using uipickfiles
 
@@ -13,7 +13,7 @@ for k=1:length(array)
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
-  name = strcat('cluster_', name)
+  name = strcat('cluster_', name;
   name = char(name);
   %loads data
   x = load(char(array(k)));

@@ -11,6 +11,19 @@ function thingy = accelVsFiringRate(time, accelORvel, firingdata, t)
 % time = lfpmaze19.timestamp*7.75e-2;
 % firingdata = [mazet19c3;mazet19c4;mazet29c1]*7.75e-2;
 % t = .1736;
+
+if size(time, 2) < size(time, 1)
+	time = time';
+end
+
+if size(accelORvel, 2) < size(accelORvel, 1)
+	accelORvel = accelORvel';
+end
+
+if size(accelORvel, 2) > size(firingdata, 1)
+	firingdata = firingdata';
+end
+
 start = min(time);
 ending = max(time);
 
@@ -39,6 +52,7 @@ ylabel('Firing rate/Sec.');
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
+
 for i = 0:fastest
      subset = avg_accel(rate == i);
      if length(subset) < threshold
@@ -64,4 +78,6 @@ lsline
 % scatter(deviation, (0:fastest)/t)
 % xlabel('Deviation of Theta Power Ratio');
 % ylabel('Firing rate');
-thingy = [average,deviation,(0:fastest)'/t];
+%thingy = [average,deviation,(0:fastest)'/t];
+
+thingy = [average, (0:fastest)'/t];
