@@ -1,12 +1,13 @@
 function f = MASSaccelVsFiringRate(spikestructure, posstructure, timestructure, windowsize)
-  %use clusterimport.m and posimport.m to create spike and position structures
+  %use clusterimport.m and posimport.m and timeimport.m to create spike and position structures
+  %does conversion factor if needed for early recordings
   %window size is in seconds
 
 %determine how many spikes
 spikenames = (fieldnames(spikestructure));
 spikenum = length(spikenames);
 
-output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'};
+output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'; 'p value'};
 
 for k = 1:spikenum
     name = char(spikenames(k));
@@ -24,6 +25,19 @@ for k = 1:spikenum
     posformateddate = strcat(date, '_position');
     posformateddate = strcat('date_', posformateddate);
 
+    %get conversion factor
+    numdate = {date};
+    numdate = char(strrep(numdate,'_',''));
+    numdate = str2num(numdate);
+      if numdate < 20170427
+        actualseconds = length(timestructure.(timeformateddate)) / 2000;
+        fakeseconds = timestructure.(timeformateddate)(end)-timestructure.(timeformateddate)(1);
+        conversion = actualseconds/fakeseconds;
+      else
+        conversion = 1;
+      end
+
+
     % limit the times in the time file to those in position files
     starttime = posstructure.(posformateddate)(1,1);
     endtime = posstructure.(posformateddate)(end,1);
@@ -38,7 +52,7 @@ for k = 1:spikenum
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
     set(0,'DefaultFigureVisible', 'off');
-    accvrate = accelVsFiringRate(time, posstructure.(accformateddate), spikestructure.(spikename), windowsize);
+    accvrate = accelVsFiringRate((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
     x = accvrate(:,1);
     actualvals = find(~isnan(x));
     x = x(actualvals);
@@ -55,10 +69,11 @@ for k = 1:spikenum
 
 
     spikesizes = spikestructure.(spikename);
-    %stats = regress(x,y); unclear how to make these work
-    %stats = fitlm(x,y); unclear how to make these work
+    stats = fitlm(x,y);
+    pval = stats.Coefficients.pValue(2);
+
     % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
-    newdata = {name; length(spikesizes); size(x,1); slope; rsquared};
+    newdata = {name; length(spikesizes); size(x,1); slope; rsquared; pval};
 
     output = horzcat(output, newdata);
   end

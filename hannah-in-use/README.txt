@@ -69,6 +69,13 @@ powerMap.m: plots power by location
 psth.m: makes a psth graph of events around a trigger point
 spikehisto.m: makes a histogram of spikes in binned time
 
+BULK
+uipickfiles.m: lets you pick files and puts path into an array (not my code)
+clusterimport.m: outputs a structure of all cluster times imported from uipickfiles
+posimport.m: outputs a structure of pos/vel/acc from imported pos files from uipickfiles
+timeimport.m: outputs a structure of multiple lfp times from files selected with uipickfiles
+MASSaccelVsFiringRate.m: does acceleration vs firing rates for tons of clusters at once using bulk data
+
 RANDOM
 binning.m: bins stuff
 boundedline.m: shades bounds around a line
