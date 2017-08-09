@@ -10,12 +10,18 @@ spikenum = length(spikenames);
 output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'; 'p value'};
 
 for k = 1:spikenum
-    name = char(spikenames(k));
+    name = char(spikenames(k))
     % get date of spike
     date = strsplit(name,'cluster_'); %splitting at year
     date = char(date(1,2));
-    date = regexp(date,'(?=[maze])_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|_10_|_11_|_12_|_13_|_14_|_15_|_16_|_17_|_18_|_19_|_20_|_21_|_22_|_23_|_24_|_25_|_26_|_27_|_28_|_29_|_30_|_31_|_32_','split');
+    date = strsplit(date,'_maze_cl');
     date = char(date(1,1));
+    date = strcat(date, '!');
+    date = regexp(date,'_1!|_2!|_3!|_4!|_5!|_6!|_7!|_8!|_9!|_10!|_11!|_12!|_13!|_14!|_15!|_16!|_17!|_18!|_19!|_20!|_21!|_22!|_23!|_24!|_25!|_26!|_27!|_28!|_29!|_30!|_31!|_32!','split');
+    %date = strsplit(date,'_1!'|'_2!'|'_3!','_4!','_5!','_6!','_7!','_8!','_9!','_10!','_11!','_12!','_13!','_14!','_15!','_16!','_17!','_18!','_19!','_20!','_21!','_22!','_23!','_24!', '_25!', '_26!', '_27!', '_28!', '_29!', '_30!', '_31!', '_32!')
+    date = char(date(1,1));
+    %date = regexp(date,'(?=[maze])_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|_10_|_11_|_12_|_13_|_14_|_15_|_16_|_17_|_18_|_19_|_20_|_21_|_22_|_23_|_24_|_25_|_26_|_27_|_28_|_29_|_30_|_31_|_32_','split');
+    %date = char(date(1,1));
     % formats date to be same as in position structure: date_2015_08_01_acc
     accformateddate = strcat(date, '_acc');
     accformateddate = strcat('date_', accformateddate);
