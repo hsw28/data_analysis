@@ -13,7 +13,8 @@ for k=1:length(array)
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
-  name = strcat('cluster_', name;
+  name = strrep(name, ' ', '_');
+  name = strcat('cluster_', name);
   name = char(name);
   %loads data
   x = load(char(array(k)));

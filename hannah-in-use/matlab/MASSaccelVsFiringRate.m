@@ -14,7 +14,8 @@ for k = 1:spikenum
     % get date of spike
     date = strsplit(name,'cluster_'); %splitting at year
     date = char(date(1,2));
-    date = char(date(1:10)); %takes only this many since thats how many characters in a 2015_08_01 format
+    date = regexp(date,'(?=[maze])_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|_10_|_11_|_12_|_13_|_14_|_15_|_16_|_17_|_18_|_19_|_20_|_21_|_22_|_23_|_24_|_25_|_26_|_27_|_28_|_29_|_30_|_31_|_32_','split');
+    date = char(date(1,1));
     % formats date to be same as in position structure: date_2015_08_01_acc
     accformateddate = strcat(date, '_acc');
     accformateddate = strcat('date_', accformateddate);

@@ -14,6 +14,7 @@ for k=1:length(array)
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
+  name = strrep(name, ' ', '_');
   name = strcat('date_', name);
   posname = strcat(name, '_position');
   velname = strcat(name, '_vel');
@@ -27,9 +28,9 @@ for k=1:length(array)
   vel = velocity(pos);
   acc = accel(pos);
   %assigns pos structure
-  myStruct(k).(posname) = pos;
-  myStruct(k).(velname) = vel;
-  myStruct(k).(accname) = acc;
+  myStruct.(posname) = pos;
+  myStruct.(velname) = vel;
+  myStruct.(accname) = acc;
 
 end
 

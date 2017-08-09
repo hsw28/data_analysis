@@ -12,6 +12,7 @@ for k=1:length(array)
   name = strsplit(name,'/arte_lfp');
   name = (name(1,1));
   %replaces characters that cant be in structure names
+  name = strrep(name, ' ', '_');
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');
   name = strcat('date_', name);
@@ -20,7 +21,7 @@ for k=1:length(array)
 
   %loads data
   [lfp.timestamp, lfp.data] = gh_debuffer(char(array(k)), 'system', 'arte', 'gains', 5000, 'timewin', [0, inf]);
-  myStruct(k).(name) = lfp.timestamp;
+  myStruct.(name) = lfp.timestamp;
 
 end
 
