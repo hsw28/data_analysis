@@ -49,10 +49,12 @@ UNITS
 accelVsFiringRate.m: plots accel versus firing rate
 firingphase.m: finds and plots the theta phase of spike data
 isi.m: finds interspike interval
+normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 powerVsFiringRate.m: plots theta against firing rate
 rasterplot.m: makes a raster plot
+spikehisto.m: makes a vector of  the number of spikes per bin for a histogram of spikes. also good for autocorr
 spiketrain.m: makes a spike train of data
 STA.m: finds spike triggered average
 

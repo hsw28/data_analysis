@@ -1,4 +1,4 @@
-function f = MASSaccelVsFiringRate(spikestructure, posstructure, timestructure, windowsize)
+function f = MASSvelVsFiringRate(spikestructure, posstructure, timestructure, windowsize)
   %use clusterimport.m and posimport.m and timeimport.m to create spike and position structures
   %does conversion factor if needed for early recordings
   %window size is in seconds
@@ -23,8 +23,8 @@ for k = 1:spikenum
     %date = regexp(date,'(?=[maze])_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|_10_|_11_|_12_|_13_|_14_|_15_|_16_|_17_|_18_|_19_|_20_|_21_|_22_|_23_|_24_|_25_|_26_|_27_|_28_|_29_|_30_|_31_|_32_','split');
     %date = char(date(1,1));
     % formats date to be same as in position structure: date_2015_08_01_acc
-    accformateddate = strcat(date, '_acc');
-    accformateddate = strcat('date_', accformateddate);
+    velformateddate = strcat(date, '_vel');
+    velformateddate = strcat('date_', velformateddate);
     % formats date to be same as in time structure: date_2015_08_01_time
     timeformateddate = strcat(date, '_time');
     timeformateddate = strcat('date_', timeformateddate);
@@ -59,7 +59,7 @@ for k = 1:spikenum
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
     set(0,'DefaultFigureVisible', 'off');
-    accvrate = accelVsFiringRate((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
+    accvrate = accelVsFiringRate((time.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
     x = accvrate(:,1);
     actualvals = find(~isnan(x));
     x = x(actualvals);

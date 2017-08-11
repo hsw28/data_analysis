@@ -27,14 +27,24 @@ i = 1;
 while i<=(sz)
 	if i == 1
 	k = find(spike>(tm((i))) &  spike<(tm((i*numts))));
+	train(end+1) = length(k);
   elseif i > 1 && i<(sz)
 	k = find(spike>(tm((i-1)*numts)) &  spike<(tm((i*numts))));
+	train(end+1) = length(k);
   elseif i == (sz);
 	k = find(spike>(tm((i-1)*numts)) &  spike<(tm((end))));
-	end
 	train(end+1) = length(k);
+	end
 	i = i+1;
 end
 
 x = train;
+%xax = (1:bins/1000:(length(x)./bins*10));
+%while length(xax) < length(x)
+%			xax(end+1) = length(xax)+1;
+%
+%	end
+%
+%xax = xax';
+
 bar(x)
