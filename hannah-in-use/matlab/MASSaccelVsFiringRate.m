@@ -58,7 +58,7 @@ for k = 1:spikenum
     % does the thing
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
-    set(0,'DefaultFigureVisible', 'off');
+    %set(0,'DefaultFigureVisible', 'off');
     accvrate = accelVsFiringRate((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
     x = accvrate(:,1);
     actualvals = find(~isnan(x));

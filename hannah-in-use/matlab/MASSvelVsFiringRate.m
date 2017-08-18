@@ -58,8 +58,9 @@ for k = 1:spikenum
     % does the thing
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
-    set(0,'DefaultFigureVisible', 'off');
+    %set(0,'DefaultFigureVisible', 'off');
     accvrate = accelVsFiringRate((time.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
+    xlabel('Average Velocity')
     x = accvrate(:,1);
     actualvals = find(~isnan(x));
     x = x(actualvals);
@@ -87,3 +88,5 @@ for k = 1:spikenum
 
 % outputs chart with spike name, number of spikes, slope, and r2 value
   f = output';
+
+  set(0,'DefaultFigureVisible', 'on');
