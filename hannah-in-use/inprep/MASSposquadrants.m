@@ -1,4 +1,8 @@
 function f =  MASSposquadrants(array)
+
+  %WILL LIKELY BE DEPRECATED
+
+  
 %input array of pos files using uipickfiles
 
 array = array';

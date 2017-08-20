@@ -7,6 +7,8 @@ array = array';
 for k=1:length(array)
   %loads data
   pos = load(char(array(k)));
+	vel = velocity(pos)';
+	acc = accel(pos)';
 
 	tme = pos(:,1);
 	tme = tme';
@@ -78,9 +80,9 @@ for k=1:length(array)
 		% matrix of all start times
 		starttimes = [tme(timestart)];
 
-		k=2;
-		while k <=length(starttimes)
-			runtimes = find (tme < starttimes(k) & tme > starttimes(k-1));
+		q=2;
+		while q <=length(starttimes)
+			runtimes = find (tme < starttimes(q) & tme > starttimes(q-1));
 			runtimes(1);
 			runtimes(end);
 			x = xpos(runtimes);
@@ -88,7 +90,7 @@ for k=1:length(array)
 			times = tme(runtimes);
 
 			%find INDEX of points in forced arms
-			xforce = find(x<460);
+			xforce = find(x<460); %index of forced
 			%assign these to points so now you have values instead of data
 			timeforce = times(xforce);
 
@@ -117,29 +119,59 @@ for k=1:length(array)
 			name = strrep(name, '-', '_');
 			name = strrep(name, ' ', '_');
 			name = strcat('date_', name);
-			posname = strcat(name, '_position');
 
+			posname = strcat(name, '_position');
+			velname = strcat(name, '_vel');
+			accname = strcat(name, '_acc');
 			posname = char(posname);
+			velname = char(velname);
+			accname = char(accname);
+
 
 			name = char('_trial_');
-			trialnum = (k-1);
+			trialnum = (q-1);
 			name = strcat(name, int2str(trialnum));
 			forcename = strcat(name, '_forced');
 			midname = strcat(name, '_middle');
 			rewname = strcat(name, '_reward');
 
-			forcename = char(strcat(posname, forcename));
-			midname = char(strcat(posname, midname));
-			rewname = char(strcat(posname, rewname));
+			posforcename = char(strcat(posname, forcename));
+			posmidname = char(strcat(posname, midname));
+			posrewname = char(strcat(posname, rewname));
 
+			velforcename = char(strcat(velname, forcename));
+			velmidname = char(strcat(velname, midname));
+			velrewname = char(strcat(velname, rewname));
 
+			accforcename = char(strcat(accname, forcename));
+			accmidname = char(strcat(accname, midname));
+			accrewname = char(strcat(accname, rewname));
 
+			posforce = pos(xforce, :);
+			posmid = pos(bothindex, :);
+			posreward = pos(xreward, :);
 
-			myStruct.(forcename) = timeforce';
-	  	myStruct.(midname) = timemiddle';
-	  	myStruct.(rewname) = timereward';
+			velforce = vel(xforce, :);
+			velmid = vel(bothindex, :);
+			velreward = vel(xreward, :);
 
-			k = k+1;
+			accforce = acc(xforce, :);
+			accmid = vel(bothindex, :);
+			accreward = acc(xreward, :);
+
+			myStruct.(posforcename) = posforce;
+	  	myStruct.(posmidname) = posmid;
+	  	myStruct.(posrewname) = posreward;
+
+			myStruct.(velforcename) = velforce;
+			myStruct.(velmidname) = velmid;
+			myStruct.(velrewname) = velreward;
+
+			myStruct.(accforcename) = accforce;
+			myStruct.(accmidname) = accmid;
+			myStruct.(accrewname) = accreward;
+
+			q = q+1;
 
 		end
 	end

@@ -9,6 +9,7 @@ if size(units,2)>size(units,1)
 end
 
 %finds when velocity is high (>5000 but not sure if this is how velocity is always taken)
+% NEED TO CHANGE VELOCITY MEASURE
 i = 1;
 highvel = [];
 
