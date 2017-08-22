@@ -120,32 +120,33 @@ for k=1:length(array)
 			name = strrep(name, ' ', '_');
 			name = strcat('date_', name);
 
-			posname = strcat(name, '_position');
-			velname = strcat(name, '_vel');
-			accname = strcat(name, '_acc');
-			posname = char(posname);
-			velname = char(velname);
-			accname = char(accname);
+			posname = char('_position');
+			velname = char('_vel');
+			accname = char('_acc');
 
 
-			name = char('_trial_');
+			name = strcat(name, '_trial_');
 			trialnum = (q-1);
 			name = strcat(name, int2str(trialnum));
-			forcename = strcat(name, '_forced');
+		  forcename = strcat(name, '_forced');
 			midname = strcat(name, '_middle');
 			rewname = strcat(name, '_reward');
 
-			posforcename = char(strcat(posname, forcename));
-			posmidname = char(strcat(posname, midname));
-			posrewname = char(strcat(posname, rewname));
+      %forcename = char(strcat(name, forcename));
+      %midname = char(strcat(name, midname));
+      %rewname = char(strcat(name, rewname));
 
-			velforcename = char(strcat(velname, forcename));
-			velmidname = char(strcat(velname, midname));
-			velrewname = char(strcat(velname, rewname));
+			posforcename = char(strcat(forcename, posname));
+			posmidname = char(strcat(midname, posname));
+			posrewname = char(strcat(rewname, posname));
 
-			accforcename = char(strcat(accname, forcename));
-			accmidname = char(strcat(accname, midname));
-			accrewname = char(strcat(accname, rewname));
+			velforcename = char(strcat(forcename, velname));
+			velmidname = char(strcat(midname, velname));
+			velrewname = char(strcat(rewname, velname));
+
+			accforcename = char(strcat(forcename, accname));
+			accmidname = char(strcat(midname, accname));
+			accrewname = char(strcat(rewname, accname));
 
 			posforce = pos(xforce, :);
 			posmid = pos(bothindex, :);
@@ -163,13 +164,13 @@ for k=1:length(array)
 	  	myStruct.(posmidname) = posmid;
 	  	myStruct.(posrewname) = posreward;
 
-			myStruct.(velforcename) = velforce;
-			myStruct.(velmidname) = velmid;
-			myStruct.(velrewname) = velreward;
+			myStruct.(velforcename) = velforce';
+			myStruct.(velmidname) = velmid';
+			myStruct.(velrewname) = velreward';
 
-			myStruct.(accforcename) = accforce;
-			myStruct.(accmidname) = accmid;
-			myStruct.(accrewname) = accreward;
+			myStruct.(accforcename) = accforce';
+			myStruct.(accmidname) = accmid';
+			myStruct.(accrewname) = accreward';
 
 			q = q+1;
 
