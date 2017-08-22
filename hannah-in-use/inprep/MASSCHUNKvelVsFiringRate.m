@@ -1,7 +1,10 @@
-function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, timestructure, windowsize)
-  %use clusterimport.m and posimport.m and timeimport.m to create spike and position structures
+function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, time, windowsize)
+  %use clusterimport.m and MASSchunkingruns.m to create spike and position structures
+  % time can be a normal time file
   %does conversion factor if needed for early recordings
   %window size is in seconds
+  %
+  %right now can ONLY do from one day,so make sure all clusters are from the SAME DAY as the pos, time, etc
 
 %determine how many different position files
 posnames = (fieldnames(posstructure));
@@ -20,15 +23,15 @@ while k <= posnum
     accformateddate = strcat(date, '_acc');
     posformateddate = strcat(date, '_position');
 
-    timeformateddate = regexp(date, '_forced|_middle|_reward', 'split');
-    timeformateddate = char(timeformateddate(1,1));
-    timeformateddate = strcat(date, '_time')
+    %timeformateddate = regexp(date, '_forced|_middle|_reward', 'split');
+    %timeformateddate = char(timeformateddate(1,1));
+    %timeformateddate = strcat(date, '_time')
 
-    clusterformat = regexp(date, '_forced|_middle|_reward', 'split');
-    clusterformat = char(clusterformat(1,1));
-    clusterformat = strsplit(date, 'date_');
-    clusterformat = (1,2);
-    clusterformat = strcat(date, 'cluster_');
+    %clusterformat = regexp(date, '_forced|_middle|_reward', 'split');
+    %clusterformat = char(clusterformat(1,1));
+    %clusterformat = strsplit(date, 'date_');
+    %clusterformat = (1,2);
+    %clusterformat = strcat(date, 'cluster_');
     % not actually the cluster format since it doesnt have cl_clustnum after it. but not sure i need this section anyway
 
     %get conversion factor
@@ -50,11 +53,11 @@ while k <= posnum
     % limit the times in the time file to those in position files
     starttime = posstructure.(posformateddate)(1,1);
     endtime = posstructure.(posformateddate)(end,1);
-    starttime = find(abs(timestructure.(timeformateddate)-starttime) < .001);
-    endtime = find(abs(timestructure.(timeformateddate)-endtime) < .001);
+    starttime = find(abs(time-starttime) < .001);
+    endtime = find(abs(time-endtime) < .001);
     starttime = starttime(1,1);
     endtime = endtime(1,1);
-    time = [timestructure.(timeformateddate)(starttime:endtime)];
+    newtime = [time(starttime:endtime)];
 
 
     %permute through all clusters and do the thing
@@ -65,7 +68,7 @@ while k <= posnum
         % does the thing
         spike = char(spikenames(q));
         %set(0,'DefaultFigureVisible', 'off');
-        accvrate = accelVsFiringRate((time.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
+        accvrate = accelVsFiringRate((newtime.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
         xlabel('Average Velocity')
         x = accvrate(:,1);
         actualvals = find(~isnan(x));
