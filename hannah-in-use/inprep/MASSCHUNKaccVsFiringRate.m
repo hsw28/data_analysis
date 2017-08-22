@@ -1,4 +1,4 @@
-function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, time, windowsize)
+function f = MASSCHUNKaccVsFiringRate(spikestructure, posstructure, time, windowsize)
   %use clusterimport.m and MASSchunkingruns.m to create spike and position structures
   % time can be a normal time file
   %does conversion factor if needed for early recordings
@@ -10,7 +10,7 @@ function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, time, window
 posnames = (fieldnames(posstructure));
 posnum = length(posnames)./3;
 
-output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'; 'p value'; 'type'; 'spike name'};
+output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'; 'p value'; 'type';'spike name'};
 
 k=1;
 while k <= posnum
@@ -25,7 +25,6 @@ while k <= posnum
 
     type = regexp(date, 'forced|middle|reward', 'split');
     type = type(1,2);
-
 
     %timeformateddate = regexp(date, '_forced|_middle|_reward', 'split');
     %timeformateddate = char(timeformateddate(1,1));
@@ -77,7 +76,7 @@ while k <= posnum
         % does the thing
         spike = char(spikenames(q));
         set(0,'DefaultFigureVisible', 'off');
-        accvrate = accelVsFiringRate((newtime.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
+        accvrate = accelVsFiringRate((newtime.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
         xlabel('Average Velocity')
         x = accvrate(:,1);
         actualvals = find(~isnan(x));
@@ -98,7 +97,7 @@ while k <= posnum
         pval = stats.Coefficients.pValue(2);
 
         % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
-        newdata = {name; length(spikenames(q)); size(x,1); slope; rsquared; pval; char(type); spikenames(q)};
+        newdata = {name; length(spikenames(q)); size(x,1); slope; rsquared; pval; type; spikenames(q)};
         %i think spike number is wrong bc its total number of spikes not number in the time bin
         output = horzcat(output, newdata);
         q = q+1;

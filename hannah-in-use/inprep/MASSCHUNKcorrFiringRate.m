@@ -1,6 +1,7 @@
-function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, time, windowsize)
+function f = MASSCHUNKcorrFiringRate(spikestructure, posstructure, time, bins)
   %use clusterimport.m and MASSchunkingruns.m to create spike and position structures
   % time can be a normal time file
+  %bin in ms
   %does conversion factor if needed for early recordings
   %window size is in seconds
   %
@@ -10,7 +11,8 @@ function f = MASSCHUNKvelVsFiringRate(spikestructure, posstructure, time, window
 posnames = (fieldnames(posstructure));
 posnum = length(posnames)./3;
 
-output = {'cluster name'; '# spikes'; '# points on graph'; 'slope'; 'r2 value'; 'p value'; 'type'; 'spike name'};
+output = {'cluster name'; '# spikes'; 'vel corr'; 'acc corr';'type'; 'spike name'};
+
 
 k=1;
 while k <= posnum
@@ -60,10 +62,10 @@ while k <= posnum
     if length(starttime) < 1
         break
     end
-    starttime = posstructure.(posformateddate)(1,1);
-    endtime = posstructure.(posformateddate)(end,1);
-    starttime = find(abs(time-starttime) < .001);
-    endtime = find(abs(time-endtime) < .001);
+    posstarttime = posstructure.(posformateddate)(1,1);
+    posendtime = posstructure.(posformateddate)(end,1);
+    starttime = find(abs(time-posstarttime) < .001);
+    endtime = find(abs(time-posendtime) < .001);
     starttime = starttime(1,1);
     endtime = endtime(1,1);
     newtime = [time(starttime:endtime)];
@@ -77,31 +79,43 @@ while k <= posnum
         % does the thing
         spike = char(spikenames(q));
         set(0,'DefaultFigureVisible', 'off');
-        accvrate = accelVsFiringRate((newtime.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
-        xlabel('Average Velocity')
-        x = accvrate(:,1);
-        actualvals = find(~isnan(x));
-        x = x(actualvals);
-        y = accvrate(:,2);
-        y = y(actualvals);
-        coeffs = polyfit(x, y, 1);
-        slope = coeffs(1); % get slope of best fit line
-        intercept = coeffs(2);
-        % Get fitted values
-        polydata = polyval(coeffs,x);
-        sstot = sum((y - mean(y)).^2);
-        ssres = sum((y - polydata).^2);
-        rsquared = 1 - (ssres / sstot); % get r^2 value
+        
+        confinedspikes = find(spikestructure.(spike)>=posstarttime & spikestructure.(spike)<=posendtime);
+        confinedspikes = (spikestructure.(spike)(confinedspikes));
+        spikehis = spikehisto(confinedspikes.*conversion, newtime.*conversion, bins);
 
-        %spikesizes = spikestructure.(spikename);
-        stats = fitlm(x,y);
-        pval = stats.Coefficients.pValue(2);
+        vel = assignvel(newtime.*conversion, posstructure.(velformateddate).*conversion);
+        acc = assignvel(newtime.*conversion, posstructure.(accformateddate).*conversion);
+
+
+
+        w = warning('query','last');
+        id = w.identifier;
+        warning('off',id);
+
+        numbins = length(spikehis);
+        round(length(vel)./numbins);
+        velbins = binning(vel', (length(vel)./numbins));
+        accbins = binning(acc', (length(acc)./numbins));
+
+        velcorr = (corr(velbins', spikehis'));
+        acccorr = (corr(accbins', spikehis'));
+        size(velcorr);
+        velcorr = velcorr(1,:);
+        acccorr = acccorr(1,:);
+        velcorr = max(abs(velcorr));
+        acccorr = max(abs(acccorr));
+
 
         % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
-        newdata = {name; length(spikenames(q)); size(x,1); slope; rsquared; pval; char(type); spikenames(q)};
+
+        newdata = {name; length(spikenames(q)); velcorr; acccorr; char(type); spikenames(q)};
         %i think spike number is wrong bc its total number of spikes not number in the time bin
         output = horzcat(output, newdata);
         q = q+1;
+
+
+
     end
 
     %positions are 3 in a row (forced middle reward), seperated by 6 (vel and acc)
