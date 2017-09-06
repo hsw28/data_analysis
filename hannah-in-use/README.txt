@@ -77,6 +77,7 @@ clusterimport.m: outputs a structure of all cluster times imported from uipickfi
 posimport.m: outputs a structure of pos/vel/acc from imported pos files from uipickfiles
 timeimport.m: outputs a structure of multiple lfp times from files selected with uipickfiles
 MASSaccelVsFiringRate.m: does acceleration vs firing rates for tons of clusters at once using bulk data
+MASSvelVsFiringRate.m: does velocity vs firing rates for tons of clusters at once using bulk data
 
 RANDOM
 binning.m: bins stuff

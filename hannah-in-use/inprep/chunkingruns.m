@@ -2,6 +2,7 @@ function f = chunkingruns(pos)
 
 %chunks data into run number and then place in run, returns structure of elements
 
+%SPLIT INTO MIDDLE GOING MIDDLE COMING
 
 tme = pos(:,1);
 tme = tme';
