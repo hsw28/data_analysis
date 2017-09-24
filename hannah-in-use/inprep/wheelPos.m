@@ -1,4 +1,9 @@
-function f = wheelPos(wheelpos)
+function [degrees xycoord] = wheelPos(wheelpos, time)
+% input position data of wheel tracker and time. cleans up wheel data and interpolates data for all time points
+% returns two arrays-- position by degrees and xy position
+%
+%function [degrees xycoord] = wheelPos(wheelpos, time)
+
 
 %eliminate erroneous position points-- seems like these usually happen when the LED is be blocked by the animal
 %does this by finding indices of values that make sense and keeping those
@@ -26,9 +31,30 @@ withinmeanIndex = find(abs(RfromPointsMean-diffrommean) < 2*RfromPointsSTD); %we
 wheelposgood = wheelposgood(withinmeanIndex, :);
 
 % extrapolate points to 30 hrtz sampling frequency (might want to do more later)
+% extrapolate x values
+extrapX = spline(wheelposgood(:,1),wheelposgood(:,2),time);
+extrapY = spline(wheelposgood(:,1),wheelposgood(:,3),time);
 
 % linearize:
-% refind equation in case it changed with extrapolation (check to see if we need to do this)
+% refind equation in case it changed with extrapolation
+[xc yc R] = circfit(extrapX,extrapY);
+
 % shift everything so center is 0,0 (just subtract x and y)
-% use tangent to find the angle of every coordinate pair
-%BOOM
+extrapX = extrapX-xc;
+extrapY = extrapY-yc;
+
+% use inverse tangent to find the angle of every coordinate pair
+k =1;
+angles = zeros[length(time), 1];
+while k <= length(time)
+    ang = atand(extrapY(k)/extrapX(k));
+    angles(k) = ang;
+    k = k+1;
+end
+
+% returns degree array
+degrees = [time; angles];
+% returns xy coords
+xcoord = cosd(angles)*R;
+ycoord = sind(angles)*R;
+xycoord = [time; xcoord; ycoord];
