@@ -3,7 +3,9 @@ Contents:
 MATLAB
 FILTERING
 deltafilt.m: lowpass filters in the delta band (<4)
+filter812.m: filters in 8-12hz
 gammafilt.m: bandpass filters in the gamma band (20-100)
+lowpass4.m: lowerpass filters below 4
 lowpass20.m: lowpass filters below 20
 lowpass50.m: lowpass filters below 50
 lowpass300.m: lowpass filters below 300
@@ -36,9 +38,13 @@ assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
 centerdirection.m: finds direction on the center stem if the animal is going towards or away from the reward arms, point by point (for run by tun use middletimes.m)
+chunkingrungs.m: chunks H maze into times in each arm (forced, center, reward) of maze
+derivative_dwt.m: differentiation (derivative) of sampled data based on discrete wavelet transform
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
 middletimes.m: run by run, finds times the animal is in the center stem and the direction of travel
+movementunits.m: returns units only when the animal is actually running
+noiselessVelocity.m: computes velocity in a supposedly smoother way
 normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
@@ -49,14 +55,16 @@ UNITS
 accelVsFiringRate.m: plots accel versus firing rate
 firingphase.m: finds and plots the theta phase of spike data
 isi.m: finds interspike interval
-normalizePosData.m: normalizes spike data for time spent in each part of the track and outputs a heat map
+isiShuffle.m: shuffles data for ISI analysis
+movementunits.m: returns units only when the animal is actually running
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 powerVsFiringRate.m: plots theta against firing rate
 rasterplot.m: makes a raster plot
-spikehisto.m: makes a vector of  the number of spikes per bin for a histogram of spikes. also good for autocorr
 spiketrain.m: makes a spike train of data
 STA.m: finds spike triggered average
+STAfake.m: plots a real spike triggered average and a fake spike striggered average on same graph
+STAshuffledStats.m: shuffles data to get a STA for random data
 
 COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
@@ -64,20 +72,29 @@ cohVsFiringRate.m: finds coherence versus unit firiting rate
 compareISI.m: compares and plots some thing (acc, phase, power, etc) to ISI
 corr.m: finds the cross correlation and plots
 findLSFrequencies: finds all LS events and makes a frequency plot of them
+lfpfreq.m: takes LFP and finds power spectrum. does NOT filter in any way
 LSevents.m: finds LS events
 LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and duration, then plots the LFP for the other thing youre looking for during the same time
 orderLSevent.m: plots LS events in order by duration
 powerMap.m: plots power by location
 psth.m: makes a psth graph of events around a trigger point
+slidingWindowCorr.m: Plots the max autocorrelation value calculated for a window of specified length accross time
+spectralPowerVsTime.m: Plots the power of frequency bands specified in bins against time
 spikehisto.m: makes a histogram of spikes in binned time
 
 BULK
-uipickfiles.m: lets you pick files and puts path into an array (not my code)
-clusterimport.m: outputs a structure of all cluster times imported from uipickfiles
-posimport.m: outputs a structure of pos/vel/acc from imported pos files from uipickfiles
-timeimport.m: outputs a structure of multiple lfp times from files selected with uipickfiles
-MASSaccelVsFiringRate.m: does acceleration vs firing rates for tons of clusters at once using bulk data
-MASSvelVsFiringRate.m: does velocity vs firing rates for tons of clusters at once using bulk data
+clusterimport.m: takes clusters found using uipickfiles and makes a structure of clusters
+MASSaccelVsFiringRate.m: does a mass correlation of cluster firing versus accel, across days
+MASSchunkingruns.m: chunks multiple runs into run number and place in run and returns structure
+MASSCHUNKaccVsFiringRate.m: does same as MASSaccelVsFiringRate.m but for one day and with H maze runs chunked by position
+MASSCHUNKcorrFiringRate.m: takes clusters from one day and correlates firing with acc and vel for different parts of maze
+MASSCHUNKvelVsFiringRate.m: does same as MASSvelVsFiringRate.m but for one day and with H maze runs chunked by position
+MASSvelVsFiringRate.m: does a mass correlation of cluster firing versus vel, across days
+posimport.m: takes pos files found using uipickfiles and makes a structure of pos/vel/acc
+timeimport.m: takes lfps found using uipickfiles and makes a structure of time data
+
+WHEEL
+wheelPos.m: cleans up wheel data and interpolates data for all time points, returning XY coord and degrees
 
 RANDOM
 binning.m: bins stuff
@@ -88,7 +105,10 @@ gh_debuffer.m: imports an ARTE .eeg file
 kw.m: performs a Kruskal-Wallis test on two groups of data
 mua_rate.m: finds rate of MUA, outputs as number of spikes per time bin
 oat2pos.m: imports OATE position csv to binary. uses the same x and y value for front and back LEDs
+plotLFP.m: plots all 8 LFPs from one lfp set
 psth.m: makes a psth graph of events around a trigger point
+randomlfp.m: randomizes LFP data
+randomunits.m: makes fake unit data, enter time and number of units you want
 specto.m: creates a spectograph from raw lfps
 
 OTHER (mostly python)

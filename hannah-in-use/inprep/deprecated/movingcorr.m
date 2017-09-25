@@ -1,4 +1,4 @@
-%NON FUNCTIONAL MOVING CORRELATION
+%DEPRECATED
 
 function f = movingcorr(lfp, windowlength)
 

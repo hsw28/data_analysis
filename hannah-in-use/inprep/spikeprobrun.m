@@ -1,4 +1,6 @@
 function f = spikeprobrun(time, vel, event, cond)
+%UNELEGANT AND IN PREP
+
 %bin velocity / acc then find spike probability for that vel or accel
 %cond for condition - 1 is not abs value, 2 is abs value
 

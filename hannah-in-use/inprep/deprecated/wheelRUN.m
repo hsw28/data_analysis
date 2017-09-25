@@ -1,3 +1,5 @@
+DEPRECATED
+
 function f = wheelRUN(wheeldegrees);
 %input wheel degree vector from wheelPos
 % finds sin and smooths over areas where the rat isn't running
@@ -5,8 +7,8 @@ function f = wheelRUN(wheeldegrees);
 
 SINwheel = wheeldegrees;
 SINwheel(:,2) = sind(wheeldegrees(:,2));
-[pks,pkindex] = findpeaks(SINwheel(:,2),'MinPeakWidth', .5);
-[valleys,valindex] = findpeaks(SINwheel(:,2)*(-1), 'MinPeakWidth', .5);
+[pks,pkindex] = findpeaks(SINwheel(:,2),'MinPeakWidth', 1);
+[valleys,valindex] = findpeaks(SINwheel(:,2)*(-1), 'MinPeakWidth', 1);
 
 extremeINDEX = vertcat(pkindex, valindex);
 extremeINDEX = sort(extremeINDEX);
@@ -14,10 +16,10 @@ extremeINDEX = sort(extremeINDEX);
 k = 2;
 nonrunning = [];
 while k < length(extremeINDEX)
-    if SINwheel(extremeINDEX(k),2) > .9 | SINwheel(extremeINDEX(k),2) < .1
+    if ((SINwheel(extremeINDEX(k),2)) > .999 & (SINwheel(extremeINDEX(k+1),2)) < .999) | ((SINwheel(extremeINDEX(k),2)) < .999 & (SINwheel(extremeINDEX(k+1),2)) > .999)
       k = k+1;
-    elseif SINwheel(extremeINDEX(k-1),2) > .9 | SINwheel(extremeINDEX(k-1),2) < .1 | SINwheel(extremeINDEX(k+1),2) > .9 | SINwheel(extremeINDEX(k+1),2) < .1
-      k = k+1;
+    %elseif abs(SINwheel(extremeINDEX(k-1),2)) > .99 | abs(SINwheel(extremeINDEX(k+1),2)) > .99
+    %  k = k+1;
     else
        nonrunning(end+1) = (k); %this is all the indices of low maxima/minima from extreme index
        k = k+1;

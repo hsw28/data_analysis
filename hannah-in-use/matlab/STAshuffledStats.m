@@ -1,4 +1,6 @@
-function r = shuffledStats(vel,units,lfp,time,criteria,num)
+function r = STAshuffledStats(vel,units,lfp,time,criteria,num)
+%     shuffles data to get a STA for random data
+%
 %     vels = velocity(pos);
 %     vel = vels;
 %     units = mazet21c1*7.75e-2;

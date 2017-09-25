@@ -1,5 +1,6 @@
 function f = movementunits(vel, units)
 % returns units only when the animal is actually running
+% CHANGE MEASURE OF VELOCITY
 
 tme = vel(2,:);
 vel = vel(1,:);
