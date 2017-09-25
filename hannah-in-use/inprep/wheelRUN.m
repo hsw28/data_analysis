@@ -24,7 +24,6 @@ while k < length(extremeINDEX)
      end
 end
 
-f=(nonrunning);
 oneD = SINwheel(:,2);
 
 k = 1;
@@ -34,13 +33,13 @@ while k <= length(nonrunning)
     while nonrunning(k)+z == nonrunning(k+z) & k+z<length(nonrunning)
       z = z+1;
     end
-    if z>1
-    av = mean(oneD((extremeINDEX(nonrunning(k))):extremeINDEX(nonrunning(k+z))));
-    oneD((extremeINDEX(nonrunning(k))):extremeINDEX(nonrunning(k+z))) = av;
+    if z>=1
+    av = mean(oneD((extremeINDEX(nonrunning(k))):extremeINDEX(nonrunning(k+z-1))));
+    oneD((extremeINDEX(nonrunning(k))):extremeINDEX(nonrunning(k+z-1))) = av;
     k = k+z;
     else
-      k=k+1
+      k=k+1;
     end
   end
 
-  %f = [SINwheel(:,1), oneD];
+  f = [SINwheel(:,1), oneD];
