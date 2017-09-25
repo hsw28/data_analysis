@@ -27,13 +27,27 @@ diffrommean = zeros([length(RfromPoints) 1]);
 diffrommean = RfromPoints-RfromPointsMean;
 %finds std dev of RfromPoints and indices of points that are < 2 stddevs from mean
 RfromPointsSTD = std(RfromPoints);
-withinmeanIndex = find(abs(RfromPointsMean-diffrommean) < 2*RfromPointsSTD); %we keep these points
+withinmeanIndex = find(abs(diffrommean) < (2*RfromPointsSTD)); %we keep these points
 wheelposgood = wheelposgood(withinmeanIndex, :);
 
-% extrapolate points to 30 hrtz sampling frequency (might want to do more later)
+
+
 % extrapolate x values
-extrapX = spline(wheelposgood(:,1),wheelposgood(:,2),time);
-extrapY = spline(wheelposgood(:,1),wheelposgood(:,3),time);
+% make sure all time values are unique
+[C,ia,ic] = unique(wheelposgood(:,1));
+wheelposgood = wheelposgood(ia,:);
+
+% start time when position data starts
+timeindex = find(time>= wheelposgood(1,1) & time<=wheelposgood(end,1));
+time = time(timeindex);
+
+%extrapX = spline(wheelposgood(:,1),wheelposgood(:,2),time);
+%extrapY = spline(wheelposgood(:,1),wheelposgood(:,3),time);
+extrapX = interp1(wheelposgood(:,1),wheelposgood(:,2),time);
+extrapY = interp1(wheelposgood(:,1),wheelposgood(:,3),time);
+
+figure
+scatter(extrapX, extrapY);
 
 % linearize:
 % refind equation in case it changed with extrapolation
@@ -43,18 +57,29 @@ extrapY = spline(wheelposgood(:,1),wheelposgood(:,3),time);
 extrapX = extrapX-xc;
 extrapY = extrapY-yc;
 
+
+
+
 % use inverse tangent to find the angle of every coordinate pair
 k =1;
-angles = zeros[length(time), 1];
+angles = zeros(length(time), 1);
 while k <= length(time)
-    ang = atand(extrapY(k)/extrapX(k));
-    angles(k) = ang;
+    ang = abs(atand(extrapY(k)/extrapX(k)));
+    if extrapX(k)>=0 & extrapY(k)>=0
+      angles(k) = ang;
+    elseif extrapX(k)<0 & extrapY(k)>=0
+      angles(k) = 180-ang;
+    elseif extrapX(k)<0 & extrapY(k)<0
+      angles(k) = 180+ang;
+    elseif extrapX(k)>=0 & extrapY(k)<0
+      angles(k) = 360-ang;
+    end
     k = k+1;
 end
 
 % returns degree array
-degrees = [time; angles];
+degrees = [time, angles];
 % returns xy coords
 xcoord = cosd(angles)*R;
 ycoord = sind(angles)*R;
-xycoord = [time; xcoord; ycoord];
+xycoord = [time, xcoord, ycoord];
