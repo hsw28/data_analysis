@@ -47,4 +47,5 @@ x = train;
 %
 %xax = xax';
 
-bar((1:length(x))/(bins/10), x, 'barwidth', 1)
+%bar((1:length(x))/(bins/10), x, 'barwidth', 1)
+bar((1:length(x)), x, 'barwidth', 1)

@@ -46,8 +46,6 @@ time = time(timeindex);
 extrapX = interp1(wheelposgood(:,1),wheelposgood(:,2),time);
 extrapY = interp1(wheelposgood(:,1),wheelposgood(:,3),time);
 
-figure
-scatter(extrapX, extrapY);
 
 % linearize:
 % refind equation in case it changed with extrapolation
@@ -78,8 +76,8 @@ while k <= length(time)
 end
 
 % returns degree array
-degrees = [time, angles];
+degrees = [time', angles];
 % returns xy coords
 xcoord = cosd(angles)*R;
 ycoord = sind(angles)*R;
-xycoord = [time, xcoord, ycoord];
+xycoord = [time', xcoord, ycoord];

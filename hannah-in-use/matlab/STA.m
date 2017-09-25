@@ -3,9 +3,9 @@ function f = STA(eventtimes, lfp, time, binsize)
 % finds spike triggered average -- filter yourself if you want to filter LFP
 % bin size in seconds
 % f = STA(eventtimes, lfp, time, binsize)
-% if you only want when the animal is moving remember to use movementunits.m
 
 
+% want LFP forward of spike also i think... will need to eliminate events that fall in last bin too
 
 figure;
 hold on;
