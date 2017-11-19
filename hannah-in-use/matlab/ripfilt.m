@@ -3,7 +3,7 @@ function y = ripfilt(x)
 % RIPFILT Filters input x and returns output y.
 % hilbert transforms output
 % filters in ripple frequency range 100-300. import eeg data from gh_debuffer
-% example: 
+% example:
 % data = ripfilt(lfp.data);
 
 
@@ -11,7 +11,7 @@ function y = ripfilt(x)
 persistent Hd;
 
 if isempty(Hd)
-    
+
     % The following code was used to design the filter coefficients:
     % % FIR Window Bandpass filter designed using the FIR1 function.
     %
@@ -27,7 +27,7 @@ if isempty(Hd)
     %
     % % Calculate the coefficients using the FIR1 function.
     % b  = fir1(N, [Fc1 Fc2]/(Fs/2), 'bandpass', win, flag);
-    
+
     Hd = dsp.FIRFilter( ...
         'Numerator', [0 9.08466204519207e-09 2.65125651172904e-08 ...
         -8.24615861104705e-08 -4.53198082864083e-07 -9.24560822169642e-07 ...
@@ -202,6 +202,7 @@ d = step(Hd,x);
 delay = mean(grpdelay(Hd));
 d(1:delay) = [];
 y = abs(hilbert(d));
+y = d;
 
 
 % [EOF]

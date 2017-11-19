@@ -12,8 +12,8 @@ twonorm = two-mean(two);
 
 [cor, lag] = xcorr(onenorm, twonorm, 'coeff');
 
-plot(lag./2, cor)
-%plot(lag./2000, cor)
+%plot(lag./2, cor)
+plot(lag, cor)
 
 size(cor);
 size(lag);

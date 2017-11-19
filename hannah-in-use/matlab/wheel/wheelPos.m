@@ -32,7 +32,6 @@ wheelposgood = wheelposgood(withinmeanIndex, :);
 
 
 
-% extrapolate x values
 % make sure all time values are unique
 [C,ia,ic] = unique(wheelposgood(:,1));
 wheelposgood = wheelposgood(ia,:);
@@ -41,8 +40,7 @@ wheelposgood = wheelposgood(ia,:);
 timeindex = find(time>= wheelposgood(1,1) & time<=wheelposgood(end,1));
 time = time(timeindex);
 
-%extrapX = spline(wheelposgood(:,1),wheelposgood(:,2),time);
-%extrapY = spline(wheelposgood(:,1),wheelposgood(:,3),time);
+% extrapolate x values
 extrapX = interp1(wheelposgood(:,1),wheelposgood(:,2),time);
 extrapY = interp1(wheelposgood(:,1),wheelposgood(:,3),time);
 

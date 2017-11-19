@@ -78,7 +78,7 @@ LSlfpcompare.m:  takes raw LS LFP and finds the weird LS events and the time and
 orderLSevent.m: plots LS events in order by duration
 powerMap.m: plots power by location
 psth.m: makes a psth graph of events around a trigger point
-slidingWindowCorr.m: Plots the max autocorrelation value calculated for a window of specified length accross time
+slidingWindowCorr.m: Plots the max autocorrelation value calculated for a window of specified length across time
 spectralPowerVsTime.m: Plots the power of frequency bands specified in bins against time
 spikehisto.m: makes a histogram of spikes in binned time
 
@@ -95,6 +95,9 @@ timeimport.m: takes lfps found using uipickfiles and makes a structure of time d
 
 WHEEL
 wheelPos.m: cleans up wheel data and interpolates data for all time points, returning XY coord and degrees
+wheelACCEL.m: accel of rotating wheel
+wheelVEL.m: vel of rotating wheel
+wheelwrap.m: unwraps degree data
 
 RANDOM
 binning.m: bins stuff
@@ -113,6 +116,7 @@ specto.m: creates a spectograph from raw lfps
 
 OTHER (mostly python)
 extract_OATpos.py: extracts position from oate into a csv file. use this for importing to matlab
+extract_tick.py: extracts times and video tick marks
 pos_extract.py: extracts position into seperate doctuments
 
 

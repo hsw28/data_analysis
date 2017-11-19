@@ -18,10 +18,10 @@ function varargout=psth(varargin)
 %   lags - vector of bins for histogram
 %   segments - list of segments
 %   normalization - 'coef', 'none', 'rate'
-%   
+%
 
 %get options
-options = struct('lags', linspace(-1,1, 300), ...  %change here for seconds around and bins
+options = struct('lags', linspace(-.5,.5, 100), ...  %change here for seconds around and bins
                  'segments', [], ...
                  'normalization', 'none');
 
@@ -59,7 +59,7 @@ elseif iscell(events)
 else
   error('psth:invalidArgument', 'Invalid events')
 end
-  
+
 if ~isnumeric(options.lags) || ~isvector(options.lags) || ...
       numel(options.lags)<2 || ~issorted(options.lags)
   error('psth:invalidArgument', 'Invalid lags')
@@ -80,7 +80,7 @@ for k=1:n
         varargout{1}(k,:) = histc(tmp, options.lags );
     end
 end
-  
+
 varargout{1}(:,end)=[];
 
 ntriggers = numel( find( ~isnan(nev) ) );

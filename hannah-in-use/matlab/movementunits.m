@@ -1,7 +1,8 @@
-function f = movementunits(vel, units)
+function f = movementunits(pos, units)
 % returns units only when the animal is actually running
 % CHANGE MEASURE OF VELOCITY
 
+vel = noiselessVelocity(pos);
 tme = vel(2,:);
 vel = vel(1,:);
 
@@ -9,7 +10,7 @@ if size(units,2)>size(units,1)
     units = units';
 end
 
-%finds when velocity is high (>5000 but not sure if this is how velocity is always taken)
+%finds when velocity is high (>2cm/sec)
 % NEED TO CHANGE VELOCITY MEASURE
 i = 1;
 highvel = [];

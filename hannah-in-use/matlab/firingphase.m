@@ -91,31 +91,33 @@ while i<= size(firingtimes,1)
 
 			elseif firingtimes(i)-point < 0 % point is after
 				% find previous point
-				previouspoint = peaktimes(x-1);
-				peaklength = abs(point-previouspoint);
+        if x > 1
+				      previouspoint = peaktimes(x-1);
+				      peaklength = abs(point-previouspoint);
 				%now need to make sure the distance between the two points are 6-12hz. if not, move on
 
-				if peaklength >= .08 & peaklength <= .17 & previouspoint<firingtimes(i)
-          tt = find(troughtimes < point & troughtimes > previouspoint); %finds minima
-          tt = troughtimes(tt);
+				    if peaklength >= .08 & peaklength <= .17 & previouspoint<firingtimes(i)
+              tt = find(troughtimes < point & troughtimes > previouspoint); %finds minima
+              tt = troughtimes(tt);
 
-          if tt-firingtimes(i) < 0 & size(tt,1) == 1; % trough is first
-              dis = firingtimes(i)-tt;
-              phase(end+1) = (dis*180 / abs(tt-point) + 180);
-              ftimes(end+1) = firingtimes(i);
-          elseif tt-firingtimes(i) > 0 & size(tt,1) == 1; % point is first
-              dis = firingtimes(i)-previouspoint;
-              phase(end+1) = (dis*180 / abs(tt-previouspoint));
-              ftimes(end+1) = firingtimes(i);
-          elseif tt-firingtimes(i) == 0 & size(tt,1) == 1; % point is on trough
-            phase(end+1) = 180;
-            ftimes(end+1) = firingtimes(i);
-          else
-            dis = firingtimes(i)-previouspoint;
-				  	phase(end+1) = dis*360 / peaklength;
-				  	ftimes(end+1) = firingtimes(i);
-         end
+              if tt-firingtimes(i) < 0 & size(tt,1) == 1; % trough is first
+                dis = firingtimes(i)-tt;
+                phase(end+1) = (dis*180 / abs(tt-point) + 180);
+                ftimes(end+1) = firingtimes(i);
+              elseif tt-firingtimes(i) > 0 & size(tt,1) == 1; % point is first
+                dis = firingtimes(i)-previouspoint;
+                phase(end+1) = (dis*180 / abs(tt-previouspoint));
+                ftimes(end+1) = firingtimes(i);
+              elseif tt-firingtimes(i) == 0 & size(tt,1) == 1; % point is on trough
+                phase(end+1) = 180;
+                ftimes(end+1) = firingtimes(i);
+              else
+                dis = firingtimes(i)-previouspoint;
+				  	    phase(end+1) = dis*360 / peaklength;
+				  	    ftimes(end+1) = firingtimes(i);
+              end
           end
+      end
 
 
 
