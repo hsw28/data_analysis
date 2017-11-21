@@ -1,5 +1,6 @@
 function thingy = firingPerVel(time, accelORvel, firingdata, t)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
+%outputs average firing rate per acceleration, with allerations binned as 0-10, 10-30, 30-60, 60-100, 100+ cm/s
 
 if size(time, 2) < size(time, 1)
 	time = time';
@@ -48,7 +49,7 @@ while i <= length(vbin)
 			 		subset = rate(avg_accel > vbin(i));
 		 end
      if length(subset) < threshold
-        average(i) = sum(rate)./length(time) %sub in average rate
+        average(i) = length(firingdata)./(length(time)./(2000*t)) %sub in average rate
      else
         average(i) = mean(subset);
      end
