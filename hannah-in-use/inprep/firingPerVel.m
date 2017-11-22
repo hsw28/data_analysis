@@ -49,7 +49,7 @@ while i <= length(vbin)
 			 		subset = rate(avg_accel > vbin(i));
 		 end
      if length(subset) < threshold
-        average(i) = length(firingdata)./(length(time)./(2000*t)) %sub in average rate
+        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
      else
         average(i) = mean(subset);
      end
