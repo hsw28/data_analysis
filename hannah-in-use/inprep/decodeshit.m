@@ -49,14 +49,16 @@ while tm <= length(timevector)-(rem(length(timevector), 1000))
           prob = 1;
           while c <= numclust
               name = char(clustname(c));
-              ni = find(clusters.(name)>tm & clusters.(name)<tm+1000); % finds spikes in range time
+              ni = find(clusters.(name)>tm & clusters.(name)<tm+1000); % finds index of spikes in range time
               % must find tambda
               % lambda = time window * firing rate at velocity
               % find cell firing rate at velocity
               sumfx = (fxmatrix(c, k));  %should be the rate for cell c at vel k. i think this is lambda
-              newprob = (poisspdf(ni,sumfx)); % finds poisson
+
+              newprob = poisspdf(length(ni),sumfx); % finds poisson
               prob = prob*newprob;
               c = c+1; % goes to next cell, same velocity
+
           end
           % now have all cells at that velocity multiplied
           % need to multiple by probabily of being at that velocity
