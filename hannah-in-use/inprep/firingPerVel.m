@@ -34,7 +34,9 @@ end
 maxacc = max(avg_accel);
 
 
-vbin = [0; 10; 30; 60; 100];
+vbin = [0; 5; 10; 20; 50; 100];
+vbin = [0; 6; 10; 15; 25; 100];
+
 
 average = [];
 deviation = zeros(fastest+1,1);
@@ -43,7 +45,9 @@ threshold = .01 * length(rate);
 
 i = 1;
 while i <= length(vbin)
-		 if i<length(vbin)
+		 if i==1
+			 		subset = rate(avg_accel >= vbin(i) & avg_accel<vbin(i+1));
+		 elseif i<length(vbin) & i>1
      			subset = rate(avg_accel > vbin(i) & avg_accel<vbin(i+1));
 		 elseif i==length(vbin)
 			 		subset = rate(avg_accel > vbin(i));
