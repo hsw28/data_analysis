@@ -1,12 +1,12 @@
-function f = decodeshit(timevector, clusters, vel)
+function f = decodeshit(timevector, clusters, vel, t)
 
 % define a time window, see how often cells spike during that time window
 % based on average firing rate at different velocities, estimate velocity
-
+% t is binning in seconds
 % permute through times, then velocities, then clusters
 
 % set time window
-t = 1000;
+t = 2000*t;
 tm = 1;
 
 assvel = assignvel(timevector, vel);
@@ -30,7 +30,7 @@ end
 
 
 vbin = [0; 5; 10; 20; 50; 100];
-vbin = [0; 6; 10; 15; 25; 100];
+
 
 % find prob the animal is each velocity
 probatvelocity = zeros(6,1);
@@ -40,7 +40,7 @@ probatvelocity(3,1) = length(find(assvel>vbin(3) & assvel<=vbin(4)))./length(ass
 probatvelocity(4,1) = length(find(assvel>vbin(4) & assvel<=vbin(5)))./length(assvel);
 probatvelocity(5,1) = length(find(assvel>vbin(5) & assvel<=vbin(6)))./length(assvel);
 probatvelocity(6,1) = length(find(assvel>vbin(6)))./length(assvel);
-
+probatvelocity
 
 % permue times
   maxprob = [];

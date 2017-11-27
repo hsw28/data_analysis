@@ -35,7 +35,6 @@ maxacc = max(avg_accel);
 
 
 vbin = [0; 5; 10; 20; 50; 100];
-vbin = [0; 6; 10; 15; 25; 100];
 
 
 average = [];
