@@ -15,17 +15,18 @@ end
 start = min(time);
 ending = max(time);
 
-
-vbin = [0; 5; 10; 20; 50; 100];
-
 binvec = [];
 
-acceldata = (assignvel(time,accelORvel));
-length(acceldata);
-sized = ceil(length(time)./(2000*t))-1;
+assvel = (assignvel(time,accelORvel));
+
+vbin =  [10; 12; 14; 16; 18; 20];
+
+
+
+sized = ceil(length(assvel)./(2000*t))-1;
 avg_accel = zeros(sized,1);
 for i = 1:sized
-    avg_accel(i) = mean(acceldata((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
+    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
 		if avg_accel(i) >= vbin(1) & avg_accel(i) <= vbin(2)
 				binvec(end+1) = 1;
 		elseif avg_accel(i) > vbin(2) & avg_accel(i) <= vbin(3)
@@ -37,7 +38,10 @@ for i = 1:sized
 		elseif avg_accel(i) > vbin(5) & avg_accel(i) <= vbin(6)
 					binvec(end+1) = 5;
 		elseif avg_accel(i) > vbin(6)
-					binvec(end+1) = 6;
+				binvec(end+1) = 100;
+		else
+			binvec(end+1) = 100;
+
 		end
 end
 

@@ -65,27 +65,30 @@ for k = 1:spikenum
     xlabel('Average Velocity')
     x = accvrate(:,1);
     actualvals = find(~isnan(x));
-    x = x(actualvals);
+    x = x(actualvals)
     y = accvrate(:,2);
-    y = y(actualvals);
-    coeffs = polyfit(x, y, 1);
-    slope = coeffs(1); % get slope of best fit line
-    intercept = coeffs(2);
-    % Get fitted values
-    polydata = polyval(coeffs,x);
-    sstot = sum((y - mean(y)).^2);
-    ssres = sum((y - polydata).^2);
-    rsquared = 1 - (ssres / sstot); % get r^2 value
+    y = y(actualvals)
+      if length(x)>=1 & length(y)>=1
+        coeffs = polyfit(x, y, 1);
+        slope = coeffs(1); % get slope of best fit line
+        intercept = coeffs(2);
+        % Get fitted values
+        polydata = polyval(coeffs,x);
+        sstot = sum((y - mean(y)).^2);
+        ssres = sum((y - polydata).^2);
+        rsquared = 1 - (ssres / sstot); % get r^2 value
 
 
-    spikesizes = spikestructure.(spikename);
-    stats = fitlm(x,y);
-    pval = stats.Coefficients.pValue(2);
+          spikesizes = spikestructure.(spikename);
+          stats = fitlm(x,y);
+          pval = stats.Coefficients.pValue(2);
 
-    % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
-    newdata = {name; length(spikesizes); size(x,1); slope; rsquared; pval};
+          % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
+          newdata = {name; length(spikesizes); size(x,1); slope; rsquared; pval};
 
-    output = horzcat(output, newdata);
+          output = horzcat(output, newdata);
+
+        end
   end
 
 % outputs chart with spike name, number of spikes, slope, and r2 value

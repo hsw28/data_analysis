@@ -13,6 +13,8 @@ function r = mua_rate(tv, start_time, end_time, t)
 % returns a [2, :] matrix of spikes and times
 
 %going through all the time and making a vector time_v with each millisecond
+
+
 duration = end_time-start_time;
 time_v = start_time:t:end_time;
 if mod(duration,t) ~= 0

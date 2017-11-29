@@ -1,65 +1,18 @@
+function f = assignvel(time, vel);
+%takes input of velocity vector and upsamples from 60hz to 2000hz
 
+velvector = vel(1,:);
+veltime = vel(2,:);
+i = ceil(length(time)/length(velvector))-1;
 
-function f = assignvel(timefile, velo);
-
-
-%takes input of velocity matric from velocity.m
-% makes a vector of velocities at every time stamp so you can make a graph against all time points
-% smooths data
+%upvel = resample(velvector, i, 1);
+%upveltime = resample(veltime, i, 1);
 %
-% ex: f = assignvel(tet11.timestamp, velocitymatrix)
+%f = [upvel; upveltime];
+
+distorted = veltime(end-30);
+[m index] = min(abs(time-distorted));
+upvel = interp1(veltime, velvector, time(1:index), 'pchip');
 
 
-
-
-tfs = size(timefile,2);
-velvector = velo(1,:);
-timevector = velo(2,:);
-vfs = size(timevector,2);
-
-closestvel=[];
-
-newn=1;
-i=1;
-
-tfs;
-
-while i<=tfs
-	newn;
-	m=[];
-	for n = newn:vfs
-		m(end+1) = (abs(timefile(i)-(timevector(n))));
-
-		% or use the next line if time data hasn't been divided to seconds
-		% m(end+1) = (abs(timefile(i)-(timevector(n)./10000)));
-		
-		if size(m,2) == 1
-			closestv = velvector(n);
-			closestvel(i) = closestv;
-		end
-
-		if size(m,2)>1
-			if m(end)<=m(end-1)
-				
-				closestv = velvector(n);
-				newn=n;
-				closestvel(i) = closestv;
-			end
-			if m(end)>m(end-1)
-				break
-			end
-		end	
-	end
-
-i=i+1;
-
-end
-
-f = closestvel;
-
-%smooths with moving average, window 3
-%f = smooth(a');			
-
-		
-		
-		
+f = upvel;

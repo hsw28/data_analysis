@@ -14,6 +14,9 @@ if size(accelORvel, 2) > size(firingdata, 1)
 	firingdata = firingdata';
 end
 
+assvel = (assignvel(time,accelORvel));
+time = time(1:length(assvel));
+
 start = min(time);
 ending = max(time);
 
@@ -23,18 +26,16 @@ rate = r(2,:); % number of spikes per time bin
 fastest = max(rate);
 m = length(rate);
 
-acceldata = (assignvel(time,accelORvel));
-length(acceldata);
-length(time);
 avg_accel = zeros(m,1);
 for i = 1:m
-    avg_accel(i) = mean(acceldata((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
+    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
 end
 
 maxacc = max(avg_accel);
 
+vbin =  [10; 12; 14; 16; 18; 20];
 
-vbin = [0; 5; 10; 20; 50; 100];
+
 
 
 average = [];
@@ -61,4 +62,4 @@ end
 
 
 
-thingy = [average];
+thingy = [average]

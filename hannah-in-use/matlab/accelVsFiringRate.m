@@ -24,21 +24,25 @@ if size(accelORvel, 2) > size(firingdata, 1)
 	firingdata = firingdata';
 end
 
-start = min(time);
-ending = max(time);
+start = min(accelORvel(2,:));
+ending = max(accelORvel(2,:));
 
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:);
 fastest = max(rate);
 m = length(rate);
+length(rate);
 
 acceldata = (assignvel(time,accelORvel));
 length(acceldata);
 length(time);
 avg_accel = zeros(m,1);
+time = time(1:length(acceldata));
 for i = 1:m
+
     avg_accel(i) = mean(acceldata((time > start+t*(i-1)) & (time < start+t*i)));
+
 end
 % length(powers)
 

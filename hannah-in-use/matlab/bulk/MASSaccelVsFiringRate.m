@@ -67,6 +67,8 @@ for k = 1:spikenum
     x = x(actualvals);
     y = accvrate(:,2);
     y = y(actualvals);
+    size(x)
+    size(y)
     coeffs = polyfit(x, y, 1);
     slope = coeffs(1); % get slope of best fit line
     intercept = coeffs(2);
