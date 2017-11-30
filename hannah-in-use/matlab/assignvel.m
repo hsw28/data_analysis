@@ -3,6 +3,11 @@ function f = assignvel(time, vel);
 
 velvector = vel(1,:);
 veltime = vel(2,:);
+[c timestart] = min(abs(time-veltime(1)));
+[c timeend] = min(abs(veltime(end)-time));
+time = time(timestart:timeend);
+
+
 i = ceil(length(time)/length(velvector))-1;
 
 %upvel = resample(velvector, i, 1);
@@ -12,6 +17,7 @@ i = ceil(length(time)/length(velvector))-1;
 
 distorted = veltime(end-30);
 [m index] = min(abs(time-distorted));
+
 upvel = interp1(veltime, velvector, time(1:index), 'pchip');
 
 

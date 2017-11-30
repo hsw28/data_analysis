@@ -1,11 +1,7 @@
 function f = decodeshit(timevector, clusters, vel, t)
 
-% define a time window, see how often cells spike during that time window
-% based on average firing rate at different velocities, estimate velocity
-% t is binning in seconds
-% permute through times, then velocities, then clusters
+% decodes velocity  based on cell firing. t is bins in seconds
 
-% set time window
 t = 2000*t;
 tm = 1;
 assvel = assignvel(timevector, vel);

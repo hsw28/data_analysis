@@ -1,4 +1,4 @@
-function rate = powermap(powerdata,posData, lim)
+function rate = powermap(powerdata,posData, dim, lim)
 
 % plot a heat map based on the power of the signal
 % can also be used to heat map coherence, etc
@@ -8,14 +8,14 @@ if size(powerdata,1)<size(powerdata,2)
 	powerdata=powerdata';
 end
 
-%dim = 3.5;
-dim = 5;
 
 powerdata = powerdata';
 tme = posData(:,1);
-size(tme)
-Power = assignvel(tme', powerdata);
+size(tme);
+Power = assignvel(tme, powerdata);
 Power = Power';
+posData = posData(1:length(Power), :);
+size(Power);
 
 psize = 3.5 * dim; %some REAL ratio of pixels to cm
 xmax = max(posData(:,2));
@@ -35,11 +35,13 @@ for i = 1:xbins
         B = sum(A,2); %find the rows that satisfy both previous conditions
         C = B > 1;
         avpower(ybins+1-j,i) = sum(Power(C))/sum(C); %set the matrix cell for that bin to the number of rows that satisfy both
-    end
+
+
+		end
 end
 
 %heat map stuff
-%figure
+figure
 [nr,nc] = size(avpower);
 colormap('parula');
 pcolor([(avpower) nan(nr,1); nan(1,nc+1)]);

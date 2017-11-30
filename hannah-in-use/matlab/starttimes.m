@@ -36,7 +36,7 @@ i = 2;
 %now can seperate into runs basically based on the amount of time between points
 %adds the first time point after a lapse to runnum matrix
 while i <= size(timeend,1)
-		if timeend(i)-timeend(i-1) > 2
+		if timeend(i)-timeend(i-1) > 3
 				runnum(end+1) = timeend(i);
 		end
 i=i+1;
@@ -60,9 +60,9 @@ while i<=size(runnum,1)
 			%finds x when on correct side
 			xranges = find(xpos<500);
 			both = intersect(xranges, timeranges);
-			both = both';
+			both = both'; % index in time range where on force arms
 			%finds most extreme y
-			[value, index] = (max(ypos(both)));
+			[value, index] = (max(ypos(both))); %index of most extreme y
 			index = index + both(1);
 		elseif i == size(runnum,1)
 			timeranges = find(pos(:,1)>runnum(i) & pos(:,1)<max(tme));
@@ -70,34 +70,42 @@ while i<=size(runnum,1)
 			both = intersect(xranges, timeranges);
 			both = both';
 			%finds most extreme y
-			[value, index] = (max(ypos(both)));
+			[value, index] = (max(ypos(both))) % index of most extreme y
 			index = index + both(1);
 		  end
 	%finds "end times" -- this is when rat finishes going to choice arms for the last times
-%{
+
 	if i<size(runnum,1)
 		%finds x when on correct side
-		timeranges = find(tme>runnum(i) & tme<runnum(i+1))
+		timeranges = find(tme>runnum(i) & tme<runnum(i+1));
 		xranges = find(xpos>800);
 		both = intersect(xranges, timeranges);
-		both = both';
+		both = both'
 		%finds most extreme y
-		[endvalue, endindex] = (findpeaks(ypos(both)));
-		endindex = endindex(end) + both(1);
+		if length(both<0)
+			[endvalue, endindex] = (findpeaks(ypos(both)));
+			endindex = endindex(end) + both(1);
+		else
+		 endindex = NaN;
+	  end
 	elseif i == size(runnum,1)
 		xranges = find(xpos>800);
 		both = intersect(xranges, timeranges);
 		both = both';
 		%finds most extreme y
-		[endvalue, endindex] = (findpeaks(ypos(both)));
-		endindex = endindex(end) + both(1);
+		if length(both<0)
+			[endvalue, endindex] = (findpeaks(ypos(both)));
+			endindex = endindex(end) + both(1);
+		else
+		 endindex = NaN;
+	  end
 		end
-%}
+
 %add times to matrix
 timestart(end+1) = index;
-%timestart(end+1) = endindex;
+timestart(end+1) = endindex;
 i = i+1;
 end
 
 
-t = [tme(timestart)];
+t = [timestart];

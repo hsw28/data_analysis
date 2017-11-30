@@ -1,6 +1,5 @@
 function thingy = binVel(time, accelORvel, t)
-% Takes pos data, timestamps, cluster data, and window size (in seconds)
-%outputs average firing rate per acceleration, with allerations binned as 0-10, 10-30, 30-60, 60-100, 100+ cm/s
+% for use with decode shit. bins actual velocities in same bins as decode shit, so you can compare your decoded data
 
 
 if size(time, 2) < size(time, 1)
