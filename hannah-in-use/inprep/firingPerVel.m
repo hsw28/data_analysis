@@ -33,7 +33,8 @@ end
 
 maxacc = max(avg_accel);
 
-vbin =  [11; 11.5; 12; 12.5; 13; 13.5; 14; 14.5; 15; 15.5];
+
+vbin =  [0; 10; 30];
 
 
 
@@ -47,14 +48,16 @@ i = 1;
 while i <= length(vbin)
 		 if i==1
 			 		subset = rate(avg_accel >= vbin(i) & avg_accel<vbin(i+1));
+		 elseif i==length(vbin) %if you wanna go to infinity
+						 subset = rate(avg_accel > vbin(i));
 		 elseif i<length(vbin) & i>1
      			subset = rate(avg_accel > vbin(i) & avg_accel<vbin(i+1));
-		 elseif i==length(vbin)
-			 		subset = rate(avg_accel > vbin(i));
-		 end
+
+		end
+
      if length(subset) < threshold
 			 	average(i) = NaN
-    %    average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
+        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
      else
         average(i) = mean(subset);
      end
@@ -63,4 +66,4 @@ end
 
 
 
-thingy = [average]
+thingy = [average];

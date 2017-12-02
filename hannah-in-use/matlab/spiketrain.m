@@ -2,6 +2,7 @@ function x = spiketrain(spike, tm);
 
 % makes a spike train where 0 is no spike, 1 is a spike
 % input spike times and session times
+% can insert a matrix of spike data
 %
 % ex: spiketrain(spiketime, lfp.timestamp);
 
@@ -13,17 +14,20 @@ if size(tm, 1) > size(tm,2)
 end
 
 train = zeros(size(tm));
+alltrain = [];
+size(spike);
+for f=size(spike,2)
+		onespike = spike(:,f);
+		train = train';
+		k=[];
 
-train = train';
-k=[];
-
-i = 1;
-while i<=size(spike,1)
-	k = find(abs(tm-spike(i))<.0001, 1);
-	train(k) = train(k)+1;
-	i = i+1;
+		i = 1;
+		while i<=size(onespike,1)
+			k = find(abs(tm-onespike(i))<.0001, 1);
+			train(k) = train(k)+1;
+			i = i+1;
+		end
+alltrain = [alltrain; train];
 end
 
-x = train;
-
-
+x = alltrain;
