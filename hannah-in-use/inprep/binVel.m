@@ -22,10 +22,15 @@ vbin =  [0; 4; 8; 12; 16; 20; 24];
 
 
 
-sized = ceil(length(assvel)./(2000*t))-1;
+sized = ceil(length(assvel)./(2000*t))-1; %done in time stamps. number of bins
 avg_accel = zeros(sized,1);
+t = t*2000;
 for i = 1:sized
-    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
+%for i = 1:1
+
+		time(1+t*(i-1));
+		time(1+t*i);
+    avg_accel(i) = mean(assvel((time > time(1+t*(i-1)) & (time < time(1+t*i))))); % finds average vel within times
 		if avg_accel(i) >= vbin(1) & avg_accel(i) <= vbin(2)
 					binvec(end+1) = 1;
 		elseif avg_accel(i) > vbin(2) & avg_accel(i) <= vbin(3)

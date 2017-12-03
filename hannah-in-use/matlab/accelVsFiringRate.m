@@ -12,6 +12,9 @@ function thingy = accelVsFiringRate(time, accelORvel, firingdata, t)
 % firingdata = [mazet19c3;mazet19c4;mazet29c1]*7.75e-2;
 % t = .1736;
 
+
+%MAKE INTO TIME STAMPS AND NOT RAW time
+
 if size(time, 2) < size(time, 1)
 	time = time';
 end
@@ -27,7 +30,7 @@ end
 start = min(accelORvel(2,:));
 ending = max(accelORvel(2,:));
 
-r = mua_rate(firingdata,start,ending,t);
+r = mua_rate(firingdata,accelORvel(2,:),t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:);
 fastest = max(rate);

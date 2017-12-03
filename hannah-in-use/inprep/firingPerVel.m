@@ -23,7 +23,7 @@ start = min(time);
 ending = max(time);
 
 
-r = mua_rate(firingdata,start,ending,t);
+r = mua_rate(firingdata,time,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:); % number of spikes per time bin
 size(rate);
@@ -31,9 +31,13 @@ fastest = max(rate);
 m = length(rate);
 
 
+t = t*2000;
 avg_accel = zeros(m,1);
-for i = 1:m
-    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
+%for i = 1:m
+for i = 1:1
+	time(1+t*(i-1))
+	time(1+t*i)
+    avg_accel(i) = mean(assvel((time > time(1+t*(i-1))) & (time < time(1+t*i)))); % finds average vel within times
 end
 
 maxacc = max(avg_accel);
@@ -59,8 +63,8 @@ while i <= length(vbin)
 		end
 
      if length(subset) < threshold
-			 	average(i) = NaN
-        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
+			 	average(i) = NaN;
+        average(i) = length(firingdata)./(length(time)./(t)); %sub in average rate
      else
         average(i) = mean(subset);
      end

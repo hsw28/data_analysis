@@ -85,13 +85,6 @@ while tm <= length(timevector)-(rem(length(timevector), t))
           end
           % now have all cells at that velocity
           tmm = t./2000;
-
-          %eq = (productme.* exp(-tmm.*expme)); OLD
-
-          % need to multiple by probabily of being at that velocity
-
-          %endprob(end+1) = probatvelocity(k) .* eq;
-
           endprob(end+1) = log(probatvelocity(k)) + (productme) + (-tmm.*expme); %NEW
 
 
@@ -107,7 +100,7 @@ while tm <= length(timevector)-(rem(length(timevector), t))
 
 
         end
-      endprob;
+        endprob;
         [val, idx] = (max(endprob));
         maxprob(end+1) = idx;
         %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
