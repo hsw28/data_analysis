@@ -1,11 +1,13 @@
-function f = decodeshit(timevector, clusters, vel, t)
+function f = decodeshit(timevec, clusters, vel, t)
 
 % decodes velocity  based on cell firing. t is bins in seconds
+% returns [predictedV, actualV]
+% for now make sure bins in binVel function are the same. will implement that as a variable later
 
 t = 2000*t;
 tm = 1;
-assvel = assignvel(timevector, vel);
-timevector = timevector(1:length(assvel));
+assvel = assignvel(timevec, vel);
+timevector = timevec(1:length(assvel));
 
 %find number of clusters
 clustname = (fieldnames(clusters))
@@ -15,8 +17,9 @@ numclust = length(clustname)
 % for now let's bin velocity as 0-10, 10-30, 30-60, 60-100, 100+
 %vbin = [10; 30; 60; 100];
 
-vbin = [0; 10; 30];
+vbin =  [0; 4; 8; 12; 16; 20; 24];
 
+binnedV = binVel(timevec, vel, t/2000);
 
 
 % for each cluster,find the firing rate at esch velocity range
@@ -24,7 +27,7 @@ j = 1;
 fxmatrix = zeros(numclust, length(vbin));
 while j <= numclust
     name = char(clustname(j));
-    fxmatrix(j,:) = firingPerVel(timevector, vel, clusters.(name), 2000./t);
+    fxmatrix(j,:) = firingPerVel(timevector, assvel, clusters.(name), t./2000);
     j = j+1;
 end
 
@@ -34,14 +37,19 @@ end
 % find prob the animal is each velocity
 probatvelocity = zeros(length(vbin),1);
 for k = 1:length(vbin)
-    if k == 1
-        probatvelocity(1,1) = length(find(assvel>=vbin(1) & assvel<=vbin(2)))./length(assvel);
-    elseif k>1 & k<length(vbin)
-      probatvelocity(k,1) = length(find(assvel>vbin(k) & assvel<=vbin(k+1)))./length(assvel);
-    elseif k==length(vbin)
-      probatvelocity(end,1) = length(find(assvel>vbin(length(vbin))))./length(assvel);
-    end
+    numvel = find(binnedV == (k));
+    probatvelocity(k) = length(numvel)./length(binnedV);
 end
+
+%for k = 1:length(vbin)
+%    if k == 1
+%        probatvelocity(1,1) = length(find(assvel>=vbin(1) & assvel<=vbin(2)))./length(assvel);
+%    elseif k>1 & k<length(vbin)
+%      probatvelocity(k,1) = length(find(assvel>vbin(k) & assvel<=vbin(k+1)))./length(assvel);
+%    elseif k==length(vbin)
+%      probatvelocity(end,1) = length(find(assvel>vbin(length(vbin))))./length(assvel);
+%    end
+%end
 probatvelocity
 
 % permue times
@@ -68,7 +76,7 @@ while tm <= length(timevector)-(rem(length(timevector), t))
               %fxni = (fx^length(ni)); OLD
               %productme = productme*fxni; OLD
 
-               productme = productme + length(ni)*log(fx);
+               productme = (productme + length(ni)*log(fx));
               %productme = productme + log((fx^length(ni)));
 
               expme = (expme) + (fx);
@@ -107,5 +115,5 @@ while tm <= length(timevector)-(rem(length(timevector), t))
     tm = tm+t;
 end
 
-
-f =maxprob;
+[h,p,ci,stats] = ttest2(maxprob, binnedV)
+f = [maxprob; binnedV];

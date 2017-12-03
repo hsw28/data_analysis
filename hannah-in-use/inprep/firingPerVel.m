@@ -1,6 +1,7 @@
 function thingy = firingPerVel(time, accelORvel, firingdata, t)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
 % outputs average firing rate per velocity/acc
+% ASSIGN VELOCITY BEFORE THIS FUNCTION
 
 if size(time, 2) < size(time, 1)
 	time = time';
@@ -14,17 +15,21 @@ if size(accelORvel, 2) > size(firingdata, 1)
 	firingdata = firingdata';
 end
 
-assvel = (assignvel(time,accelORvel));
-time = time(1:length(assvel));
+assvel = accelORvel;
+%assvel = (assignvel(time,accelORvel));
+%time = time(1:length(assvel));
 
 start = min(time);
 ending = max(time);
 
+
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:); % number of spikes per time bin
+size(rate);
 fastest = max(rate);
 m = length(rate);
+
 
 avg_accel = zeros(m,1);
 for i = 1:m
@@ -33,9 +38,7 @@ end
 
 maxacc = max(avg_accel);
 
-
-vbin =  [0; 10; 30];
-
+vbin =  [0; 4; 8; 12; 16; 20; 24];
 
 
 
