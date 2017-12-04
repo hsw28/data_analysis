@@ -30,7 +30,7 @@ end
 start = min(accelORvel(2,:));
 ending = max(accelORvel(2,:));
 
-r = mua_rate(firingdata,accelORvel(2,:),t);
+r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:);
 fastest = max(rate);

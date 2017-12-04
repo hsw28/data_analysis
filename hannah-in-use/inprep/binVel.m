@@ -18,15 +18,14 @@ binvec = [];
 
 assvel = (assignvel(time,accelORvel));
 
-vbin =  [0; 4; 8; 12; 16; 20; 24];
-
+%good for 5 bins
+vbin = [0; 3; 6; 12; 19; 30];
 
 
 sized = ceil(length(assvel)./(2000*t))-1; %done in time stamps. number of bins
 avg_accel = zeros(sized,1);
 t = t*2000;
 for i = 1:sized
-%for i = 1:1
 
 		time(1+t*(i-1));
 		time(1+t*i);
@@ -41,8 +40,8 @@ for i = 1:sized
 					binvec(end+1) = 4;
 		elseif avg_accel(i) > vbin(5) & avg_accel(i) <= vbin(6)
 					binvec(end+1) = 5;
-		elseif avg_accel(i) > vbin(6) & avg_accel(i) <= vbin(7)
-							binvec(end+1) = 5;
+		%elseif avg_accel(i) > vbin(6) & avg_accel(i) <= vbin(7)
+		%					binvec(end+1) = 6;
 		elseif avg_accel(i) > vbin(end)
 				binvec(end+1) = 6; %CAN CHANGCE
 		else

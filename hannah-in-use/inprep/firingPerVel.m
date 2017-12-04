@@ -17,13 +17,14 @@ end
 
 assvel = accelORvel;
 %assvel = (assignvel(time,accelORvel));
-%time = time(1:length(assvel));
+time = time(1:length(assvel));
+
+
 
 start = min(time);
 ending = max(time);
 
-
-r = mua_rate(firingdata,time,t);
+r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:); % number of spikes per time bin
 size(rate);
@@ -31,18 +32,15 @@ fastest = max(rate);
 m = length(rate);
 
 
-t = t*2000;
 avg_accel = zeros(m,1);
-%for i = 1:m
-for i = 1:1
-	time(1+t*(i-1))
-	time(1+t*i)
-    avg_accel(i) = mean(assvel((time > time(1+t*(i-1))) & (time < time(1+t*i)))); % finds average vel within times
+for i = 1:m
+    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
 end
 
 maxacc = max(avg_accel);
 
-vbin =  [0; 4; 8; 12; 16; 20; 24];
+vbin = [8; 9; 10; 11; 12; 13; 14; 15; 17; 19; 21; 23; 27; 30; 33];
+
 
 
 
@@ -55,8 +53,8 @@ i = 1;
 while i <= length(vbin)
 		 if i==1
 			 		subset = rate(avg_accel >= vbin(i) & avg_accel<vbin(i+1));
-		 elseif i==length(vbin) %if you wanna go to infinity
-						 subset = rate(avg_accel > vbin(i));
+		 %elseif i==length(vbin) %if you wanna go to infinity
+			%			 subset = rate(avg_accel > vbin(i));
 		 elseif i<length(vbin) & i>1
      			subset = rate(avg_accel > vbin(i) & avg_accel<vbin(i+1));
 
@@ -64,7 +62,7 @@ while i <= length(vbin)
 
      if length(subset) < threshold
 			 	average(i) = NaN;
-        average(i) = length(firingdata)./(length(time)./(t)); %sub in average rate
+        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
      else
         average(i) = mean(subset);
      end
