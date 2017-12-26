@@ -19,34 +19,39 @@ numclust = length(clustname)
 % for now let's bin velocity as 0-10, 10-30, 30-60, 60-100, 100+
 
 
-%vbin = [10; 15; 20; 25; 30]; 0.7578
-%vbin = [0; 4; 8; 12; 16; 20];
-vbin = [0; 3; 6; 13; 19; 28];
+
+vbin = [-5; -1; 1; 5];
 
 
-binnedV = binVel(timevec, vel, t/2000);
+
+binnedV = binAcc(timevec, vel, t/2000);
 
 
 % for each cluster,find the firing rate at esch velocity range
 j = 1;
-fxmatrix = zeros(numclust, length(vbin));
+fxmatrix = zeros(numclust, length(vbin)+1);
+size(fxmatrix);
 while j <= numclust
     name = char(clustname(j));
-    fxmatrix(j,:) = firingPerVel(timevector, assvel, clusters.(name), t./2000);
+    size(firingPerAcc(timevector, assvel, clusters.(name), t./2000));
+    fxmatrix(j,:) = firingPerAcc(timevector, assvel, clusters.(name), t./2000);
     j = j+1;
 end
 
+size(fxmatrix)
 
 
 
 % find prob the animal is each velocity
-probatvelocity = zeros(length(vbin),1);
+probatvelocity = zeros(length(vbin)+1,1);
 legitV = find(binnedV<100);
-for k = 1:length(vbin)
+for k = 1:(length(vbin)+1)
     numvel = find(binnedV == (k));
     probatvelocity(k) = length(numvel)./length(legitV);
+
 end
 probatvelocity
+
 
 %for k = 1:length(vbin)
 %    if k == 1
@@ -62,7 +67,7 @@ probatvelocity
 % permue times
   maxprob = [];
   spikenum = 1;
-  times = [];
+    times = [];
 
 %percents = zeros(length(timevector)-(rem(length(timevector), t)), length(vbin)) ;
 percents = [];
@@ -77,6 +82,7 @@ while tm <= length(timevector)-(rem(length(timevector), t))
           productme =0;
           expme = 0;
           c = 1;
+
           while c <= numclust
               size(numclust);
               name = char(clustname(c));
@@ -114,7 +120,7 @@ while tm <= length(timevector)-(rem(length(timevector), t))
 
 
         end
-
+        size(endprob);
 
         [val, idx] = (max(endprob));
 
@@ -133,28 +139,23 @@ while tm <= length(timevector)-(rem(length(timevector), t))
       endprob = endprob*conv;
 
 
+      times(end+1) = timevector(tm);
 
         percents = vertcat(percents, endprob);
 
         maxprob(end+1) = idx;
         %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
-                                          % if I want probabilities need to make a matrix of endprobs instead of selecting max
-        times(end+1) = timevector(tm);
-
+                                              % if I want probabilities need to make a matrix of endprobs instead of selecting max
     tm = tm+t;
 end
 
 length(find(binnedV==4))
 
 %ans = find(binnedV<50);
-[h,p,ci,stats] = ttest2(maxprob, binnedV);
+[h,p,ci,stats] = ttest2(maxprob, binnedV)
 probs = percents;
-
-
-%values = [maxprob; binnedV, times'];
 v = [maxprob; binnedV];
 values = [v; times];
-
 
 %[h,p,ci,stats] = ttest2(maxprob, binnedV)
 %probs = percents;

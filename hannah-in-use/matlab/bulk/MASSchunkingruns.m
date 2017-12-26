@@ -1,8 +1,8 @@
-function f = MASSchunkingruns(array)
+function f = MASSchunkingruns(posarray)
 %import array of position files made using uipickfiles
 %chunks data into run number and then place in run, returns structure of elements
 
-array = array';
+array = posarray';
 
 for k=1:length(array)
   %loads data

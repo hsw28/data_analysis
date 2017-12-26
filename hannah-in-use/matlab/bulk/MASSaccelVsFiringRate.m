@@ -16,6 +16,8 @@ for k = 1:spikenum
     date = char(date(1,2));
     date = strsplit(date,'_maze_cl');
     date = char(date(1,1));
+    date = strsplit(date,'_box_cl');
+    date = char(date(1,1));
     date = strsplit(date,'_cl');
     date = char(date(1,1));
     date = strcat(date, '!');
@@ -50,17 +52,18 @@ for k = 1:spikenum
     % limit the times in the time file to those in position files
     starttime = posstructure.(posformateddate)(1,1);
     endtime = posstructure.(posformateddate)(end,1);
-    starttime = find(abs(timestructure.(timeformateddate)-starttime) < .001);
-    endtime = find(abs(timestructure.(timeformateddate)-endtime) < .001);
-    starttime = starttime(1,1);
-    endtime = endtime(1,1);
+    [c starttime] = min(abs(timestructure.(timeformateddate)-starttime))
+    [c endtime] = min(abs(timestructure.(timeformateddate)-endtime))
+    %starttime = starttime(1,1);
+    %endtime = endtime(1,1);
     time = [timestructure.(timeformateddate)(starttime:endtime)];
+    size(time)
 
 
     % does the thing
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
-    set(0,'DefaultFigureVisible', 'off');
+    %set(0,'DefaultFigureVisible', 'off');
     accvrate = accelVsFiringRate((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
     x = accvrate(:,1);
     actualvals = find(~isnan(x));
@@ -69,6 +72,7 @@ for k = 1:spikenum
     y = y(actualvals);
     size(x)
     size(y)
+    if length(x)>=1 & length(y)>=1
     coeffs = polyfit(x, y, 1);
     slope = coeffs(1); % get slope of best fit line
     intercept = coeffs(2);
@@ -83,10 +87,12 @@ for k = 1:spikenum
     stats = fitlm(x,y);
     pval = stats.Coefficients.pValue(2);
 
+
     % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
     newdata = {name; length(spikesizes); size(x,1); slope; rsquared; pval};
 
     output = horzcat(output, newdata);
+  end
   end
 
 % outputs chart with spike name, number of spikes, slope, and r2 value

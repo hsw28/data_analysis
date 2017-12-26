@@ -16,25 +16,27 @@ duration = [];
 accmag = [];
 numevents = 0;
 
+above = mean(accl)+std(accl);
+
 
 for k = 1:(size(acc,2))
-	if accl(k) > 200 | accl(k) <(-200)
+	if accl(k) > above | accl(k) <(-above)
 		% we've found high acceleration or decelleration
 		% looks to see when value returns to a low value, this is the start of the acc time
 		i = k;
-		while accl(i) > 200 | accl(i) < -200  && i>0
+		while accl(i) > above | accl(i) < -above  && i>0
 			i=i-1;
 		end
-		
-		% looks to see when value returns this is the end of the acc time		
+
+		% looks to see when value returns this is the end of the acc time
 		j = k;
-		while accl(j) > 200 | accl(j) < -200 && j<=(size(acc,2)-1)
+		while accl(j) > above | accl(j) < -above && j<=(size(acc,2)-1)
 			j=j+1;
 		end
 
 		%start time is d(i);
 		%end time is d(j);
-		k = j;		
+		k = j;
 
 		%only include events longer than 500ms
 		if ts(j)-ts(i) > .5
@@ -48,6 +50,7 @@ end
 
 %for accel function first row is accel, second is time stamp
 %make matrix
+
 eventtimes = [];
 maxacc = [];
 n=1;
@@ -59,4 +62,3 @@ for n = 1:size(startpoints,2)
 end
 
 f = [maxacc; eventtimes];
-

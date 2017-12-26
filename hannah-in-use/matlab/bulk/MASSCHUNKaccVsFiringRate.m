@@ -1,5 +1,6 @@
 function f = MASSCHUNKaccVsFiringRate(spikestructure, posstructure, time, windowsize)
   %use clusterimport.m and MASSchunkingruns.m to create spike and position structures
+  % MAKE SURE YOU CHUNK FIRST
   % time can be a normal time file
   %does conversion factor if needed for early recordings
   %window size is in seconds
@@ -76,7 +77,7 @@ while k <= posnum
         % does the thing
         spike = char(spikenames(q));
         set(0,'DefaultFigureVisible', 'off');
-        accvrate = accelVsFiringRate((newtime.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
+        accvrate = accelVsFiringRateCHUNK((newtime.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spike).*conversion), windowsize);
         xlabel('Average Velocity')
         x = accvrate(:,1);
         actualvals = find(~isnan(x));

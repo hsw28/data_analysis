@@ -201,7 +201,7 @@ end
 d = step(Hd,x);
 delay = mean(grpdelay(Hd));
 d(1:delay) = [];
-y = abs(hilbert(d));
+%y = abs(hilbert(d));
 y = d;
 
 

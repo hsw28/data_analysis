@@ -1,4 +1,4 @@
-function x = corr(one, two);
+function x = Hcorr(one, two);
 
 %finds the normalized cross correlation for two things and puts them into a vector, and outputs a normalized graph. Quick and easy!
 %

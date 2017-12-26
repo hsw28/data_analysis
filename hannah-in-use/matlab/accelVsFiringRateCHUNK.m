@@ -1,4 +1,4 @@
-function thingy = accelVsFiringRate(time, accelORvel, firingdata, t)
+function thingy = accelVsFiringRateCHUNK(time, accelORvel, firingdata, t)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
 % Produces plots that relate Firing Rate in window to acceleration
 % in window
@@ -37,7 +37,7 @@ fastest = max(rate);
 m = length(rate);
 length(rate);
 
-acceldata = (assignvel(time,accelORvel));
+acceldata = (assignvelOLD(time,accelORvel));
 length(acceldata);
 length(time);
 avg_accel = zeros(m,1);
@@ -50,35 +50,26 @@ end
 % length(powers)
 
 
-%COMMENT BACK
-%figure
-%scatter(avg_accel,rate/t)
+
+figure
+scatter(avg_accel,rate/t)
 
 xlabel('Average Acceleration');
 ylabel('Firing rate/Sec.');
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
-%threshold = .01 * length(firingdata);
 
-
-
-StdError=[];
 for i = 0:fastest
      subset = avg_accel(rate == i);
-		 length(subset);
      if length(subset) < threshold
          average(i+1) = NaN;
          deviation(i+1) = NaN;
      else
-			 	subset=(subset(~isnan(subset)));
         average(i+1) = mean(subset);
-        %deviation(i+1) = std(subset,1);
+        deviation(i+1) = std(subset,1);
      end
-		 StdError(end+1) = std(subset)./sqrt(length(subset));
 end
-
-average
 
 % figure
 % errorbar((0:fastest)/t,average,deviation,'o')
@@ -86,20 +77,10 @@ average
 % ylabel('Average Theta Power Ratio');
 
 figure
-
-%errorbar((0:fastest)/t, average, StdError, 'o')
-errorbar(average, (0:fastest)/t, StdError, 'horizontal', 'o')
-
+scatter(average,(0:fastest)/t)
 xlabel('Average Acceleration');
 ylabel('Firing rate/Sec.');
-
-%COMMENT BACK
-%figure
-%scatter(average,(0:fastest)/t)
-%xlabel('Average Velocity');
-%ylabel('Firing rate/Sec.');
-%lsline
-
+lsline
 % figure
 % scatter(deviation, (0:fastest)/t)
 % xlabel('Deviation of Theta Power Ratio');

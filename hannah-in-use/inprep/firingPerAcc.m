@@ -1,4 +1,4 @@
-function thingy = firingPerVel(time, accelORvel, firingdata, t)
+function thingy = firingPerAcc(time, accelORvel, firingdata, t)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
 % outputs average firing rate per velocity/acc
 % ASSIGN VELOCITY BEFORE THIS FUNCTION
@@ -37,10 +37,10 @@ for i = 1:m
     avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
 end
 
+avg_accel;
+
 maxacc = max(avg_accel);
-
-vbin = [0; 3; 6; 13; 19; 28];
-
+vbin = [-5; -1; 1; 5];
 
 
 
@@ -49,25 +49,26 @@ deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
 
 
-i = 1;
+i = 0;
 while i <= length(vbin)
-		 if i==1
-			 		subset = rate(avg_accel >= vbin(i) & avg_accel<vbin(i+1));
-		 elseif i==length(vbin) %if you wanna go to infinity
+		 if i==0
+			 		subset = rate(avg_accel < vbin(1));
 
+		 elseif i==length(vbin) %if you wanna go to infinity
 						 subset = rate(avg_accel > vbin(i));
-		 elseif i<length(vbin) & i>1
-     			subset = rate(avg_accel > vbin(i) & avg_accel<vbin(i+1));
+
+		 else
+     			subset = rate(avg_accel > vbin(i) & avg_accel<=vbin(i+1));
 
 		end
 
      if length(subset) < threshold
-			 	average(i) = NaN;
-        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
+        average(i+1) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
      else
-        average(i) = mean(subset);
+        average(i+1) = mean(subset);
      end
 		 i = i+1;
+
 end
 
 

@@ -5,9 +5,9 @@ function fuckme = binning(x, y);
 
 binned = [];
 n = 1;
-while n <= size(x,1)
+while n <= length(x)
 	n;
-	if n+y-1 <= size(x,1)
+	if n+y-1 <= length(x)
 		binned(end+1) = sum(x(n:n+y-1));
 	else
 		binned(end+1) = sum(x(n:end));

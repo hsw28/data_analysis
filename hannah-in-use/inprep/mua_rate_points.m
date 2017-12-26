@@ -1,5 +1,5 @@
-function r = mua_rate(tv, start_time, end_time, t)
-
+function r = mua_rate_points(cluster, time, t)
+% DOES IT IN NUMBER OF SAMPLES INSTEAD OF TIME
 % finds rate of MUA, outputs as number of spikes per time bin
 % function muar = mua_rate(file, start_time, end_time, t);
 % MUA must be format [1, evemts]
@@ -14,18 +14,21 @@ function r = mua_rate(tv, start_time, end_time, t)
 
 %going through all the time and making a vector time_v with each millisecond
 
+t = t*2000;
+bins = ceil(length(time)./t)-1
+mua = [];
+timev = [];
+for k = 1:bins
+    if k==1
+      findit = find(cluster>=time(k) & cluster<=time(k*t));
+      mua(end+1) = length(findit);
+    else
+      findit = find(cluster>time((k-1)*t) & cluster<=time(k*t));
+      mua(end+1) = length(findit);
+      
+    end
 
-duration = end_time-start_time;
- time_v = start_time:t:end_time;
- if mod(duration,t) ~= 0
-     time_v = time_v(1:end-1);
- end
-
- m = length(time_v);
- i = 1:m-1;
- rate = zeros(size(time_v));
- for i = 1:m-1
-     rate(i) = sum((tv > time_v(i)) & (tv < time_v(i+1)));
 end
 
-r = [time_v; rate];
+
+r = mua;

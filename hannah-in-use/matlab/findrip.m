@@ -1,9 +1,10 @@
 
 function p = findrip(unfilteredLFP, timevector, devAboveMean, pos);
+%IF DONT HAVE POSITION PUT 'NA'
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
 % ex:
-% findrip(lfp, lfp, 4, pos);
+% function p = findrip(unfilteredLFP, timevector, devAboveMean, pos);
 
 c = unfilteredLFP;
 d = timevector;
@@ -16,23 +17,13 @@ filtdata = ripfilt(c);
 h = hilbert(filtdata);
 trans = abs(h);
 
-%guassian smoothing of 4ms (8 samples)
-w = gausswin(8);
-trans = filter(w, 1, trans);
-
-delay = length(d)-length(trans);
-d = d(1:end-delay);
-
-% gets rid of extreme values and finds std devs above mean
-trans2 = trans;
-bigpoints = find(trans2>.5);
-trans2(bigpoints) = .5;
-mn = mean(trans2);
-st = std(trans2);
-m = mn + (st.*y);
+% finds std devs above mean
+mn = mean(trans);
+st = std(trans);
+m = mn + (st.*y); % this is the value LFP must be above
 
 %also finds 6 std dev above mean to rule out huge things
-%big = mn + (st.*6);
+big = mn + (st.*6);
 
 %makes empty vector to hold times of ripples
 rt=[];
@@ -40,12 +31,17 @@ peaktime=[];
 starts = [];
 
 % gets velocity
-vel = noiselessVelocity(pos);
-vel = assignvel(d, vel);
+if pos == 'NA'
+	vel = ones(1,length(d));
+else
+	vel = noiselessVelocity(pos);
+  vel = assignvelOLD(d, vel);
+end
 
-% permute through transformed data and find when data is three std devs above mean
+% permute through transformed data and find when data is Y std devs above mean
 for k = 1:(size(trans))
-	if trans(k) > m && vel(k) < 3
+	k;
+	if trans(k)>m && trans(k)<big && vel(k) < 5
 
 		% we've found something above threshold, now need to find surrounding times when it's back at mean
 

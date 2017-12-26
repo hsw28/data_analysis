@@ -80,12 +80,14 @@ while i<=size(runnum,1)
 		timeranges = find(tme>runnum(i) & tme<runnum(i+1));
 		xranges = find(xpos>800);
 		both = intersect(xranges, timeranges);
-		both = both'
+		size(xranges)
+		size(timeranges)
+		both = both';
 		%finds most extreme y
 		if length(both<0)
-			[endvalue, endindex] = (findpeaks(ypos(both)));
-			endindex = endindex(end) + both(1);
-		else
+			%[endvalue, endindex] = (findpeaks(ypos(both)));
+			%endindex = endindex(end) + both(1);
+		%else
 		 endindex = NaN;
 	  end
 	elseif i == size(runnum,1)

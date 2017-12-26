@@ -3,7 +3,7 @@ function avg_transform = lfpfreq(lfp_data)
 % takes LFP and finds power spectrum. does NOT filter in any way
 % findFrequencies(LS.data);
 
-samples = LS_lfp_data;
+samples = lfp_data;
 
 L = 11000;
 Q = length(samples);

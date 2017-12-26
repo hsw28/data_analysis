@@ -11,8 +11,8 @@ end
 
 powerdata = powerdata';
 tme = posData(:,1);
-size(tme);
-Power = assignvel(tme, powerdata);
+%Power = assignvelOLD(tme, powerdata);
+Power = powerdata(1,:);
 Power = Power';
 posData = posData(1:length(Power), :);
 size(Power);
@@ -47,6 +47,6 @@ colormap('parula');
 pcolor([(avpower) nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
-set(gca,'clim',[0,lim]);
-axis([16 (size(avpower, 2)+5) -4 (size(avpower,1))]);
+%set(gca,'clim',[0,lim]);
+%axis([16 (size(avpower, 2)+5) -4 (size(avpower,1))]);
 colorbar;
