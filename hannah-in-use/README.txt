@@ -48,6 +48,7 @@ noiselessVelocity.m: computes velocity in a supposedly smoother way
 normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+spikeprobrun.m: bins vel/acc then finds spiking prob for each acc/vel bin
 starttimes.m: finds time animal starts each trial and returns a matrix of all start & end times and index values
 velocity.m: finds velocity from position data
 
@@ -93,6 +94,14 @@ MASSvelVsFiringRate.m: does a mass correlation of cluster firing versus vel, acr
 posimport.m: takes pos files found using uipickfiles and makes a structure of pos/vel/acc
 timeimport.m: takes lfps found using uipickfiles and makes a structure of time data
 
+DECODE
+binAcc.m: bins actual velocities in same bins as decode shit, so you can compare your decoded data
+binVel.m: bins actual accelerations in same bins as decode shit, so you can compare your decoded data
+decodeshit.m: decodes velocity based on cell firing
+decodeshitACC.m: decodes acceleration based on cell firing
+firingPerAcc.m: outputs average firing rate per acceleration
+firingPerVel.m: outputs average firing rate per velocity
+
 WHEEL
 wheelPos.m: cleans up wheel data and interpolates data for all time points, returning XY coord and degrees
 wheelACCEL.m: accel of rotating wheel
@@ -100,6 +109,7 @@ wheelVEL.m: vel of rotating wheel
 wheelwrap.m: unwraps degree data
 
 RANDOM
+assigntic.m: outputs times of a video tic mark
 binning.m: bins stuff
 boundedline.m: shades bounds around a line
 eventcorr.m -- not sure (lol)
