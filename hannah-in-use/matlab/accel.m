@@ -22,5 +22,4 @@ for i = 2:s-2
 	timevector(end+1) = t(i);
 end
 
-accvector = smooth(accvector);
 a = [accvector'; timevector];

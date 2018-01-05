@@ -18,7 +18,6 @@ i = ceil(length(time)/length(velvector))-1;
 distorted = veltime(end-30);
 [m index] = min(abs(time-distorted));
 
-size(veltime)
 %TO DEBUG IF NON UNIQUE VALUES IN TIME (OR WHATEVER)
 [~,idxu,idxc] = (unique(veltime));
 [count, ~, idxcount] = histcounts(idxc,numel(idxu));
