@@ -21,7 +21,7 @@ timemiddle = tme(bothindex);
 xmiddle = xpos(bothindex);
 ymiddle = ypos(bothindex);
 
-timemiddle
+
 posmiddle = [timemiddle; xmiddle; ymiddle];
 
 %find directions
@@ -33,9 +33,9 @@ dir = direction(timemiddle, pos);
 towardreward =[];
 awayfromreward = [];
 for i=1:size(dir,2)
-	if dir(4,i) > 0;
+	if dir(4,i) > 0
 		towardreward(end+1) = dir(1,i);
-	elseif dir(4,i) < 0;
+	elseif dir(4,i) < 0
 		awayfromreward(end+1) = dir(1,i);
 	end
 end

@@ -14,25 +14,60 @@ time = time(1:length(vel));
 
 acc = accelfromvel(vel, time);
 acc = acc(1,:);
-%what is the format of vel entered? all times? spike times only? vector or matrix?
-%trains = spiketrain(cluster, time);
+
+
+%UN COMMENT IF YOU WANT DIRECTION
+%{
+[towardreward, awayfromreward] = centerdirection(pos);
+k =1;
+dir = zeros(2, k);
+while k <= length(pos)
+  [cto indexto] = min(abs(pos(k,1)-towardreward));
+  [caway indexaway] = min(abs(pos(k,1)-awayfromreward));
+  if abs(pos(k,1)-cto) < .001
+      dir(:,k) = [pos(k,1), 1]; % assign timestamp 1 if going to toreward
+  elseif abs(pos(k,1)-caway) < .001
+      dir(:,k) = [pos(k,1), 1]; % assign -1 if going to away from reward
+  else
+      dir(:,k) = [pos(k,1), 0]; % assign 0 if not in center
+  end
+k = k+1;
+end
+dir = assignvelOLD(time, dir);
+dir = dir(2:end-2);
+dir = dir';
+%}
+
+posX = [pos(:,2), pos(:,1)]; %[xpos, time]
+posX = assignvel(time,posX');
+
+posY = [pos(:,2), pos(:,1)]; %[xpos, time]
+posY = assignvel(time,posY');
 
 vel = vel(2:end-2);
 time = time(2:end-2);
+posX = posX(2:end-2);
+posY = posY(2:end-2);
+size(vel)
+
+
 vel = vel';
 acc = acc';
+posX = posX';
+posY = posY';
+
+
 
 
 trains = spiketrain(cluster, time);
 spikeindex = find(trains);
 N = length(spikeindex);
 
-size(vel)
-size(trains)
+
 
 %model 1: only vel
-b1 = glmfit([acc], trains, 'poisson')
-lambda1 = exp(b1(1)+b1(2)*acc);
+b1 = glmfit([vel acc posX], trains, 'poisson')
+lambda1 = exp(b1(1)+b1(2)*vel+b1(3)*acc+b1(4)*posX);
 %lambda1 = exp(b1(2)*vel.^3);
 figure
 plot(lambda1)
