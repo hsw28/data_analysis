@@ -1,5 +1,6 @@
 function f = glmTEST(cluster, time, pos)
 
+  clustsize = length(cluster);
 
 [c timestart] = min(abs(time-pos(1,1)));
 [c timeend] = min(abs(pos(end,1)-time));
@@ -7,6 +8,8 @@ time = time(timestart:timeend);
 
 vel = noiselessVelocity(pos);
 vel = assignvel(time, vel);
+time = vel(2,:);
+vel = vel(1,:);
 
 
 time = time(1:length(vel));

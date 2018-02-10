@@ -6,11 +6,20 @@ function x = spiketrain(spike, tm);
 %
 % ex: spiketrain(spiketime, lfp.timestamp);
 
-if size(spike,1) < size(spike,2)
-	spike = spike';
+
+%making sure no spikes fall outside of time
+[c index] = min(abs(spike-tm(1)));
+if tm(1)-c < 0 % then closest value is before start time
+		spike = spike(index+1:end);
+else
+		spike = spike(index:end);
 end
-if size(tm, 1) > size(tm,2)
-	tm = tm';
+[c index] = min(abs(spike-tm(end)));
+if tm(end)-c < 0 %then closest value is after start time
+		spike = spike(1:index-1);
+else
+		spike = spike(1:index);
 end
+
 
 x = hist(spike, tm)';

@@ -13,8 +13,11 @@ function v = noiselessVelocity(file1)
 file = file1';
 
 t = file(1, :);
-xpos = file(2, :);
-ypos = file(3, :);
+xpos = (file(2, :))';
+xpos = lowpass4(xpos)';
+ypos = (file(3, :))';
+ypos = lowpass4(ypos)';
+t = t(1:length(xpos));
 
 xderiv = derivative_dwt(xpos,'spl',5,1/30,1); % The third arg is the detail coefficient. Make it higher to smooth more, make it lower to capture more noise
 yderiv = derivative_dwt(ypos,'spl',5,1/30,1); % detail coefficient of 5 was chosen expirmentally to achieve best fitting without oversmoothing

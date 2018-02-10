@@ -1,29 +1,35 @@
 function ff = spikespectra(cluster, tm)
 
   %takes cluster data, seperates into 1sec and then uses a tool from chronux to determine spiking frequency spectra
+st = spiketrain(cluster, tm);
 
-st = spiketrain(tm, cluster);
-%group into 2000 samples each for 1 sec window
+
+%group into 10000 samples each for 5 sec window
 k = 1;
-stbin = zeros(2000, ceil(length(st)/2000)-1);
-while k<=ceil((length(st)/2000)-1)
-    stbin(:, k) = st(((k-1)*(2000)+1):k*2000);
+sam = 20000; % number of samples per bin
+stbin = zeros(sam, ceil(length(st)/sam)-1);
+while k<=ceil((length(st)/sam)-1)
+    q = st(((k-1)*(sam)+1):k*sam);
+    stbin(:,k) = q';
     k = k+1;
 end;
 
 
-% for frequency resolution of .5hz using 2sec window
-TW =  1; %time bandwidth product
-ntapers = 2*TW-1; %number of tapers
-params.Fs = 2000; %sampling frequency
-params.tapers = [TW,ntapers]; %time-band product, no. of ntapers
-params.fpass = [0 100]; %frequency range to examine
-params.trialave = 1; %perform trial average
+% for frequency resolution of 1hz using 5sec window
 
-%compute coherence
-[cr, f] = mtspectrumpb(stbin(:,:), params');
+  TW = (sam/2000)*2; %time bandwidth product
+  ntapers = 2*TW-1; %number of tapers
+  params.Fs = 2000; %sampling frequency
+  params.tapers = [TW,ntapers]; %time-band product, no. of ntapers
+  params.fpass = [1 500]; %frequency range to examine
+  params.trialave = 1; %perform trial average
+
+  %compute coherence
+  [cr, fr] = mtspectrumpb(stbin, params');
+  fr = fr;
+  sumcr = cr+cr;
 
 figure
-plot(f, cr)
+plot(fr, cr)
 ylabel('Power [Hz]')
 xlabel('Frequency [Hz]')

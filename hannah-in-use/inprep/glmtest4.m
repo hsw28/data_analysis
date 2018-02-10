@@ -1,4 +1,4 @@
-function f = glmTEST2(cluster, time, pos)
+function f = glmTEST4(cluster, time, pos)
 
 
 [c timestart] = min(abs(time-pos(1,1)));
@@ -11,40 +11,12 @@ time = vel(2,:);
 vel = vel(1,:);
 
 
+
+
 time = time(1:length(vel));
 
 acc = accelfromvel(vel, time);
 acc = acc(1,:);
-
-
-%UN COMMENT IF YOU WANT DIRECTION
-
-[towardreward, awayfromreward] = centerdirection(pos);
-k =1;
-dir = zeros(2, length(pos));
-%while k <= length(pos)
-while k <= length(pos)
-  [cto indexto] = min(abs(pos(k,1)-towardreward));
-  [caway indexaway] = min(abs(pos(k,1)-awayfromreward));
-
-  if abs(pos(k,1)-towardreward(indexto)) < .1
-      times = pos(k,1);
-      dir(:,k) = [times; 1]; % assign timestamp 1 if going to toreward
-  elseif abs(pos(k,1)-awayfromreward(indexaway)) < .1
-      times = pos(k,1);
-      dir(:,k) = [times; -1]; % assign -1 if going to away from reward
-  else
-      times = pos(k,1);
-      dir(:,k) = [times; 0]; % assign 0 if not in center
-  end
-k = k+1;
-end
-dir = assignvelOLD(time, dir);
-dir = dir(2:end-2);
-dir = dir';
-
-
-
 
 posX = [pos(:,2), pos(:,1)]; %[xpos, time]
 posX = assignvel(time,posX');
@@ -68,20 +40,30 @@ posX = posX';
 posY = posY';
 
 
-
-
 trains = spiketrain(cluster, time);
-spikeindex = find(trains);
+
+%notstillindex = find(vel>20 & (acc<-9 | acc>9));
+%notstillindex = find(vel>20);
+%vel = vel(notstillindex);
+%acc = acc(notstillindex);
+%posX = posX(notstillindex);
+%posY = posY(notstillindex);
+%trains = trains(notstillindex);
+
+
+
+
+spikeindex = find(trains==1);
 N = length(spikeindex);
 
 
 
 %model 1: only vel
-b1 = glmfit([vel acc posX dir], trains, 'poisson')
-lambda1 = exp(b1(1)+b1(2)*vel+b1(3)*acc+b1(4)*posX+b1(5)*dir);
+[b1,dev,stats] = glmfit([vel acc vel.^2 acc.^2], trains, 'poisson');
+b1
+lambda1 = exp(b1(1)+b1(2)*vel+b1(3)*acc+b1(4)*vel.^2 +b1(5)*acc.^2);
 %lambda1 = exp(b1(2)*vel.^3);
-figure
-plot(lambda1)
+
 
 A(1) = sum(lambda1(1:spikeindex(1)));
 for i = 2:N
@@ -99,3 +81,13 @@ hold off
 xlabel('Model CDF')
 ylabel('Emperical CDF')
 title('model 1: only vel')
+
+Ivel_p = stats.p(2)
+Iacc_p = stats.p(3)
+vel2 = stats.p(4)
+acc2 = stats.p()
+
+R = cumsum(stats.resid);
+figure
+plot(R);
+title('resid cumsum')

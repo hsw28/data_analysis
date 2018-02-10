@@ -52,8 +52,8 @@ for k = 1:spikenum
     % limit the times in the time file to those in position files
     starttime = posstructure.(posformateddate)(1,1);
     endtime = posstructure.(posformateddate)(end,1);
-    starttime = find(abs(timestructure.(timeformateddate)-starttime) < .001);
-    endtime = find(abs(timestructure.(timeformateddate)-endtime) < .001);
+    starttime = find(abs(timestructure.(timeformateddate)-starttime) < .001)
+    endtime = find(abs(timestructure.(timeformateddate)-endtime) < .001)
     starttime = starttime(1,1);
     endtime = endtime(1,1);
     time = [timestructure.(timeformateddate)(starttime:endtime)];

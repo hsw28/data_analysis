@@ -22,4 +22,6 @@ for i = 2:s-2
 	timevector(end+1) = t(i);
 end
 
-a = [accvector'; timevector];
+
+a = [accvector; timevector];
+size(a)

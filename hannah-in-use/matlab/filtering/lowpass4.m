@@ -81,5 +81,5 @@ if isempty(Hd)
 end
 
 y = step(Hd,x);
-delay = mean(grpdelay(Hd));
+delay = round(mean(grpdelay(Hd)));
 y(1:delay) = [];

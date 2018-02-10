@@ -53,6 +53,8 @@ xstart = [];
 ystart = [];
 ypos = abs(360-ypos);
 
+timeend = [];
+
 while i<=size(runnum,1)
 		%finds start times in range -- this is when the rat is at the end of forced choice arm
 		if i<size(runnum,1)
@@ -105,9 +107,10 @@ while i<=size(runnum,1)
 
 %add times to matrix
 timestart(end+1) = index;
-timestart(end+1) = endindex;
+timeend(end+1) = endindex;
 i = i+1;
 end
 
-
-t = [timestart];
+myStruct.start = timestart;
+myStruct.end = timeend;
+t = myStruct;

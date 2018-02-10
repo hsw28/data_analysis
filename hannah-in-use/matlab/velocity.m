@@ -12,8 +12,12 @@ function v = velocity(file1);
 file = file1';
 
 t = file(1, :);
-xpos = file(2, :);
-ypos = file(3, :);
+xpos = (file(2, :))';
+xpos = lowpass4(xpos)';
+ypos = (file(3, :))';
+ypos = lowpass4(ypos)';
+t = t(1:length(xpos));
+
 
 velvector = [];
 timevector = [];

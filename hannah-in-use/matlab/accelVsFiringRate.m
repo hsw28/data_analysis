@@ -38,6 +38,7 @@ m = length(rate);
 length(rate);
 
 acceldata = (assignvel(time,accelORvel));
+acceldata = acceldata(1,:);
 length(acceldata);
 length(time);
 avg_accel = zeros(m,1);
@@ -51,8 +52,18 @@ end
 
 
 %COMMENT BACK
-%figure
-%scatter(avg_accel,rate/t)
+figure
+scatter(avg_accel,rate/t)
+
+figure
+size(avg_accel)
+size(rate/t)
+h = vertcat(avg_accel', (rate/t));
+values = hist3(h');
+imagesc(values.')
+colorbar
+axis equal
+axis xy
 
 xlabel('Average Acceleration');
 ylabel('Firing rate/Sec.');
@@ -94,16 +105,12 @@ xlabel('Average Acceleration');
 ylabel('Firing rate/Sec.');
 
 %COMMENT BACK
-%figure
-%scatter(average,(0:fastest)/t)
+figure
+scatter(average,(0:fastest)/t)
 %xlabel('Average Velocity');
 %ylabel('Firing rate/Sec.');
 %lsline
 
-% figure
-% scatter(deviation, (0:fastest)/t)
-% xlabel('Deviation of Theta Power Ratio');
-% ylabel('Firing rate');
-%thingy = [average,deviation,(0:fastest)'/t];
+
 
 thingy = [average, (0:fastest)'/t];
