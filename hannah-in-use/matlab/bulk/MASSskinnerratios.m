@@ -8,21 +8,23 @@ function f = MASSskinnerratios(spikestructure, time, cueOn)
 cueOn;
 foodOn = cueOn+8;
 foodEnd = foodOn+8;
-cueOnindex = find(abs(time-cueOn)<.002);
-x = diff(cueOnindex);
-x = find(x<4000);
-cueOnindex = cueOnindex(x);
-foodOnindex = find(abs(time-foodOn)<.002);
-x = diff(foodOnindex);
-x = find(x<4000);
-foodOnindex = foodOnindex(x);
-foodEndindex = find(abs(time-foodEnd)<.002);
-x = diff(foodEndindex);
-x = find(x<4000);
-foodEndindex = foodEndindex(x);
+cueOnindex=[];
+foodOnindex=[];
+foodEndindex=[];
+for k=1:length(cueOn)
+    [c cueindex] = min(abs(time-cueOn(k)));
+    [c foodindex] = min(abs(time-foodOn(k)));
+    [c endindex] = min(abs(time-foodEnd(k)));
+    cueOnindex(end+1) = cueindex;
+    foodOnindex(end+1) = foodindex;
+    foodEndindex(end+1) = endindex;
+end
 
-if length(cueOnindex) != length(foodOnindex) | length(foodOnindex) != (foodEndindex)
-    error('your lengths are wonky')
+if length(cueOnindex) ~= length(foodOnindex) | length(foodOnindex) ~= length(foodEndindex) | length(cueOnindex) ~= length(cueOn)
+  length(cueOnindex)
+  length(foodOnindex)
+  length(foodEndindex)
+    warning('your lengths are wonky')
 end
 
 %finding times
@@ -36,17 +38,17 @@ timeintertrial = 0;
 while k <= length(cueOnindex)
     cue = time(cueOnindex(k):foodOnindex(k));
     timecueOnly = timecueOnly + (cue(end)-cue(1));
-    cueOnly = [cueOnly; cue]
+    cueOnly = horzcat(cueOnly, cue);
     food = time(foodOnindex(k):foodEndindex(k));
     timereward = timereward + (food(end)-food(1));
-    reward = [reward; food]
+    reward = horzcat(reward, food);
     if k == 1
-        base = time(1:foodOnindex(k))
+        base = time(1:foodOnindex(k));
     else
-        base = time(foodOnindex(k-1):foodOnindex(k))
+        base = time(foodOnindex(k-1):foodOnindex(k));
     end
-    timeintertrial = intertrial + (base(end)-base(1));
-    intertrial = [intertrial; base]
+    timeintertrial = timeintertrial + (base(end)-base(1));
+    intertrial = horzcat(intertrial, base);
 k = k +1;
 end
 % now you have all times for intertrial, cueOnly, and reward, and how long each is in seconds
@@ -59,8 +61,8 @@ spikenames = (fieldnames(spikestructure));
 spikenum = length(spikenames);
 
 for k = 1:spikenum
-    name = char(spikenames(k))
-    currentspike = spikestructure.(spikename);
+    name = char(spikenames(k));
+    currentspike = spikestructure.(name);
 
     spikesIntertrial = intersect(currentspike, intertrial);
     spikesCue = intersect(currentspike, cueOnly);
