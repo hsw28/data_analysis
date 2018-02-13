@@ -1,0 +1,86 @@
+function f = MASSskinnerratios(spikestructure, time, cueOn)
+  %use clusterimport.m create spike structures
+  %input time vector and vector of cue times
+
+
+
+% group timestructure
+cueOn;
+foodOn = cueOn+8;
+foodEnd = foodOn+8;
+cueOnindex = find(abs(time-cueOn)<.002);
+x = diff(cueOnindex);
+x = find(x<4000);
+cueOnindex = cueOnindex(x);
+foodOnindex = find(abs(time-foodOn)<.002);
+x = diff(foodOnindex);
+x = find(x<4000);
+foodOnindex = foodOnindex(x);
+foodEndindex = find(abs(time-foodEnd)<.002);
+x = diff(foodEndindex);
+x = find(x<4000);
+foodEndindex = foodEndindex(x);
+
+if length(cueOnindex) != length(foodOnindex) | length(foodOnindex) != (foodEndindex)
+    error('your lengths are wonky')
+end
+
+%finding times
+k = 1;
+cueOnly = [];
+timecueOnly = 0;
+reward = [];
+timereward = 0;
+intertrial = [];
+timeintertrial = 0;
+while k <= length(cueOnindex)
+    cue = time(cueOnindex(k):foodOnindex(k));
+    timecueOnly = timecueOnly + (cue(end)-cue(1));
+    cueOnly = [cueOnly; cue]
+    food = time(foodOnindex(k):foodEndindex(k));
+    timereward = timereward + (food(end)-food(1));
+    reward = [reward; food]
+    if k == 1
+        base = time(1:foodOnindex(k))
+    else
+        base = time(foodOnindex(k-1):foodOnindex(k))
+    end
+    timeintertrial = intertrial + (base(end)-base(1));
+    intertrial = [intertrial; base]
+k = k +1;
+end
+% now you have all times for intertrial, cueOnly, and reward, and how long each is in seconds
+
+output = {'cluster';'base spikes/s'; 'cue spikes/s'; 'cue change'; 'R spikes/s'; 'R change'};
+
+% time to go through the clusters
+%determine how many spikes
+spikenames = (fieldnames(spikestructure));
+spikenum = length(spikenames);
+
+for k = 1:spikenum
+    name = char(spikenames(k))
+    currentspike = spikestructure.(spikename);
+
+    spikesIntertrial = intersect(currentspike, intertrial);
+    spikesCue = intersect(currentspike, cueOnly);
+    spikesReward = intersect(currentspike, reward);
+
+    %finding rates
+    rateIntertrial = length(spikesIntertrial)/timeintertrial;
+    rateCue = length(spikesCue)/timecueOnly;
+    rateReward = length(spikesReward)/timereward;
+
+    %finding difference from baseline
+    changeCue = rateCue/rateIntertrial;
+    changeReward = rateReward/rateIntertrial;
+
+    %makes output vector
+    newdata = {name; rateIntertrial; rateCue; changeCue; rateReward; changeReward};
+
+    output = horzcat(output, newdata);
+
+  end
+
+% outputs chart with spike name, number of spikes, slope, and r2 value
+  f = output';
