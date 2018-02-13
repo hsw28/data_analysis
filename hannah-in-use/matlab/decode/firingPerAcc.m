@@ -40,7 +40,7 @@ end
 avg_accel;
 
 maxacc = max(avg_accel);
-vbin = [-5; -1; 1; 5];
+vbin = [-15; -7; -1; 1; 7; 15];
 
 
 

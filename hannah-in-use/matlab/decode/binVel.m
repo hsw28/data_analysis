@@ -17,9 +17,10 @@ ending = max(time);
 binvec = [];
 
 assvel = (assignvel(time,accelORvel));
+assvel = assvel(1,:);
 
 %good for 5 bins
-vbin = [0; 3; 6; 13; 19; 28];
+vbin = [0; 5; 10; 15; 20; 25];
 
 sized = ceil(length(assvel)./(2000*t))-1; %done in time stamps. number of bins
 avg_accel = zeros(sized,1);

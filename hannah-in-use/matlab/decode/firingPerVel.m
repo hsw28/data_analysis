@@ -18,6 +18,7 @@ end
 assvel = accelORvel;
 %assvel = (assignvel(time,accelORvel));
 time = time(1:length(assvel));
+assvel = assvel(1,:);
 
 
 
@@ -39,7 +40,7 @@ end
 
 maxacc = max(avg_accel);
 
-vbin = [0; 3; 6; 13; 19; 28];
+vbin = [0; 5; 10; 15; 20; 25];
 
 
 

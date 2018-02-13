@@ -53,20 +53,38 @@ end
 
 %COMMENT BACK
 figure
-scatter(avg_accel,rate/t)
+scatter(avg_accel, rate/t)
+xlabel('Average Velocity');
+ylabel('Firing Rate/Sec.');
+
+%figure
+%size(avg_accel)
+%size(rate/t)
+%heatscatter((avg_accel), (rate/t)')
 
 figure
-size(avg_accel)
-size(rate/t)
-h = vertcat(avg_accel', (rate/t));
-values = hist3(h');
-imagesc(values.')
+Apts = linspace(min(avg_accel), max(avg_accel), 300);
+sApts = max(avg_accel)
+Rpts = linspace(min(rate/t), max(rate/t), 100);
+sRpts = max(rate/t)
+N = histcounts2((rate/t)', (avg_accel), Rpts, Apts);
+imagesc(Apts, Rpts, N);
 colorbar
-axis equal
-axis xy
+caxis([2 80])
+%axis equal;
+set(gca, 'XLim', Apts([1 ceil(end)]), 'YLim', Rpts([1 ceil(end)]), 'YDir', 'normal');
+xlabel('Average Velocity');
+ylabel('Firing Rate/Sec.');
 
-xlabel('Average Acceleration');
-ylabel('Firing rate/Sec.');
+
+
+%h = vertcat(avg_accel', (rate/t));
+%values = hist3(h');
+%imagesc(values.')
+%colorbar
+%axis equal
+%axis xy
+
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
 threshold = .01 * length(rate);
@@ -101,14 +119,14 @@ figure
 %errorbar((0:fastest)/t, average, StdError, 'o')
 errorbar(average, (0:fastest)/t, StdError, 'horizontal', 'o')
 
-xlabel('Average Acceleration');
+xlabel('Average Velocity');
 ylabel('Firing rate/Sec.');
 
 %COMMENT BACK
 figure
 scatter(average,(0:fastest)/t)
 %xlabel('Average Velocity');
-%ylabel('Firing rate/Sec.');
+%ylabel('Firing Rate/Sec.');
 %lsline
 
 

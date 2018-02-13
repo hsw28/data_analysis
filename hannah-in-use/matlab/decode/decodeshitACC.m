@@ -1,4 +1,4 @@
-function [values probs] = decodeshit(timevec, clusters, vel, t)
+function [values probs] = decodeshitACC(timevec, clusters, vel, t)
 
 % decodes velocity  based on cell firing. t is bins in seconds
 % returns [predictedV, actualV]
@@ -9,6 +9,7 @@ function [values probs] = decodeshit(timevec, clusters, vel, t)
 t = 2000*t;
 tm = 1;
 assvel = assignvel(timevec, vel);
+assvel = assvel(1,:);
 timevector = timevec(1:length(assvel));
 
 %find number of clusters
@@ -20,7 +21,7 @@ numclust = length(clustname)
 
 
 
-vbin = [-5; -1; 1; 5];
+vbin = [-15; -7; -1; 1; 7; 15];
 
 
 

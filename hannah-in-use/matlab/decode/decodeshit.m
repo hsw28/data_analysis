@@ -3,8 +3,17 @@ function [values probs] = decodeshit(timevec, clusters, vel, t)
 % decodes velocity  based on cell firing. t is bins in seconds
 % returns [predictedV, actualV]
 % for now make sure bins in binVel function are the same. will implement that as a variable later
-
+%
+%
 %NEED TO PUT TIMES WITH THE OUTPUT OR IT GETS SUPER CONFUSING. DO THIS
+%
+% to plot: imagesc([minx maxx], [miny maxy], decoded.probs')
+% ex: imagesc([0 length(decoded.probs)], [2 24], decoded.probs')
+%
+% to plot actual velocity over it:
+% temp = binning(assvel(1,:)', ceil(length(assvel)/length(decoded.probs)));
+% temp = temp/ceil(length(assvel)/length(decoded.probs));
+% plot(temp, 'LineWidth',1.5, 'Color', 'w');
 
 t = 2000*t;
 tm = 1;
@@ -21,7 +30,7 @@ numclust = length(clustname)
 
 %vbin = [10; 15; 20; 25; 30]; 0.7578
 %vbin = [0; 4; 8; 12; 16; 20];
-vbin = [0; 3; 6; 13; 19; 28];
+vbin = [0; 5; 10; 15; 20; 25];
 
 
 binnedV = binVel(timevec, vel, t/2000);
