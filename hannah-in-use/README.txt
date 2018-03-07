@@ -43,14 +43,17 @@ derivative_dwt.m: differentiation (derivative) of sampled data based on discrete
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
 middletimes.m: run by run, finds times the animal is in the center stem and the direction of travel
+middlevel.m: gets velocity times for middle runs
 movementunits.m: returns units only when the animal is actually running
 noiselessVelocity.m: computes velocity in a supposedly smoother way
 normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+rewardtimes.m: tells you the time animal went to reward site and amount of time spent there
 spikeprobrun.m: bins vel/acc then finds spiking prob for each acc/vel bin
 starttimes.m: finds time animal starts each trial and returns a matrix of all start & end times and index values
 velocity.m: finds velocity from position data
+veltimes.m: tells you the time animal was below a particular velocity
 
 UNITS
 accelVsFiringRate.m: plots accel versus firing rate
@@ -90,6 +93,8 @@ MASSchunkingruns.m: chunks multiple runs into run number and place in run and re
 MASSCHUNKaccVsFiringRate.m: does same as MASSaccelVsFiringRate.m but for one day and with H maze runs chunked by position
 MASSCHUNKcorrFiringRate.m: takes clusters from one day and correlates firing with acc and vel for different parts of maze
 MASSCHUNKvelVsFiringRate.m: does same as MASSvelVsFiringRate.m but for one day and with H maze runs chunked by position
+MASSrewardratios: input entry time to reward box on maze, tells you spiking difference between pre entry and entry
+MASSskinnerratios: input cue time, tells you spiking difference between intertrial, cue, and reward
 MASSvelVsFiringRate.m: does a mass correlation of cluster firing versus vel, across days
 posimport.m: takes pos files found using uipickfiles and makes a structure of pos/vel/acc
 timeimport.m: takes lfps found using uipickfiles and makes a structure of time data
@@ -115,6 +120,7 @@ boundedline.m: shades bounds around a line
 eventcorr.m -- not sure (lol)
 getHeaderGains.m: gets gains from eeg file after opening with mwlopen
 gh_debuffer.m: imports an ARTE .eeg file
+glmtest!.m: constantly in prep, but for generalized linear models
 kw.m: performs a Kruskal-Wallis test on two groups of data
 mua_rate.m: finds rate of MUA, outputs as number of spikes per time bin
 oat2pos.m: imports OATE position csv to binary. uses the same x and y value for front and back LEDs
