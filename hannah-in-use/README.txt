@@ -34,11 +34,13 @@ POS/VEL/ACCEL
 accel.m: finds acceleration for position data
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 accelVsFiringRate.m: plots accel versus firing rate
+accelVsFiringRateChunk.m: does same as above except with chunked data
 assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
+assignticktimes.m using a file from extracttick.py for tick times, and video ticks of an event, output times of the event
 centerdirection.m: finds direction on the center stem if the animal is going towards or away from the reward arms, point by point (for run by tun use middletimes.m)
-chunkingrungs.m: chunks H maze into times in each arm (forced, center, reward) of maze
+chunkingruns.m: chunks H maze into times in each arm (forced, center, reward) of maze
 derivative_dwt.m: differentiation (derivative) of sampled data based on discrete wavelet transform
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
@@ -74,7 +76,7 @@ COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 cohVsFiringRate.m: finds coherence versus unit firiting rate
 compareISI.m: compares and plots some thing (acc, phase, power, etc) to ISI
-corr.m: finds the cross correlation and plots
+Hcorr.m: finds the cross correlation and plots
 findLSFrequencies: finds all LS events and makes a frequency plot of them
 lfpfreq.m: takes LFP and finds power spectrum. does NOT filter in any way
 LSevents.m: finds LS events
