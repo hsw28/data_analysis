@@ -1,4 +1,4 @@
-function f = glmTEST4(cluster, time, pos)
+function f = glmTEST4(cluster, time, pos, dir)
 
 
 [c timestart] = min(abs(time-pos(1,1)));
@@ -39,6 +39,30 @@ acc = acc';
 posX = posX';
 posY = posY';
 
+%{
+[towardreward, awayfromreward] = centerdirection(pos);
+k =1;
+dir = zeros(2, length(pos));
+while k <= length(pos)
+  [cto indexto] = min(abs(pos(k,1)-towardreward));
+  [caway indexaway] = min(abs(pos(k,1)-awayfromreward));
+
+  if abs(pos(k,1)-towardreward(indexto)) < .1
+      times = pos(k,1);
+      dir(:,k) = [times; 1]; % assign timestamp 1 if going to toreward
+  elseif abs(pos(k,1)-awayfromreward(indexaway)) < .1
+      times = pos(k,1);
+      dir(:,k) = [times; -1]; % assign -1 if going to away from reward
+  else
+      times = pos(k,1);
+      dir(:,k) = [times; 0]; % assign 0 if not in center
+  end
+k = k+1;
+end
+dir = assignvelOLD(time, dir);
+dir = dir';
+%}
+
 
 trains = spiketrain(cluster, time);
 
@@ -59,9 +83,9 @@ N = length(spikeindex);
 
 
 %model 1: only vel
-[b1,dev,stats] = glmfit([vel acc vel.^2 acc.^2], trains, 'poisson');
+[b1,dev,stats] = glmfit([vel acc posX], trains, 'poisson');
 b1
-lambda1 = exp(b1(1)+b1(2)*vel+b1(3)*acc+b1(4)*vel.^2 +b1(5)*acc.^2);
+lambda1 = exp(b1(1)+b1(2)*vel+b1(3)*acc+b1(4)*posX);
 %lambda1 = exp(b1(2)*vel.^3);
 
 
@@ -84,10 +108,24 @@ title('model 1: only vel')
 
 Ivel_p = stats.p(2)
 Iacc_p = stats.p(3)
-vel2 = stats.p(4)
-acc2 = stats.p()
+dir_p = stats.p(4)
+
+% confidence bounds
+  CI = [b1-2*stats.se b1+2*stats.se]
+  CI_lower2 = exp(b1(2)-2*stats.se(2));
+  CI_upper2 = exp(b1(2)+2*stats.se(2));
+
+  CI_lower2 = exp(b1(3)-2*stats.se(3));
+  CI_upper2 = exp(b1(3)+2*stats.se(3));
+
+  CI_lower2 = exp(b1(4)-2*stats.se(4));
+  CI_upper2 = exp(b1(4)+2*stats.se(4));
+% and pval
+
 
 R = cumsum(stats.resid);
 figure
 plot(R);
 title('resid cumsum')
+
+f = dir;

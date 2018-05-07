@@ -1,6 +1,6 @@
 
-function p = findrip(unfilteredLFP, timevector, devAboveMean, pos);
-%IF DONT HAVE POSITION PUT 'NA'
+function p = findrip(unfilteredLFP, timevector, devAboveMean, vel);
+%IF DONT HAVE VELOCITY PUT 0
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
 % ex:
@@ -31,10 +31,9 @@ peaktime=[];
 starts = [];
 
 % gets velocity
-if pos == 'NA'
+if vel == 0
 	vel = ones(1,length(d));
 else
-	vel = noiselessVelocity(pos);
   vel = assignvelOLD(d, vel);
 end
 

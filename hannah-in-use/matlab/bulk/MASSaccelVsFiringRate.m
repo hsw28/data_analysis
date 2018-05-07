@@ -18,6 +18,8 @@ for k = 1:spikenum
     date = char(date(1,1));
     date = strsplit(date,'_box_cl');
     date = char(date(1,1));
+    date = strsplit(date,'_rotation_cl');
+    date = char(date(1,1));
     date = strsplit(date,'_cl');
     date = char(date(1,1));
     date = strcat(date, '!');
@@ -63,7 +65,7 @@ for k = 1:spikenum
     % does the thing
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
-    %set(0,'DefaultFigureVisible', 'off');
+    set(0,'DefaultFigureVisible', 'off');
     accvrate = accelVsFiringRate((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), windowsize);
     x = accvrate(:,1);
     actualvals = find(~isnan(x));

@@ -42,18 +42,28 @@ while k <= length(cueOnindex)
     food = time(foodOnindex(k):foodEndindex(k));
     timereward = timereward + (food(end)-food(1));
     reward = horzcat(reward, food);
-    if k == 1
-        base = time(1:foodOnindex(k));
-    else
-        base = time(foodOnindex(k-1):foodOnindex(k));
-    end
-    timeintertrial = timeintertrial + (base(end)-base(1));
-    intertrial = horzcat(intertrial, base);
+
+    %THIS USED TO MAKE ALL TIMES THE INTERTRIAL SPIKE RATE, I THINK WE ONLY WANT 8 SEC
+    %if k == 1
+    %    base = time(1:foodOnindex(k));
+    %else
+    %    base = time(foodOnindex(k-1):foodOnindex(k));
+    %end
+    %timeintertrial = timeintertrial + (base(end)-base(1));
+    %intertrial = horzcat(intertrial, base);
+
+    %NEW
+        base = time(cueOnindex(k)-16000:cueOnindex(k));
+        timeintertrial = timeintertrial + (time(cueOnindex(k))-time(cueOnindex(k)-16000));
+        intertrial = horzcat(intertrial, base);
+
+
+
 k = k +1;
 end
 % now you have all times for intertrial, cueOnly, and reward, and how long each is in seconds
 
-output = {'cluster';'base spikes/s'; 'cue spikes/s'; 'cue change'; 'R spikes/s'; 'R change'};
+output = {'cluster'; 'num of spikes';'base spikes/s'; 'cue spikes/s'; 'cue change'; 'R spikes/s'; 'R change'};
 
 % time to go through the clusters
 %determine how many spikes
@@ -78,7 +88,7 @@ for k = 1:spikenum
     changeReward = rateReward/rateIntertrial;
 
     %makes output vector
-    newdata = {name; rateIntertrial; rateCue; changeCue; rateReward; changeReward};
+    newdata = {name; length(currentspike); rateIntertrial; rateCue; changeCue; rateReward; changeReward};
 
     output = horzcat(output, newdata);
 

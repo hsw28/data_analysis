@@ -25,7 +25,7 @@ ymiddle = ypos(bothindex);
 posmiddle = [timemiddle; xmiddle; ymiddle];
 
 %find directions
-figure('visible','off');
+%figure('visible','off');
 dir = direction(timemiddle, pos);
 % now you have [timevector; xposvector; yposvector; fxvector; fyvector];
 

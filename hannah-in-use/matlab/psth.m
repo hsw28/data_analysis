@@ -1,4 +1,5 @@
-function varargout=psth(varargin)
+
+function varargout=psth(seconds, bins, varargin)
 %PSTH peri-stimulus time histogram
 %
 % all inputs must be in columns
@@ -21,7 +22,7 @@ function varargout=psth(varargin)
 %
 
 %get options
-options = struct('lags', linspace(-20,20, 200), ...  %change here for seconds around and bins
+options = struct('lags', linspace(-seconds, seconds, bins), ...%change here for seconds around and bins
                  'segments', [], ...
                  'normalization', 'none');
 

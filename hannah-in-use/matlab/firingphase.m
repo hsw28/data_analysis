@@ -22,8 +22,10 @@ phase = [];
 ftimes = [];
 test = 0;
 
+
 vel = assignvel(timevector, vel);
-indx = find(vel>6);
+
+indx = find(vel(1,:)>6);
 goodtimes = timevector(indx);
 goodtimes = goodtimes';
 
