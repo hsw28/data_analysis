@@ -43,14 +43,17 @@ derivative_dwt.m: differentiation (derivative) of sampled data based on discrete
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
 middletimes.m: run by run, finds times the animal is in the center stem and the direction of travel
+middlevel.m: assigns velocity to times animal is in the center stem
 movementunits.m: returns units only when the animal is actually running
 noiselessVelocity.m: computes velocity in a supposedly smoother way
 normalizePosData.m: normalizes position data for time spent in each part of the track and outputs a heat map
 phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
+rewardtimes.m: tells you the time animal went to reward site and amount of time spent there
 spikeprobrun.m: bins vel/acc then finds spiking prob for each acc/vel bin
 starttimes.m: finds time animal starts each trial and returns a matrix of all start & end times and index values
 velocity.m: finds velocity from position data
+veltimes.m: tells you the time animal was below a particular velocity v
 
 UNITS
 accelVsFiringRate.m: plots accel versus firing rate
@@ -85,11 +88,14 @@ spikehisto.m: makes a histogram of spikes in binned time
 
 BULK
 clusterimport.m: takes clusters found using uipickfiles and makes a structure of clusters
+lfpimport.m: takes LFPs found using uipickfiles and makes a structure of LFPs
 MASSaccelVsFiringRate.m: does a mass correlation of cluster firing versus accel, across days
 MASSchunkingruns.m: chunks multiple runs into run number and place in run and returns structure
 MASSCHUNKaccVsFiringRate.m: does same as MASSaccelVsFiringRate.m but for one day and with H maze runs chunked by position
 MASSCHUNKcorrFiringRate.m: takes clusters from one day and correlates firing with acc and vel for different parts of maze
 MASSCHUNKvelVsFiringRate.m: does same as MASSvelVsFiringRate.m but for one day and with H maze runs chunked by position
+MASSrewardratios.m: finds spiking ratio around any entered time points
+MASSripplerate.m: finds increase/decrease around ripple times
 MASSvelVsFiringRate.m: does a mass correlation of cluster firing versus vel, across days
 posimport.m: takes pos files found using uipickfiles and makes a structure of pos/vel/acc
 timeimport.m: takes lfps found using uipickfiles and makes a structure of time data
