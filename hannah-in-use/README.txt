@@ -34,11 +34,13 @@ POS/VEL/ACCEL
 accel.m: finds acceleration for position data
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 accelVsFiringRate.m: plots accel versus firing rate
+accelVsFiringRateChunk.m: does same as above except with chunked data
 assignpos.m assigns position to all timepoints
 assignvel.m: assigns velocities to every time point
 assigntic.m: assigns a tic number from the video to an event
+assignticktimes.m using a file from extracttick.py for tick times, and video ticks of an event, output times of the event
 centerdirection.m: finds direction on the center stem if the animal is going towards or away from the reward arms, point by point (for run by tun use middletimes.m)
-chunkingrungs.m: chunks H maze into times in each arm (forced, center, reward) of maze
+chunkingruns.m: chunks H maze into times in each arm (forced, center, reward) of maze
 derivative_dwt.m: differentiation (derivative) of sampled data based on discrete wavelet transform
 direction.m: takes an timestamps and finds the animal's direction at times
 maxaccel.m: finds times of high acceleration and returns them along with accell values
@@ -53,7 +55,7 @@ rewardtimes.m: tells you the time animal went to reward site and amount of time 
 spikeprobrun.m: bins vel/acc then finds spiking prob for each acc/vel bin
 starttimes.m: finds time animal starts each trial and returns a matrix of all start & end times and index values
 velocity.m: finds velocity from position data
-veltimes.m: tells you the time animal was below a particular velocity v
+veltimes.m: tells you the time animal was below a particular velocity
 
 UNITS
 accelVsFiringRate.m: plots accel versus firing rate
@@ -65,6 +67,7 @@ phaseVaccel.m plots spike phase versus acceleration
 placeevent.m: if you have event times, this will match with place data to get place cells or whatever
 powerVsFiringRate.m: plots theta against firing rate
 rasterplot.m: makes a raster plot
+spikecrosstabs.m: lets you take cross tabs and chi2 of any number of spike parameters
 spiketrain.m: makes a spike train of data
 STA.m: finds spike triggered average
 STAfake.m: plots a real spike triggered average and a fake spike striggered average on same graph
@@ -74,7 +77,7 @@ COMPARISIONS/FREQUENCIES
 acc_lfp.m: finds points of acceleration and plots corresponding LFPs
 cohVsFiringRate.m: finds coherence versus unit firiting rate
 compareISI.m: compares and plots some thing (acc, phase, power, etc) to ISI
-corr.m: finds the cross correlation and plots
+Hcorr.m: finds the cross correlation and plots
 findLSFrequencies: finds all LS events and makes a frequency plot of them
 lfpfreq.m: takes LFP and finds power spectrum. does NOT filter in any way
 LSevents.m: finds LS events
@@ -94,8 +97,8 @@ MASSchunkingruns.m: chunks multiple runs into run number and place in run and re
 MASSCHUNKaccVsFiringRate.m: does same as MASSaccelVsFiringRate.m but for one day and with H maze runs chunked by position
 MASSCHUNKcorrFiringRate.m: takes clusters from one day and correlates firing with acc and vel for different parts of maze
 MASSCHUNKvelVsFiringRate.m: does same as MASSvelVsFiringRate.m but for one day and with H maze runs chunked by position
-MASSrewardratios.m: finds spiking ratio around any entered time points
-MASSripplerate.m: finds increase/decrease around ripple times
+MASSrewardratios: input entry time to reward box on maze, tells you spiking difference between pre entry and entry
+MASSskinnerratios: input cue time, tells you spiking difference between intertrial, cue, and reward
 MASSvelVsFiringRate.m: does a mass correlation of cluster firing versus vel, across days
 posimport.m: takes pos files found using uipickfiles and makes a structure of pos/vel/acc
 timeimport.m: takes lfps found using uipickfiles and makes a structure of time data
@@ -121,6 +124,7 @@ boundedline.m: shades bounds around a line
 eventcorr.m -- not sure (lol)
 getHeaderGains.m: gets gains from eeg file after opening with mwlopen
 gh_debuffer.m: imports an ARTE .eeg file
+glmtest!.m: constantly in prep, but for generalized linear models
 kw.m: performs a Kruskal-Wallis test on two groups of data
 mua_rate.m: finds rate of MUA, outputs as number of spikes per time bin
 oat2pos.m: imports OATE position csv to binary. uses the same x and y value for front and back LEDs
