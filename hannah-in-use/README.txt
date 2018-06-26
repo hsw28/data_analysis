@@ -5,10 +5,12 @@ FILTERING
 deltafilt.m: lowpass filters in the delta band (<4)
 filter812.m: filters in 8-12hz
 gammafilt.m: bandpass filters in the gamma band (20-100)
+hightheta.m: bandpass filters 7-12hz
 lowpass4.m: lowerpass filters below 4
 lowpass20.m: lowpass filters below 20
 lowpass50.m: lowpass filters below 50
 lowpass300.m: lowpass filters below 300
+lowtheta.m: bandpass filters 3-6
 ripfilt.m: bandpass filters in the ripple band (100-300)
 thetafilt.m: bandpass filters in the theta band (6-10)
 

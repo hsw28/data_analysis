@@ -1,6 +1,7 @@
-function f = MASSripplerate(spikestructure, posstructure, timestructure, lfpstructure, usevel)
+function f = MASSripplerate(spikestructure, posstructure, timestructure, lfpstructure, usevel, startorpeak)
   %IF USE VEL = 0 VELOCITY IS NOT USED TO FIND RIPPLES. IF =1 IT IS. RIGHT NOW YOU STILL PUT IN POS EITHER WAY
   %IF YOU SELECT ZERO THEN TIME ISNT CUT TO POSITION FILE TIMES. IF YOU SELECT 1 IT IS
+  % FOR START OR PEAK-- ENTER 0 FOR START, 1 FOR PEAK
   %
   %DONT IMPORT FILTERED lfps
   %
@@ -97,8 +98,14 @@ for k = 1:spikenum
     end
 
     spikename = char(spikenames(k));
-    allchanges = psth(.2, 41, rips(2,:), (spikestructure.(spikename).*conversion));
 
+    if startorpeak == 1
+      allchanges = psth(.2, 41, rips(2,:), (spikestructure.(spikename).*conversion));
+    elseif startorpeak == 0
+        allchanges = psth(.5, 101, rips(1,:), (spikestructure.(spikename).*conversion));
+    end
+
+%{
     size(allchanges)
     %take 20ms around each side for ripple rate
     totalrip = allchanges(18)+allchanges(22);
@@ -106,15 +113,16 @@ for k = 1:spikenum
     totalprerip = allchanges(8)+allchanges(12);
     %for post ripple take 60-100ms after
     totalpostrip = allchanges(28)+allchanges(32);
-    hold on
-    plot(allchanges/allchanges(1))
+
 
     newdata = {name; length(spikestructure.(spikename)); totalprerip; totalrip; totalpostrip; totalrip/totalprerip; totalrip/totalpostrip;  totalpostrip/totalprerip};
 
     %output = {'cluster name'; '# spikes'; 'spikes pre rip'; 'spikes rip'; 'spikes post rip'; 'rip/pre-rip'; 'rip/post-rip'; 'postrip/prerip' };
 
           output = horzcat(output, newdata);
-
+%}
+          hold on
+          plot(allchanges/allchanges(1))
 end
 
 % outputs chart with spike name, number of spikes, slope, and r2 value

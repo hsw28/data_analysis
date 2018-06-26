@@ -86,6 +86,9 @@ for k = 1:spikenum
           spikesizes = spikestructure.(spikename);
           stats = fitlm(x,y);
           pval = stats.Coefficients.pValue(2);
+          if rsquared == 1
+              rsquared = NaN;
+          end
 
           % made chart with name, number of spikes, number of points on graph, slope, and r2 value, and p value from t test
           newdata = {name; length(spikesizes); size(x,1); slope; rsquared; pval};
