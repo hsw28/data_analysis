@@ -1,4 +1,4 @@
-function [values probs] = decodeshit(timevec, clusters, vel, t)
+function [values probs] = decodeshitVel(timevec, clusters, vel, t)
 
 % decodes velocity  based on cell firing. t is bins in seconds
 % returns [predictedV, actualV]
@@ -30,8 +30,9 @@ numclust = length(clustname)
 
 %vbin = [10; 15; 20; 25; 30]; 0.7578
 %vbin = [0; 4; 8; 12; 16; 20];
-vbin = [0; 5; 10; 15; 20; 25];
-
+%vbin = [0; 5; 10; 15; 20; 25];
+%vbin = [0; 5; 10; 15; 30; 45];
+vbin = [0; 5; 10; 15; 20; 25; 30; 35; 40; 45];
 
 binnedV = binVel(timevec, vel, t/2000);
 
@@ -45,27 +46,18 @@ while j <= numclust
     j = j+1;
 end
 
+fxmatrix
 
 
-
-% find prob the animal is each velocity
-probatvelocity = zeros(length(vbin),1);
-legitV = find(binnedV<100);
-for k = 1:length(vbin)
-    numvel = find(binnedV == (k));
-    probatvelocity(k) = length(numvel)./length(legitV);
-end
-probatvelocity
-
+% find prob the animal is each velocity DONT NEED BUT CAN BE USEFUL
+%probatvelocity = zeros(length(vbin),1);
+%legitV = find(binnedV<100);
 %for k = 1:length(vbin)
-%    if k == 1
-%        probatvelocity(1,1) = length(find(assvel>=vbin(1) & assvel<=vbin(2)))./length(assvel);
-%    elseif k>1 & k<length(vbin)
-%      probatvelocity(k,1) = length(find(assvel>vbin(k) & assvel<=vbin(k+1)))./length(assvel);
-%    elseif k==length(vbin)
-%      probatvelocity(end,1) = length(find(assvel>vbin(length(vbin))))./length(assvel);
-%    end
+%    numvel = find(binnedV == (k));
+%    probatvelocity(k) = length(numvel)./length(legitV);
 %end
+%probatvelocity
+
 
 
 % permue times
@@ -76,11 +68,11 @@ probatvelocity
 %percents = zeros(length(timevector)-(rem(length(timevector), t)), length(vbin)) ;
 percents = [];
 
-while tm <= length(timevector)-(rem(length(timevector), t))
+while tm <= length(timevector)-(rem(length(timevector), t)) & (tm+t) < length(timevector)
       %for the cluster, permute through the velocities
       endprob = [];
 
-        for k = (1:length(probatvelocity)) % six for the 6 groups of velocities
+        for k = (1:length(vbin)) % six for the 6 groups of velocities
           %PERMUTE THROUGH THE CLUSTERS
           %productme = 1; OLD
           productme =0;
@@ -150,18 +142,49 @@ while tm <= length(timevector)-(rem(length(timevector), t))
                                           % if I want probabilities need to make a matrix of endprobs instead of selecting max
         times(end+1) = timevector(tm);
 
-    tm = tm+t;
+    tm = tm+(t/2); %for overlap?
+
 end
 
-length(find(binnedV==4))
+%length(find(binnedV==4))
 
 %ans = find(binnedV<50);
-[h,p,ci,stats] = ttest2(maxprob, binnedV);
+%[h,p,ci,stats] = ttest2(maxprob, binnedV);
 probs = percents;
 
 
 %values = [maxprob; binnedV, times'];
-v = [maxprob; binnedV];
+%v = [maxprob; binnedV];
+v = maxprob;
+%vbin = [0; 10; 15; 20; 30; 40];
+vbin = [0; 5; 10; 15; 20; 25; 30; 35; 40; 45];
+
+bin1 = find(v==1);
+bin2 = find(v==2);
+bin3 = find(v==3);
+bin4 = find(v==4);
+bin5 = find(v==5);
+bin6 = find(v==6);
+bin7 = find(v==7);
+bin8 = find(v==8);
+bin9 = find(v==9);
+bin10 = find(v==10);
+v(bin1) = (vbin(1)+vbin(2))/2;
+v(bin2) = (vbin(2)+vbin(3))/2;
+v(bin3) = (vbin(3)+vbin(4))/2;
+v(bin4) = (vbin(4)+vbin(5))/2;
+v(bin5) = (vbin(5)+vbin(6))/2;
+v(bin6) = (vbin(6)+vbin(7))/2;
+v(bin7) = (vbin(7)+vbin(8))/2;
+v(bin8) = (vbin(8)+vbin(9))/2;
+v(bin9) = (vbin(9)+vbin(10))/2;
+
+highestvel = find(vel(1,:)>vbin(10));
+highestvel = median(vel(1,highestvel));
+v(bin10) = highestvel;
+
+size(v)
+size(times)
 values = [v; times];
 
 

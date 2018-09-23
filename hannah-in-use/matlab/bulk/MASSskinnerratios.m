@@ -54,8 +54,8 @@ while k <= length(cueOnindex)
 
     %NEW
         base = time(cueOnindex(k)-16000:cueOnindex(k));
-        timeintertrial = timeintertrial + (time(cueOnindex(k))-time(cueOnindex(k)-16000));
-        intertrial = horzcat(intertrial, base);
+        timeintertrial = timeintertrial + (time(cueOnindex(k))-time(cueOnindex(k)-16000)); %current length of time plus old length
+        intertrial = horzcat(intertrial, base); %timestamps
 
 
 

@@ -1,5 +1,6 @@
 function f = spikecrosstabs(infomatrix, varargin)
   % infomatrix is the matrix of all info you want to compare
+  % for your limits, it divides into < limit and >= limit
   % number of cells should be first dimension
   % then input the number you want to be the dividing line. if you want an absolute value (for example, no change = 1, decrease <1, increaae >1, and you want to see any time the cell changes firing but you dont care which direction), you have to normalize data around baseline value first
   % so table abs(amount-1) BEFORE entering data

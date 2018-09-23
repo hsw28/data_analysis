@@ -1,5 +1,5 @@
-function rate = normalizePosData(eventData,posData,dim, save)
-%TO DO: make it modular -- have two outputs, rate and occupancy. add an optional input of occupancy so you can reuse occpancy and skip everything else. allow to choose to save figure as a file
+function rate = normalizePosData(eventData,posData,dim)
+%TO DO: add figure saving
 
 %This function bins event data based on a user input bin size and
 %normalizes based on total time spent in bin
@@ -8,10 +8,9 @@ function rate = normalizePosData(eventData,posData,dim, save)
 %   eventData: A timeseries of cell firings (e.g. the output of abovetheta)
 %   posData: The matrix of overall position data with columns [time,x,y]
 %   dim: Bin size in cm (only square bins are supported)
-%		save: if you want to save the output graph. 0 for no, 1 for yes
-%   NO LONGER IN USE: lim: limit for heat map colors
 %
-%   ex: map = normalizePosData(lsevents, pos, 4, 3)
+%
+%   ex: map = normalizePosData(lsevents, pos, 4)
 %
 %Output:
 %   rate: A discritized matrix of cell events per second
@@ -70,7 +69,7 @@ end
 
 
 rate = events./(time*tstep); %time*tstep is occupancy
-rate = rate(:, 15:end-20);
+%rate = rate(:, 15:end-20);
 
 
 
@@ -89,6 +88,8 @@ pcolor([rate nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
 %set(gca,'clim',[0,lim]);
-set(gca, 'clim', [minratefive, maxratefive]);
+if minratefive ~= maxratefive
+		set(gca, 'clim', [minratefive, maxratefive]);
+end
 axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
 colorbar;

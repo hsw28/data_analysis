@@ -1,5 +1,5 @@
 
-function p = findrip(unfilteredLFP, timevector, devAboveMean, vel);
+function [notable, all] = findrip(unfilteredLFP, timevector, devAboveMean, vel);
 %IF DONT HAVE VELOCITY PUT 0
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
@@ -11,6 +11,7 @@ d = timevector;
 y = devAboveMean;
 
 filtdata = ripfilt(c);
+
 % filters data with bandpass filter between 100-300hz
 
 % does a hilbert transformation on the data
@@ -29,6 +30,8 @@ big = mn + (st.*6);
 rt=[];
 peaktime=[];
 starts = [];
+ends = [];
+alltime = [];
 
 % gets velocity
 if vel == 0
@@ -64,7 +67,7 @@ for k = 1:(size(trans))
 
 		%only include events longer than 30ms
 
-		if i>0 && d(j)-d(i) > .02
+		if i>0 && d(j)-d(i) > .03
 			%making a vector with all the data points of the ripple
 			pt=[];
 
@@ -82,6 +85,8 @@ for k = 1:(size(trans))
 				index = index+i-1;
 				peaktime(end+1) = d(index);
 				starts(end+1) = d(i);
+				ends(end+1) = d(j);
+
 
 			%end
 		end
@@ -93,6 +98,16 @@ end
 %vector should have all peak times after getting rid of duplicates
 peaks=unique(peaktime);
 starts = unique(starts);
+ends = unique(ends);
+
+alltimes = [];
+size(peaks)
+size(starts)
+for k = 1:length(starts)
+  riptimes = find(d>= starts(k) & d<=ends(k));
+	alltimes = horzcat(alltimes, d(riptimes));
+end
 
 
-p = [starts; peaks];
+notable = [starts; peaks; ends];
+all = alltimes;

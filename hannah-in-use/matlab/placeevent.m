@@ -10,11 +10,14 @@ function vectortxy = placeevent(event, pos)
 % ex:
 % txy = placeevent(rippletimes, position);
 
+if size(event,1) <size(event,2)
+		event = event';
+end
 
-eventsize = size(event,2);
+eventsize = length(event);
 alltimes = pos(:,1);
 
-at = size(alltimes);
+at = length(alltimes);
 
 xposvector = [];
 yposvector = [];
@@ -33,7 +36,8 @@ while i <= eventsize
 	i=i+1;
 end
 
-vectortxy = [event; xposvector; yposvector];
+
+vectortxy = [event'; xposvector; yposvector];
 
 
 % DEPRECATED AND SHITTY

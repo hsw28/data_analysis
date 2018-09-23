@@ -19,4 +19,4 @@ size(cor);
 size(lag);
 ylabel('Correlation')
 xlabel('Lag (Sec.)')
-x = [cor'; lag];
+x = [cor; lag];
