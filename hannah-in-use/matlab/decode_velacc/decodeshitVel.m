@@ -32,7 +32,10 @@ numclust = length(clustname)
 %vbin = [0; 4; 8; 12; 16; 20];
 %vbin = [0; 5; 10; 15; 20; 25];
 %vbin = [0; 5; 10; 15; 30; 45];
-vbin = [0; 5; 10; 15; 20; 25; 30; 35; 40; 45];
+%vbin = [0; 8; 16; 24; 32; 40]; A
+%vbin = [0; 10; 20; 30; 40; 50]; %B
+vbin = [0; 10; 20; 30; 40]; %C
+
 
 binnedV = binVel(timevec, vel, t/2000);
 
@@ -49,14 +52,14 @@ end
 fxmatrix
 
 
-% find prob the animal is each velocity DONT NEED BUT CAN BE USEFUL
-%probatvelocity = zeros(length(vbin),1);
-%legitV = find(binnedV<100);
-%for k = 1:length(vbin)
-%    numvel = find(binnedV == (k));
-%    probatvelocity(k) = length(numvel)./length(legitV);
-%end
-%probatvelocity
+ %find prob the animal is each velocity DONT NEED BUT CAN BE USEFUL
+probatvelocity = zeros(length(vbin),1);
+legitV = find(binnedV<100);
+for k = 1:length(vbin)
+    numvel = find(binnedV == (k));
+    probatvelocity(k) = length(numvel)./length(legitV);
+end
+probatvelocity
 
 
 
@@ -157,31 +160,30 @@ probs = percents;
 %v = [maxprob; binnedV];
 v = maxprob;
 %vbin = [0; 10; 15; 20; 30; 40];
-vbin = [0; 5; 10; 15; 20; 25; 30; 35; 40; 45];
 
 bin1 = find(v==1);
 bin2 = find(v==2);
 bin3 = find(v==3);
 bin4 = find(v==4);
 bin5 = find(v==5);
-bin6 = find(v==6);
-bin7 = find(v==7);
-bin8 = find(v==8);
-bin9 = find(v==9);
-bin10 = find(v==10);
+%bin6 = find(v==6);
+%bin7 = find(v==7);
+%bin8 = find(v==8);
+%bin9 = find(v==9);
+%bin10 = find(v==10);
 v(bin1) = (vbin(1)+vbin(2))/2;
 v(bin2) = (vbin(2)+vbin(3))/2;
 v(bin3) = (vbin(3)+vbin(4))/2;
 v(bin4) = (vbin(4)+vbin(5))/2;
-v(bin5) = (vbin(5)+vbin(6))/2;
-v(bin6) = (vbin(6)+vbin(7))/2;
-v(bin7) = (vbin(7)+vbin(8))/2;
-v(bin8) = (vbin(8)+vbin(9))/2;
-v(bin9) = (vbin(9)+vbin(10))/2;
+%v(bin5) = (vbin(5)+vbin(6))/2;
+%v(bin6) = (vbin(6)+vbin(7))/2;
+%v(bin7) = (vbin(7)+vbin(8))/2;
+%v(bin8) = (vbin(8)+vbin(9))/2;
+%v(bin9) = (vbin(9)+vbin(10))/2;
 
-highestvel = find(vel(1,:)>vbin(10));
+highestvel = find(vel(1,:)>vbin(5));
 highestvel = median(vel(1,highestvel));
-v(bin10) = highestvel;
+v(bin5) = highestvel;
 
 size(v)
 size(times)

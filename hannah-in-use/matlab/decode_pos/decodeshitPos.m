@@ -30,7 +30,8 @@ yinc = ymin +(0:ybins-1)*psize; %makes a vector of all the y values at each incr
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim); %outputs a structure of rates
+fxmatrix = firingPerPos(pos, clusters, dim);
+%outputs a structure of rates
 
 maxprob = [];
 spikenum = 1;
@@ -96,8 +97,8 @@ while tm < (length(timevector)-t)
         maxy(end+1) = (yinc(maxvaly));
         times(end+1) = timevector(tm);
 
-    %tm = tm+t;
-    tm = tm+(t/2); %for overlap?
+    tm = tm+t;
+    %tm = tm+(t/2); %for overlap?
 end
 
 warning('your probabilities were the same')

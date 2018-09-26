@@ -5,7 +5,7 @@ function a = accel(file);
 % returns acceleration per ms and time stamp vector where first row is accel, second is time stamp
 % doesn't smooth or transform-- do that later when you assign velocities
 
-v = noiselessVelocity(file);
+v = velocity(file);
 
 vel = v(1, :);
 t = v(2, :);

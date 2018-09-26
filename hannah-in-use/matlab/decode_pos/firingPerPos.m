@@ -60,6 +60,7 @@ for k = 1:spikenum
     fastspike = unit(fastspikeindex);
     ls = placeevent(fastspike, posData); %outputs [event; xposvector; yposvector];
     ls = ls';
+    if length(fastspikeindex)>0
     %WILL NEED TO DO THIS FOR ALL CELLS
     for x = (1:xbins-1)
         for y = (1:ybins-1)
@@ -77,14 +78,15 @@ for k = 1:spikenum
             %events(ybins+1-j,i) = sum(C); %number of spikes in each bin
         end
     end
-    size(events);
-    size(timecells);
-    size(tstep);
     rate = events./(timecells*tstep); %time*tstep is occupancy %want this for all cells
     rate = rate(1:xbins, 1:ybins);
     myStruct.(spikename) = rate;
-
+    else
+    rate = zeros(xbins, ybins);
+    myStruct.(spikename) = rate;
+    warning('the cell', spikename ,'doesnt have enough points')
+    end
 end
 
-
+fprintf('firing per complete')
 f = myStruct;

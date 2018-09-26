@@ -1,5 +1,5 @@
 
-function [notable, all] = findrip(unfilteredLFP, timevector, devAboveMean, vel);
+function [notable, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, vel);
 %IF DONT HAVE VELOCITY PUT 0
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
