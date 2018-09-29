@@ -14,7 +14,7 @@ for i=1:length(X)
     hold on
     plot(X(i),Y(i),'or','MarkerSize',5,'MarkerFaceColor','r')
     axis([min(pos(:,2))-10 max(pos(:,2))+10 min(pos(:,3))-10 max(pos(:,3))+10])
-    pause(.2)
+    pause(5)
     hold off
     i
 end

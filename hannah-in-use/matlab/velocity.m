@@ -15,10 +15,10 @@ file = pos';
 
 t = file(1, :);
 xpos = (file(2, :))';
-xpos = smoothdata(xpos,'gaussian',500);
+%xpos = smoothdata(xpos,'gaussian',500);
 %xpos = lowpass4(xpos)';
 ypos = (file(3, :))';
-ypos = smoothdata(ypos,'gaussian',500);
+%ypos = smoothdata(ypos,'gaussian',500);
 %ypos = lowpass4(ypos)';
 t = t(1:length(xpos));
 
@@ -40,5 +40,5 @@ end
 
 
 
-%v = hampel(velvector, 30, 3);
+v = hampel(velvector, 30, 3);
 v = [v/3.5; timevector];
