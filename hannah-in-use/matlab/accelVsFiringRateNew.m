@@ -1,11 +1,11 @@
 function f = accelVsFiringRateNew(time, accelORvel, firingdata, binsize)
-%binsize in cm/sec or cm/sec2
+%binsize in cm/sec or cm/sec2. RIGHT NOW SET AS TEN DEFAULT
 %finds occupancy per velocity, then finds spikes per velocity
 %divies spikes per velocity by occupancy per velocity to get normalized spikes per velocity
 
 %DO I WANT TO SMOOTH VEL??
 %DO WE WANT A THRESHOLD FOR LOW OCCUPANCY
-
+binsize = 10;
 mintime = accelORvel(2,1);
 maxtime = accelORvel(2,end);
 
@@ -23,75 +23,137 @@ minvel = min(spikevel(1,:));
 maxvel = max(spikevel(1,:));
 
 
-%bin speed into 3cm/sec bins
-binnum = ceil((maxvel-minvel)./binsize) %4cm/sec bins
+%bin speed into  bins
+binnum = ceil((maxvel-minvel)./binsize);
 
 [spikepervel edges] = histcounts(spikevel, binnum); %fassign velocities to each spike time
 assvel = assignvel(time, accelORvel);
 [velcounts, edges] = histcounts(assvel(1,:), edges); % find velocity distribution
 
 figure
-subplot(4,1,1)
+subplot(5,2,1)
 centers = (edges(1:end-1) + edges(2:end))/2;
 velcounts = velcounts/2000;
-bar(centers, velcounts)
-title('|Velocity| Occupancy')
-xlabel('|Velocity| (cm/s)')
+bar(centers, velcounts);
+title('Acceleration Occupancy')
+xlabel('Acceleration (cm/s)')
 ylabel('Time (s)')
+set(gca,'TickDir','out');
 
-
-subplot(4,1,2)
+subplot(5,2,2)
 centers = (edges(1:end-1) + edges(2:end))/2;
-bar(centers, spikepervel)
-title('Spike Count as a Function of |Velocity|')
-xlabel('|Velocity| (cm/s)')
+bar(centers, spikepervel);
+title('Spike Count as a Function of Acceleration')
+xlabel('Acceleration (cm/s^2)')
 ylabel('Spike Count')
+set(gca,'TickDir','out');
 
 
 %divide spiking per each velocity by how much time in each velocity
 normspike = spikepervel./velcounts;
 %f = normspike;
-subplot(4,1,3:4)
+subplot(5,2,3:6)
 centers = (edges(1:end-1) + edges(2:end))/2;
 %bar(centers, normspike)
 hold on
 scatter(centers, normspike)
 
 
-threshold = sum(spikepervel)*.01
-[c thresholdindex]= min(abs(threshold-spikepervel));
-vline(centers(thresholdindex))
-
-threshold = sum(spikepervel)*.001
-[c thresholdindex2]= min(abs(threshold-spikepervel));
-vline(centers(thresholdindex2))
-
-x = centers(1:thresholdindex);
-y = normspike(1:thresholdindex);
-
-coeffs = polyfit(x, y, 1);
-slope = coeffs(1);
-polydata = polyval(coeffs,x);
-sstot = sum((y - mean(y)).^2);
-ssres = sum((y - polydata).^2);
-rsquared = 1 - (ssres / sstot); % get r^2 value
+threshold = sum(velcounts)*.01
+sum01 = 0;
+k = 0;
+while sum01 < threshold
+  sum01 = sum01+velcounts(end-k)+velcounts(k+1);
+  k = k+1;
+end
+posthreshold01 = centers(end-k-1);
+negthreshold01 = centers(k);
+negthresholdindex = k;
+posthresholdindex = length(velcounts)-k+1;
+vline(posthreshold01);
+vline(negthreshold01);
 
 
-stats = fitlm(x,y);
-pval = stats.Coefficients.pValue(2);
+threshold = sum(velcounts)*.001
+sum02 = 0;
+k = 0;
+while sum02 < threshold
+  sum02 = sum02+velcounts(end-k)+velcounts(k+1);
+  k = k+1;
+end
+posthreshold001 = centers(end-k-1);
+negthreshold001 = centers(k);
+vline(posthreshold001);
+vline(negthreshold001);
 
-y = polyval(coeffs,x);
-plot(x, y) % best fit line
 
+str2 = {'1% Acceleration', 'occupancy threshold'};
+str3 = {'0.1% Acceleration', 'occupancy threshold'};
+text(negthreshold01,max(normspike),str2);
+text(negthreshold001,max(normspike)*.6,str3);
+text(posthreshold01,max(normspike),str2);
+text(posthreshold001,max(normspike)*.6,str3);
 
-str1 = {'slope' slope, 'p value' pval, 'r2 value' rsquared};
-text(1,max(normspike)*.75,str1)
-
-str2 = {'1% |Velocity|', 'occupancy threshold'};
-str3 = {'0.1% |Velocity|', 'occupancy threshold'};
-text(centers(thresholdindex),max(normspike)*.75,str2);
-text(centers(thresholdindex2),max(normspike)*.75,str3);
-
-title('Firing Rate as a function of |Velocity|')
-xlabel('|Velocity| (cm/s)')
+title('Firing Rate as a function of Acceleration')
 ylabel('Spike Rate (spikes/sec)')
+set(gca,'TickDir','out');
+
+subplot(5,2,7:10)
+currentcenters= centers(negthresholdindex:posthresholdindex);
+currentnormspike = normspike(negthresholdindex:posthresholdindex);
+scatter(currentcenters, currentnormspike);
+hold on
+%for positive values
+[c center0index] = min(abs(centers-0))
+posx = centers(center0index:posthresholdindex);
+posy = normspike(center0index:posthresholdindex);
+coeffs = polyfit(posx, posy, 1);
+posslope = coeffs(1);
+polydata = polyval(coeffs,posx);
+sstot = sum((posy - mean(posy)).^2);
+ssres = sum((posy - polydata).^2);
+posrsquared = 1 - (ssres / sstot); % get r^2 value
+stats = fitlm(posx,posy);
+pospval = stats.Coefficients.pValue(2);
+y = polyval(coeffs,posx);
+plot(posx, y) % best fit line
+str1 = {'pos slope' posslope, 'pos p value' pospval, 'pos r2 value' posrsquared};
+text(currentcenters(end),max(currentnormspike)*.9,str1);
+
+%for negative values
+[c center0index] = min(abs(centers-0));
+negx = centers(negthresholdindex:center0index);
+negy = normspike(negthresholdindex:center0index);
+coeffs = polyfit(negx, negy, 1);
+negslope = coeffs(1);
+polydata = polyval(coeffs,negx);
+sstot = sum((negy - mean(negy)).^2);
+ssres = sum((negy - polydata).^2);
+negrsquared = 1 - (ssres / sstot); % get r^2 value
+stats = fitlm(negx,negy);
+negpval = stats.Coefficients.pValue(2);
+y = polyval(coeffs,negx);
+plot(negx, y) % best fit line
+str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared};
+text(currentcenters(1),max(currentnormspike)*.9,str1);
+
+title('Firing Rate as a function of Acceleration within 1% Occupancy')
+xlabel('Acceleration (cm/s^2)')
+ylabel('Spike Rate (spikes/sec)')
+set(gca,'TickDir','out');
+
+
+%%% BELOW IS FOR ALL< WHICH IS NOT PLOTTED RIGHT NOW
+allx = centers(negthresholdindex:posthresholdindex);
+ally = normspike(negthresholdindex:posthresholdindex);
+coeffs = polyfit(allx, ally, 1);
+allslope = coeffs(1);
+polydata = polyval(coeffs,allx);
+sstot = sum((ally - mean(ally)).^2);
+ssres = sum((ally - polydata).^2);
+allrsquared = 1 - (ssres / sstot); % get r^2 value
+stats = fitlm(allx,ally);
+allpval = stats.Coefficients.pValue(2);
+y = polyval(coeffs,allx);
+
+f = [negslope; negrsquared;  negpval; posslope; posrsquared; pospval; allslope; allrsquared; allpval];
