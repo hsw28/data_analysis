@@ -1,4 +1,4 @@
-function f = decodeshitPos(time, pos, clusters, tdecode, dim)
+function [times matrices] = decodeshitPosBIG(time, pos, clusters, tdecode, dim)
 %decodes position and outputs decoded x, y, confidence(in percents), and time. if you want to filter spiking for veloctity you put velocity in varargin
 tic
 posData = pos;
@@ -40,8 +40,9 @@ percents = [];
 numcel = [];
 maxx = [];
 maxy = [];
-
+matrices = zeros(xbins-1, ybins-1, ceil(length(timevector)/t)-1);
 same = 0;
+num = 1;
 while tm < (length(timevector)-t)
       %for the cluster, permute through the different conditions
     endprob = zeros(xbins-1, ybins-1);
@@ -83,26 +84,26 @@ while tm < (length(timevector)-t)
 
         endprob = exp(endprob);
         conv = 1./sum(endprob(~isnan(endprob)));
-        endprob = endprob.*conv; %matrix of percents
-        %percents = vertcat(percents, endprob);
-        [maxvalx, maxvaly] = find(endprob == max(endprob(:))); %finds indices
-        percents(end+1) = max(endprob(:)); %finds confidence
-        if length(maxvalx) > 1 %if probs are the sample, randomly pick one and print warning
-            same = same+1;
-            maxvalx = datasample(maxvalx, 1);
-            maxvaly = datasample(maxvaly, 1);
+      endprob = endprob.*conv;
+        matrices(:,:,num) = endprob;
 
-        end
-        maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
-        maxy(end+1) = (yinc(maxvaly));
+        %percents = vertcat(percents, endprob);
+        %[maxvalx, maxvaly] = find(endprob == max(endprob(:))); %finds indices
+        %percents(end+1) = max(endprob(:)); %finds confidence
+        %if length(maxvalx) > 1 %if probs are the sample, randomly pick one and print warning
+        %    same = same+1;
+        %    maxvalx = datasample(maxvalx, 1);
+        %    maxvaly = datasample(maxvaly, 1);
+
+        %end
+        %maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
+        %maxy(end+1) = (yinc(maxvaly));
         times(end+1) = timevector(tm);
 
     tm = tm+t;
+    num = num+1;
     %tm = tm+(t/2); %for overlap?
 end
 
-warning('your probabilities were the same')
-same = same
-values = [maxx; maxy; percents; times];
-toc
-f = values;
+times = times;
+matrices = matrices;

@@ -122,7 +122,7 @@ hold on
 plot(x, y) % best fit line
 str1 = {'slope' slope, 'p value' pval, 'r2 value' rsquared};
 text(1,max(currentnormspike)*.75,str1);
-title('Firing Rate as a function of |Velocity| within 1% Occupancy')
+title('Firing Rate as a function of |Velocity| within 99% Occupancy')
 xlabel('|Velocity| (cm/s)')
 ylabel('Spike Rate (spikes/sec)')
 set(gca,'TickDir','out');

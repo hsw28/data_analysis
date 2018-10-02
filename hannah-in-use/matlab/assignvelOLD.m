@@ -22,7 +22,7 @@ while i<=length(timefile)
 		[m index] = min(abs(timefile(i)-newvec));
 		closestvel(i) = velvector(index);
 		i=i+1;
-		
+
 
 end
 

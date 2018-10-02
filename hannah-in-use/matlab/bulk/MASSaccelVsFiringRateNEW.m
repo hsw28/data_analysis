@@ -8,7 +8,7 @@ function f = MASSaccelVsFiringRateNEW(spikestructure, posstructure, timestructur
 spikenames = (fieldnames(spikestructure));
 spikenum = length(spikenames);
 
-output = {'cluster name'; '# spikes'; 'neg slope'; 'neg r2'; 'neg p value'; 'pos slope'; 'pos r2'; 'pos p value'; 'all slope', 'all r2'; 'all p value'};
+output = {'cluster name'; '# spikes'; 'neg slope'; 'neg r2'; 'neg p value'; 'pos slope'; 'pos r2'; 'pos p value'; 'all slope'; 'all r2'; 'all p value'};
 
 for k = 1:spikenum
     name = char(spikenames(k))
@@ -66,7 +66,7 @@ for k = 1:spikenum
     spikename = char(spikenames(k));
     set(0,'DefaultFigureVisible', 'off');
     accvrate = accelVsFiringRateNew((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), binsize);
-  
+
 
     negslope = accvrate(1);
     negrsquared = accvrate(2)

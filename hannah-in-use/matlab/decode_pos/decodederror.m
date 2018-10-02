@@ -1,5 +1,10 @@
-function f = decodeerror(decoded, pos)
+function f = decodederror(decoded, pos)
 %returns an error in cm for each decoded time
+
+if size(decoded,1)>size(decoded,2)
+  decoded = decoded';
+end
+
 
 pointstime = decoded(4,:);
 X = decoded(1,:);

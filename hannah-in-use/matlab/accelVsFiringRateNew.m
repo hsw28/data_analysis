@@ -137,7 +137,7 @@ plot(negx, y) % best fit line
 str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared};
 text(currentcenters(1),max(currentnormspike)*.9,str1);
 
-title('Firing Rate as a function of Acceleration within 1% Occupancy')
+title('Firing Rate as a function of Acceleration within 99% Occupancy')
 xlabel('Acceleration (cm/s^2)')
 ylabel('Spike Rate (spikes/sec)')
 set(gca,'TickDir','out');

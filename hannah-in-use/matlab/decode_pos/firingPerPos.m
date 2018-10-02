@@ -11,12 +11,12 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 
 %only find occupancy map if one hasn't been provided
 
-xmin = min(posData(:,2));
-ymin = min(posData(:,3));
-xmax = max(posData(:,2));
-ymax = max(posData(:,3));
-xbins = ceil((xmax-xmin)/psize) %number of x
-ybins = ceil((ymax-ymin)/psize) %number of y
+xmin = min(posData(:,2))
+ymin = min(posData(:,3))
+xmax = max(posData(:,2))
+ymax = max(posData(:,3))
+xbins = ceil((xmax-xmin)/psize); %number of x
+ybins = ceil((ymax-ymin)/psize); %number of y
   timecells = zeros(xbins, ybins); %used to be time
   events = zeros(xbins,ybins);
   xstep = xmax/xbins;
@@ -24,8 +24,8 @@ ybins = ceil((ymax-ymin)/psize) %number of y
   tstep = 1/30;
 
 
-  xinc = xmin +(0:xbins-1)*psize; %makes a vectors of all the x values at each increment
-  yinc = ymin +(0:ybins-1)*psize; %makes a vector of all the y values at each increment
+  xinc = xmin +(0:xbins-1)*psize %makes a vectors of all the x values at each increment
+  yinc = ymin +(0:ybins-1)*psize %makes a vector of all the y values at each increment
 
 %only uses data that is >15cm/s
 vel = velocity(posData);
@@ -78,6 +78,7 @@ for k = 1:spikenum
             %events(ybins+1-j,i) = sum(C); %number of spikes in each bin
         end
     end
+    
     rate = events./(timecells*tstep); %time*tstep is occupancy %want this for all cells
     rate = rate(1:xbins, 1:ybins);
     myStruct.(spikename) = rate;
