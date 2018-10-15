@@ -1,4 +1,4 @@
-function f = markov(decodedmaxes, posData)
+function fun = markov(decodedmaxes, posData)
   %use maximum decoded
   % hidden markov decoding – transition matrix
 
@@ -14,20 +14,18 @@ function f = markov(decodedmaxes, posData)
   y = posData(:,3);
 
   vel = velocity(posData);
-
   assvel = assignvelOLD(decodedtimes, vel);
 
+
 %different states
-%state 1: left forced end:    x < 500 y >= 540
-%state 2: left forced arm     x < 500 y >= 393 y < 540
-%state 3: right forced arm    x < 500 y < 336 y >= 166
-%state 4: right forced end    x < 500 y < 166
-%state 5: first half (by forced) middle arm -- will be an elseif on the ys   x<645
-%state 6: second half (by reward) middle arm -- will be an elseif on the ys  x>=645
-%state 7: left reward end     x >= 780  y>=575
-%state 8: left reward arm     x >=780   y<575 y>411
-%state 9: right reward arm    x >=780   y>=172  y<370
-%state 10: right reward end   x >=780   y<172
+%state 1: left forced :    x < 500 y >= 540
+%state 2: right forced arm    x < 500 y < 336 y >= 166
+%state 3: first half (by forced) middle arm -- will be an elseif on the ys   x<645
+%state 4: second half (by reward) middle arm -- will be an elseif on the ys  x>=645
+%state 5: left reward end     x >= 780  y>=575
+%state 6: left reward arm     x >=780   y<575 y>411
+%state 7: right reward arm    x >=780   y>=172  y<370
+%state 8: right reward end   x >=780   y<172
 
 %{
 x = posData(:,2);
@@ -74,74 +72,61 @@ end
 end
 %}
 
-markov = zeros(10,10);  %first dimension is current position, second dimension is next position
+markov = zeros(8,8);  %first dimension is current position, second dimension is next position
 x = decoded(1,:);
 y = decoded(2,:);
 for k=1:length(decodedtimes)-1
   c = 0; %current position
   f = 0; %future position
-  if assvel(k) > 15
+  if assvel(k) < 12
     %first current position
-  if x(k)< 500 & y(k)>=511
+  if x(k)< 500 & y(k)>= 393
       c = 1;
-    %2
-  elseif x(k)< 500 &  y(k)>= 393 & y(k)< 540
-      c=2;
-    %3
-  elseif x(k) < 500 & y(k) < 300 & y(k) >= 160
-      c=3;
-    %4
-  elseif x(k)< 500 & y(k) < 160
-      c=4;
-    %7
+  elseif x(k) < 500 & y(k) < 300
+      c = 2;
+    %5
     elseif x(k) >= 780 & y(k)>=575
+      c=5;
+    %6
+    elseif x(k) >=780  & y(k)< 575 & y(k)> 411
+      c=6;
+    %7
+    elseif x(k) >=780  & y(k)>=172  & y(k)< 370
       c=7;
     %8
-    elseif x(k) >=780  & y(k)< 575 & y(k)> 411
-      c=8;
-    %9
-    elseif x(k) >=780  & y(k)>=172  & y(k)< 370
-      c=9;
-    %10
     elseif x(k) >=780 & y(k)<172
-      c=10;
-      %5
+      c=8;
+      %3
       elseif x(k)< 645
-        c=5;
-      %6
+        c=3;
+      %4
       elseif x(k)>=645
-        c=6;
+        c=4;
     end
   %NOW FUTURE POSITION
-  if x(k+1)< 500 & y(k+1)>=511
+  if x(k+1)< 500 & y(k+1)>=393
     f=1;
-  %2
-  elseif x(k+1)< 500 &  y(k+1)>= 393 & y(k+1)< 540
+  elseif x(k+1) < 500 & y(k+1) < 300
     f=2;
-  %3
-  elseif x(k+1) < 500 & y(k+1) < 300 & y(k+1) >= 160
-    f=3;
-  %4
-elseif x(k+1)< 500 & y(k+1) < 160
-    f=4;
-  %7
+
+  %5
   elseif x(k+1) >= 780 & y(k+1)>=575
+    f=5;
+  %6
+  elseif x(k+1) >=780  & y(k+1)< 575 & y(k+1)> 411
+    f=6;
+  %7
+  elseif x(k+1) >=780  & y(k+1)>=172  & y(k+1)< 370
     f=7;
   %8
-  elseif x(k+1) >=780  & y(k+1)< 575 & y(k+1)> 411
-    f=8;
-  %9
-  elseif x(k+1) >=780  & y(k+1)>=172  & y(k+1)< 370
-    f=9;
-  %10
   elseif x(k+1) >=780 & y(k+1)<172
-    f=10;
-    %5
+    f=8;
+    %3
     elseif x(k+1)< 645
-      f=5;
-    %6
+      f=3;
+    %4
     elseif x(k+1)>=645
-      f=6;
+      f=4;
   end
 
   markov(c,f) = markov(c,f)+1;   %assign state
@@ -159,9 +144,12 @@ for k=1:length(markov)
     markov(k,:) = markov(k,:)*div;
 end
 
-f = markov;
+%fun = markov;
 
 figure
-h = heatmap(markov);
-ylabel('Current')
-xlabel('Future')
+xlabels = {'Forced Left', 'Forced Right', 'Middle Stem 1st half', 'Middle Stem 2nd half', 'Choice Left Arm', 'Left Reward Site', 'Choice Right Arm', 'Right Reward Site'};
+ylabels = {'Forced Left', 'Forced Right', 'Middle Stem 1st half', 'Middle Stem 2nd half', 'Choice Left Arm', 'Left Reward Site', 'Choice Right Arm', 'Right Reward Site'};
+
+h = heatmap(xlabels, ylabels, markov);
+ylabel('Decoded Position at Time t')
+xlabel('Decoded Position at Time t+1')

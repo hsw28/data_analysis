@@ -63,6 +63,7 @@ for i = 1:length(forceindexleft)
   end
 end
 figure
+
 x = ones(1, length(flvel));
 plot(x, flvel, 'b*', 'MarkerSize', 5, 'LineWidth', 3);
 hold on;

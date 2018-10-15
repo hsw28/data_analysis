@@ -14,6 +14,6 @@ for i=1:length(time)
   diff = abs(decodedvel(i)-vel(1,index));
   alldiff(end+1) = diff;
 end
-
-f = [alldiff; time];
+realvel = closevel;
+f = [alldiff; realvel; time];
 %f = closevel;

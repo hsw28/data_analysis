@@ -2,13 +2,13 @@ function y = gammafilt(x)
 %GAMMAFILT Filters input x and returns output y.
 % hilbert transforms output
 % filters in gamma frequency range 20-100. import eeg data from gh_debuffer
-% example: 
+% example:
 % data = gammafilt(lfp.data);
 
 persistent Hd;
 
 if isempty(Hd)
-    
+
     % The following code was used to design the filter coefficients:
     % % FIR Window Bandpass filter designed using the FIR1 function.
     %
@@ -24,7 +24,7 @@ if isempty(Hd)
     %
     % % Calculate the coefficients using the FIR1 function.
     % b  = fir1(N, [Fc1 Fc2]/(Fs/2), 'bandpass', win, flag);
-    
+
     Hd = dsp.FIRFilter( ...
         'Numerator', [0 4.47361323994463e-09 3.37498851084184e-08 ...
         1.02518567518633e-07 2.0684397891209e-07 3.19416813649484e-07 ...
@@ -192,10 +192,9 @@ if isempty(Hd)
         3.37498851084184e-08 4.47361323994463e-09 0]);
 end
 
-d = step(Hd,x);
 delay = mean(grpdelay(Hd));
-d(1:delay) = [];
-y = abs(hilbert(d));
+y = step(Hd,(x));
+y(1:delay) = [];
 
 
 % [EOF]

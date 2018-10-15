@@ -25,8 +25,8 @@ xbins = ceil((xmax-xmin)/psize); %number of x
 ybins = ceil((ymax-ymin)/psize); %number of y
 
 
-xinc = xmin +(0:xbins-1)*psize; %makes a vectors of all the x values at each increment
-yinc = ymin +(0:ybins-1)*psize; %makes a vector of all the y values at each increment
+xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
+yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
 
 % for each cluster,find the firing rate at esch velocity range
@@ -40,40 +40,53 @@ percents = [];
 numcel = [];
 maxx = [];
 maxy = [];
-
 same = 0;
+
 while tm < (length(timevector)-t)
       %for the cluster, permute through the different conditions
-    endprob = zeros(xbins-1, ybins-1);
-        for x = (1:xbins-1) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
-          for y = (1:ybins-1)
+    endprob = zeros(xbins, ybins);
+        for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
+          for y = (1:ybins)
           productme =0;
           expme = 0;
           c = 1;
-          occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
-          occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
+
+          if x<xbins & y<ybins
+            occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
+            occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
+          elseif x==xbins & y<ybins
+            occx = find(xvals>=xinc(x));
+            occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
+          elseif x<xbins & y==ybins
+            occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
+            occy = find(yvals>=yinc(y));
+          elseif x==xbins & y==ybins
+            occx = find(xvals>=xinc(x));
+            occy = find(yvals>=yinc(y));
+          end
+
           if length(occx) == 0  & length(occy)==0 %means never went there, dont consider
             endprob(x,y) = NaN;
             break
           end
           while c <= numclust  %permute through cluster
               name = char(clustname(c));
-              ni = find(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)); % finds index (number) of spikes in range time
+              ni = length(clusters.(name)(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
               fx = fxmatrix.(name);
 
               fx = (fx(x, y));
               if fx ~= 0
-                productme = productme + length(ni)*log(fx);  %IN
+                productme = productme + (ni)*log(fx);  %IN
               else
                 fx = .00000000000000000000001;
-                productme = productme + length(ni)*log(fx);
+                productme = productme + (ni)*log(fx);
               end
 
               expme = (expme) + (fx);
               c = c+1; % goes to next cell, same location
 
           end
-          numcel(end+1) = length(ni);
+          numcel(end+1) = (ni);
           % now have all cells at that location
           tmm = t./2000;
         endprob(x, y) = (productme) + (-tmm.*expme); %IN
@@ -97,12 +110,19 @@ while tm < (length(timevector)-t)
         maxy(end+1) = (yinc(maxvaly));
         times(end+1) = timevector(tm);
 
-    tm = tm+t;
+
+    if tdecode>=.25
+      tm = tm+(t/2);
+    else
+      tm = tm+t;
+    end
     %tm = tm+(t/2); %for overlap?
 end
 
 warning('your probabilities were the same')
 same = same
+maxx = maxx+psize/2;
+maxy = maxy+psize/2;
 values = [maxx; maxy; percents; times];
 toc
 f = values;

@@ -1,4 +1,4 @@
-function y = filter812(x)
+function y = theta812(x)
 %FILTER812 Filters input x and returns output y.
 
 % MATLAB Code
@@ -13,7 +13,7 @@ function y = filter812(x)
 persistent Hd;
 
 if isempty(Hd)
-    
+
     % The following code was used to design the filter coefficients:
     % % FIR Window Bandpass filter designed using the FIR1 function.
     %
@@ -29,7 +29,7 @@ if isempty(Hd)
     %
     % % Calculate the coefficients using the FIR1 function.
     % b  = fir1(N, [Fc1 Fc2]/(Fs/2), 'bandpass', win, flag);
-    
+
     Hd = dsp.FIRFilter( ...
         'Numerator', [0 -1.81418407322353e-06 -7.26338737704458e-06 ...
         -1.63527089334085e-05 -2.90803566672688e-05 -4.54369449693971e-05 ...
@@ -99,8 +99,8 @@ if isempty(Hd)
         -1.81418407322353e-06 0]);
 end
 
-y = step(Hd,x);
 delay = mean(grpdelay(Hd));
+y = step(Hd,(x));
 y(1:delay) = [];
 
 % [EOF]

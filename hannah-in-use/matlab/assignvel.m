@@ -2,25 +2,31 @@ function f = assignvel(time, vel);
 %takes input of velocity vector and upsamples from 60hz to 2000hz
 %USED TO ONLY OUTPUT VELOCITY NOW OUTPUTS VELOCITY WITH TIME. YOU NEED THIS. EDIT OTHER CODE TO FIT
 
+
+
+[C, ia, ic] = unique(vel(2,:));
+vel = vel(:,ia);
+
 velvector = vel(1,:);
 veltime = vel(2,:);
 
 [c timestart] = min(abs(time-veltime(1)));
-[c timeend] = min(abs(veltime(end)-time));
-
 if timestart > 1
-  warning('your time starts before your velocity!!!')
+  warning('your time starts before your velocity and your time will be cut!')
+  time = time(timestart:end);
 end
+
+[c timeend] = min(abs(veltime(end)-time));
 if timeend < length(time)
   warning('your time ends after your velocity and your time will be cut')
   time = time(1:timeend);
+
 elseif timeend > length(time)
-  warning('your time ends after your velocity and your velocity will be cut!!!')
+  warning('your velocity ends after your time and your velocity will be cut!!!')
   [c velend] = min(abs(veltime-time(timeend)));
   velvector = velvector(1:velend);
   veltime = veltime(1:velend);
 end
-
 
 
 

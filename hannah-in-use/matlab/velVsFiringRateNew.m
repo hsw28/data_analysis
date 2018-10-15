@@ -6,19 +6,24 @@ function f = velVsFiringRateNew(time, accelORvel, firingdata, binsize)
 %DO I WANT TO SMOOTH VEL??
 %DO WE WANT A THRESHOLD FOR LOW OCCUPANCY
 
-binsize = 2;
+%binsize = 2;
 mintime = accelORvel(2,1);
 maxtime = accelORvel(2,end);
 
 [c indexmin] = (min(abs(time-mintime)));
 [c indexmax] = (min(abs(time-maxtime)));
 time = time(indexmin:indexmax);
+time(end)
+time(1)
 
 [c indexmin] = (min(abs(firingdata-mintime)));
 [c indexmax] = (min(abs(firingdata-maxtime)));
 firingdata = firingdata(indexmin:indexmax);
+length(firingdata)
 
 
+%assvel = assignvel(time, accelORvel);   %COMMENT OUT
+%spikevel = assignvelOLD(firingdata,assvel); %COMMENT OUT
 spikevel = assignvelOLD(firingdata,accelORvel);
 minvel = min(spikevel(1,:));
 maxvel = max(spikevel(1,:));

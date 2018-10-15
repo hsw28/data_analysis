@@ -41,6 +41,6 @@ end
 
 
 %v = hampel(velvector, 30, 3);
-v = smoothdata(velvector,'gaussian',500);
+v = smoothdata(velvector,'gaussian',7);
 v = v(1:length(timevector));
 v = [(v/3.5); timevector];

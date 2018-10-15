@@ -1,4 +1,4 @@
-function f = accelVsFiringRateNew(time, accelORvel, firingdata, binsize)
+function f = accelVsFiringRateNewDEP(time, accelORvel, firingdata, binsize)
 %binsize in cm/sec or cm/sec2
 %finds occupancy per velocity, then finds spikes per velocity
 %divies spikes per velocity by occupancy per velocity to get normalized spikes per velocity

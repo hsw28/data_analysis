@@ -1,4 +1,4 @@
-function thingy = firingPerVel(time, accelORvel, firingdata, t)
+function thingy = firingPerVel_temp(time, accelORvel, firingdata, t, vbin, avg_accel)
 % Takes pos data, timestamps, cluster data, and window size (in seconds)
 % outputs average firing rate per velocity/acc
 % ASSIGN VELOCITY BEFORE THIS FUNCTION
@@ -15,9 +15,23 @@ if size(accelORvel, 2) > size(firingdata, 1)
 	firingdata = firingdata';
 end
 
+mintime = accelORvel(2,1);
+maxtime = accelORvel(2,end);
+
+%[c indexmin] = (min(abs(time-mintime)));
+%[c indexmax] = (min(abs(time-maxtime)));
+%time = time(indexmin:indexmax);
+
+[c indexmin] = (min(abs(firingdata-mintime)));
+[c indexmax] = (min(abs(firingdata-maxtime)));
+firingdata = firingdata(indexmin:indexmax);
+
+
 assvel = accelORvel;
 %assvel = (assignvel(time,accelORvel));
-time = time(1:length(assvel));
+
+
+%time = time(indexmin:indexmax);
 assvel = assvel(1,:);
 
 
@@ -28,24 +42,20 @@ ending = max(time);
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:); % number of spikes per time bin
-size(rate);
 fastest = max(rate);
 m = length(rate);
 
 
-avg_accel = zeros(m,1);
-for i = 1:m
-    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
-end
+%SHOULD BE ABLE TO PUT THIS INTO MAIN DECODE FILE TO SPEED THINGS UP
+
+%avg_accel = zeros(m,1);
+%for i = 1:m
+%    avg_accel(i) = mean(assvel((time > start+t*(i-1)) & (time < start+t*i))); % finds average vel within times
+%end
+
 
 maxacc = max(avg_accel);
 
-%vbin = [0; 5; 10; 15; 20; 25];
-%vbin = [0; 8; 16; 24; 32; 40];
-%vbin = [0; 5; 10; 15; 20; 25; 30; 35; 40; 45];
-%vbin = [0; 10; 20; 30; 40; 50];
-%vbin = [0; 5; 12; 25; 40; 55];
-vbin = [0; 10; 20; 30; 40];
 
 
 average = [];
@@ -65,12 +75,12 @@ while i <= length(vbin)
 
 		end
 
-     if length(subset) < threshold
-			 	average(i) = NaN;
-        average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
-     else
+  %   if length(subset) < threshold
+	%		 	average(i) = NaN;
+  %      average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
+  %   else
         average(i) = mean(subset);
-     end
+  %   end
 		 i = i+1;
 end
 

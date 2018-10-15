@@ -1,4 +1,4 @@
-function y = thetafilt(x)
+function y = thetafilt412(x)
 %theta filters in 4-12
 % group delay is 250 samples
 

@@ -9,7 +9,7 @@ function f = decodeddiff(decoded, pos)
 
 
 vel = velocity(pos);
-length(find(vel(1,:)<10))
+length(find(vel(1,:)<10));
 f = vel;
 
 alldiffmean = [];
@@ -18,6 +18,7 @@ stilldiffmean = [];
 velvalue = 0;
 velvector = [];
 
+figure
 while velvalue <=60
 alldiff = [];
 movediff = [];
@@ -40,6 +41,7 @@ movedifferror = std(movediff)/sqrt(length(movediff))/3.5;
 stilldiffmean(end+1) = mean(stilldiff)/3.5;
 stilldifferror = std(stilldiff)/sqrt(length(stilldiff))/3.5;
 velvector(end+1) = velvalue;
+
 if velvalue == 0 | velvalue == 10 | velvalue == 20 | velvalue == 30 | velvalue == 40 | velvalue == 50 | velvalue == 60
 
   subplot(2,4,velvalue/10+1);

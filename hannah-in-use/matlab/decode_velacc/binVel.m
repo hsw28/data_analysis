@@ -1,4 +1,4 @@
-function thingy = binVel(time, accelORvel, t)
+function thingy = binVel(time, accelORvel, tdecode)
 % for use with decode shit. bins actual velocities in same bins as decode shit, so you can compare your decoded data
 
 
@@ -11,44 +11,46 @@ if size(accelORvel, 2) < size(accelORvel, 1)
 end
 
 
-start = min(time);
-ending = max(time);
+mintime = accelORvel(2,1);
+maxtime = accelORvel(2,end);
 
-binvec = [];
+[c indexmin] = (min(abs(time-mintime)));
+[c indexmax] = (min(abs(time-maxtime)));
+time = time(indexmin:indexmax);
 
 assvel = (assignvel(time,accelORvel));
 assvel = assvel(1,:);
 
-%good for 5 bins
-vbin = [0; 5; 10; 15; 20; 25];
 
-sized = ceil(length(assvel)./(2000*t))-1; %done in time stamps. number of bins
-avg_accel = zeros(sized,1);
-t = t*2000;
-for i = 1:sized
+%vbin = [0; 10; 20; 30; 40; 50];
+%vbin = [0; 10; 20; 30; 40]
+vbin = [0; 6; 12; 18; 24; 30]
 
-		time(1+t*(i-1));
-		time(1+t*i);
-    avg_accel(i) = mean(assvel((time > time(1+t*(i-1)) & (time < time(1+t*i))))); % finds average vel within times
-		if avg_accel(i) >= vbin(1) & avg_accel(i) <= vbin(2)
-					binvec(end+1) = 1;
-		elseif avg_accel(i) > vbin(2) & avg_accel(i) <= vbin(3)
-				binvec(end+1) = 2;
-		elseif avg_accel(i) > vbin(3) & avg_accel(i) <= vbin(4)
-				binvec(end+1) = 3;
-		elseif avg_accel(i) > vbin(4) & avg_accel(i) <= vbin(5)
-					binvec(end+1) = 4;
-		elseif avg_accel(i) > vbin(5) & avg_accel(i) <= vbin(6)
-					binvec(end+1) = 5;
-		%elseif avg_accel(i) > vbin(6) & avg_accel(i) <= vbin(7)
-		%					binvec(end+1) = 6;
-		elseif avg_accel(i) > vbin(end)
-				binvec(end+1) = 6; %CAN CHANGCE
-		else
-			  binvec(end+1) = 100;
-
-		end
+tm = 1;
+tdecodesec = tdecode;
+tdecode = tdecode*2000;
+avg_accel = []
+while tm <= length(time)-(rem(length(time), tdecode)) & (tm+tdecode) < length(time)
+    avg_accel(end+1) = mean(assvel(tm:tm+tdecode));
+		        if tdecodesec>=.25
+		          tm = tm+(tdecode/2);
+		        else
+		          tm = tm+tdecode;
+		        end
 end
 
 
-thingy = binvec;
+for k=1:length(vbin)
+	if k<length(vbin)
+	index = find(avg_accel>=vbin(k) & avg_accel<vbin(k+1));
+	avg_accel(index) = k;
+	elseif k==length(vbin)
+	index = find(avg_accel>vbin(k));
+	avg_accel(index) = k;
+	end
+end
+
+
+
+
+thingy = avg_accel;

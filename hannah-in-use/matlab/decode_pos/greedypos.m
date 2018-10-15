@@ -1,4 +1,4 @@
-function f = greedy(decodedtimes, decodedarray, posData, dim)
+function f = greedypos(decodedtimes, decodedarray, posData, dim)
 %dim is dimension in cm. should match dimension for decoding
 
 tic

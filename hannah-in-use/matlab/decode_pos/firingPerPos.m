@@ -1,7 +1,7 @@
 function f = firingPerPos(posData, clusters, dim)
 %returns firing per position. dim is number of centimeters for binning
 
-velthreshold = 10;
+velthreshold = 15;
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);
 
@@ -10,7 +10,8 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 
 
 %only find occupancy map if one hasn't been provided
-
+mintime = min(posData(:,1));
+maxtime = max(posData(:,1));
 xmin = min(posData(:,2))
 ymin = min(posData(:,3))
 xmax = max(posData(:,2))
@@ -24,8 +25,8 @@ ybins = ceil((ymax-ymin)/psize); %number of y
   tstep = 1/30;
 
 
-  xinc = xmin +(0:xbins-1)*psize %makes a vectors of all the x values at each increment
-  yinc = ymin +(0:ybins-1)*psize %makes a vector of all the y values at each increment
+  xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
+  yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
 %only uses data that is >15cm/s
 vel = velocity(posData);
@@ -35,10 +36,21 @@ posDataFast = posData(fastvel, :);
 
 
 %defiding position
-  for x = (1:xbins-1) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
-    for y = (1:ybins-1)
-        inX = find(posDataFast(:,2)>=xinc(x) & posDataFast(:,2)<xinc(x+1));
-        inY = find(posDataFast(:,3)>=yinc(y) & posDataFast(:,3)<yinc(y+1));
+  for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
+    for y = (1:ybins)
+        if x<xbins & y<ybins
+          inX = find(posDataFast(:,2)>=xinc(x) & posDataFast(:,2)<xinc(x+1));
+          inY = find(posDataFast(:,3)>=yinc(y) & posDataFast(:,3)<yinc(y+1));
+        elseif x==xbins & y<ybins
+          inX = find(posDataFast(:,2)>=xinc(x));
+          inY = find(posDataFast(:,3)>=yinc(y) & posDataFast(:,3)<yinc(y+1));
+        elseif x<xbins & y==ybins
+          inX = find(posDataFast(:,2)>=xinc(x) & posDataFast(:,2)<xinc(x+1));
+          inY = find(posDataFast(:,3)>=yinc(y));
+        elseif x==xbins & y==ybins
+          inX = find(posDataFast(:,2)>=xinc(x));
+          inY = find(posDataFast(:,3)>=yinc(y));
+        end
         inboth = intersect(inX, inY);
         timecells(x, y) = length(inboth);
         %	A1 = posData(:,2)>((i-1)*xstep) & posData(:,2)<=(i*xstep); %finds all rows that are in the current x axis bin
@@ -55,17 +67,34 @@ posDataFast = posData(fastvel, :);
 for k = 1:spikenum
     spikename = char(spikenames(k));
     unit = clusters.(spikename);
-    assvel = assignvelOLD(clusters.(spikename), vel);
+
+    [m firstspike] = min(abs(unit-mintime));
+    [m lastspike] = min(abs(unit-maxtime));
+    unit = unit(firstspike:lastspike);
+
+    assvel = assignvelOLD(unit, vel);
     fastspikeindex = find(assvel > velthreshold);
     fastspike = unit(fastspikeindex);
     ls = placeevent(fastspike, posData); %outputs [event; xposvector; yposvector];
     ls = ls';
     if length(fastspikeindex)>0
     %WILL NEED TO DO THIS FOR ALL CELLS
-    for x = (1:xbins-1)
-        for y = (1:ybins-1)
-          inX = find(ls(:,2)>=xinc(x) & ls(:,2)<xinc(x+1));
-          inY = find(ls(:,3)>=yinc(y) & ls(:,3)<yinc(y+1));
+    for x = (1:xbins)
+        for y = (1:ybins)
+          if x<xbins & y<ybins
+            inX = find(ls(:,2)>=xinc(x) & ls(:,2)<xinc(x+1));
+            inY = find(ls(:,3)>=yinc(y) & ls(:,3)<yinc(y+1));
+          elseif x==xbins & y<ybins
+            inX = find(ls(:,2)>=xinc(x));
+            inY = find(ls(:,3)>=yinc(y) & ls(:,3)<yinc(y+1));
+          elseif x<xbins & y==ybins
+            inX = find(ls(:,2)>=xinc(x) & ls(:,2)<xinc(x+1));
+            inY = find(ls(:,3)>=yinc(y));
+          elseif x==xbins & y==ybins
+            inX = find(ls(:,2)>=xinc(x));
+            inY = find(ls(:,3)>=yinc(y));
+          end
+
           inboth = intersect(inX, inY);
           events(x,y) = length(inboth);
 
@@ -78,14 +107,14 @@ for k = 1:spikenum
             %events(ybins+1-j,i) = sum(C); %number of spikes in each bin
         end
     end
-    
+
     rate = events./(timecells*tstep); %time*tstep is occupancy %want this for all cells
     rate = rate(1:xbins, 1:ybins);
     myStruct.(spikename) = rate;
     else
     rate = zeros(xbins, ybins);
-    myStruct.(spikename) = rate;
-    warning('the cell', spikename ,'doesnt have enough points')
+    warning('the cell doesnt have enough points')
+    spikename
     end
 end
 
