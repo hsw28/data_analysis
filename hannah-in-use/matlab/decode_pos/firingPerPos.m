@@ -1,7 +1,7 @@
-function f = firingPerPos(posData, clusters, dim)
+function f = firingPerPos(posData, clusters, dim, tdecode)
 %returns firing per position. dim is number of centimeters for binning
 
-velthreshold = 15;
+velthreshold = 12;
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);
 
@@ -10,12 +10,23 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 
 
 %only find occupancy map if one hasn't been provided
+
 mintime = min(posData(:,1));
 maxtime = max(posData(:,1));
-xmin = min(posData(:,2))
-ymin = min(posData(:,3))
-xmax = max(posData(:,2))
-ymax = max(posData(:,3))
+oldtime = posData(:,1);
+X = (posData(:,2));
+Y = (posData(:,3));
+
+timeMAZEinc = mintime:.0333:maxtime;
+newX = interp1(oldtime, X, timeMAZEinc, 'pchip');
+newY = interp1(oldtime, Y, timeMAZEinc, 'pchip');
+posData = [timeMAZEinc; newX; newY]';
+
+xmin = min(posData(:,2));
+ymin = min(posData(:,3));
+xmax = max(posData(:,2));
+ymax = max(posData(:,3));
+
 xbins = ceil((xmax-xmin)/psize); %number of x
 ybins = ceil((ymax-ymin)/psize); %number of y
   timecells = zeros(xbins, ybins); %used to be time
@@ -28,9 +39,10 @@ ybins = ceil((ymax-ymin)/psize); %number of y
   xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
   yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
-%only uses data that is >15cm/s
+%only uses data that is >15cm/s -- first smooths for length of bin
 vel = velocity(posData);
-fastvel = find(vel(2,:) > velthreshold);
+vel(1,:) = smoothdata(vel(1,:), 'gaussian', tdecode*15); %originally had this at 30, trying with 15 now
+fastvel = find(vel(1,:) > velthreshold);
 posDataFast = posData(fastvel, :);
 
 

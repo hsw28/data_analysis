@@ -30,7 +30,7 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim);
+fxmatrix = firingPerPos(pos, clusters, dim, tdecode);
 %outputs a structure of rates
 
 maxprob = [];
@@ -41,6 +41,8 @@ numcel = [];
 maxx = [];
 maxy = [];
 same = 0;
+
+n =0;
 
 while tm < (length(timevector)-t)
       %for the cluster, permute through the different conditions
@@ -106,8 +108,21 @@ while tm < (length(timevector)-t)
             maxvaly = datasample(maxvaly, 1);
 
         end
-        maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
-        maxy(end+1) = (yinc(maxvaly));
+        if isempty(maxvalx)==1 | isempty(maxvaly) ==1
+          maxx(end+1) = 0;
+          maxy(end+1) =0;
+          fprintf('you have a zero matrix')
+        else
+            if max(endprob(:))==0
+              maxx(end+1) = NaN;
+              maxy(end+1) = NaN;
+            else
+              maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
+              maxy(end+1) = (yinc(maxvaly));
+            end
+        end
+
+
         times(end+1) = timevector(tm);
 
 
@@ -117,6 +132,7 @@ while tm < (length(timevector)-t)
       tm = tm+t;
     end
     %tm = tm+(t/2); %for overlap?
+    n = n+1
 end
 
 warning('your probabilities were the same')

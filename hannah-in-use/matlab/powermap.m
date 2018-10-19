@@ -47,6 +47,6 @@ colormap('parula');
 pcolor([(avpower) nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
-set(gca,'clim',[0,lim]);
+set(gca,'clim',[5,lim]);
 %axis([16 (size(avpower, 2)+5) -4 (size(avpower,1))]);
 colorbar;

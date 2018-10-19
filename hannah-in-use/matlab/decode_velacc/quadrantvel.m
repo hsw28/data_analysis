@@ -64,12 +64,12 @@ for k=1:length(x)
     velsum(4) = velsum(4) + vel(k);
     velall4(end+1) = vel(k);
   %7
-  elseif x(k) >= 780 & y(k)>=575
+elseif x(k) >= 780 & y(k)>=588
     statecount(7) = statecount(7)+1;
     velsum(7) = velsum(7) + vel(k);
     velall7(end+1) = vel(k);
   %8
-  elseif x(k) >=780  & y(k)< 575 & y(k)> 411
+elseif x(k) >=780  & y(k)< 588 & y(k)> 411
     statecount(8) = statecount(8)+1;
     velsum(8) = velsum(8) + vel(k);
     velall8(end+1) = vel(k);

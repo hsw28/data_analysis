@@ -30,7 +30,7 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim)
+fxmatrix = firingPerPos(pos, clusters, dim, tdecode)
 %outputs a structure of rates
 
 maxprob = [];

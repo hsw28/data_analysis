@@ -16,16 +16,17 @@ delta = delta.^2;
 
 ratio = theta./delta;
 
-%velvector = cell2mat(varargin);
-%if length(varargin)>1
+
+if length(velvector)>1
 
   assvel = assignvel(time, velvector);
   asstime = (assvel(2,:));
   assvel = assvel(1,:);
-%else
-%  fprintf('we DONT have a vel')
-%  assvel = zeros(length(time),1);
-%end
+else
+
+  assvel = zeros(length(time),1);
+  asstime = time;
+end
 
 
 %sliding window of 1sec with .5sec overlap
@@ -39,11 +40,11 @@ while i<length(asstime)-2000
   meanvel = mean(assvel(i:i+2000));
   j = i;
   if meanratio > 2 & meanvel <= 5 %REM detected
-    while j<length(asstime)-2000 & mean(ratio(j:j+2000))>2 & mean(assvel(j:j+2000))<=5
+    while j<length(asstime)-2000 & j<length(ratio)-2000 & mean(ratio(j:j+2000))>2 & mean(assvel(j:j+2000))<=5
       mean(ratio(j:j+2000));
       j = j+1000;
     end
-    if time(j+1000)-time(i)>30
+    if time(j+1000)-time(i)>60
       remstart(end+1) = time(i);
       remend(end+1) = time(j+1000);
       remtime = [remtime, time(i:j)];

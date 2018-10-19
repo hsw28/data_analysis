@@ -21,10 +21,8 @@ time = time(indexmin:indexmax);
 assvel = (assignvel(time,accelORvel));
 assvel = assvel(1,:);
 
+vbin = [0; 7; 14; 21; 28; 35]
 
-%vbin = [0; 10; 20; 30; 40; 50];
-%vbin = [0; 10; 20; 30; 40]
-vbin = [0; 6; 12; 18; 24; 30]
 
 tm = 1;
 tdecodesec = tdecode;
