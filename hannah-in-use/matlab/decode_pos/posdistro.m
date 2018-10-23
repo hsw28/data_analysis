@@ -40,7 +40,11 @@ elseif x(k) >=797 & y(k)< 180 %180 if reg pos, 131 if decode
     %6
   elseif x(k)>=662
     statecount(end+1) = 6;
+  else
+    statecount(end+1) = NaN;
   end
 end
+
+f = statecount;
 
 histogram(statecount, 'Normalization','probability')

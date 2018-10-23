@@ -16,6 +16,7 @@ if num ==1
 				for cellCount = 1:length(spikePos)
 						line([spikePos(cellCount), spikePos(cellCount)], [k-0.4 k+0.4], 'color', [0 0 0]);
 				end
+				k
   end
 ylim([0 numclust+1]);
 end

@@ -1,11 +1,10 @@
-function f = findripMUA(time, posData, clusters, timewin)
+function f = findripMUA(time, vel, clusters, timewin)
 %timewin is in ms
 %outputs ripple start times. also have ripple end times if need later. do not have peaks right now
 %for awake periods only as uses position data to get non moving times
 
 timewin = (timewin/1000*2000)-1;
 velthreshold = 10;
-vel = velocity(posData);
 
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);

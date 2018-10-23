@@ -99,8 +99,9 @@ if isempty(Hd)
         -1.81418407322353e-06 0]);
 end
 
-delay = mean(grpdelay(Hd));
 y = step(Hd,(x));
+delay = mean(grpdelay(Hd));
+
 y(1:delay) = [];
 
 % [EOF]

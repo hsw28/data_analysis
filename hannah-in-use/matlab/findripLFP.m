@@ -1,5 +1,5 @@
 
-function [notable, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, vel);
+function [notabletimes, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, vel);
 %IF DONT HAVE VELOCITY PUT 0
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
@@ -37,7 +37,7 @@ alltime = [];
 if vel == 0
 	vel = ones(1,length(d));
 else
-  vel = assignvelOLD(d, vel);
+  vel = assignvel(d, vel);
 end
 
 % permute through transformed data and find when data is Y std devs above mean
@@ -109,5 +109,5 @@ for k = 1:length(starts)
 end
 
 
-notable = [starts; peaks; ends];
+notabletimes = [starts; peaks; ends];
 all = alltimes;
