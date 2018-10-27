@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # to use: python extract_OATpos.py oate-file.txt output-file.csv
+#INPUT AT ARTE POS FILE .TXT NOT A JSON
 #converts to correct timestamp
 
 
