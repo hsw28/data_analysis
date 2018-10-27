@@ -120,7 +120,7 @@ for k = 1:spikenum
         end
     end
 
-    rate = events./(timecells*tstep); %time*tstep is occupancy %want this for all cells
+    rate = events./(timecells*tstep)+eps; %time*tstep is occupancy %want this for all cells
     rate = rate(1:xbins, 1:ybins);
     myStruct.(spikename) = rate;
     else

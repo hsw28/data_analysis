@@ -38,15 +38,17 @@ y = rank2(:,1);
 f = [rank1, rank2];
 
 
-coeffs = polyfit(x, y, 1);
-polydata = polyval(coeffs,x);
-sstot = sum((y - mean(y)).^2);
-ssres = sum((y - polydata).^2);
-rsquared = 1 - (ssres / sstot)
-stats = fitlm(x,y);
-pval = stats.Coefficients.pValue(2)
+[rho,pval] = corr(x,y, 'Type','Spearman')
+
+%coeffs = polyfit(x, y, 1);
+%polydata = polyval(coeffs,x);
+%sstot = sum((y - mean(y)).^2);
+%ssres = sum((y - polydata).^2);
+%rsquared = 1 - (ssres / sstot)
+%stats = fitlm(x,y);
+%pval = stats.Coefficients.pValue(2)
 
 figure
 scatter(x, y);
-str1 = {'P value' pval, 'r2' rsquared};
+str1 = {'Spearmans rho' rho, 'P value' pval};
 text(1.2,max(y)*.9,str1);

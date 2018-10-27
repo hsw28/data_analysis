@@ -1,4 +1,4 @@
-function thingy = binVel(time, accelORvel, tdecode)
+function thingy = binVel(time, accelORvel, tdecode,vbin)
 % for use with decode shit. bins actual velocities in same bins as decode shit, so you can compare your decoded data
 
 
@@ -21,7 +21,7 @@ time = time(indexmin:indexmax);
 assvel = (assignvel(time,accelORvel));
 assvel = assvel(1,:);
 
-vbin = [0; 4; 8; 12; 16; 20]
+%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24; 27; 30]
 
 tm = 1;
 tdecodesec = tdecode;

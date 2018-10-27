@@ -1,4 +1,4 @@
-function [startend alltimes ratio] = REMdetect2(unfilteredLFP, time, velvector, headdirection)
+function [startend ratio] = REMdetect2(unfilteredLFP, time, velvector)
 %varargin should be velocity
 %To identify REM episodes, LFP traces were digitally bandpass filtered in the delta (2–4 Hz) and theta (6–10 Hz) bands
 %power in each band was computed as the time-averaged squared amplitude of the filtered trace
@@ -14,11 +14,6 @@ delta = deltafilt04(unfilteredLFP);
 theta = theta.^2;
 delta = delta.^2;
 
-
-%ratio = theta(1:length(delta))./delta;
-
-
-
 if length(velvector)>1
 
   assvel = assignvel(time, velvector);
@@ -30,61 +25,82 @@ else
   asstime = time;
 end
 
-if length(headdirection)>1
-  hd = hdvelocity(headdirection);
-  hd = assignvel(time, hd);
-  hd = hd(1,:);
-else
-  hd = zeros(length(time),1);
+
+i = 1;
+k = 0;
+total = 0;
+every = [];
+tm = [];
+meanv = [];
+while i<length(asstime)-2000
+currenttheta = rms(theta(i:i+2000));
+currentdelta = rms(delta(i:i+2000));
+ratio = currenttheta./currentdelta;
+meanvel = mean(assvel(i:i+2000));
+%meanv(end+1) = meanvel;
+total = total+ratio;
+every(end+1) = ratio;
+tm(end+1) = asstime(i);
+k = k+1; %number of seconds
+i = i+2000;
 end
 
+meanrat = mean(every);
 
-
-
-%Filter, square, bin, rms, ratio
-i=1;
-remstart = [];
-remend = [];
-remtime = [];
-meanr = []; %to keep track of ratios, not using right now
-meanv = [];
-t = [];
-while i<length(asstime)-2000
-  currenttheta = rms(theta(i:i+2000));
-  currentdelta = rms(delta(i:i+2000));
-  meanratio = currenttheta./currentdelta;
-  meanvel = mean(assvel(i:i+2000));
-  meanr(end+1) = meanratio;
-  meanv(end+1) = meanvel;
-  t(end+1) = asstime(i);
-  numbelow = length(find(assvel(i:i+2000)<5));
-  meanhd = mean(abs(hd(i:i+2000)));
+REMbeginindex = [];
+REMfinishindex = [];
+REMbegin = [];
+REMfinish = [];
+for i=1:length(every)-3
   j = i;
-
-  %if meanratio > 2 & meanvel <=5 %REM detected
-  if meanratio > 2 &  numbelow==length(assvel(i:i+2000)) & meanhd<.04 %REM detected
-
-  meanr(end+1) = (rms(theta(j:j+2000))./rms(delta(j:j+2000)));
-  meanv(end+1) = mean(assvel(j:j+2000));
-  t(end+1) = asstime(j);
-    %while j<length(asstime)-2000 & j<length(ratio)-2000 & mean(ratio(j:j+2000))>2 & mean(assvel(j:j+2000))<=5
-    while j<length(asstime)-2000 & (rms(theta(j:j+2000))./rms(delta(j:j+2000)))>2 & (length(find(assvel(j:j+2000)<5))==length(assvel(j:j+2000))) & mean(abs(hd(j:j+2000)))<.04
-
-      meanr(end+1) = (rms(theta(j:j+2000))./rms(delta(j:j+2000)));
-      meanv(end+1) = mean(assvel(j:j+2000));
-      t(end+1) = asstime(j);
-      j = j+2000;
+  if every(i) > 2 & length(find(assvel((i-1)*2000+1:i*2000)<5))==2000 %rem start
+    REMstart = tm(i);
+    while (every(j)>2) & length(find(assvel((j-1)*2000+1:j*2000)<5))==2000
+      j= j+1;
     end
-    if time(j+1000)-time(i)>5
-      remstart(end+1) = time(i);
-      remend(end+1) = time(j+1000);
-      remtime = [remtime, time(i:j)];
-    end
+    REMend = tm(j-1);
+    j = j-1;
+    %if REMend-REMstart > 1 %& REMend-REMstart<300
+      REMbegin(end+1) = REMstart;
+      REMfinish(end+1) = REMend;
+      REMbeginindex(end+1) = i;
+      REMfinishindex(end+1) = j;
+
+    %end
   end
   i = j;
-  i = i+2000;
+  i = i+1;
 end
 
-startend = [remstart;remend];
-alltimes = remtime;
-ratio = [meanr; meanv; t];
+
+REMbegin2 = [];
+REMfinish2 = [];
+f = 1;
+while f <= length(REMbegin)-1
+  s = f+1;
+  if abs(REMfinish(f)-REMbegin(s)) < 6
+    REMbegin2(end+1) = REMbegin(f);
+    while abs(REMfinish(f)-REMbegin(s)) < 10 & mean(every(REMfinishindex(f)):REMbeginindex(s))>meanrat & length(find(assvel(f:s))<5)==s-f+1 & f<length(REMfinish)-1
+    f = f+1;
+    s = f+1;
+    end
+    REMfinish2(end+1) = REMfinish(s-1);
+    s =s+1;
+  else
+    REMbegin2(end+1) =  REMbegin(f);
+    REMfinish2(end+1) = REMfinish(f);
+  end
+    f = s;
+end
+
+REMbegin3= [];
+REMfinish3 = [];
+for f=1:length(REMbegin2)
+  if REMfinish2(f)-REMbegin2(f)>30
+    REMbegin3(end+1) = REMbegin2(f);
+    REMfinish3(end+1) = REMfinish2(f);
+  end
+end
+
+startend = [REMbegin3; REMfinish3];
+ratio = [every; tm];

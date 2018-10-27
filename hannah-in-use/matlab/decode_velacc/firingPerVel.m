@@ -79,7 +79,7 @@ while i <= length(vbin)
 	%		 	average(i) = NaN;
   %      average(i) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
   %   else
-        average(i) = mean(subset);
+        average(i) = mean(subset)+eps;
   %   end
 		 i = i+1;
 end

@@ -80,7 +80,7 @@ while i <= length(vbin)
 %     if length(subset) < threshold
 %        average(i+1) = length(firingdata)./(length(time)./(2000*t)); %sub in average rate
 %     else
-        average(i+1) = mean(subset);
+        average(i+1) = mean(subset)+eps;
 %     end
 
 		 i = i+1;

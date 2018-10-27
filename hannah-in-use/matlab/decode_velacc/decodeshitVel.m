@@ -21,8 +21,8 @@ tdecodesec = tdecode;
 tdecode = tdecode*2000;
 tm = 1;
 
-mintime = vel(2,1)
-maxtime = vel(2,end)
+mintime = vel(2,1);
+maxtime = vel(2,end);
 
 [c indexmin] = (min(abs(timevector-mintime)));
 [c indexmax] = (min(abs(timevector-maxtime)));
@@ -32,60 +32,9 @@ assvel = assignvel(decodetimevector, vel);
 asstime = assvel(2,:);
 
 %find number of clusters
-clustname = (fieldnames(clusters))
+clustname = (fieldnames(clusters));
 numclust = length(clustname)
 
-
-
-
-%bin the velocities
-%vbin = [0; 2; 4; 6; 8; 10; 12; 14; 16; 18]
-
-%vbin = [0; 3; 6; 9; 12; 15; 18]
-%vbin = [0; 3; 6; 9; 12; 15; 18; 21]
-%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24] %for 15, gets .17 corr at .5
-%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24; 27]
-
-
-vbin = [0; 4; 8; 12; 16; 20] %best yet 22 22%
-%vbin = [0; 4; 8; 12; 16; 20; 24]%best yet 22 17.75
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28]; %use for 17
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32];
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44]
-
-
-%%%%%%%%%%%vbin = [0; 5; 10; 15; 20] % 30 percent
-%vbin = [0; 5; 10; 15; 20]
-%vbin = [0; 5; 10; 15; 20; 25];
-%vbin = [0; 5; 10; 15; 20; 25; 30];
-%vbin = [0; 5; 10; 15; 20; 25; 30; 35]
-%vbin = [0; 5; 10; 15; 20; 30]
-%vbin = [0; 5; 10; 15; 25; 35]
-
-%vbin = [0; 6; 12; 18; 24; 30; 36]
-%vbin = [0; 6; 12; 18; 24; 30] %best for 22
-%vbin = [0; 6; 12; 18; 24]%best yet
-
-%vbin = [0; 7; 14; 21; 28]; %for 15, gets .11 corr
-%vbin = [0; 7; 14; 21; 28; 35];
-%vbin = [0; 7; 14; 21; 28; 35; 42]
-%vbin = [0; 7; 14; 21; 28; 35; 42; 49]
-
-%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 19
-%vbin = [0; 8; 16; 24; 32; 40; 48];
-%vbin = [0; 8; 16; 24; 32; 40]
-%vbin = [0; 8; 16; 24; 32];
-
-%vbin = [0; 9; 18; 27; 36; 45]
-%vbin = [0; 9; 18; 27; 36]
-
-%vbin = [0; 10; 20; 30; 40] %best yet for 15
-%vbin = [0; 10; 20; 30; 40; 50]
-
-
-
-%vbin = [0; 7; 14; 21; 28; 35]  %best for 4-15
-%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 4-19
 
 
 %%%NEW
@@ -113,6 +62,28 @@ end
 size(avg_accel);
 avg_accel = avg_accel';
 
+
+%%%%
+binnedVelo = histcounts(avg_accel, 'BinWidth', 7);
+binnedVelo = binnedVelo./sum(binnedVelo);
+k = length(binnedVelo);
+percentsum = 0;
+while percentsum<.05
+  percentsum = percentsum + binnedVelo(k);
+  k = k-1;
+end
+totbin = k+1;
+vbin = [0:7:totbin*7]
+
+%7 with .05 is best so far
+
+
+
+
+
+
+
+
 % for each cluster,find the firing rate at esch velocity range
 j = 1;
 fxmatrix = zeros(numclust, length(vbin));
@@ -129,7 +100,7 @@ fxmatrix
  %find prob the animal is each velocity DONT NEED BUT CAN BE USEFUL
 
 probatvelocity = zeros(length(vbin),1);
-binnedV = binVel(asstime, vel, t/2000);
+binnedV = binVel(asstime, vel, t/2000, vbin);
 legitV = find(binnedV<100);
 for k = 1:length(vbin)
     numvel = find(binnedV == (k));
@@ -143,6 +114,7 @@ probatvelocity
   maxprob = [];
   spikenum = 1;
   times = [];
+  perc = [];
 
 %percents = zeros(length(timevector)-(rem(length(timevector), t)), length(vbin)) ;
 percents = [];
@@ -222,6 +194,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
         percents = vertcat(percents, endprob);
 
         maxprob(end+1) = idx;
+        perc(end+1) = max(endprob);
         %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
                                           % if I want probabilities need to make a matrix of endprobs instead of selecting max
         times(end+1) = timevector(tm);
@@ -259,9 +232,60 @@ end
 k = k-1;
 end
 
-values = [v; times; binnum];
+values = [v; times; binnum; perc];
 
 toc
 %[h,p,ci,stats] = ttest2(maxprob, binnedV)
 %probs = percents;
 %values = [maxprob; binnedV];
+
+
+
+%bin the velocities
+%vbin = [0; 2; 4; 6; 8; 10; 12; 14; 16; 18]
+
+%vbin = [0; 3; 6; 9; 12; 15]
+%vbin = [0; 3; 6; 9; 12; 15; 18]
+%vbin = [0; 3; 6; 9; 12; 15; 18; 21]
+%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24] %for 15, gets .17 corr at .5
+%%%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24; 27; 30]
+
+%vbin = [0; 4; 8; 12; 16] %best yet 22 17.75
+%vbin = [0; 4; 8; 12; 16; 20] %best yet for 28
+%vbin = [0; 4; 8; 12; 16; 20; 24]
+%vbin = [0; 4; 8; 12; 16; 20; 24; 28]; %use for 17
+%%%%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32];
+%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40];
+%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44]
+
+
+%%%%%%%%%%%vbin = [0; 5; 10; 15; 20] % 30 percent
+%vbin = [0; 5; 10; 15; 20]
+%vbin = [0; 5; 10; 15; 20; 25];  %%%%%%%%%getting there 8-22
+%vbin = [0; 5; 10; 15; 20; 25; 30];
+%vbin = [0; 5; 10; 15; 20; 25; 30; 35]
+
+%vbin = [0; 6; 12; 18; 24; 30; 36]
+%vbin = [0; 6; 12; 18; 24; 30] %% LAST ONE
+%vbin = [0; 6; 12; 18; 24]%best yet
+
+%vbin = [0; 7; 14; 21; 28]; %for 15, gets .11 corr
+%vbin = [0; 7; 14; 21; 28; 35];
+%vbin = [0; 7; 14; 21; 28; 35; 42]
+%vbin = [0; 7; 14; 21; 28; 35; 42; 49]
+
+%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 19
+%vbin = [0; 8; 16; 24; 32; 40; 48];
+%vbin = [0; 8; 16; 24; 32; 40]
+%vbin = [0; 8; 16; 24; 32]; %%%%%%%%%%%%%822uggg
+
+%vbin = [0; 9; 18; 27; 36; 45; 54]
+%vbin = [0; 9; 18; 27; 36; 45] %822 - 28%
+%vbin = [0; 9; 18; 27; 36]  %822uggg
+
+%vbin = [0; 10; 20; 30; 40] %best yet for 15
+%vbin = [0; 10; 20; 30; 40; 50] %822 - 30
+
+
+%vbin = [0; 7; 14; 21; 28; 35]  %best for 4-15
+%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 4-19

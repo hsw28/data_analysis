@@ -114,18 +114,26 @@ all = 0;
 
       end
     end
-
-
+numincells;
 
   linearmean = reshape(averagecells,[1 xbins*ybins]);
   linearnum = reshape(numincells,[1 xbins*ybins]);
 
 if all>1000
-  low = find(linearnum<(all*.001));
+  low = find(linearnum<=ceil(all*.001));
+  linearmean(low) = NaN;
+%else
+%    low = find(linearnum<=ceil(all*.01));
+%    linearmean(low) = NaN;
+
+%elseif find(~isnan(linearnum))>10
+%  low = find(linearnum<5);
+%  linearmean(low) = NaN;
 else
   low = find(linearnum<2);
-end
   linearmean(low) = NaN;
+end
+%  linearmean(low) = NaN;
   [avs,idx] = sort(linearmean);
   sorted = [[1:1:length(idx)]; idx; avs; linearnum(idx)]';
 
