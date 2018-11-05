@@ -1,8 +1,12 @@
-function [times matrices maxes] = decodeshitPosBIG(time, pos, clusters, tdecode, dim)
-%decodes position and outputs decoded x, y, confidence(in percents), and time. if you want to filter spiking for veloctity you put velocity in varargin
-tic
+function f = POSdecodeSWRsegments(SWRstartend, pos, clusters, dim, tdecode)
+%decodes position in each SWR seperately. input the output for findripMUA.m
+
+%%%%%%FILL IN
+SWRstart = SWRstartend(1,:);
+SWRend = SWRstartend(2,:);
+
 posData = pos;
-timevector = time;
+%timevector = time;
 
 t = tdecode;
 t = 2000*t;
@@ -30,27 +34,30 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim, tdecode)
+fxmatrix = firingPerPos(pos, clusters, dim, tdecode);
 %outputs a structure of rates
 
 maxprob = [];
 spikenum = 1;
 times = [];
 percents = [];
+numcel = [];
 maxx = [];
 maxy = [];
-matrices = zeros(xbins, ybins, ceil(length(timevector)/t)-1);
 same = 0;
-num = 1;
 
-while tm < (length(timevector)-t)
+n =0;
+nivector = zeros((numclust),1);
+r =1;
+while r <= (length(SWRstartend))
+   %find spikes in each cluster for time
+   for c=1:numclust   %permute through cluster
+     name = char(clustname(c));
+     nivector(c) = length(clusters.(name)(clusters.(name)>=SWRstart(r) & clusters.(name)<SWRend(r)));
+   end
+
       %for the cluster, permute through the different conditions
-
-      for c=1:numclust  %permute through cluster
-        name = char(clustname(c));
-        nivector(c) = length(clusters.(name)(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
-      end
-      endprob = zeros(xbins, ybins);
+    endprob = zeros(xbins, ybins);
         for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
           for y = (1:ybins)
           productme =0;
@@ -71,14 +78,11 @@ while tm < (length(timevector)-t)
             occy = find(yvals>=yinc(y));
           end
 
-
           if length(occx) == 0  & length(occy)==0 %means never went there, dont consider
             endprob(x,y) = NaN;
             break
           end
-
-
-          for c=1:numclust %permute through cluster
+          for c=1:numclust  %permute through cluster
               ni = nivector(c);
               name = char(clustname(c));
               fx = fxmatrix.(name);
@@ -88,60 +92,62 @@ while tm < (length(timevector)-t)
                 productme = productme + (ni)*log(fx);  %IN
               else
                 fx = .00000000000000000000001;
+                fprintf('zero thing isnt working')
                 productme = productme + (ni)*log(fx);
               end
 
               expme = (expme) + (fx);
-              % goes to next cell, same location
+               % goes to next cell, same location
 
           end
+          numcel(end+1) = (ni);
           % now have all cells at that location
-          tmm = t./2000;
+          tmm = SWRend(r)-SWRstart(r);
         endprob(x, y) = (productme) + (-tmm.*expme); %IN
         end
         end
 
-                [maxvalx, maxvaly] = find(endprob == max(endprob(:))); %finds indices
-                mp = max(endprob(:))-12;
+        [maxvalx, maxvaly] = find(endprob == max(endprob(:)));
 
-                endprob = exp(endprob(:)-mp);
-                conv = 1./sum(endprob(~isnan(endprob)), 'all');
-                endprob = endprob.*conv; %matrix of percents
+        mp = max(endprob(:))-12;
 
-                matrices(:,:,num) = endprob;
+      endprob = exp(endprob-mp);
 
 
-                percents(end+1) = max(endprob(:)); %finds confidence
-                if length(maxvalx) > 1 %if probs are the sample, randomly pick one and print warning
+         %finds indices
+        conv = 1./sum(endprob(~isnan(endprob)), 'all');
+        endprob = endprob.*conv; %matrix of percents
+        %percents = vertcat(percents, endprob);
 
-                    maxvalx = datasample(maxvalx,1 );
-                    maxvaly = datasample(maxvaly,1);
+        percents(end+1) = max(endprob(:)); %finds confidence
+        if length(maxvalx) > 1 %if probs are the sample, randomly pick one and print warning
+            same = same+1;
+            maxvalx = datasample(maxvalx, 1);
+            maxvaly = datasample(maxvaly, 1);
 
-                end
-
-
-                    if length(maxvalx)<1 | length(maxvaly) <1
-                      maxx(end+1) = NaN;
-                      maxy(end+1) = NaN;
-                    else
-                      maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
-                      maxy(end+1) = (yinc(maxvaly));
-                    end
-
-        times(end+1) = timevector(tm);
-
-        if tdecode>=.25
-          tm = tm+(t/2);
-        else
-          tm = tm+t;
         end
-num = num+1
+
+            if length(maxvalx)<1 | length(maxvaly) <1
+              maxx(end+1) = NaN;
+              maxy(end+1) = NaN;
+            else
+              maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
+              maxy(end+1) = (yinc(maxvaly));
+            end
+
+
+
+
+
+
+      r = r+1
 
 end
 
-toc
-times = times;
-matrices = matrices;
+warning('your probabilities were the same')
+same = same
 maxx = maxx+psize/2;
 maxy = maxy+psize/2;
-maxes = [maxx; maxy; percents; times];
+values = [maxx; maxy; percents; SWRstart; SWRend];
+toc
+f = values;

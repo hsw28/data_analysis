@@ -1,6 +1,7 @@
-function f = velrank(posData, vel, dimX, dimY)
+function f = velrank(posData, vel, dimX, dimY, confidencethreshold)
 %posData should be in the format (time,x,y) or (x,y,prob,time)
 %vel should be in (vel, time, varargin)
+%MAKE SURE CONFIDENCE THRESHOLD IS LIKE .3 AND NOT 30%
 
 
 psizeX = 3.5 * dimX; %some REAL ratio of pixels to cm
@@ -19,19 +20,58 @@ if size(posData,2) == 3 %this means non decoded
 %    Y = interp1(timepos, Y, timeMAZEinc, 'pchip');
 %    timepos = timeMAZEinc;
 %  end
-elseif size(posData,1)==4
+elseif size(posData,1)==4 %means decoded continuous
+
+  %%%%%%%%%%%%%%%FOR TESTING: USE ONLY CONFIDENCES ABOVE 30%
+  highprobpos = find(posData(3,:)>confidencethreshold);
+  posData = posData(:,highprobpos);
+  %%ENDDDDD
+  size(posData)
+
   mintimepos = min(posData(4,:));
   maxtimepos = max(posData(4,:));
   timepos = posData(4,:)';
   X = (posData(1,:))';
   Y = (posData(2,:))';
+elseif size(posData,1)==5 %means SWR decoded
+  highprobpos = find(posData(3,:)>confidencethreshold);
+  posData = posData(:,highprobpos);
+  mintimepos = min(posData(4,:));
+  maxtimepos = max(posData(5,:));
+  X = (posData(1,:))';
+  Y = (posData(2,:))';
+  timepos = posData(4,:)';
+
 end
 
 %set velocities
-mintimevel = min(vel(2,:));
-maxtimevel = max(vel(2,:));
-timevel = vel(2,:);
-vel = vel(1,:);
+%%%%%%%%%%%%%%%FOR TESTING: USE ONLY CONFIDENCES ABOVE 30%
+if size(vel,1)==4
+  highprobvel = find(vel(4,:)>confidencethreshold);
+  vel = vel(:,highprobvel);
+  mintimevel = min(vel(2,:));
+  maxtimevel = max(vel(2,:));
+  timevel = vel(2,:);
+  vel = vel(1,:);
+
+elseif size(vel,1)==5
+  highprobvel = find(vel(3,:)>confidencethreshold);
+  vel = vel(:,highprobvel);
+
+  mintimevel = min(vel(4,:));
+  maxtimevel = max(vel(5,:));
+  timevel = (vel(4,:));
+  vel = vel(1,:);
+
+else
+  mintimevel = min(vel(2,:));
+  maxtimevel = max(vel(2,:));
+  timevel = vel(2,:);
+  vel = vel(1,:);
+
+end
+%%ENDDDDD
+
 
 %cut so same
 if mintimepos>mintimevel
@@ -62,7 +102,6 @@ end
 
 posData = [timepos, X, Y];
 
-
 %putting in approx values here for now, just want them to always be same i think
 xmin = 360;
 ymin = 70;
@@ -76,6 +115,7 @@ xstep = xmax/xbins;
 ystep = ymax/ybins;
 xinc = xmin +(0:xbins)*psizeX; %makes a vectors of all the x values at each increment
 yinc = ymin +(0:ybins)*psizeY; %makes a vector of all the y values at each increment
+
 
 timesforvel = placeevent(timevel, posData); %vectortxy = [time'; xposvector; yposvector];
 timesforvel = timesforvel';

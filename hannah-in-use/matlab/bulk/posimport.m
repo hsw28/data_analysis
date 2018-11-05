@@ -9,8 +9,11 @@ for k=1:length(array)
   name = char(array(k));
   name = strsplit(name,'Data/');
   name = char(name(1,2));
+  %name = strsplit(name,'/boxpos.csv');
+  %name = (name(1,1));
   name = strsplit(name,'/pos.csv');
   name = (name(1,1));
+
   %replaces characters that cant be in structure names
   name = strrep(name, '/', '_');
   name = strrep(name, '-', '_');

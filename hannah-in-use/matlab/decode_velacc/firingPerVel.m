@@ -41,7 +41,7 @@ ending = max(time);
 
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
-rate = r(2,:); % number of spikes per time bin
+rate = r(2,:).*1/t; % number of spikes per time bin -- converted to spikes per second
 fastest = max(rate);
 m = length(rate);
 

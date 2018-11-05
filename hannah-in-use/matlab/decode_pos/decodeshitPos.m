@@ -43,8 +43,15 @@ maxy = [];
 same = 0;
 
 n =0;
+nivector = zeros((numclust),1);
 
 while tm < (length(timevector)-t)
+   %find spikes in each cluster for time
+   for c=1:numclust   %permute through cluster
+     name = char(clustname(c));
+     nivector(c) = length(clusters.(name)(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
+   end
+
       %for the cluster, permute through the different conditions
     endprob = zeros(xbins, ybins);
         for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
@@ -71,21 +78,22 @@ while tm < (length(timevector)-t)
             endprob(x,y) = NaN;
             break
           end
-          while c <= numclust  %permute through cluster
+          for c=1:numclust  %permute through cluster
+              ni = nivector(c);
               name = char(clustname(c));
-              ni = length(clusters.(name)(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
               fx = fxmatrix.(name);
-
               fx = (fx(x, y));
+
               if fx ~= 0
                 productme = productme + (ni)*log(fx);  %IN
               else
                 fx = .00000000000000000000001;
+                fprintf('zero thing isnt working')
                 productme = productme + (ni)*log(fx);
               end
 
               expme = (expme) + (fx);
-              c = c+1; % goes to next cell, same location
+               % goes to next cell, same location
 
           end
           numcel(end+1) = (ni);
@@ -95,12 +103,18 @@ while tm < (length(timevector)-t)
         end
         end
 
+        [maxvalx, maxvaly] = find(endprob == max(endprob(:)));
 
-        endprob = exp(endprob);
-        conv = 1./sum(endprob(~isnan(endprob)));
+        mp = max(endprob(:))-12;
+
+      endprob = exp(endprob-mp);
+
+
+         %finds indices
+        conv = 1./sum(endprob(~isnan(endprob)), 'all');
         endprob = endprob.*conv; %matrix of percents
         %percents = vertcat(percents, endprob);
-        [maxvalx, maxvaly] = find(endprob == max(endprob(:))); %finds indices
+
         percents(end+1) = max(endprob(:)); %finds confidence
         if length(maxvalx) > 1 %if probs are the sample, randomly pick one and print warning
             same = same+1;
@@ -108,19 +122,15 @@ while tm < (length(timevector)-t)
             maxvaly = datasample(maxvaly, 1);
 
         end
-        if isempty(maxvalx)==1 | isempty(maxvaly) ==1
-          maxx(end+1) = 0;
-          maxy(end+1) =0;
-          fprintf('you have a zero matrix')
-        else
-            if max(endprob(:))==0
+
+            if length(maxvalx)<1 | length(maxvaly) <1
               maxx(end+1) = NaN;
               maxy(end+1) = NaN;
             else
               maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
               maxy(end+1) = (yinc(maxvaly));
             end
-        end
+        
 
 
         times(end+1) = timevector(tm);

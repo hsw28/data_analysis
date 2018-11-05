@@ -1,6 +1,6 @@
 function r = mua_rate(tv, start_time, end_time, t)
 
-% finds rate of MUA, outputs as number of spikes per time bin
+% finds rate of MUA, outputs as NUMBER OF SPIKES of spikes per time bin-- not spikes/time
 % function muar = mua_rate(file, start_time, end_time, t);
 % MUA must be format [1, evemts]
 %
@@ -22,7 +22,7 @@ duration = end_time-start_time;
  end
 
  m = length(time_v);
- i = 1:m-1;
+ %i = 1:m-1;
  rate = zeros(size(time_v));
  for i = 1:m-1
      rate(i) = sum((tv > time_v(i)) & (tv < time_v(i+1)));

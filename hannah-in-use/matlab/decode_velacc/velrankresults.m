@@ -1,10 +1,19 @@
-function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY)
+function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, confidencethreshold)
+  if confidencethreshold>1
+    warning('YOUR THRESHOLD SHOULD BE <1')
+  end
 
-rank1 = velrank(pos1, vel1, dimX, dimY);
-rank2 = velrank(pos2, vel2, dimX, dimY);
+rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold);
+rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold);
+rank1.order;
+rank2.order;
 
 rank1.order = sortrows(rank1.order, 2);
 rank2.order = sortrows(rank2.order, 2);
+
+if length(rank2.order)==0
+  warning('YOU HAVE NO OVERLAP DECODING')
+end
 
 good = find(~isnan(rank1.order(:, 3)));
 rank1 = rank1.order(good,:);
@@ -12,7 +21,6 @@ rank2 = rank2.order(good,:);
 good = find(~isnan(rank2(:, 3)));
 rank1 = rank1(good,:);
 rank2 = rank2(good,:);
-
 
 rank1 = sortrows(rank1, 3);
 rank2 = sortrows(rank2, 3);
@@ -36,7 +44,6 @@ y = rank2(:,1);
 %y = y(good);
 
 f = [rank1, rank2];
-
 
 [rho,pval] = corr(x,y, 'Type','Spearman')
 

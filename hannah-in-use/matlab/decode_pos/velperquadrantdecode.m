@@ -1,4 +1,4 @@
-function f = quadrantdecode(decoded, pos)
+function f = velperquadrantdecode(decoded, pos)
 %for each section (each forced arm, each choice arm, and center stem) of the maze, tells you which section is decoded and the velocity during decoding
 
 time = decoded(4,:);

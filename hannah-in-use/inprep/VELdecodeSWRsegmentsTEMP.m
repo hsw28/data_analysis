@@ -1,24 +1,16 @@
-function [values probs] = decodeshitVel(timevector, clusters, vel, tdecode, t)
+function values = VELdecodeSWRsegments(SWRstartend, timevector, clusters, vel, t)
+%decodes position in each SWR seperately. input the output for findripMUA.m
+%THIS TEMPERARY VERSION SPLITS UP RIPPLES >.2s
 
-% decodes velocity  based on cell firing. t is bins in seconds
-% returns [predictedV, actualV]
-% for now make sure bins in binVel function are the same. will implement that as a variable later
-%
-%
-%NEED TO PUT TIMES WITH THE OUTPUT OR IT GETS SUPER CONFUSING. DO THIS
-%
-% to plot: imagesc([minx maxx], [miny maxy], decoded.probs')
-% ex: imagesc([0 length(decoded.probs)], [2 24], decoded.probs')
-%
-% to plot actual velocity over it:
-% temp = binning(assvel(1,:)', ceil(length(assvel)/length(decoded.probs)));
-% temp = temp/ceil(length(assvel)/length(decoded.probs));
-% plot(temp, 'LineWidth',1.5, 'Color', 'w');
+
+SWRstart = SWRstartend(1,:);
+SWRend = SWRstartend(2,:);
+
+
 tic
 tsec = t;
 t = 2000*t;
-tdecodesec = tdecode;
-tdecode = tdecode*2000;
+
 tm = 1;
 
 mintime = vel(2,1);
@@ -116,15 +108,16 @@ probatvelocity
   times = [];
   perc = [];
 
+
 %percents = zeros(length(timevector)-(rem(length(timevector), t)), length(vbin)) ;
 percents = [];
 nivector = zeros((numclust),1);
-
-while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode) < length(timevector)
+ r=1;
+while r<=length(SWRstartend)
       %for the cluster, permute through the velocities
       endprob = [];
 
-
+      if SWRend(r)-SWRstart(r)<=.4
         for k = (1:length(vbin)) % six for the 6 groups of velocities
           %PERMUTE THROUGH THE CLUSTERS
           %productme = 1; OLD
@@ -134,7 +127,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
           while c <= numclust
               size(numclust);
               name = char(clustname(c));
-              ni = find(clusters.(name)>timevector(tm) & clusters.(name)<=timevector(tm+tdecode)); % finds index (number) of spikes in range time
+              ni = find(clusters.(name)>SWRstart(r) & clusters.(name)<=SWRend(r)); % finds index (number) of spikes in range time
               fx = (fxmatrix(c, k));  %should be the rate for cell c at vel k.
 
               if fx ~= 0
@@ -159,19 +152,6 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
           %IF YOU WANT TO MULTIPLY BY PROB OF LOCATION COMMENT OUT FIRST LINE AND IN SECOND LINE
           endprob(end+1) = (productme) + (-tmm.*expme); %NEW
           %endprob(end+1) = log(probatvelocity(k)) + (productme) + (-tmm.*expme); %NEW
-
-
-        %  if max(isinf(endprob)) ==1
-        %      warning('youve got an infinity')
-              %length(ni)
-              %log(productme) %this is inf
-          %elseif mean(endprob) ==0
-          %    warning('youve got all zeros')
-          %    endprob
-          %end
-
-
-
         end
 
 
@@ -184,34 +164,98 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
           mp = max(endprob(:))-12;
 
           endprob = exp(endprob-mp);
-
-
-
-            %if max(isinf(test)) == 1
-            %endprob = exp(endprob-(max(endprob)*.2));
-            %else
-          %    endprob = test;
-        %    end
-
             conv = 1./sum(endprob(~isnan(endprob)), 'all');
-
       endprob = endprob*conv;
-
-
-
         percents = vertcat(percents, endprob);
 
         maxprob(end+1) = idx;
         perc(end+1) = max(endprob);
         %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
                                           % if I want probabilities need to make a matrix of endprobs instead of selecting max
-        times(end+1) = timevector(tm);
 
-        if tdecodesec>=.25
-          tm = tm+(tdecode/2);
+else
+  subd = floor((SWRend(r)-SWRstart(r))/.2); %how many divisions you'll split ripple into
+  divsize = floor((SWRend(r)-SWRstart(r))./subd*2000); %how long each division is
+  perctemp = [];
+  maxprobtemp = [];
+  for z=0:subd
+    for k = (1:length(vbin)) % six for the 6 groups of velocities
+    %PERMUTE THROUGH THE CLUSTERS
+    %productme = 1; OLD
+    productme =0;
+    expme = 0;
+    c = 1;
+    while c <= numclust
+        size(numclust);
+        name = char(clustname(c));
+        ni = find(clusters.(name)>SWRstart(r)+(z*divsize) & clusters.(name)<=SWRstart(r)+((z+1)*divsize)); % finds index (number) of spikes in range time
+        fx = (fxmatrix(c, k));  %should be the rate for cell c at vel k.
+
+        if fx ~= 0
+          productme = productme + length(ni)*log(fx);  %IN
         else
-          tm = tm+tdecode;
+          fx = .00000000000000000000001;
+          productme = productme + length(ni)*log(fx);
         end
+
+         productme = (productme + length(ni)*log(fx));
+        %productme = productme + log((fx^length(ni)));
+
+        expme = (expme) + (fx);
+        c = c+1; % goes to next cell, same velocity
+
+    end
+    % now have all cells at that velocity
+    tmm = t./2000;
+
+    %IF YOU WANT TO MULTIPLY BY PROB OF LOCATION COMMENT OUT FIRST LINE AND IN SECOND LINE
+    endprob(end+1) = (productme) + (-tmm.*expme); %NEW
+    %endprob(end+1) = log(probatvelocity(k)) + (productme) + (-tmm.*expme); %NEW
+  end
+
+
+  [val, idx] = (max(endprob));
+
+  nums = isfinite(endprob);
+  nums = find(nums == 1);
+endprob = endprob(nums);
+
+    mp = max(endprob(:))-12;
+
+    endprob = exp(endprob-mp);
+      conv = 1./sum(endprob(~isnan(endprob)), 'all');
+    endprob = endprob*conv;
+  %percents = vertcat(percents, endprob);
+
+
+  maxprobtemp(end+1) = idx;
+  perctemp(end+1) = max(endprob);
+  %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
+                                    % if I want probabilities need to make a matrix of endprobs instead of selecting max
+
+end
+  v = maxprobtemp;
+  k=length(vbin);
+  while k>0
+    bin = find(v==k);
+    if k<length(vbin)
+      v(bin) = (vbin(k)+vbin(k+1))/2;
+    elseif k==length(vbin)
+      highestvel = find(vel(1,:)>vbin(end));
+      highestvel = median(vel(1,highestvel));
+      v(bin) = highestvel;
+    end
+    k = k-1;
+  end
+
+ maxprob(end+1) = mean(v);
+ perc(end+1) = mean(perctemp);
+
+end
+
+
+
+        r =r+1;
 
 
 end
@@ -240,7 +284,7 @@ end
 k = k-1;
 end
 
-values = [v; times; binnum; perc];
+values = [v; binnum; perc; SWRstart; SWRend];
 
 toc
 
@@ -248,57 +292,3 @@ if abs(length(values)-length(binnedV))<3
   cm = confusionmat(values(3,1:length(binnedV)), binnedV);
   plotConfMat(cm)
 end
-%[h,p,ci,stats] = ttest2(maxprob, binnedV)
-%probs = percents;
-%values = [maxprob; binnedV];
-
-
-
-%bin the velocities
-%vbin = [0; 2; 4; 6; 8; 10; 12; 14; 16; 18]
-
-%vbin = [0; 3; 6; 9; 12; 15]
-%vbin = [0; 3; 6; 9; 12; 15; 18]
-%vbin = [0; 3; 6; 9; 12; 15; 18; 21]
-%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24] %for 15, gets .17 corr at .5
-%%%vbin = [0; 3; 6; 9; 12; 15; 18; 21; 24; 27; 30]
-
-%vbin = [0; 4; 8; 12; 16] %best yet 22 17.75
-%vbin = [0; 4; 8; 12; 16; 20] %best yet for 28
-%vbin = [0; 4; 8; 12; 16; 20; 24]
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28]; %use for 17
-%%%%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32];
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40];
-%vbin = [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44]
-
-
-%%%%%%%%%%%vbin = [0; 5; 10; 15; 20] % 30 percent
-%vbin = [0; 5; 10; 15; 20]
-%vbin = [0; 5; 10; 15; 20; 25];  %%%%%%%%%getting there 8-22
-%vbin = [0; 5; 10; 15; 20; 25; 30];
-%vbin = [0; 5; 10; 15; 20; 25; 30; 35]
-
-%vbin = [0; 6; 12; 18; 24; 30; 36]
-%vbin = [0; 6; 12; 18; 24; 30] %% LAST ONE
-%vbin = [0; 6; 12; 18; 24]%best yet
-
-%vbin = [0; 7; 14; 21; 28]; %for 15, gets .11 corr
-%vbin = [0; 7; 14; 21; 28; 35];
-%vbin = [0; 7; 14; 21; 28; 35; 42]
-%vbin = [0; 7; 14; 21; 28; 35; 42; 49]
-
-%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 19
-%vbin = [0; 8; 16; 24; 32; 40; 48];
-%vbin = [0; 8; 16; 24; 32; 40]
-%vbin = [0; 8; 16; 24; 32]; %%%%%%%%%%%%%822uggg
-
-%vbin = [0; 9; 18; 27; 36; 45; 54]
-%vbin = [0; 9; 18; 27; 36; 45] %822 - 28%
-%vbin = [0; 9; 18; 27; 36]  %822uggg
-
-%vbin = [0; 10; 20; 30; 40] %best yet for 15
-%vbin = [0; 10; 20; 30; 40; 50] %822 - 30
-
-
-%vbin = [0; 7; 14; 21; 28; 35]  %best for 4-15
-%vbin = [0; 8; 16; 24; 32; 40; 48; 54]; %MOST USED, used for 4-19

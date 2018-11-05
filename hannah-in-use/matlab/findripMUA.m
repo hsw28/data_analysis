@@ -86,7 +86,7 @@ while k <= length(slowtime)-timewin;
           break
         end
       end
-      if endtimetemp - starttimetemp >= .03 %making sure meets length
+      if endtimetemp - starttimetemp >= .03 &&  endtimetemp - starttimetemp <= .1%making sure meets length
         starttime(end+1) = starttimetemp;
         endtime(end+1) = endtimetemp;
       end
@@ -94,4 +94,4 @@ while k <= length(slowtime)-timewin;
   k = j+timewin;
 end
 
-f = [unique(starttime), unique(endtime)]
+f = [unique(starttime); unique(endtime)]
