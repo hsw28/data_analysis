@@ -22,24 +22,16 @@ mintime = accelORvel(2,1);
 maxtime = accelORvel(2,end);
 
 
-
 [c indexmin] = (min(abs(firingdata-mintime)));
 [c indexmax] = (min(abs(firingdata-maxtime)));
 firingdata = firingdata(indexmin:indexmax);
-
-%%FOR TROUBLESHOOTING
-%[c indexmin] = (min(abs(time-mintime)));
-%[c indexmax] = (min(abs(time-maxtime)));
-%time = time(indexmin:indexmax);
-%assvel = assignvel(time, accelORvel);
-%asstime = assvel(2,:);
 
 
 assvel = accelORvel;
 
 
-%time = time(indexmin:indexmax);
 
+%time = time(indexmin:indexmax);
 assvel = assvel(1,:);
 
 
@@ -51,6 +43,7 @@ ending = max(time);
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
 rate = r(2,:); % number of spikes per time bin
+rate = r(2,:).*1/t;
 fastest = max(rate);
 m = length(rate);
 

@@ -1,4 +1,4 @@
-function thingy = binAcc(time, accelORvel, tdecode)
+function thingy = binAcc(time, accelORvel, tdecode, vbin)
 % for use with decode shit. bins actual velocities in same bins as decode shit, so you can compare your decoded data
 
 
@@ -26,8 +26,8 @@ assvel = assvel(1,:);
 
 %FIGURE THIS OUT
 %vbin = [-15; -7; -1; 1; 7; 15];
-assvel = abs(assvel);
-vbin = [ 3; 6; 9; 12; 15; 18];
+%assvel = abs(assvel);
+%vbin = [ 3; 6; 9; 12; 15; 18];
 
 
 

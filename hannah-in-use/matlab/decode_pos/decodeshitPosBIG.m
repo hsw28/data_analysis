@@ -104,8 +104,12 @@ while tm < (length(timevector)-t)
                 [maxvalx, maxvaly] = find(endprob == max(endprob(:))); %finds indices
                 mp = max(endprob(:))-12;
 
-                endprob = exp(endprob(:)-mp);
+
+                endprob = exp(endprob-mp);
+
                 conv = 1./sum(endprob(~isnan(endprob)), 'all');
+
+
                 endprob = endprob.*conv; %matrix of percents
 
                 matrices(:,:,num) = endprob;

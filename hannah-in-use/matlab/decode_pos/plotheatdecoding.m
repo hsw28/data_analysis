@@ -71,13 +71,13 @@ for i=1:length(pointstime)
     [c index] = (min(abs(pointstime(i)-posData(:,1))));
 
     %commend lines out marked with % if you dont want to screen for velocity
-    if mean(vel(index-10:index+10))>13    %
+    %if mean(vel(index-10:index+10))>13    %
     imagesc(limitedmatrix(:,:,i)', [0 .88])
     hold on
-    else %
-    imagesc(limitedmatrix(:,:,i)', [1 2]) %
-    hold on %
-    end %
+    %else %
+    %imagesc(limitedmatrix(:,:,i)', [1 2]) %
+    %hold on %
+    %end %
 
     [c index] = (min(abs(pointstime(i)-posData(:,1))));
     axis xy

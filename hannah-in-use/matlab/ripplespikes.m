@@ -3,6 +3,15 @@ function f = ripplespikes(ripplematrix, spikematrix)
 %ripple matrix should be [start time, end time] from findrip.m
 % spike matrix. matrix should be a matrix where [num of cells, spike times]. can make using padcat
 
+%clustname = (fieldnames(clusters));
+%numclust = length(clustname);
+%spikematrix = [];
+%for c=1:numclust   %permute through cluster
+%  name = char(clustname(c));
+%  spikematrix = padcat(spikematrix, clusters.(name));
+%nd
+
+
 ripnum = length(ripplematrix);
 spikesinrip = zeros(1,ripnum);
 order = NaN(ripnum);
@@ -40,9 +49,9 @@ for k = 1:ripnum
 
 
 end
-biggest
-order = order(1:biggest, 1:x-1);
-%order = order(1:biggest, 1:ripnum);
+%biggest
+%order = order(1:biggest, 1:x-1);
+order = order(1:biggest, 1:ripnum);
 f = order;
 
 %number of spikes per ripple

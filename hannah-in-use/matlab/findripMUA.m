@@ -3,8 +3,9 @@ function f = findripMUA(time, vel, clusters, timewin)
 %outputs ripple start times. also have ripple end times if need later. do not have peaks right now
 %for awake periods only as uses position data to get non moving times
 
-timewin = (timewin/1000*2000)-1;
-velthreshold = 10;
+timewinsec = timewin/1000;
+timewin = (timewin/1000*2000);
+velthreshold = 5;
 
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);
@@ -18,80 +19,73 @@ for k=1:spikenum
 end
 allspikes = sort(allspikes);
 
-assvelspikes = assignvelOLD(allspikes, vel);
-slowspikeindex = find(assvelspikes <= velthreshold);
-slowspikes = allspikes(slowspikeindex); %these are all the spikes that happen when animal is stopped
-
-
-
 assvel = assignvel(time, vel);
-slowvel = find(assvel(1,:) <= velthreshold);
-slowtime = assvel(2,slowvel);
-
-
-[c mintime] = min(abs(assvel(2,1)-allspikes));
-[c maxtime]= min(abs(assvel(2,end)-allspikes));
-allspikes = allspikes(mintime-1:maxtime+1);
-
-%to get bins of 1ms, it will be 2 timestamps
+vel = assvel(1,:);
+time = assvel(2,:);
+tm = 1;
+i=1;
+highvel = 0;
+numspikes = 0;
+timewin2 = 15;
 numspikes = [];
-k =1;
-while k <= length(slowtime)-timewin
-    currenttime = slowtime(k:k+timewin);
-    intime = ismember(allspikes, currenttime);
-    intime = find(intime==1);
-    intime = length(intime);
-    numspikes(end+1) = intime;
-    k = k+timewin;
+goodspikes = [];
+vel = smoothdata(vel, 'gaussian', 90);
+
+allspikes = cutclosest(time(1), time(end), allspikes, allspikes);
+binnum = floor(length(time)./timewin);
+[binnedspikesnum, edges] = histcounts(allspikes,binnum);
+velav = bintheta(vel, timewinsec, 0);
+[timebins, timeedges] = histcounts(time,binnum);
+
+
+goodbin = [];
+numspikes = [];
+for n = 1:length(velav)
+  if length(find((vel(round((n-1)*timewin+1):round(n*timewin)))<velthreshold))==timewin
+    numspikes(end+1) = binnedspikesnum(n);
+  end
 end
-%f = numspikes;
-meanrate = mean(numspikes); %mean number of spikes
-stddev = std(numspikes); %std dev of spikes
-lotsofspikes = meanrate+(stddev*3); %three standard devs above mean-- this is what we want for ripple detection
+
+meanrate = mean(numspikes)
+stddev = std(numspikes);
+lotsofspikes = meanrate+(stddev*3)
+
 
 starttime = [];
 endtime = [];
 peaktime = [];
 k=1;
-while k <= length(slowtime)-timewin;
-  currenttime = slowtime(k:k+timewin);
-  intime = ismember(allspikes, currenttime);
-  intime = find(intime==1);
-  intime = length(intime);
+count = 0;
+while k <= length(velav)
   i = k;
   j = k;
-  if intime >= lotsofspikes %detected event
-  %  riptime = (riptime, currenttime); %adds current time to ripple times
+  if binnedspikesnum(k) >= lotsofspikes &  length(find((vel(round((k-1)*timewin+1):round(k*timewin))))<velthreshold)==timewin;
       while i>1
-        lesstime = slowtime(i-timewin:i);
-        intimeless = ismember(allspikes, lesstime);
-        intimeless = find(intimeless==1);
-        intimeless = length(intimeless);
-        if (intimeless) > meanrate+(.5*stddev) % looks to see when value returns to half a std dev above mean, this is the start of the ripple time
-            i=i-timewin;
+        if binnedspikesnum(i) > meanrate+(.5*stddev) & length(find((vel(round((i-1)*timewin+1):round(i*timewin))<velthreshold)))==timewin;% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
+            i=i-1;
         else
-           starttimetemp = lesstime(end);
+           starttimetemp = edges(i+1);
            break
         end
       end
-      while j < length(slowtime)-timewin % looks to see when value returns to half a std dev above mean, this is the end of the ripple time
-        moretime = slowtime(j:j+timewin);
-        inmoretime = ismember(allspikes, moretime);
-        inmoretime = find(inmoretime==1);
-        inmoretime = length(inmoretime);
-        if (inmoretime) > meanrate+(.5*stddev)
-          j = j+timewin;
+
+      while j <= length(velav) % looks to see when value returns to half a std dev above mean, this is the end of the ripple time
+        if binnedspikesnum(j) > meanrate+(.5*stddev) & length(find((vel(round((j-1)*timewin+1):round(j*timewin))<velthreshold)))==timewin;
+          j = j+1;
         else
-        endtimetemp = moretime(1);
+        endtimetemp =  edges(j+1);
           break
         end
       end
-      if endtimetemp - starttimetemp >= .03 &&  endtimetemp - starttimetemp <= .1%making sure meets length
+
+      if endtimetemp - starttimetemp >= .03 && endtimetemp - starttimetemp <= .1 %making sure meets length
         starttime(end+1) = starttimetemp;
         endtime(end+1) = endtimetemp;
+      %end
       end
     end
-  k = j+timewin;
+  k = j+1;
 end
 
-f = [unique(starttime); unique(endtime)]
+
+f = [unique(starttime); unique(endtime)];

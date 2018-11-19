@@ -12,8 +12,8 @@ fprintf('IS YOUR TIME THE SAME UNITS AS YOUR LFP???!?!?!??!')
 theta = thetafilt412(unfilteredLFP);
 delta = deltafilt04(unfilteredLFP);
 
-theta = theta.^2;
-delta = delta.^2;
+%theta = theta.^2;
+%delta = delta.^2;
 
 if length(velvector)>1
   mintime = velvector(2,1);
@@ -40,8 +40,8 @@ every = [];
 tm = [];
 meanv = [];
 while i<length(asstime)-2000 & i<length(theta)-2000
-currenttheta = rms(theta(i:i+2000));
-currentdelta = rms(delta(i:i+2000));
+currenttheta = rms(theta(i:i+2000)).^2;
+currentdelta = rms(delta(i:i+2000)).^2;
 ratio = currenttheta./currentdelta;
 meanvel = mean(assvel(i:i+2000));
 meanv(end+1) = meanvel;
@@ -103,7 +103,7 @@ end
 REMbegin3= [];
 REMfinish3 = [];
 for f=1:length(REMbegin2)
-  if REMfinish2(f)-REMbegin2(f)>20
+  if REMfinish2(f)-REMbegin2(f)>45
     REMbegin3(end+1) = REMbegin2(f);
     REMfinish3(end+1) = REMfinish2(f);
   end

@@ -1,4 +1,4 @@
-function f = MASSripplerate(spikestructure, posstructure, timestructure, lfpstructure, usevel, startorpeak)
+function f = MASSripplerate(spikestructureLS, spikestructureHPC, posstructure, timestructure, lfpstructure, usevel, startorpeak)
   %IF USE VEL = 0 VELOCITY IS NOT USED TO FIND RIPPLES. IF =1 IT IS. RIGHT NOW YOU STILL PUT IN POS EITHER WAY
   %IF YOU SELECT ZERO THEN TIME ISNT CUT TO POSITION FILE TIMES. IF YOU SELECT 1 IT IS
   % FOR START OR PEAK-- ENTER 0 FOR START, 1 FOR PEAK
@@ -13,7 +13,7 @@ function f = MASSripplerate(spikestructure, posstructure, timestructure, lfpstru
   %for pre ripple take 100-60ms before
   %for post ripple take 60-100ms after
 
-
+spikestructure = spikestructureLS;
 %determine how many spikes
 spikenames = (fieldnames(spikestructure));
 spikenum = length(spikenames);
@@ -87,11 +87,13 @@ for k = 1:spikenum
           endtime = endtime(1,1);
           time = [timestructure.(timeformateddate)(starttime:endtime)];
           lfp = [lfpstructure.(lfpformateddate)(starttime:endtime)];
-          rips = findrip(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
+          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          %rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
         elseif usevel == 0
           time = timestructure.(timeformateddate);
           lfp = lfpstructure.(lfpformateddate);
-          rips = findrip(lfp, (time.*conversion), 2.5, 0);
+          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          %rips = findripLFP(lfp, (time.*conversion), 2.5, 0);
         end
     else
       disp('same date! will not refilter')
@@ -105,7 +107,7 @@ for k = 1:spikenum
         allchanges = psth(.5, 101, rips(1,:), (spikestructure.(spikename).*conversion));
     end
 
-%{
+
     size(allchanges)
     %take 20ms around each side for ripple rate
     totalrip = allchanges(18)+allchanges(22);
@@ -119,10 +121,10 @@ for k = 1:spikenum
 
     %output = {'cluster name'; '# spikes'; 'spikes pre rip'; 'spikes rip'; 'spikes post rip'; 'rip/pre-rip'; 'rip/post-rip'; 'postrip/prerip' };
 
-          output = horzcat(output, newdata);
-%}
-          hold on
-          plot(allchanges/allchanges(1))
+    output = horzcat(output, newdata);
+
+      hold on
+      plot(allchanges/allchanges(1))
 end
 
 % outputs chart with spike name, number of spikes, slope, and r2 value

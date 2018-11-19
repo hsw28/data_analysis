@@ -22,6 +22,7 @@ if size(eventData, 1)>size(eventData,2)
 	eventData = eventData';
 end
 
+eventData = cutclosest(posData(1,1), posData(end,1), eventData, eventData);
 ls = placeevent(eventData,posData);
 
 ls = ls';
@@ -89,7 +90,7 @@ shading flat;
 set(gca, 'ydir', 'reverse');
 %set(gca,'clim',[0,lim]);
 if minratefive ~= maxratefive
-		set(gca, 'clim', [minratefive, maxratefive]);
+		set(gca, 'clim', [minratefive*1.5, maxratefive*.75]);
 end
 axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
 colorbar;

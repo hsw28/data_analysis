@@ -11,7 +11,9 @@ function [values probs] = decodeshitACC(timevector, clusters, acc, tdecode, t)
 vel = acc;
 
 
-
+%vbin = [3; 6; 9; 12; 15; 18];
+%vbin = [-12, -6, -4, 4, 6, 12]
+vbin = [-4, 4]
 
 
 tsec = t;
@@ -30,65 +32,15 @@ decodetimevector = timevector(indexmin:indexmax);
 
 
 assvel = assignvel(decodetimevector, vel);
-size(assvel);
-size(decodetimevector);
-size(vel);
 asstime = assvel(2,:);
 
 %find number of clusters
 clustname = (fieldnames(clusters));
 numclust = length(clustname)
 
-%bin the velocities
-% for now let's bin velocity as 0-10, 10-30, 30-60, 60-100, 100+
-%vbin = [-30; -15; -8; -2; 2; 8; 15; 30];
-%vbin = [-25; -15; -7; -1; 1; 7; 15; 25];
-%vbin = [-21; -15; -9; -3; 3; 9; 15; 21];
-%vbin = [-28; -20; -12; -4; 4; 12; 20; 28]; %12.4
-%vbin = [ -20; -12; -4; 4; 12; 20]; %14
-%vbin = [-25; -18; -10; -2; 2; 10; 18; 25];
-%vbin = [-50; -30; -11; -2; 2; 11; 30; 50]; %14.4
-%vbin = [-50; -30; -15; -4; 4; 15; 30; 50];  %14.49
-%vbin = [-35; -20; -10; -3; 3; 10; 20; 35];
-%vbin = [-40; -25; -15; -2; 2; 15; 25; 40];
-%vbin = [-50; -25; -12; -4; 4; 12; 25; 50];
-%vbin = [-35; -20; -12; -2; 2; 12; 20; 35];
-%vbin = [-28; -18; -9; -3; 3; 9; 18; 28];
-%vbin = [-18; -13; -7; -2; 2; 7; 13; 18];
-%vbin = [ -30; -15; -4; 4; 15; 30]; %12
-%vbin = [ -30; -18; -6; 6; 18; 30];     %17
-%vbin = [-18; -10; -3; 3; 10; 18];
-%vbin = [-18; -12; -4; 4; 12; 18];
-%vbin = [-36; -18; -14; -5; 5; 14; 18; 36];
-%vbin = [-34; -24; -14; -4; 4; 14; 24; 34];
-%vbin = [-35; -25; -15; -5; 5; 15; 25; 35];
-%vbin = [-42; -30; -18; -6; 6; 18; 30; 42];
-%vbin = [-35; -25; -18; -6; 6; 18; 25; 35]; %tweak me
-%vbin = [-50; -30; -18; -6; 6; 18; 30; 50]; %16.16
-%vbin = [-45; -28; -16; -6; 6; 16; 28; 45]; %16.23
-%vbin = [-45; -25; -15; -6; 6; 15; 25; 45];
-%vbin = [-45; -22; -12; -6; 6; 12; 22; 45];
-%vbin = [-22; -12; -6; 6; 12; 22]; %16.7
-%vbin = [-12; -8; -2; 2; 8; 12;];
-%vbin = [ -22; -15; -9; -3; 3; 9; 15; 22];
-%vbin = [ -22; -15; -9; -4; 4; 9; 15; 22];
-%vbin = [ -15; -10; -6; -3; 3; 6; 10; 15];
-%vbin = [ -15; -10; -6; -1; 1; 6; 10; 15];
-%vbin = [ -15; -10; -8; -1; 1; 8; 10; 15];
-%vbin = [ -18; -10; -8; -2; 2; 8; 10; 18];
-%vbin = [-22; -15; -8; -3; 3; 8; 15; 22];
-%vbin = [-22; -15; -8; -5; 5; 8; 15; 22];
-%vbin = [-22; -15; -8; -1; 1; 8; 15; 22];
-%vbin = [-24; -16; -6; 6; 16; 24]; %17.06
-%vbin = [-24; -16; -5; 5; 16; 24];
-%vbin = [-24; -12; -3; 3; 12; 24]; %16.3 but looks better i think
-%vbin = [-24; -12; -7; -3; 3; 7; 12; 24]; %ok
-%vbin = [-24; -16; -10; -5; 5; 10; 16; 24];
-%vbin = [-24; -12; -8; -3; 3; 8; 12; 24];
 
 %FIGURE THIS OUT
-assvel(1,:) = abs(assvel(1,:));
-vbin = [ 3; 6; 9; 12; 15; 18];
+%assvel(1,:) = abs(assvel(1,:));
 
 
 starttime = decodetimevector(1);
@@ -138,7 +90,7 @@ fxmatrix
 
 % find prob the animal is each velocity
 probatvelocity = zeros(length(vbin),1);
-binnedV = binAcc(asstime, vel, t/2000);
+binnedV = binAcc(asstime, vel, t/2000, vbin);
 for k = 1:(length(vbin)+1)
     numvel = find(binnedV == (k));
     probatvelocity(k) = length(numvel)./length(binnedV);
@@ -162,9 +114,11 @@ probatvelocity
   maxprob = [];
   spikenum = 1;
     times = [];
+    perc = [];
 
 %percents = zeros(length(timevector)-(rem(length(timevector), t)), length(vbin)) ;
 percents = [];
+nivector = zeros((numclust),1);
 
 while tm <= length(timevector)-(rem(length(timevector), tdecode))  & (tm+tdecode) < length(timevector)
       %for the cluster, permute through the velocities
@@ -228,20 +182,25 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode))  & (tm+tdecode
         nums = find(nums == 1);
       endprob = endprob(nums);
 
-        test = exp(endprob);
-            if max(isinf(test)) == 1
-            endprob = exp(endprob-(max(endprob)*.2));
-            else
-              endprob = test;
-            end
+      mp = max(endprob(:))-12;
 
-        conv = 1./sum(endprob);
+      endprob = exp(endprob-mp);
+
+        %test = exp(endprob);
+        %    if max(isinf(test)) == 1
+        %    endprob = exp(endprob-(max(endprob)*.2));
+        %    else
+        %      endprob = test;
+        %    end
+
+          conv = 1./sum(endprob(~isnan(endprob)), 'all');
       endprob = endprob*conv;
 
 
         percents = vertcat(percents, endprob);
 
         maxprob(end+1) = idx;
+        perc(end+1) = max(endprob);
         %maxprob(end+1) = find(max(endprob)); %finds most likely range: 1 is for 0-10, 2 for 10-30, etc
                                     % if I want probabilities need to make a matrix of endprobs instead of selecting max
       times(end+1) = timevector(tm);
@@ -252,7 +211,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode))  & (tm+tdecode
       end
 end
 
-fprintf('HERE')
+
 probs = percents;
 
 
@@ -260,12 +219,10 @@ v = maxprob;
 
 binnum = v;
 vnew = zeros(length(v),1);
-k=length(vbin+1);
+k=length(vbin)+1
 while k>0
   bin = find(v==k);
-  if k<length(vbin) k>1
-    vnew(bin) = (vbin(k)+vbin(k+1))/2;
-  elseif k==length(vbin)
+  if k==length(vbin)+1
     highestvel = find(vel(1,:)>vbin(end));
     highestvel = median(vel(1,highestvel));
     vnew(bin) = highestvel;
@@ -273,9 +230,20 @@ while k>0
     lowestvel = find(vel(1,:)<vbin(1));
     lowestvel = median(vel(1,lowestvel));
     vnew(bin) = lowestvel;
+  else % k<length(vbin)+1 & k>1
+      vnew(bin) = (vbin(k-1)+vbin(k))/2;
+
 end
 k = k-1;
 end
 
 
-values = [vnew'; times; binnum];
+values = [vnew'; times; binnum; perc];
+
+figure
+if abs(length(values)-length(binnedV))<3
+  size(values)
+  size(binnedV)
+  cm = confusionmat(values(3,1:length(binnedV)), binnedV(1,:));
+  plotConfMat(cm)
+end

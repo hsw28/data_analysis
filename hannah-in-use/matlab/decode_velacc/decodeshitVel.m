@@ -73,7 +73,11 @@ while percentsum<.05
   k = k-1;
 end
 totbin = k+1;
+if totbin<=7
 vbin = [0:7:totbin*7]
+else
+vbin = [0:7:42]
+end
 
 %7 with .05 is best so far
 

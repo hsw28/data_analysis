@@ -31,32 +31,32 @@ assvel = assignvel(time, accelORvel);
 [velcounts, edges] = histcounts(assvel(1,:), edges); % find velocity distribution
 
 figure
-subplot(5,2,1)
+subplot(3,2,1)
 centers = (edges(1:end-1) + edges(2:end))/2;
 velcounts = velcounts/2000;
 bar(centers, velcounts);
-title('Acceleration Occupancy')
-xlabel('Acceleration (cm/s)')
-ylabel('Time (s)')
+title('Acceleration Occupancy','FontSize',16)
+xlabel('Acceleration (cm/s)', 'FontSize',14)
+ylabel('Time (s)','FontSize',14)
 set(gca,'TickDir','out');
 
-subplot(5,2,2)
+subplot(3,2,2)
 centers = (edges(1:end-1) + edges(2:end))/2;
 bar(centers, spikepervel);
-title('Spike Count as a Function of Acceleration')
-xlabel('Acceleration (cm/s^2)')
-ylabel('Spike Count')
+title('Spike Count as a Function of Acceleration','FontSize',16)
+xlabel('Acceleration (cm/s^2)','FontSize',14)
+ylabel('Spike Count','FontSize',14)
 set(gca,'TickDir','out');
 
 
 %divide spiking per each velocity by how much time in each velocity
 normspike = spikepervel./velcounts;
 %f = normspike;
-subplot(5,2,3:6)
-centers = (edges(1:end-1) + edges(2:end))/2;
+%subplot(5,2,3:6)
+%centers = (edges(1:end-1) + edges(2:end))/2;
 %bar(centers, normspike)
-hold on
-scatter(centers, normspike)
+%hold on
+%scatter(centers, normspike)
 
 
 threshold = sum(velcounts)*.01
@@ -83,22 +83,22 @@ while sum02 < threshold
 end
 posthreshold001 = centers(end-k-1);
 negthreshold001 = centers(k);
-vline(posthreshold001);
-vline(negthreshold001);
+%vline(posthreshold001);
+%vline(negthreshold001);
 
 
-str2 = {'1% Acceleration', 'occupancy threshold'};
-str3 = {'0.1% Acceleration', 'occupancy threshold'};
-text(negthreshold01,max(normspike),str2);
-text(negthreshold001,max(normspike)*.6,str3);
-text(posthreshold01,max(normspike),str2);
-text(posthreshold001,max(normspike)*.6,str3);
+%str2 = {'1% Acceleration', 'occupancy threshold'};
+%str3 = {'0.1% Acceleration', 'occupancy threshold'};
+%text(negthreshold01,max(normspike),str2);
+%text(negthreshold001,max(normspike)*.6,str3);
+%text(posthreshold01,max(normspike),str2);
+%text(posthreshold001,max(normspike)*.6,str3);
 
 title('Firing Rate as a function of Acceleration')
 ylabel('Spike Rate (spikes/sec)')
 set(gca,'TickDir','out');
 
-subplot(5,2,7:10)
+subplot(3,2,3:6)
 currentcenters= centers(negthresholdindex:posthresholdindex);
 currentnormspike = normspike(negthresholdindex:posthresholdindex);
 scatter(currentcenters, currentnormspike);
@@ -116,9 +116,10 @@ posrsquared = 1 - (ssres / sstot); % get r^2 value
 stats = fitlm(posx,posy);
 pospval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,posx);
-plot(posx, y) % best fit line
-str1 = {'pos slope' posslope, 'pos p value' pospval, 'pos r2 value' posrsquared};
-text(currentcenters(end),max(currentnormspike)*.9,str1);
+plot(posx, y, 'LineWidth', 2) % best fit line
+%str1 = {'pos slope' posslope, 'pos p value' pospval, 'pos r2 value' posrsquared};
+str1 = {'pos p value' pospval, 'pos r2 value' posrsquared};
+text(currentcenters(end)-1500,max(currentnormspike)*.5,str1, 'FontSize',13);
 
 %for negative values
 [c center0index] = min(abs(centers-0));
@@ -133,13 +134,14 @@ negrsquared = 1 - (ssres / sstot); % get r^2 value
 stats = fitlm(negx,negy);
 negpval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,negx);
-plot(negx, y) % best fit line
-str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared};
-text(currentcenters(1),max(currentnormspike)*.9,str1);
+plot(negx, y, 'LineWidth', 2) % best fit line
+%str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared};
+str1 = {'neg p value' negpval, 'neg r2 value' negrsquared};
+text(currentcenters(3),max(currentnormspike)*.5,str1,'FontSize',13);
 
-title('Firing Rate as a function of Acceleration within 99% Occupancy')
-xlabel('Acceleration (cm/s^2)')
-ylabel('Spike Rate (spikes/sec)')
+title('Firing Rate as a function of Acceleration within 99% Occupancy','FontSize',16)
+xlabel('Acceleration (cm/s^2)','FontSize',14)
+ylabel('Spike Rate (spikes/sec)','FontSize',14)
 set(gca,'TickDir','out');
 
 
