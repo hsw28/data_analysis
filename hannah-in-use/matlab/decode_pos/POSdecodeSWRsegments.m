@@ -149,5 +149,5 @@ same = same
 maxx = maxx+psize/2;
 maxy = maxy+psize/2;
 values = [maxx; maxy; percents; SWRstart; SWRend];
-toc
+
 f = values;

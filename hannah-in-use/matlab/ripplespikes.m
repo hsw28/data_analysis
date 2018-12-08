@@ -11,6 +11,10 @@ function f = ripplespikes(ripplematrix, spikematrix)
 %  spikematrix = padcat(spikematrix, clusters.(name));
 %nd
 
+if size(spikematrix,1)>size(spikematrix,2)
+  spikematrix = spikematrix';
+end
+
 
 ripnum = length(ripplematrix);
 spikesinrip = zeros(1,ripnum);
@@ -55,4 +59,4 @@ order = order(1:biggest, 1:ripnum);
 f = order;
 
 %number of spikes per ripple
-%f = spikesinrip';
+f = spikesinrip';

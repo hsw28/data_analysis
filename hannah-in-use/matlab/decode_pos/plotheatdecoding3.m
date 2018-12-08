@@ -34,19 +34,58 @@ ybins = ceil((ymax-ymin)/psize); %number of y
   max(posY)
 
 colors = zeros(3,length(vel));
-crange = [min(vel) max(vel)];
+%crange = [min(vel) max(vel)];
+crange = [-6 46];
 for n=1:length(vel)
   colors(:,n)= vals2colormap(vel(n), 'parula', crange);
 end
 
+numvec = zeros(length(posX),2);
+for lx=1:length(posX)
+
+  for ly=1:length(posY)
+
+    ix = find(posX==posX(lx));
+    iy = find(posY==posY(ly));
+    ixy = intersect(ix,iy);
+    numvec(ixy,1) = length(ixy);
+    numvec(ixy,2) = (1:length(ixy));
+
+  end
+end
+
+numtimes = [];
 f=1
 figure
-for i=1:length(pointstime)
-    clf
-    axis([200 1000 0 700]);
-    colormap(bone)
+axis([200 1000 0 700]);
+order = randperm(length(posX));
+for k=1:length(posX)
 
-    rectangle('Position', [posX(i) posY(i) 35 35], 'FaceColor',colors(:,i))
+    i = order(k);
+    blocknum = numvec(i,1);
+    %blocksize = 35./(numvec(i,1)^(1/numvec(i,1)));
+    %blockshiftsize = 35./(numvec(i,1)^(1/numvec(i,1)));
+    blockshift = numvec(i,2);
+
+
+    if blocknum >1
+      vec = (9:.1:ceil(blocknum)*2+12);
+      length(vec)
+      ranshift = randperm(length(vec));
+      if rem(ranshift(1),2)==0
+        nowposX = posX(i)-vec(ranshift(1));
+      elseif rem(ranshift(1),2)~=0
+        nowposX = posX(i)+vec(ranshift(1));
+      end
+      if rem(ranshift(2),2)==0
+        nowposY = posY(i)+vec(ranshift(2));
+      elseif rem(ranshift(2),2)~=0
+        nowposY = posY(i)-vec(ranshift(2));
+      end
+      rectangle('Position', [nowposX nowposY 35 35], 'FaceColor',[colors(:,i)]);
+    else
+      rectangle('Position', [posX(i) posY(i) 35 35], 'FaceColor',[colors(:,i)]);
+    end
     %imagesc([posX(i); posY(i); vel(i)], [min(vel) max(vel)])
     hold on
 
@@ -61,18 +100,18 @@ for i=1:length(pointstime)
     t.FontSize = 12;
     t.Color = 'red';
     M(i) = getframe;
-    hold off
-    if length(delay)==1
-        fr = delay*100;
-        M(f:(f+fr)) = getframe;
+    alpha(.5)
+    %if length(delay)==1
+    %    fr = delay*100;
+    %    M(f:(f+fr)) = getframe;
         pause(delay)
-        f = f+fr;
-    end
-    i
+    %    f = f+fr;
+    %end
+    k
 end
 
-%video = VideoWriter('decodetrack2018-08-10.avi')
-%video.FrameRate = 6;
+%video = VideoWriter('822remdecode.avi')
+%video.FrameRate = 5;
 %open(video);
 
 %writeVideo(video, M);

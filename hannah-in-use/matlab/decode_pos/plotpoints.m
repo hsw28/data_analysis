@@ -23,7 +23,7 @@ for i=1:length(X)
     text(600,350,str1);
     M(i) = getframe;
     pause(delay)
-    %hold off
+    hold off
   else
     plot(X(i),Y(i),'or','MarkerSize',5,'MarkerFaceColor','r')
     axis([300 1000 0 700])

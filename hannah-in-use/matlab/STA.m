@@ -39,6 +39,7 @@ while i <= size(trimmedevents,1)
 	%find index for start of event
 
 	(q+binsize);
+	
 	if find((abs(time-(q+binsize))<=.0001))
 		z = .0001;
 		timeendevent = [];

@@ -10,6 +10,11 @@ c = unfilteredLFP;
 d = timevector;
 y = devAboveMean;
 
+if length(vel)>1
+	c = cutclosest(vel(2,1), vel(2,end), d, c);
+	d = cutclosest(vel(2,1), vel(2,end), d, d);
+end
+
 filtdata = ripfilt(c);
 
 % filters data with bandpass filter between 100-300hz
@@ -17,6 +22,7 @@ filtdata = ripfilt(c);
 % does a hilbert transformation on the data
 h = hilbert(filtdata);
 trans = abs(h);
+d= d(1:length(trans));
 
 % finds std devs above mean
 mn = mean(trans);
@@ -38,7 +44,12 @@ if vel == 0
 	vel = ones(1,length(d));
 else
   vel = assignvel(d, vel);
+	dold = d;
+	d = vel(2,:);
 end
+
+trans = cutclosest(d(1), d(end), dold, trans);
+
 
 % permute through transformed data and find when data is Y std devs above mean
 for k = 1:(size(trans))
@@ -49,13 +60,13 @@ for k = 1:(size(trans))
 
 		% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
 		i = k;
-		while i>0 && abs(trans(i)-mn) > (st./2)
+		while i>0 && abs(trans(i)-mn) > (st./2) && i<length(d)
 			i=i-1;
 		end
 
 		% looks to see when value returns to half a std dev above mean, this is the end of the ripple time
 		j = k;
-		while abs(trans(j)-mn) > (st./2) && j<length(trans)
+		while abs(trans(j)-mn) > (st./2) && j<length(trans) && j<length(d)
 			j=j+1;
 		end
 
@@ -109,5 +120,6 @@ for k = 1:length(starts)
 end
 
 
-notabletimes = [starts; peaks; ends];
+%notabletimes = [starts; peaks; ends];
+notabletimes = [starts; ends];
 all = alltimes;

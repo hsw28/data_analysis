@@ -6,6 +6,7 @@ if num ==1
 	clustname = (fieldnames(spikematrix))
 	numclust = length(clustname)
 	f = figure;
+	%subplot(4,1,3:4)
 	hold all;
 	numoftrains = numclust;
 	for k = 1:numclust

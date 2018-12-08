@@ -68,7 +68,7 @@ function f = MASSvelVsFiringRateNEW(spikestructure, posstructure, timestructure,
 
     accvrate = velVsFiringRateNew((time.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spikename).*conversion), binsize);
     slope = accvrate(1);
-    rsquared = accvrate(2)
+    rsquared = accvrate(2);
     pval = accvrate(3);
 
     spikesizes = spikestructure.(spikename);

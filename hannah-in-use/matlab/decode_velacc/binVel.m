@@ -27,6 +27,7 @@ tm = 1;
 tdecodesec = tdecode;
 tdecode = tdecode*2000;
 avg_accel = []
+tt = [];
 while tm <= length(time)-(rem(length(time), tdecode)) & (tm+tdecode) < length(time)
     avg_accel(end+1) = mean(assvel(tm:tm+tdecode));
 		        if tdecodesec>=.25
@@ -34,6 +35,7 @@ while tm <= length(time)-(rem(length(time), tdecode)) & (tm+tdecode) < length(ti
 		        else
 		          tm = tm+tdecode;
 		        end
+		tt(end+1) = time(tm);
 end
 
 
@@ -49,5 +51,5 @@ end
 
 
 
-
-thingy = avg_accel;
+thingy = [avg_accel; tt];
+%thingy = avg_accel;

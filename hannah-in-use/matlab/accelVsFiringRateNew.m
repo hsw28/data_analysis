@@ -36,7 +36,7 @@ centers = (edges(1:end-1) + edges(2:end))/2;
 velcounts = velcounts/2000;
 bar(centers, velcounts);
 title('Acceleration Occupancy','FontSize',16)
-xlabel('Acceleration (cm/s)', 'FontSize',14)
+xlabel('Acceleration (cm/s^2)', 'FontSize',14)
 ylabel('Time (s)','FontSize',14)
 set(gca,'TickDir','out');
 
@@ -66,10 +66,22 @@ while sum01 < threshold
   sum01 = sum01+velcounts(end-k)+velcounts(k+1);
   k = k+1;
 end
-posthreshold01 = centers(end-k-1);
-negthreshold01 = centers(k);
-negthresholdindex = k;
-posthresholdindex = length(velcounts)-k+1;
+knew = min(abs(centers(end-k-1)), abs(centers(k)))
+if knew-300>200
+  knew = 300;
+end
+[c posk] = min(abs(centers(:)-knew));
+[c negk] = min(abs(centers(:)-(-1*knew)));
+pk = max(posk, negk);
+nk = min(posk, negk);
+posthreshold01 = centers(pk);
+negthreshold01 = centers(nk);
+%posthreshold02 = centers(end-k-1)
+%negthreshold02 = centers(k)
+%negthresholdindex = k;
+%posthresholdindex = length(velcounts)-k+1;
+negthresholdindex = nk;
+posthresholdindex = pk;
 vline(posthreshold01);
 vline(negthreshold01);
 
@@ -94,8 +106,8 @@ negthreshold001 = centers(k);
 %text(posthreshold01,max(normspike),str2);
 %text(posthreshold001,max(normspike)*.6,str3);
 
-title('Firing Rate as a function of Acceleration')
-ylabel('Spike Rate (spikes/sec)')
+title('Spike Count as a function of Acceleration')
+ylabel('Spike Count')
 set(gca,'TickDir','out');
 
 subplot(3,2,3:6)
@@ -118,8 +130,8 @@ pospval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,posx);
 plot(posx, y, 'LineWidth', 2) % best fit line
 %str1 = {'pos slope' posslope, 'pos p value' pospval, 'pos r2 value' posrsquared};
-str1 = {'pos p value' pospval, 'pos r2 value' posrsquared};
-text(currentcenters(end)-1500,max(currentnormspike)*.5,str1, 'FontSize',13);
+str1 = {'pos p value' pospval, 'pos r2 value' posrsquared}
+%text(currentcenters(end)-150,max(currentnormspike)*.5,str1, 'FontSize',13);
 
 %for negative values
 [c center0index] = min(abs(centers-0));
@@ -135,9 +147,9 @@ stats = fitlm(negx,negy);
 negpval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,negx);
 plot(negx, y, 'LineWidth', 2) % best fit line
-%str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared};
-str1 = {'neg p value' negpval, 'neg r2 value' negrsquared};
-text(currentcenters(3),max(currentnormspike)*.5,str1,'FontSize',13);
+%str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared}
+str1 = {'neg p value' negpval, 'neg r2 value' negrsquared}
+ %text(currentcenters(3),max(currentnormspike)*.5,str1,'FontSize',13);
 
 title('Firing Rate as a function of Acceleration within 99% Occupancy','FontSize',16)
 xlabel('Acceleration (cm/s^2)','FontSize',14)

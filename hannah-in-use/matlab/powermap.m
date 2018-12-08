@@ -1,4 +1,4 @@
-function rate = powermap(powerdata,posData, dim, lim)
+function rate = powermap(powerdata,posData, dim, limlow, limhigh)
 
 % plot a heat map based on the power of the signal
 % can also be used to heat map coherence, etc
@@ -47,6 +47,6 @@ colormap('parula');
 pcolor([(avpower) nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
-set(gca,'clim',[5,lim]);
+set(gca,'clim',[limlow,limhigh]);
 %axis([16 (size(avpower, 2)+5) -4 (size(avpower,1))]);
 colorbar;

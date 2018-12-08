@@ -47,4 +47,11 @@ end
 
 f = statecount;
 
-histogram(statecount, 'Normalization','probability')
+figure
+histogram(statecount)
+[n,x] = hist(statecount);
+barstrings = num2str(n');
+text(x,n,barstrings,'horizontalalignment','center','verticalalignment','bottom');
+
+%set(gca,'YScale','log')
+%histogram(statecount, 'Normalization','probability')

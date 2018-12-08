@@ -1,4 +1,4 @@
-function f = MASSripplerate(spikestructureLS, spikestructureHPC, posstructure, timestructure, lfpstructure, usevel, startorpeak)
+function f = MASSripplerate(spikestructureLS, posstructure, timestructure, lfpstructure, usevel, startorpeak)
   %IF USE VEL = 0 VELOCITY IS NOT USED TO FIND RIPPLES. IF =1 IT IS. RIGHT NOW YOU STILL PUT IN POS EITHER WAY
   %IF YOU SELECT ZERO THEN TIME ISNT CUT TO POSITION FILE TIMES. IF YOU SELECT 1 IT IS
   % FOR START OR PEAK-- ENTER 0 FOR START, 1 FOR PEAK
@@ -22,6 +22,10 @@ output = {'cluster name'; '# spikes'; 'spikes pre rip'; 'spikes rip'; 'spikes po
 
 figure
 previousdate = 0;
+increasecount = 0;
+samecount = 0;
+increasetotal = zeros(40,1)';
+sametotal = zeros(40,1)';
 for k = 1:spikenum
 
     name = char(spikenames(k))
@@ -87,13 +91,13 @@ for k = 1:spikenum
           endtime = endtime(1,1);
           time = [timestructure.(timeformateddate)(starttime:endtime)];
           lfp = [lfpstructure.(lfpformateddate)(starttime:endtime)];
-          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
-          %rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
+          %rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
         elseif usevel == 0
           time = timestructure.(timeformateddate);
           lfp = lfpstructure.(lfpformateddate);
-          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
-          %rips = findripLFP(lfp, (time.*conversion), 2.5, 0);
+          %rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          rips = findripLFP(lfp, (time.*conversion), 2.5, 0);
         end
     else
       disp('same date! will not refilter')
@@ -104,7 +108,7 @@ for k = 1:spikenum
     if startorpeak == 1
       allchanges = psth(.2, 41, rips(2,:), (spikestructure.(spikename).*conversion));
     elseif startorpeak == 0
-        allchanges = psth(.5, 101, rips(1,:), (spikestructure.(spikename).*conversion));
+        allchanges = psth(.2, 41, rips(1,:), (spikestructure.(spikename).*conversion));
     end
 
 
@@ -116,6 +120,16 @@ for k = 1:spikenum
     %for post ripple take 60-100ms after
     totalpostrip = allchanges(28)+allchanges(32);
 
+    if totalrip/totalprerip>=1.2
+      increasecount = increasecount+1;
+      increasetotal = increasetotal+allchanges/mean(allchanges(8:12));
+      size(increasetotal)
+      plot(allchanges/mean(allchanges(8:12)), 'Color', [0.5176    0.5020    0.7686])
+    else
+      samecount = samecount+1;
+      sametotal = sametotal+allchanges/mean(allchanges(8:12));
+      plot(allchanges/mean(allchanges(8:12)), 'Color',[0.9216    0.6824    0.7451])
+    end
 
     newdata = {name; length(spikestructure.(spikename)); totalprerip; totalrip; totalpostrip; totalrip/totalprerip; totalrip/totalpostrip;  totalpostrip/totalprerip};
 
@@ -124,8 +138,11 @@ for k = 1:spikenum
     output = horzcat(output, newdata);
 
       hold on
-      plot(allchanges/allchanges(1))
+      %plot(allchanges/mean(allchanges(8:12)))
 end
-
+size(increasetotal./increasecount)
+size(sametotal./samecount)
+plot(increasetotal./increasecount, 'LineWidth', 3, 'Color',[0.0902    0.0706    0.3686])
+plot(sametotal./samecount, 'LineWidth', 3, 'Color',[0.3882    0.0902    0.1686])
 % outputs chart with spike name, number of spikes, slope, and r2 value
   f = output';

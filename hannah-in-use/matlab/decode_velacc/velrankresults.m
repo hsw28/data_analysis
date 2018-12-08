@@ -5,8 +5,8 @@ function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, confidencethresh
 
 rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold);
 rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold);
-rank1.order;
-rank2.order;
+
+
 
 rank1.order = sortrows(rank1.order, 2);
 rank2.order = sortrows(rank2.order, 2);
@@ -19,8 +19,15 @@ good = find(~isnan(rank1.order(:, 3)));
 rank1 = rank1.order(good,:);
 rank2 = rank2.order(good,:);
 good = find(~isnan(rank2(:, 3)));
-rank1 = rank1(good,:);
-rank2 = rank2(good,:);
+rank1 = rank1(good,:)
+rank2 = rank2(good,:)
+%good = find(rank1(:,3)>7);
+%rank1 = rank1(good,:);
+%rank2 = rank2(good,:);
+%good = find(rank2(:,3)>7);
+%rank1 = rank1(good,:);
+%rank2 = rank2(good,:);
+
 
 rank1 = sortrows(rank1, 3);
 rank2 = sortrows(rank2, 3);
