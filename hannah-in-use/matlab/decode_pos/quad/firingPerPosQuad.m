@@ -16,31 +16,33 @@ oldtime = posData(:,1);
 X = (posData(:,2));
 Y = (posData(:,3));
 
-timeMAZEinc = mintime:.0333:maxtime;
-newX = interp1(oldtime, X, timeMAZEinc, 'pchip');
-newY = interp1(oldtime, Y, timeMAZEinc, 'pchip');
-posData = [timeMAZEinc; newX; newY]';
+pos_samp_per_sec = length(posData(:,1))./(maxtime-mintime)  %29
+
+
+%timeMAZEinc = mintime:.0333:maxtime;
+%newX = interp1(oldtime, X, timeMAZEinc, 'pchip');
+%newY = interp1(oldtime, Y, timeMAZEinc, 'pchip');
+%posData = [timeMAZEinc; newX; newY]';
 
 xmin = min(posData(:,2));
 ymin = min(posData(:,3));
 xmax = max(posData(:,2));
 ymax = max(posData(:,3));
 
-%defiding position
-xlimmin = [320 320 320 320 320 460 750 780 835 780 780];
-xlimmax = [505 505 460 505 505 835 950 950 950 950 950];
-ylimmin = [548 410 315 127 000 300 556 415 334 187 000];
-ylimmax = [700 548 410 315 127 440 700 556 415 334 187];
-
+%   [ 1   2   3   4   5   6   7   8   9   10  11]
+xlimmin = [320 320 320 320 320 440 750 780 828 780 780];
+xlimmax = [505 450 440 505 505 828 950 950 950 950 950];
+ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
+ylimmax = [700 545 422 320 170 440 700 575 420 339 182];
 
   timecells = zeros(length(xlimmin), 1); %used to be time
   events = zeros(length(xlimmin), 1);
-  tstep = 1/30;
+  tstep = 1/pos_samp_per_sec;
 
 
 %only uses data that is >15cm/s -- first smooths for length of bin
 vel = velocity(posData);
-vel(1,:) = smoothdata(vel(1,:), 'gaussian', tdecode*15); %originally had this at 30, trying with 15 now
+vel(1,:) = smoothdata(vel(1,:), 'gaussian', pos_samp_per_sec); %originally had this at 30, trying with 15 now
 fastvel = find(vel(1,:) > velthreshold);
 posDataFast = posData(fastvel, :);
 fastX = (posDataFast(:,2));

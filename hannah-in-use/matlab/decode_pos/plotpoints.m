@@ -15,7 +15,7 @@ end
 for i=1:length(X)
   if length(pos)>1
     [c index] = (min(abs(pointstime(i)-pos(:,1))));
-    plot(pos(index,2), pos(index,3), 'or','MarkerSize',5,'MarkerFaceColor','b')
+    plot(pos(index,2), pos(index,3), 'x','MarkerSize',5,'MarkerFaceColor','b')
     hold on
     plot(X(i),Y(i),'or','MarkerSize',5,'MarkerFaceColor','r')
     axis([min(pos(:,2))-10 max(pos(:,2))+10 min(pos(:,3))-10 max(pos(:,3))+10])

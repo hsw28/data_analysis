@@ -1,4 +1,4 @@
-function f = MASSripplerate(spikestructureLS, posstructure, timestructure, lfpstructure, usevel, startorpeak)
+function f = MASSripplerate(spikestructureLS, posstructure_orVEL, timestructure_orTIME, lfpstructure_orLFP, usevel, startorpeak) %, HPCclusters)
   %IF USE VEL = 0 VELOCITY IS NOT USED TO FIND RIPPLES. IF =1 IT IS. RIGHT NOW YOU STILL PUT IN POS EITHER WAY
   %IF YOU SELECT ZERO THEN TIME ISNT CUT TO POSITION FILE TIMES. IF YOU SELECT 1 IT IS
   % FOR START OR PEAK-- ENTER 0 FOR START, 1 FOR PEAK
@@ -13,6 +13,10 @@ function f = MASSripplerate(spikestructureLS, posstructure, timestructure, lfpst
   %for pre ripple take 100-60ms before
   %for post ripple take 60-100ms after
 
+posstructure = posstructure_orVEL;
+timestructure = timestructure_orTIME;
+lfpstructure = lfpstructure_orLFP;
+
 spikestructure = spikestructureLS;
 %determine how many spikes
 spikenames = (fieldnames(spikestructure));
@@ -24,11 +28,12 @@ figure
 previousdate = 0;
 increasecount = 0;
 samecount = 0;
-increasetotal = zeros(40,1)';
-sametotal = zeros(40,1)';
+increasetotal = zeros(80,1)';
+sametotal = zeros(80,1)';
 for k = 1:spikenum
+  name = char(spikenames(k))
+  if isstruct(timestructure)==1 && length(fieldnames(timestructure))>1
 
-    name = char(spikenames(k))
     % get date of spike
     date = strsplit(name,'cluster_'); %splitting at year
     date = char(date(1,2));
@@ -67,6 +72,8 @@ for k = 1:spikenum
       newdate = char(newdate(1,2));
       newdate = str2num(newdate);
 
+
+
     if newdate ~= previousdate
       disp('new date!')
       previousdate =  newdate;
@@ -91,8 +98,8 @@ for k = 1:spikenum
           endtime = endtime(1,1);
           time = [timestructure.(timeformateddate)(starttime:endtime)];
           lfp = [lfpstructure.(lfpformateddate)(starttime:endtime)];
-          %rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
-          rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
+          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          %rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
         elseif usevel == 0
           time = timestructure.(timeformateddate);
           lfp = lfpstructure.(lfpformateddate);
@@ -102,33 +109,56 @@ for k = 1:spikenum
     else
       disp('same date! will not refilter')
     end
+  else
+    if length(timestructure) ~= length(lfpstructure)
+      error('your time should be from your lfp')
+    end
+    if usevel == 1
+
+      starttime = posstructure(2,1);
+      endtime = posstructure(2, end);
+      time = timestructure;
+      lfp = lfpstructure;
+      starttime = find(abs(time-starttime) < .001);
+      endtime = find(abs(time-endtime) < .001);
+      time = time(starttime:endtime);
+      lfp = lfp(starttime:endtime);
+      rips = findripLFP(lfp, (time), 2.5, posstructure);
+      %rips = findripMUA(time, posstructure, HPCclusters, 15);
+    elseif usevel == 0
+      time = tiemstructure;
+      lfp = lfpstructure;
+      rips = findripLFP(lfp, (time), 2.5, 0);
+  end
+end
+
+
 
     spikename = char(spikenames(k));
 
     if startorpeak == 1
-      allchanges = psth(.2, 41, rips(2,:), (spikestructure.(spikename).*conversion));
+      allchanges = psth(.4, 81, rips(2,:), (spikestructure.(spikename)));
     elseif startorpeak == 0
-        allchanges = psth(.2, 41, rips(1,:), (spikestructure.(spikename).*conversion));
+        allchanges = psth(.4, 81, rips(1,:), (spikestructure.(spikename)));
     end
 
 
     size(allchanges)
     %take 20ms around each side for ripple rate
-    totalrip = allchanges(18)+allchanges(22);
-    %for pre ripple take 100-60ms before
-    totalprerip = allchanges(8)+allchanges(12);
-    %for post ripple take 60-100ms after
-    totalpostrip = allchanges(28)+allchanges(32);
+    totalrip = sum(allchanges(38:46)); %slanted to post ripple
+    %for pre ripple
+    totalprerip = sum(allchanges(1:17))/2;
+    %for post ripple
+    totalpostrip = sum(allchanges(64:80))/2;
 
     if totalrip/totalprerip>=1.2
       increasecount = increasecount+1;
-      increasetotal = increasetotal+allchanges/mean(allchanges(8:12));
-      size(increasetotal)
-      plot(allchanges/mean(allchanges(8:12)), 'Color', [0.5176    0.5020    0.7686])
+      increasetotal = increasetotal+allchanges/mean(allchanges(1:17));
+      plot(allchanges./mean(allchanges(1:17)), 'Color', [0.5176    0.5020    0.7686])
     else
       samecount = samecount+1;
-      sametotal = sametotal+allchanges/mean(allchanges(8:12));
-      plot(allchanges/mean(allchanges(8:12)), 'Color',[0.9216    0.6824    0.7451])
+      sametotal = sametotal+allchanges./mean(allchanges(1:17));
+      plot(allchanges./mean(allchanges(1:17)), 'Color',[0.9216    0.6824    0.7451])
     end
 
     newdata = {name; length(spikestructure.(spikename)); totalprerip; totalrip; totalpostrip; totalrip/totalprerip; totalrip/totalpostrip;  totalpostrip/totalprerip};

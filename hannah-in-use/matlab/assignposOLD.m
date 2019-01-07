@@ -42,4 +42,4 @@ ycord = assignvelOLD(time, ycord);
 size(time)
 size(xcord)
 size(ycord)
-f = [time(1:length(xcord)); xcord; ycord];
+f = [time(1:length(xcord)); xcord; ycord]';

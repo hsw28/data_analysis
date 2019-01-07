@@ -1,9 +1,21 @@
-function f = POSdecodeSWRsegments(SWRstartend, pos, clusters, dim, tdecode)
+function f = POSdecodeSWRsegments(SWRstartend, pos, clusters, dim, tdecode, varargin)
 %decodes position in each SWR seperately. input the output for findripMUA.m
+%if inputting in only peak time, use varargin to specify seconds around peak time
 
 %%%%%%FILL IN
-SWRstart = SWRstartend(1,:);
-SWRend = SWRstartend(2,:);
+
+if size(SWRstartend,1)>size(SWRstartend,2)
+  SWRstartend = SWRstartend';
+end
+
+if size(SWRstartend,1)>1 %means you're inputting start and end times
+  SWRstart = SWRstartend(1,:);
+  SWRend = SWRstartend(2,:);
+elseif size(SWRstartend,1)==1 %means you're just putting in mid time
+  timeshift = cell2mat(varargin);
+  SWRstart = SWRstartend-timeshift;
+  SWRend = SWRstartend+timeshift;
+end
 
 posData = pos;
 %timevector = time;
@@ -51,9 +63,10 @@ nivector = zeros((numclust),1);
 r =1;
 while r <= (length(SWRstartend))
    %find spikes in each cluster for time
+   nivector = zeros((numclust),1);
    for c=1:numclust   %permute through cluster
      name = char(clustname(c));
-     nivector(c) = length(clusters.(name)(clusters.(name)>=SWRstart(r) & clusters.(name)<SWRend(r)));
+     nivector(c) = length(find(clusters.(name)>=SWRstart(r) & clusters.(name)<SWRend(r)));
    end
 
       %for the cluster, permute through the different conditions

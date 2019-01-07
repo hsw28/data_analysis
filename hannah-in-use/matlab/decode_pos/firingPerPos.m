@@ -1,4 +1,4 @@
-function f = firingPerPos(posData, clusters, dim, tdecode)
+function f = firingPerPos(posData, clusters, dim, tdecode, pos_samp_per_sec)
 %returns firing per position. dim is number of centimeters for binning
 
 velthreshold = 12;
@@ -9,18 +9,21 @@ spikenum = length(spikenames);
 psize = 3.5 * dim; %some REAL ratio of pixels to cm
 
 
+
 %only find occupancy map if one hasn't been provided
 
 mintime = min(posData(:,1));
 maxtime = max(posData(:,1));
+
+pos_samp_per_sec = length(posData(:,1))./(maxtime-mintime)  %29
+%tms = [posData(1,1):.0333:posData(end,1)];
+%posData = assignpos(tms, posData);
+
 oldtime = posData(:,1);
 X = (posData(:,2));
 Y = (posData(:,3));
 
-timeMAZEinc = mintime:.0333:maxtime;
-newX = interp1(oldtime, X, timeMAZEinc, 'pchip');
-newY = interp1(oldtime, Y, timeMAZEinc, 'pchip');
-posData = [timeMAZEinc; newX; newY]';
+
 
 xmin = min(posData(:,2));
 ymin = min(posData(:,3));
@@ -33,7 +36,7 @@ ybins = ceil((ymax-ymin)/psize); %number of y
   events = zeros(xbins,ybins);
   xstep = xmax/xbins;
   ystep = ymax/ybins;
-  tstep = 1/30;
+  tstep = 1/pos_samp_per_sec;
 
 
   xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
@@ -41,7 +44,7 @@ ybins = ceil((ymax-ymin)/psize); %number of y
 
 %only uses data that is >15cm/s -- first smooths for length of bin
 vel = velocity(posData);
-vel(1,:) = smoothdata(vel(1,:), 'gaussian', tdecode*15); %originally had this at 30, trying with 15 now
+vel(1,:) = smoothdata(vel(1,:), 'gaussian', pos_samp_per_sec); %originally had this at 30, trying with 15 now
 fastvel = find(vel(1,:) > velthreshold);
 posDataFast = posData(fastvel, :);
 
@@ -65,12 +68,9 @@ posDataFast = posData(fastvel, :);
         end
         inboth = intersect(inX, inY);
         timecells(x, y) = length(inboth);
-        %	A1 = posData(:,2)>((i-1)*xstep) & posData(:,2)<=(i*xstep); %finds all rows that are in the current x axis bin
-        %	A2 = posData(:,3)>((j-1)*ystep) & posData(:,3)<=(j*ystep); %finds all rows that are in the current y axis bin
-        %  A = [A1 A2]; %merge results
-        %  B = sum(A,2); %find the rows that satisfy both previous conditions
-        %  C = B > 1; % this is the correct row
-        %%  timecells(ybins+1-j,i) = sum(C); %amount of time in each bin
+
+
+
       end
     end
 
@@ -110,18 +110,10 @@ for k = 1:spikenum
           inboth = intersect(inX, inY);
           events(x,y) = length(inboth);
 
-            %A1 = ls(:,2)>((i-1)*xstep) & ls(:,2)<=(i*xstep); %finds all rows that are in the current x axis bin
-            %A2 = ls(:,3)>((j-1)*ystep) & ls(:,3)<=(j*ystep); %finds all rows that are in the current y axis bin
-            %A = [A1 A2]; %merge results
-            %B = sum(A,2); %find the rows that satisfy both previous conditions
-            %C = B > 1;
-            %set the matrix cell for that bin to the number of rows that satisfy both
-            %events(ybins+1-j,i) = sum(C); %number of spikes in each bin
         end
     end
-
     rate = events./(timecells*tstep)+eps; %time*tstep is occupancy %want this for all cells
-    rate = rate(1:xbins, 1:ybins);
+
     myStruct.(spikename) = rate;
     else
     rate = zeros(xbins, ybins);

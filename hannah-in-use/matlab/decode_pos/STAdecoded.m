@@ -1,65 +1,47 @@
-function f = STAdecoded(eventtimes, decodedpos, plottime)
-
-% finds spike triggered average -- filter yourself if you want to filter LFP
-% bin size in seconds
-% f = STA(eventtimes, lfp, time, binsize)
+function f = STAdecoded(triggertimesONLY, pos4decoding, clusters4decoding, posdim, tdecoded, windowsz)
+	%decodes position around a trigger event using POSdecodetrigger.m and finds triggered average of position
+	%SELECTS 100 TRIGGERS RIGHT NOW, CAN CHANGE
 
 
-% want LFP forward of spike also i think... will need to eliminate events that fall in last bin too
 
 
-time = decodedpos(4,:);
-
+window = windowsz;
+triggertimes = triggertimesONLY;
 
 figure;
 hold on;
 
-if size(eventtimes, 2) > size(eventtimes, 1)
-	eventtimes = eventtimes';
+if size(triggertimes, 2) > size(triggertimes, 1)
+	triggertimes = triggertimes';
 end
 
-%trims eventtimes to eliminate times that fall in first bin & last bin
-trimmedevents = [];
-starttime = time(1)+time(plottime*2000);
-endtime = time(end)-time(plottime*2000);
-A = find(eventtimes >= starttime & eventtimes <= endtime);
-trimmedevents = eventtimes(A);
-
-
-wantedY = [];
-for i=1:length(trimmedevents)
-	starttime = trimmedevents(i)-plottime;
-	endtime = trimmedevents(i)+plottime;
-
-	[CS CSI] = min(abs(starttime-time));
-	[CE CEI] = min(abs(endtime-time));
-
-
-
-	if i == 1
-		[CS CSI] = min(abs(starttime-time));
-		[CE CEI] = min(abs(endtime-time));
-		neededlength = (CEI-CSI);
-		decodedposX = decodedpos(1,CSI:CEI);
-		decodedposY = decodedpos(2,CSI:CEI);
-		wantedX = decodedposX;
-		wantedY = decodedposY;
-	else
-		[CS CSI] = min(abs(starttime-time));
-		CEI = CSI+neededlength;
-		decodedposX = decodedpos(1,CSI:CEI);
-		decodedposY = decodedpos(2,CSI:CEI);
-		wantedX = wantedX + decodedposX;
-		wantedY = wantedY + decodedposY;
-	end
-
+if size(triggertimes,2)>1
+	warning('DID YOU ONLY ENTER TIME FOR YOUR TRIGGER TIMES??? ')
 end
+
+%TO ONLY SELECT A SUBSET
+%if length(triggertimes)>200
+%	triggernum = 200;
+%	selected = randperm(length(triggertimes), triggernum);
+%	triggertimes = triggertimes(selected);
+%end
+
+
+trimmedevents = triggertimes;
+
+
+
+	poses = POSdecodetrigger(trimmedevents, pos4decoding, clusters4decoding, posdim, tdecoded, window);
+		wantedX = sum(poses.x);
+		wantedY = sum(poses.y);
+
 
 %finds average
 
-binnedX = wantedX./i;
-binnedY = wantedY./i;
+binnedX = wantedX./length(trimmedevents);
+binnedY = wantedY./length(trimmedevents);
 
+length(binnedX)
 figure
 plot(binnedX);
 hold on
@@ -70,11 +52,15 @@ xticks(0:round(length(binnedX))/2:round(length(binnedX)))
 %xticklabels(xticks./(length(binnedX))*2)
 
 
-xticklabels({-1*plottime , 0, plottime'})
+xticklabels({-1*window , 0, window'})
+vline(round(length(binnedX))/2)
 
 xlabel('Sec.')
 ylabel('Pos')
 
 
 
-f= [binnedX, binnedY]';
+%f = [binnedX; binnedY]';
+f.x = poses.x;
+f.y = poses.y;
+f.percents = poses.percents;

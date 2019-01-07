@@ -23,10 +23,14 @@ filtdata = ripfilt(c);
 h = hilbert(filtdata);
 trans = abs(h);
 d= d(1:length(trans));
+assvel = assignvel(d, vel);
+assvel = assvel(1,:);
+slow = find(assvel)<12;
+slowtrans = trans(slow);
 
 % finds std devs above mean
-mn = mean(trans);
-st = std(trans);
+mn = mean(slowtrans);
+st = std(slowtrans);
 m = mn + (st.*y); % this is the value LFP must be above
 
 %also finds 6 std dev above mean to rule out huge things
@@ -78,7 +82,7 @@ for k = 1:(size(trans))
 
 		%only include events longer than 30ms
 
-		if i>0 && d(j)-d(i) > .03
+		if i>0 && d(j)-d(i) > .03 && d(j)-d(i) < .1
 			%making a vector with all the data points of the ripple
 			pt=[];
 
@@ -112,8 +116,6 @@ starts = unique(starts);
 ends = unique(ends);
 
 alltimes = [];
-size(peaks)
-size(starts)
 for k = 1:length(starts)
   riptimes = find(d>= starts(k) & d<=ends(k));
 	alltimes = horzcat(alltimes, d(riptimes));

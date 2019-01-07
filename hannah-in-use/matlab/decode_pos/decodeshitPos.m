@@ -4,9 +4,16 @@ tic
 posData = pos;
 timevector = time;
 
-t = tdecode;
-t = 2000*t;
-tm = 1;
+
+%[cc indexmin] = min(abs(posData(1,1)-timevector));
+%[cc indexmax] = min(abs(posData(end,1)-timevector));
+%timevector = timevector(indexmin:indexmax);
+%posData = assignpos(timevector, posData);
+
+tdecodesec = tdecode;
+%t = round((length(timevector)./(timevector(end)-timevector(1)))*tdecode)
+t = 2000*tdecode;
+
 
 %find number of clusters
 clustname = (fieldnames(clusters));
@@ -30,7 +37,8 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim, tdecode);
+fxmatrix = firingPerPos(pos, clusters, dim, tdecodesec, 30);
+size(fxmatrix)
 %outputs a structure of rates
 
 maxprob = [];
@@ -42,67 +50,75 @@ maxx = [];
 maxy = [];
 same = 0;
 
+occ = zeros(xbins, ybins);
+testing = 0;
+for x = (1:xbins)
+  for y = (1:ybins)
+    if x<xbins & y<ybins
+      occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
+      occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
+    elseif x==xbins & y<ybins
+      occx = find(xvals>=xinc(x));
+      occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
+    elseif x<xbins & y==ybins
+      occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
+      occy = find(yvals>=yinc(y));
+    elseif x==xbins & y==ybins
+      occx = find(xvals>=xinc(x));
+      occy = find(yvals>=yinc(y));
+    end
+    if length(intersect(occx, occy)) ==0
+      occ(x,y) = 0;
+    else
+      occ(x,y) = 1;
+    end
+end
+end
+occ;
+
+
 n =0;
 nivector = zeros((numclust),1);
-
+tm = 1;
 while tm < (length(timevector)-t)
    %find spikes in each cluster for time
+   nivector = zeros((numclust),1);
    for c=1:numclust   %permute through cluster
      name = char(clustname(c));
-     nivector(c) = length(clusters.(name)(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
+     %find number of cells that fire during each period
+     nivector(c) = length(find(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
    end
 
-      %for the cluster, permute through the different conditions
-    endprob = zeros(xbins, ybins);
+      %for the cluster, permute through the different positions
+      endprob = zeros(xbins, ybins);
         for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
           for y = (1:ybins)
           productme =0;
           expme = 0;
           c = 1;
 
-          if x<xbins & y<ybins
-            occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
-            occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
-          elseif x==xbins & y<ybins
-            occx = find(xvals>=xinc(x));
-            occy = find(yvals>=yinc(y) & yvals<yinc(y+1));
-          elseif x<xbins & y==ybins
-            occx = find(xvals>=xinc(x) & xvals<xinc(x+1));
-            occy = find(yvals>=yinc(y));
-          elseif x==xbins & y==ybins
-            occx = find(xvals>=xinc(x));
-            occy = find(yvals>=yinc(y));
+          if occ(x,y) == 0 %means never went there, dont consider
+            endprob(x,y) = NaN;
+          %  break
           end
 
-          if length(occx) == 0  & length(occy)==0 %means never went there, dont consider
-            endprob(x,y) = NaN;
-            break
-          end
           for c=1:numclust  %permute through cluster
               ni = nivector(c);
               name = char(clustname(c));
               fx = fxmatrix.(name);
               fx = (fx(x, y));
-
-              if fx ~= 0
-                productme = productme + (ni)*log(fx);  %IN
-              else
-                fx = .00000000000000000000001;
-                fprintf('zero thing isnt working')
-                productme = productme + (ni)*log(fx);
-              end
-
+              productme = productme + (ni)*log(fx);  %IN
               expme = (expme) + (fx);
                % goes to next cell, same location
 
           end
           numcel(end+1) = (ni);
           % now have all cells at that location
-          tmm = t./2000;
+          tmm = tdecodesec;
+
         endprob(x, y) = (productme) + (-tmm.*expme); %IN
         end
         end
-
         [maxvalx, maxvaly] = find(endprob == max(endprob(:)));
 
         mp = max(endprob(:))-12;
@@ -130,19 +146,19 @@ while tm < (length(timevector)-t)
               maxx(end+1) = (xinc(maxvalx)); %translates to x and y coordinates
               maxy(end+1) = (yinc(maxvaly));
             end
-        
+
 
 
         times(end+1) = timevector(tm);
 
 
-    if tdecode>=.25
+    if tdecodesec>=.25
       tm = tm+(t/2);
     else
       tm = tm+t;
     end
     %tm = tm+(t/2); %for overlap?
-    n = n+1
+    n = n+1;
 end
 
 warning('your probabilities were the same')

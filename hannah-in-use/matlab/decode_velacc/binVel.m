@@ -51,5 +51,5 @@ end
 
 
 
-thingy = [avg_accel; tt];
-%thingy = avg_accel;
+%thingy = [avg_accel; tt];
+thingy = avg_accel;

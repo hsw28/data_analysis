@@ -13,9 +13,10 @@ Y = (posData(:,3));
 [c indexmax] = (min(abs(time-maxtime)));
 time = time(indexmin:indexmax);
 
+[oldtime,ia,ic] = unique(oldtime);
 
-newX = interp1(oldtime, X, time, 'pchip');
-newY = interp1(oldtime, Y, time, 'pchip');
+newX = interp1(unique(oldtime), X(ia), time, 'pchip');
+newY = interp1(unique(oldtime), Y(ia), time, 'pchip');
 posData = [time; newX; newY]';
 
 f = posData;

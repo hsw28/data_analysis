@@ -1,6 +1,9 @@
-function f = LStrigger(time, vel, clusters, timewin)
+function f = LStrigger(time, vel, clusters, timewin, timesabove)
 %timewin is in ms
 
+if timewin<1
+  error('I think you entered time in seconds not in ms')
+end
 
 timewinsec = timewin/1000;
 timewin = (timewin/1000*2000);
@@ -28,7 +31,6 @@ i=1;
 highvel = 0;
 numspikes = 0;
 timewin2 = 15;
-numspikes = [];
 goodspikes = [];
 vel = smoothdata(vel, 'gaussian', 90);
 
@@ -38,9 +40,6 @@ binnum = floor(length(time)./timewin);
 
 velav = bintheta(vel, timewinsec, 0, 2000);
 [timebins, timeedges] = histcounts(time,binnum);
-
-size(velav)
-size(binnedspikesnum)
 
 
 goodbin = [];
@@ -52,15 +51,14 @@ for n=1:length(velav)
   if velav(n)<velthreshold
     numspikes(end+1) = binnedspikesnum(n);
   end
-  n = n+timewin;
 end
 
 figure
 histogram(numspikes)
 
-meanrate = mean(numspikes);
+meanrate = mean(numspikes)
 stddev = std(numspikes);
-lotsofspikes = meanrate+(stddev*2);
+lotsofspikes = meanrate+(stddev*timesabove)
 
 
 starttime = [];
@@ -95,8 +93,14 @@ while k <= length(velav)
 
       %finding peak
       [M,pki]  = max(binnedspikesnum(i+1:j-1));
-      peaktime(end+1)= timeedges(i+1+pki);
-      peakamount(end+1)= M;
+      if length(pki) > 0
+        peaktime(end+1)= timeedges(i+1+pki);
+        peakamount(end+1)= M;
+      else
+        peaktime(end+1) = NaN;
+        peakamount(end+1)= NaN;
+      end
+
       %end
 
     end

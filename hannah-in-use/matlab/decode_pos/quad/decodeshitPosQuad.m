@@ -34,10 +34,22 @@ ymax = max(posData(:,3));
 %position 10: right choice arm
 %position 11: end of right choice arm
 
-xlimmin = [320 320 320 320 320 460 750 780 835 780 780];
-xlimmax = [505 505 460 505 505 835 950 950 950 950 950];
-ylimmin = [548 410 315 127 000 300 556 415 334 187 000];
-ylimmax = [700 548 410 315 127 440 700 556 415 334 187];
+%defiding position
+      %   [ 1   2   3   4   5   6   7   8   9   10 ]
+%xlimmin = [320 320 320 320 420 750 780 835 780 780];
+%xlimmax = [505 420 420 505 835 950 950 950 950 950];
+%ylimmin = [548 360 160 000 300 556 415 334 187 000];
+%ylimmax = [700 548 360 160 440 700 556 415 334 187];
+
+%TRIED AND TRUE
+%          [ 1   2   3   4   5   6   7   8   9   10 ]
+
+         %[ 1   2   3   4   5   6   7   8   9   10 ]
+xlimmin = [320 320 320 320 320 440 750 780 828 780 780];
+xlimmax = [505 450 440 505 505 828 950 950 950 950 950];
+ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
+ylimmax = [700 545 422 320 170 440 700 575 420 339 182];
+
 
 
 % for each cluster,find the firing rate at esch velocity range
@@ -128,18 +140,18 @@ while tm < (length(timevector)-t)
         times(end+1) = timevector(tm);
 
 
-    if tdecode>=.25
-      tm = tm+(t/2);
-    else
+    %if tdecode>=.25
+    %  tm = tm+(t/2);
+    %else
       tm = tm+t;
-    end
+    %end
     %tm = tm+(t/2); %for overlap?
-    n = n+1
+    n = n+1;
 end
 
 warning('your probabilities were the same')
 same = same
 values = [maxquad; percents; times];
-toc
+
 fvalues = values;
 fmatrix = mat;

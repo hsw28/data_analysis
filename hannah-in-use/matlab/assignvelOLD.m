@@ -18,8 +18,8 @@ i=1;
 
 index = 1;
 while i<=length(timefile)
-		newvec = timevector(index:end);
-		[m index] = min(abs(timefile(i)-newvec));
+		%newvec = timevector(index:end);
+		[m index] = min(abs(timefile(i)-timevector));
 		closestvel(i) = velvector(index);
 		i=i+1;
 

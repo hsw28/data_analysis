@@ -248,7 +248,11 @@ values = [v; times; binnum; perc];
 
 toc
 
+size(values);
+size(binnedV);
+
 if abs(length(values)-length(binnedV))<3
+  figure
   cm = confusionmat(values(3,1:length(binnedV)), binnedV);
   plotConfMat(cm)
 end

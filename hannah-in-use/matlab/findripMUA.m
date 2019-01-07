@@ -1,6 +1,9 @@
 function f = findripMUA(time, vel, clusters, timewin)
 %timewin is in ms
 %outputs ripple start times. also have ripple end times if need later. do not have peaks right now
+if timewin<1
+  error('I think you entered time in seconds not in ms')
+end
 
 timewinsec = timewin/1000;
 timewin = (timewin/1000*2000);
@@ -27,43 +30,40 @@ i=1;
 highvel = 0;
 numspikes = 0;
 timewin2 = 15;
-numspikes = [];
 goodspikes = [];
 vel = smoothdata(vel, 'gaussian', 90);
-
 allspikes = cutclosest(time(1), time(end), allspikes, allspikes);
 binnum = floor(length(time)./timewin);
 [binnedspikesnum, edges] = histcounts(allspikes,binnum);
-velav = bintheta(vel, timewinsec, 0);
+velav = bintheta(vel, timewinsec, 0, 2000);
 [timebins, timeedges] = histcounts(time,binnum);
 
 
 goodbin = [];
 numspikes = [];
 n = 1;
-while n <= 1:length(vel)./timewin
-  if length(find(vel(n:n+timewin)<velthreshold))==timewin
+for n=1:length(velav)
+  if velav(n)<velthreshold
     numspikes(end+1) = binnedspikesnum(n);
   end
-  n = n+timewin;
 end
 
 meanrate = mean(numspikes)
-stddev = std(numspikes);
-lotsofspikes = meanrate+(stddev*3)
+stddev = std(numspikes)
+lotsofspikes = meanrate+(stddev*3.5)
 
 
 starttime = [];
 endtime = [];
 peaktime = [];
-k=1;
+k=2;
 count = 0;
 while k <= length(velav)
   i = k;
   j = k;
   if binnedspikesnum(k) >= lotsofspikes &  length(find((vel(round((k-1)*timewin+1):round(k*timewin))))<velthreshold)==timewin;
       while i>1
-        if binnedspikesnum(i) > meanrate+(.5*stddev) & length(find((vel(round((i-1)*timewin+1):round(i*timewin))<velthreshold)))==timewin;% looks to see when value returns to half a std dev above mean, this is the start of the ripple time
+        if binnedspikesnum(i) > meanrate+(.5*stddev) & length(find((vel(round((i-1)*timewin+1):round(i*timewin))<velthreshold)))==timewin  %looks to see when value returns to half a std dev above mean, this is the start of the ripple time
             i=i-1;
         else
            starttimetemp = edges(i+1);
