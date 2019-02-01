@@ -5,7 +5,9 @@ function f = accelVsFiringRateNew(time, accelORvel, firingdata, binsize)
 
 %DO I WANT TO SMOOTH VEL??
 %DO WE WANT A THRESHOLD FOR LOW OCCUPANCY
-binsize = 10;
+
+
+binsize = 5;
 mintime = accelORvel(2,1);
 maxtime = accelORvel(2,end);
 
@@ -17,6 +19,8 @@ time = time(indexmin:indexmax);
 [c indexmax] = (min(abs(firingdata-maxtime)));
 firingdata = firingdata(indexmin:indexmax);
 
+newtime = time(1):1/30:time(end);
+accelORvel = assignvel(newtime, accelORvel);
 
 spikevel = assignvelOLD(firingdata,accelORvel);
 minvel = min(spikevel(1,:));
@@ -59,16 +63,18 @@ normspike = spikepervel./velcounts;
 %scatter(centers, normspike)
 
 
-threshold = sum(velcounts)*.01
+threshold = sum(velcounts)*.05
 sum01 = 0;
 k = 0;
 while sum01 < threshold
   sum01 = sum01+velcounts(end-k)+velcounts(k+1);
   k = k+1;
 end
-knew = min(abs(centers(end-k-1)), abs(centers(k)))
+  k;
+  knew = min(abs(centers(end-k-1)), abs(centers(k)));
+
 if knew-300>200
-  knew = 300;
+  knew = 300
 end
 [c posk] = min(abs(centers(:)-knew));
 [c negk] = min(abs(centers(:)-(-1*knew)));
@@ -86,7 +92,7 @@ vline(posthreshold01);
 vline(negthreshold01);
 
 
-threshold = sum(velcounts)*.001
+threshold = sum(velcounts)*.05;
 sum02 = 0;
 k = 0;
 while sum02 < threshold
@@ -116,7 +122,7 @@ currentnormspike = normspike(negthresholdindex:posthresholdindex);
 scatter(currentcenters, currentnormspike);
 hold on
 %for positive values
-[c center0index] = min(abs(centers-0))
+[c center0index] = min(abs(centers-0));
 posx = centers(center0index:posthresholdindex);
 posy = normspike(center0index:posthresholdindex);
 coeffs = polyfit(posx, posy, 1);
@@ -130,7 +136,8 @@ pospval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,posx);
 plot(posx, y, 'LineWidth', 2) % best fit line
 %str1 = {'pos slope' posslope, 'pos p value' pospval, 'pos r2 value' posrsquared};
-str1 = {'pos p value' pospval, 'pos r2 value' posrsquared}
+str1 = {'pos p value' pospval, 'pos r2 value' posrsquared};
+pospval
 %text(currentcenters(end)-150,max(currentnormspike)*.5,str1, 'FontSize',13);
 
 %for negative values
@@ -148,7 +155,8 @@ negpval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,negx);
 plot(negx, y, 'LineWidth', 2) % best fit line
 %str1 = {'neg slope' negslope, 'neg p value' negpval, 'neg r2 value' negrsquared}
-str1 = {'neg p value' negpval, 'neg r2 value' negrsquared}
+str1 = {'neg p value' negpval, 'neg r2 value' negrsquared};
+negpval
  %text(currentcenters(3),max(currentnormspike)*.5,str1,'FontSize',13);
 
 title('Firing Rate as a function of Acceleration within 99% Occupancy','FontSize',16)
@@ -169,5 +177,8 @@ allrsquared = 1 - (ssres / sstot); % get r^2 value
 stats = fitlm(allx,ally);
 allpval = stats.Coefficients.pValue(2);
 y = polyval(coeffs,allx);
+
+
+
 
 f = [negslope; negrsquared;  negpval; posslope; posrsquared; pospval; allslope; allrsquared; allpval];

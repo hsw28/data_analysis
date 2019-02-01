@@ -1,10 +1,20 @@
-function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, confidencethreshold)
-  if confidencethreshold>1
-    warning('YOUR THRESHOLD SHOULD BE <1')
+function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, REM_YorN)
+%REM_YorN: put 0 if not using REM, 1 if using REM)
+
+
+  if size(vel1,1) == 2
+    vel1(1,:) = smoothdata(vel1(1,:), 'gaussian', 15);
+    vel1OLD = vel1;
+    vel1 = vel1(:,vel1(1,:)>velthreshold);
+    if REM_YorN == 0
+      assvel = assignvelOLD(vel2(2,:), vel1OLD);
+      goodvel = find(assvel>velthreshold);
+      vel2 = vel2(:,goodvel);
+    end
   end
 
-rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold);
-rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold);
+rank1 = velrank(pos1, vel1, dimX, dimY);
+rank2 = velrank(pos2, vel2, dimX, dimY);
 
 
 

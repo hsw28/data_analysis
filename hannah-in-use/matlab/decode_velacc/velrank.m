@@ -1,9 +1,9 @@
-function f = velrank(posData, vel, dimX, dimY, confidencethreshold)
+function f = velrank(posData, vel, dimX, dimY)
 %posData should be in the format (time,x,y) or (x,y,prob,time)
 %vel should be in (vel, time, varargin)
 %MAKE SURE CONFIDENCE THRESHOLD IS LIKE .3 AND NOT 30%
 
-
+confidencethreshold = 0;
 psizeX = 3.5 * dimX; %some REAL ratio of pixels to cm
 psizeY = 3.5 * dimY;
 
@@ -26,7 +26,6 @@ elseif size(posData,1)==4 %means decoded continuous
   highprobpos = find(posData(3,:)>confidencethreshold);
   posData = posData(:,highprobpos);
   %%ENDDDDD
-  size(posData)
 
   mintimepos = min(posData(4,:));
   maxtimepos = max(posData(4,:));

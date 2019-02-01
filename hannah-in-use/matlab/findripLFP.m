@@ -15,6 +15,7 @@ if length(vel)>1
 	d = cutclosest(vel(2,1), vel(2,end), d, d);
 end
 
+
 filtdata = ripfilt(c);
 
 % filters data with bandpass filter between 100-300hz
@@ -23,10 +24,22 @@ filtdata = ripfilt(c);
 h = hilbert(filtdata);
 trans = abs(h);
 d= d(1:length(trans));
-assvel = assignvel(d, vel);
-assvel = assvel(1,:);
-slow = find(assvel)<12;
-slowtrans = trans(slow);
+if vel == 0
+	vel = ones(1,length(d));
+	%assvel = assignvelOLD(d, vel);
+	%slow = find(assvel)<12;
+	%slowtrans = trans(slow);
+	slowtrans = trans;
+else
+	vel = assignvel(d, vel);
+	dold = d;
+	d = vel(2,:);
+	assvel = assignvel(d, vel);
+	assvel = assvel(1,:);
+	slow = find(assvel)<12;
+	slowtrans = trans(slow);
+	trans = cutclosest(d(1), d(end), dold, trans);
+end
 
 % finds std devs above mean
 mn = mean(slowtrans);
@@ -43,16 +56,6 @@ starts = [];
 ends = [];
 alltime = [];
 
-% gets velocity
-if vel == 0
-	vel = ones(1,length(d));
-else
-  vel = assignvel(d, vel);
-	dold = d;
-	d = vel(2,:);
-end
-
-trans = cutclosest(d(1), d(end), dold, trans);
 
 
 % permute through transformed data and find when data is Y std devs above mean

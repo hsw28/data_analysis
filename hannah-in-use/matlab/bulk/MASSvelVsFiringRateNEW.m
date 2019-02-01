@@ -48,6 +48,8 @@ function f = MASSvelVsFiringRateNEW(spikestructure, posstructure, timestructure,
           actualseconds = length(timestructure.(timeformateddate)) / 2000;
           fakeseconds = timestructure.(timeformateddate)(end)-timestructure.(timeformateddate)(1);
           conversion = actualseconds/fakeseconds;
+        elseif numdate == 20170715
+          conversion = 10;
         else
           conversion = 1;
         end

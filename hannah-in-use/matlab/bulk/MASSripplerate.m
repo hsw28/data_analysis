@@ -98,8 +98,8 @@ for k = 1:spikenum
           endtime = endtime(1,1);
           time = [timestructure.(timeformateddate)(starttime:endtime)];
           lfp = [lfpstructure.(lfpformateddate)(starttime:endtime)];
-          rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
-          %rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
+          %rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
+          rips = findripLFP(lfp, (time.*conversion), 2.5, posstructure.(velformateddate).*conversion);
         elseif usevel == 0
           time = timestructure.(timeformateddate);
           lfp = lfpstructure.(lfpformateddate);

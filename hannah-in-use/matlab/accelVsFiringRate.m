@@ -16,6 +16,14 @@ function thingy = accelVsFiringRate(time, accelORvel, firingdata, t, varargin)
 
 %MAKE INTO TIME STAMPS AND NOT RAW time
 
+starttime = accelORvel(2,1);
+endtime = accelORvel(2,end);
+starttime = find(abs(t.(timeformateddate)-starttime) < .001);
+endtime = find(abs(t.(timeformateddate)-endtime) < .001);
+starttime = starttime(1,1);
+endtime = endtime(1,1);
+t = [t(starttime:endtime)];
+
 if size(time, 2) < size(time, 1)
 	time = time';
 end
@@ -121,7 +129,7 @@ ylabel('Firing rate/half Sec.');
 
 average = zeros(fastest+1,1);
 deviation = zeros(fastest+1,1);
-threshold = .01 * length(rate);
+threshold = .05 * length(rate);
 %threshold = .01 * length(firingdata);
 
 

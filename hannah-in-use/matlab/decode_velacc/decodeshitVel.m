@@ -1,6 +1,7 @@
 function [values probs] = decodeshitVel(timevector, clusters, vel, tdecode, t)
 
-% decodes velocity  based on cell firing. t is bins in seconds
+% TYPE: put 0 to divide vel by occupancy, 1 to divide vel into equal binsize
+%decodes velocity  based on cell firing. t is bins in seconds
 % returns [predictedV, actualV]
 % for now make sure bins in binVel function are the same. will implement that as a variable later
 %
@@ -14,6 +15,8 @@ function [values probs] = decodeshitVel(timevector, clusters, vel, tdecode, t)
 % temp = binning(assvel(1,:)', ceil(length(assvel)/length(decoded.probs)));
 % temp = temp/ceil(length(assvel)/length(decoded.probs));
 % plot(temp, 'LineWidth',1.5, 'Color', 'w');
+
+type = 1;
 tic
 tsec = t;
 t = 2000*t;
@@ -27,6 +30,10 @@ maxtime = vel(2,end);
 [c indexmin] = (min(abs(timevector-mintime)));
 [c indexmax] = (min(abs(timevector-maxtime)));
 decodetimevector = timevector(indexmin:indexmax);
+
+%%%%%%%%%%COMMENT THIS OUT IF YOUR DECODED TIME IS DIFFERENT THAN YOUR MAZE TIME%%%%
+timevector = decodetimevector;
+%%%%%%%%%%%%%%%%%
 
 assvel = assignvel(decodetimevector, vel);
 asstime = assvel(2,:);
@@ -63,8 +70,33 @@ size(avg_accel);
 avg_accel = avg_accel';
 
 
-%%%%
-binnedVelo = histcounts(avg_accel, 'BinWidth', 7);
+%%% TO  MAKE BINS ALL SAME OCCUPANCY W 6 BINS (each is 16.67%)
+if type == 0
+  binnum = 10;
+  numswewant = floor(length(vel)*(1/binnum));
+  [N,EDGES] = histcounts(vel(1,:),1000);
+  vbin = 0;
+  numstart = 0
+  for k = 1:length(N)
+    numstart = numstart + N(k);
+    if numstart >= numswewant & EDGES(k+1)>=1
+      vbin(end+1) = EDGES(k+1);
+      numswewant = floor(sum(N(k+1:end))*(1/(binnum+1-length(vbin))));
+      numstart = 0;
+    end
+    if length(vbin) >= binnum
+      break
+    end
+  end
+
+
+
+%%%% TO MAKE BINS ALL SAME SIZE
+elseif type ==1
+binnum = 7;
+maxbin = 42;
+minbin = 35;
+binnedVelo = histcounts(avg_accel, 'BinWidth', binnum);
 binnedVelo = binnedVelo./sum(binnedVelo);
 k = length(binnedVelo);
 percentsum = 0;
@@ -73,17 +105,21 @@ while percentsum<.05
   k = k-1;
 end
 totbin = k+1;
-if totbin<=7
-vbin = [0:7:totbin*7]
-else
-vbin = [0:7:42]
+%if totbin<=7 && totbin>5
+vbin = [0:binnum:totbin*binnum]
+%elseif totbin>7
+%vbin = [0:binnum:maxbin];
+%else
+%  vbin = [0:binnum:minbin];
+%end
+
 end
 
 %7 with .05 is best so far
 
 
 
-
+vbin
 
 
 
@@ -135,6 +171,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
           productme =0;
           expme = 0;
           c = 1;
+
           while c <= numclust
               size(numclust);
               name = char(clustname(c));
@@ -248,14 +285,16 @@ values = [v; times; binnum; perc];
 
 toc
 
-size(values);
-size(binnedV);
 
-if abs(length(values)-length(binnedV))<3
-  figure
-  cm = confusionmat(values(3,1:length(binnedV)), binnedV);
-  plotConfMat(cm)
-end
+velerror(values, vel);
+
+%if abs(length(values)-length(binnedV))<3
+%  figure
+%  cm = confusionmat(values(3,1:length(binnedV)), binnedV);
+%  plotConfMat(cm)
+%end
+
+
 %[h,p,ci,stats] = ttest2(maxprob, binnedV)
 %probs = percents;
 %values = [maxprob; binnedV];

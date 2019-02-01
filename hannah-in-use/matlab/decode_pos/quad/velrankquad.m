@@ -1,12 +1,13 @@
-function f = velrankquad(posData, vel, confidencethreshold, decodet)
+function f = velrankquad(posData, vel, decodet)
 %posData should be in the format (time,x,y) or (x,y,prob,time)
 %vel should be in (vel, time, varargin)
 %MAKE SURE CONFIDENCE THRESHOLD IS LIKE .3 AND NOT 30%
 
-xlimmin = [320 320 320 320 320 440 750 780 828 780 780];
-xlimmax = [505 450 440 505 505 828 950 950 950 950 950];
-ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
-ylimmax = [700 545 422 320 170 440 700 575 420 339 182];
+confidencethreshold = 0;
+xlimmin = [320 320 320 320 320 440 638 750 780 828 780 780];
+xlimmax = [505 450 440 505 505 638 828 950 950 950 950 950];
+ylimmin = [545 422 320 170 000 300 300 575 420 339 182 000];
+ylimmax = [700 545 422 320 170 440 440 700 575 420 339 182];
 
 %determine if position file or decoded file
 if size(posData,1)>size(posData,2) %actual position
@@ -25,6 +26,7 @@ if size(posData,1)>size(posData,2) %actual position
 
 else %means binned and decoded
   highprobpos = find(posData(2,:)>confidencethreshold);
+
   posData = posData(:,highprobpos);
   mintimepos = min(posData(3,:));
   maxtimepos = max(posData(3,:));
@@ -107,15 +109,13 @@ vel = [vel; timevel];
 %vel = assignvel(timeMAZEinc, vel);
 %f.velinterp = [vel; timeMAZEinc];
 if decodet > 0
-  vel = smoothdata(vel(1,:), 'gaussian', decodet*15); %originally had this at 30, trying with 15 now
+  vel(1,:) = smoothdata(vel(1,:), 'gaussian', decodet*15); %originally had this at 30, trying with 15 now
 %else
   %vel = smoothdata(vel(1,:), 'gaussian', 0);
 end
 %vel = [vel; timeMAZEinc];
-f.veltester = vel;
-quadvel = assignvelOLD(timepos, vel);
 
-f.vel = [quad, quadvel', timepos];
+quadvel = assignvelOLD(timepos, vel);
 
 linearmean = zeros(max(quad),1);
 linearnum = zeros(max(quad),1);

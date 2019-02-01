@@ -7,13 +7,15 @@ function [values probs] = decodeshitACC(timevector, clusters, acc, tdecode, t)
 %NEED TO PUT TIMES WITH THE OUTPUT OR IT GETS SUPER CONFUSING. DO THIS
 
 
-
+tic
 vel = acc;
 
 
 %vbin = [3; 6; 9; 12; 15; 18];
 %vbin = [-12, -6, -4, 4, 6, 12]
-vbin = [-4, 4]
+%vbin = [-54, -42, -30, -18, -6, 6, 18, 30, 42, 54];
+%vbin = [-42, -30, -18, -6, 6, 18, 30, 42];
+vbin = [-35, -25, -15, -5, 5, 15, 25, 35]
 
 
 tsec = t;
@@ -29,6 +31,10 @@ maxtime = vel(2,end);
 [c indexmin] = (min(abs(timevector-mintime)));
 [c indexmax] = (min(abs(timevector-maxtime)));
 decodetimevector = timevector(indexmin:indexmax);
+
+%%%%%%%%%%COMMENT THIS OUT IF YOUR DECODED TIME IS DIFFERENT THAN YOUR MAZE TIME%%%%
+timevector = decodetimevector;
+%%%%%%%%%%%%%%%%%
 
 
 assvel = assignvel(decodetimevector, vel);
@@ -134,7 +140,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode))  & (tm+tdecode
           while c <= numclust
               size(numclust);
               name = char(clustname(c));
-              ni = find(clusters.(name)>timevector(tm) & clusters.(name)<timevector(tm+t)); % finds index (number) of spikes in range time
+              ni = find(clusters.(name)>timevector(tm) & clusters.(name)<timevector(tm+tdecode)); % finds index (number) of spikes in range time
               fx = (fxmatrix(c, k));  %should be the rate for cell c at vel k.
 
               if fx ~= 0
@@ -219,17 +225,19 @@ v = maxprob;
 
 binnum = v;
 vnew = zeros(length(v),1);
-k=length(vbin)+1
+k=length(vbin)+1;
 while k>0
   bin = find(v==k);
   if k==length(vbin)+1
     highestvel = find(vel(1,:)>vbin(end));
     highestvel = median(vel(1,highestvel));
     vnew(bin) = highestvel;
+    highestvel
   elseif k==1
     lowestvel = find(vel(1,:)<vbin(1));
     lowestvel = median(vel(1,lowestvel));
     vnew(bin) = lowestvel;
+    lowestvel
   else % k<length(vbin)+1 & k>1
       vnew(bin) = (vbin(k-1)+vbin(k))/2;
 
@@ -239,11 +247,14 @@ end
 
 
 values = [vnew'; times; binnum; perc];
+toc
 
-figure
-if abs(length(values)-length(binnedV))<3
-  size(values)
-  size(binnedV)
-  cm = confusionmat(values(3,1:length(binnedV)), binnedV(1,:));
-  plotConfMat(cm)
-end
+accerror(values, vel);
+
+%figure
+%if abs(length(values)-length(binnedV))<3
+%  size(values)
+%  size(binnedV)
+%  cm = confusionmat(values(3,1:length(binnedV)), binnedV(1,:));
+%  plotConfMat(cm)
+%end

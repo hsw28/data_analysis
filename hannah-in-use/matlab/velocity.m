@@ -12,17 +12,12 @@ function v = velocity(pos, varargin);
 % http://www.mathworks.com/matlabcentral/fileexchange/13948-numerical-differentiation-based-on-wavelet-transforms
 
 fprintf('REMEMBER: IF YOU ARE USING POSITION FROM THE SLEEP BOX PUT ANY NUMBER INTO VARARGIN')
-size(pos)
-file = pos';
-
+file = fixpos(pos);
+file = file';
 t = file(1, :);
 xpos = (file(2, :))';
-%xpos = smoothdata(xpos,'gaussian',500);
-%xpos = lowpass4(xpos)';
 ypos = (file(3, :))';
-%ypos = smoothdata(ypos,'gaussian',500);
-%ypos = lowpass4(ypos)';
-t = t(1:length(xpos));
+
 
 
 velvector = [];
@@ -40,10 +35,10 @@ for i = 2:s-1
 	end
 end
 
-
+%velvector = filloutliers(velvector, 'pchip', 'movmedian',10);
 
 %v = hampel(velvector, 30, 3);
-v = smoothdata(velvector,'gaussian',7);
+v = smoothdata(velvector,'gaussian',6);
 v = v(1:length(timevector));
 if length(varargin)>0
 	v = [(v*.026); timevector];

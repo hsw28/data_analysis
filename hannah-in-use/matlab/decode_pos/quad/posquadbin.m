@@ -1,4 +1,4 @@
-function f = posquadbinCOMP(timevector, posData, tdecode, decodedmat)
+function f = posquadbin(timevector, posData, tdecode, decodedmat)
 %puts actual time into quadrants so you can compare data from firingPerPosQuad
 
 
@@ -24,10 +24,10 @@ Y = (posData(:,3));
 
 %defiding position
 %         [ 1   2   3   4   5   6   7   8   9   10  11]
-xlimmin = [320 320 320 320 320 440 750 780 828 780 780];
-xlimmax = [505 450 440 505 505 828 950 950 950 950 950];
-ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
-ylimmax = [700 545 422 320 170 440 700 575 420 339 182];
+xlimmin = [320 320 320 320 320 440 638 750 780 828 780 780];
+xlimmax = [505 450 440 505 505 638 828 950 950 950 950 950];
+ylimmin = [545 422 320 170 000 300 300 575 420 339 182 000];
+ylimmax = [700 545 422 320 170 440 440 700 575 420 339 182];
 
 times = [];
 tm = 1;

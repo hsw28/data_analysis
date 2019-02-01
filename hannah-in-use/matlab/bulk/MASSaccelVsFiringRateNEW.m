@@ -47,6 +47,8 @@ for k = 1:spikenum
         actualseconds = length(timestructure.(timeformateddate)) / 2000;
         fakeseconds = timestructure.(timeformateddate)(end)-timestructure.(timeformateddate)(1);
         conversion = actualseconds/fakeseconds;
+      elseif numdate == 20170715
+        conversion = 10;
       else
         conversion = 1;
       end
@@ -69,13 +71,13 @@ for k = 1:spikenum
 
 
     negslope = accvrate(1);
-    negrsquared = accvrate(2)
+    negrsquared = accvrate(2);
     negpval = accvrate(3);
     posslope = accvrate(4);
-    posrsquared = accvrate(5)
+    posrsquared = accvrate(5);
     pospval = accvrate(6);
     allslope = accvrate(7);
-    allrsquared = accvrate(8)
+    allrsquared = accvrate(8);
     allpval = accvrate(9);
 
     spikesizes = spikestructure.(spikename);

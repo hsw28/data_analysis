@@ -1,11 +1,25 @@
-function f = velrankquadresult(pos1, vel1, pos2, vel2, confidencethreshold)
+function f = velrankquadresult(pos1, vel1, pos2, vel2, decodet, velthreshold, REM_YorN)
+%REM_YorN: put 0 if not using REM, 1 if using REM
 
-    if confidencethreshold>1
-      warning('YOUR THRESHOLD SHOULD BE <1')
-    end
 
-  rank1 = velrank(pos1, vel1, confidencethreshold);
-  rank2 = velrank(pos2, vel2, confidencethreshold);
+
+
+if size(vel1,1) == 2
+  vel1(1,:) = smoothdata(vel1(1,:), 'gaussian', 15);
+  vel1OLD = vel1;
+  vel1 = vel1(:,vel1(1,:)>velthreshold);
+  if REM_YorN == 0
+    assvel = assignvelOLD(vel2(2,:), vel1OLD);
+    goodvel = find(assvel>velthreshold);
+    vel2 = vel2(:,goodvel);
+  end
+end
+
+
+
+
+  rank1 = velrankquad(pos1, vel1, decodet);
+  rank2 = velrankquad(pos2, vel2, decodet);
 
 
 
