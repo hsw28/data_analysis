@@ -11,7 +11,7 @@ function v = velocity(pos, varargin);
 % numerical derivitive
 % http://www.mathworks.com/matlabcentral/fileexchange/13948-numerical-differentiation-based-on-wavelet-transforms
 
-fprintf('REMEMBER: IF YOU ARE USING POSITION FROM THE SLEEP BOX PUT ANY NUMBER INTO VARARGIN')
+%fprintf('REMEMBER: IF YOU ARE USING POSITION FROM THE SLEEP BOX PUT ANY NUMBER INTO VARARGIN');
 file = fixpos(pos);
 file = file';
 t = file(1, :);

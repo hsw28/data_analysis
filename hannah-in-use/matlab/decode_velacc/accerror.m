@@ -1,4 +1,4 @@
-function f = accerror(decodedacc, acc, vbin)
+function [values median_is mean_is] = accerror(decodedacc, acc, vbin)
 %returns an error in cm/s for each decoded time. can also use for decoded acc
 
 time = decodedacc(2,:);
@@ -23,7 +23,15 @@ closeacc = [];
 for i=1:length(time)
   [c index] = (min(abs(time(i)-acc(2,:))));
   closeacc(end+1) = acc(1,index);
-  diff = abs(decodedacc(i)-acc(1,index));
+
+  %FOR ONLY GETTING NUMS IN ACC RANGE YOU WANT
+  if abs(acc(1,index))<100 && abs(acc(1,index))>20
+    diff = abs(decodedacc(i)-acc(1,index)); %keep this line always
+  else
+    diff = NaN;
+  end
+
+
 %  if (closeacc(end)) > vbin(end)
 %    highestvel = find(vel(1,:)>vbin(end));
 %    highestvel = median(vel(1,highestvel));
@@ -32,6 +40,7 @@ for i=1:length(time)
 %    lowestvel = find(vel(1,:)<vbin(1));
 %    lowestvel = median(vel(1,lowestvel));
 %    vnew(bin) = lowestvel;
+
   if abs(closeacc(end))<=lim
     alldiff(end+1) = diff;
   else
@@ -39,9 +48,13 @@ for i=1:length(time)
   end
 end
 realacc = closeacc;
-f = [alldiff; realacc; time];
 
-temp2 = f(1,:);
+%25-100
+
+values = [alldiff; realacc; time];
+
+
+temp2 = values(1,:);
 t = ~isnan(temp2);
 temp2 = temp2(t);
 mean_is = mean(temp2)

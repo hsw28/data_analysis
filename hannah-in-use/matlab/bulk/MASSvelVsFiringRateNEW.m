@@ -12,6 +12,14 @@ function f = MASSvelVsFiringRateNEW(spikestructure, posstructure, timestructure,
 
 
   for k = 1:spikenum
+    if rem(spikenum,4) < rem(spikenum,3)
+      rows = spikenum./4;
+      columns = spikenum./rows;
+    else
+      rows = spikenum./3;
+      columns = ceil(spikenum./rows);
+    end
+
       name = char(spikenames(k))
       % get date of spike
       date = strsplit(name,'cluster_'); %splitting at year
@@ -57,7 +65,7 @@ function f = MASSvelVsFiringRateNEW(spikestructure, posstructure, timestructure,
       % does the thing
       % want to decide on output-- maybe number of spikes, slope, and r2 value
       spikename = char(spikenames(k));
-      set(0,'DefaultFigureVisible', 'off');
+      %set(0,'DefaultFigureVisible', 'off');
 
       % limit the times in the time file to those in position files
       starttime = posstructure.(posformateddate)(1,1);
@@ -68,6 +76,7 @@ function f = MASSvelVsFiringRateNEW(spikestructure, posstructure, timestructure,
       endtime = endtime(1,1);
       time = [timestructure.(timeformateddate)(starttime:endtime)];
 
+  subplot(ceil(columns), ceil(rows), k)
     accvrate = velVsFiringRateNew((time.*conversion), (posstructure.(velformateddate).*conversion), (spikestructure.(spikename).*conversion), binsize);
     slope = accvrate(1);
     rsquared = accvrate(2);

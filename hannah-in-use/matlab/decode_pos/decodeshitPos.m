@@ -2,6 +2,7 @@ function f = decodeshitPos(time, pos, clusters, tdecode, dim)
 %decodes position and outputs decoded x, y, confidence(in percents), and time. if you want to filter spiking for veloctity you put velocity in varargin
 tic
 posData = pos;
+posData = fixpos(posData);
 timevector = time;
 
 
@@ -158,7 +159,7 @@ while tm < (length(timevector)-t)
       tm = tm+t;
     end
     %tm = tm+(t/2); %for overlap?
-    n = n+1;
+    n = n+1 
 end
 
 warning('your probabilities were the same')

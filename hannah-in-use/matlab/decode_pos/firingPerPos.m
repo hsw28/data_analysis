@@ -24,11 +24,12 @@ X = (posData(:,2));
 Y = (posData(:,3));
 
 
-
 xmin = min(posData(:,2));
 ymin = min(posData(:,3));
 xmax = max(posData(:,2));
 ymax = max(posData(:,3));
+
+
 
 xbins = ceil((xmax-xmin)/psize); %number of x
 ybins = ceil((ymax-ymin)/psize); %number of y
@@ -46,6 +47,7 @@ ybins = ceil((ymax-ymin)/psize); %number of y
 vel = velocity(posData);
 vel(1,:) = smoothdata(vel(1,:), 'gaussian', pos_samp_per_sec); %originally had this at 30, trying with 15 now
 fastvel = find(vel(1,:) > velthreshold);
+posData = fixpos(posData);
 posDataFast = posData(fastvel, :);
 
 

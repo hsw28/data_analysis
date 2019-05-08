@@ -1,4 +1,4 @@
-function [degrees xycoord] = wheelPos(wheelpos, time)
+function [xycoord degrees] = wheelPos(wheelpos, time)
 % input position data of wheel tracker and time. cleans up wheel data and interpolates data for all time points
 % returns two arrays-- position by degrees and xy position
 %
@@ -74,8 +74,10 @@ while k <= length(time)
 end
 
 % returns degree array
-degrees = [time', angles];
+size(time')
+size(angles)
+degrees = [time; angles];
 % returns xy coords
 xcoord = cosd(angles)*R;
 ycoord = sind(angles)*R;
-xycoord = [time', xcoord, ycoord];
+xycoord = [time, xcoord, ycoord];

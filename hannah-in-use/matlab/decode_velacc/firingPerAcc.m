@@ -3,7 +3,6 @@ function thingy = firingPerAcc(time, accelORvel, firingdata, t, vbin, avg_accel)
 % outputs average firing rate per velocity/acc
 % ASSIGN VELOCITY BEFORE THIS FUNCTION
 
-
 if size(time, 2) < size(time, 1)
 	time = time';
 end
@@ -15,8 +14,6 @@ end
 if size(accelORvel, 2) > size(firingdata, 1)
 	firingdata = firingdata';
 end
-
-
 
 mintime = accelORvel(2,1);
 maxtime = accelORvel(2,end);
@@ -42,7 +39,6 @@ ending = max(time);
 
 r = mua_rate(firingdata,start,ending,t);
 %info = thetaPowerVsTime(lfpdata,time,L,L);
-rate = r(2,:); % number of spikes per time bin
 rate = r(2,:).*1/t;
 fastest = max(rate);
 m = length(rate);

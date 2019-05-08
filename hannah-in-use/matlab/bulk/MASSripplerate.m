@@ -32,7 +32,7 @@ increasetotal = zeros(80,1)';
 sametotal = zeros(80,1)';
 for k = 1:spikenum
   name = char(spikenames(k))
-  if isstruct(timestructure)==1 && length(fieldnames(timestructure))>1
+  if isstruct(timestructure)==1 %&& length(fieldnames(timestructure))>1
 
     % get date of spike
     date = strsplit(name,'cluster_'); %splitting at year
@@ -104,11 +104,12 @@ for k = 1:spikenum
           time = timestructure.(timeformateddate);
           lfp = lfpstructure.(lfpformateddate);
           %rips = findripMUA((time.*conversion), posstructure.(velformateddate).*conversion, spikestructureHPC, 15);
-          rips = findripLFP(lfp, (time.*conversion), 2.5, 0);
+          rips = findripLFP(lfp, (time.*conversion), 2.5, 0)
         end
     else
       disp('same date! will not refilter')
     end
+
   else
     if length(timestructure) ~= length(lfpstructure)
       error('your time should be from your lfp')
@@ -126,7 +127,7 @@ for k = 1:spikenum
       rips = findripLFP(lfp, (time), 2.5, posstructure);
       %rips = findripMUA(time, posstructure, HPCclusters, 15);
     elseif usevel == 0
-      time = tiemstructure;
+      time = timestructure;
       lfp = lfpstructure;
       rips = findripLFP(lfp, (time), 2.5, 0);
   end
@@ -143,7 +144,6 @@ end
     end
 
 
-    size(allchanges)
     %take 20ms around each side for ripple rate
     totalrip = sum(allchanges(38:46)); %slanted to post ripple
     %for pre ripple
@@ -153,7 +153,11 @@ end
 
     if totalrip/totalprerip>=1.2
       increasecount = increasecount+1;
-      increasetotal = increasetotal+allchanges/mean(allchanges(1:17));
+      addy = allchanges/mean(allchanges(1:17));
+      addy = addy(~isnan(addy));
+      addy = addy(~isinf(addy));
+
+      increasetotal = increasetotal+addy;
       plot(allchanges./mean(allchanges(1:17)), 'Color', [0.5176    0.5020    0.7686])
     else
       samecount = samecount+1;
@@ -170,9 +174,17 @@ end
       hold on
       %plot(allchanges/mean(allchanges(8:12)))
 end
-size(increasetotal./increasecount)
-size(sametotal./samecount)
+
+increasetotal = increasetotal(~isnan(increasetotal));
+increasetotal = increasetotal(~isinf(increasetotal));
+increasecount = increasecount(~isnan(increasecount));
+increasecount = increasecount(~isinf(increasecount));
+increasecount
+increasetotal./increasecount;
 plot(increasetotal./increasecount, 'LineWidth', 3, 'Color',[0.0902    0.0706    0.3686])
+sametotal = sametotal(~isnan(sametotal));
+samecount = samecount(~isnan(samecount));
+sametotal./samecount;
 plot(sametotal./samecount, 'LineWidth', 3, 'Color',[0.3882    0.0902    0.1686])
 % outputs chart with spike name, number of spikes, slope, and r2 value
   f = output';

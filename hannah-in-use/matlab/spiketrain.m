@@ -1,4 +1,4 @@
-function x = spiketrain(spike, tm);
+function x = spiketrain(spike, tm, binwidth);
 
 % makes a spike train where 0 is no spike, 1 is a spike
 % input spike times and session times
@@ -6,6 +6,9 @@ function x = spiketrain(spike, tm);
 %
 % ex: spiketrain(spiketime, lfp.timestamp);
 
+[c indexmin] = (min(abs(spike-tm(1))));
+[c indexmax] = (min(abs(spike-tm(end))));
+spike = spike(indexmin:indexmax);
 
 %making sure no spikes fall outside of time
 [c index] = min(abs(spike-tm(1)));
@@ -22,4 +25,4 @@ else
 end
 
 
-x = hist(spike, tm)';
+x = histcounts(spike, [tm(1):binwidth:tm(end)])';

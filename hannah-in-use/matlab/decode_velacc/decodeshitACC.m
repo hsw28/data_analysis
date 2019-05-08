@@ -13,9 +13,11 @@ vel = acc;
 
 %vbin = [3; 6; 9; 12; 15; 18];
 %vbin = [-12, -6, -4, 4, 6, 12]
-%vbin = [-54, -42, -30, -18, -6, 6, 18, 30, 42, 54];
 %vbin = [-42, -30, -18, -6, 6, 18, 30, 42];
-vbin = [-35, -25, -15, -5, 5, 15, 25, 35]
+
+
+vbin = [-49, -35, -21, -7, 7, 21, 35, 49];                        % 13.9968 // 13.9918 %first use
+
 
 
 tsec = t;
@@ -211,7 +213,7 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode))  & (tm+tdecode
                                     % if I want probabilities need to make a matrix of endprobs instead of selecting max
       times(end+1) = timevector(tm);
       if tdecodesec>=.25
-        tm = tm+(tdecode/2);
+        tm = tm+(tdecode/4);
       else
         tm = tm+tdecode;
       end

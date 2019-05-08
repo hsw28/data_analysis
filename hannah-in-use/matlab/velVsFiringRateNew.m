@@ -35,26 +35,26 @@ binnum = ceil((maxvel-minvel)./binsize);
 assvel = assignvel(time, accelORvel);
 [velcounts, edges] = histcounts(assvel(1,:), edges); % find velocity distribution
 
-figure
+%figure
 %subplot(5,2,1)
-subplot(3,2,1)
+%subplot(3,2,1)
 centers = (edges(1:end-1) + edges(2:end))/2;
 velcounts = velcounts/2000;
-bar(centers, velcounts);
-title('|Velocity| Occupancy', 'FontSize',16)
-xlabel('|Velocity| (cm/s)', 'FontSize',14)
-ylabel('Time (s)', 'FontSize',14)
-set(gca,'TickDir','out');
+%bar(centers, velcounts);
+%title('|Velocity| Occupancy', 'FontSize',16)
+%xlabel('|Velocity| (cm/s)', 'FontSize',14)
+%ylabel('Time (s)', 'FontSize',14)
+%set(gca,'TickDir','out');
 
 
 %subplot(5,2,2)
-subplot(3,2,2)
+%subplot(3,2,2)
 centers = (edges(1:end-1) + edges(2:end))/2;
 bar(centers, spikepervel);
-title('Spike Count as a Function of |Velocity|','FontSize',16)
-xlabel('|Velocity| (cm/s)','FontSize',14)
-ylabel('Spike Count','FontSize',14)
-set(gca,'TickDir','out');
+%title('Spike Count as a Function of |Velocity|','FontSize',16)
+%xlabel('|Velocity| (cm/s)','FontSize',14)
+%ylabel('Spike Count','FontSize',14)
+%set(gca,'TickDir','out');
 
 
 %divide spiking per each velocity by how much time in each velocity
@@ -118,20 +118,24 @@ y = polyval(coeffs,x);
 %set(gca,'TickDir','out');
 
 
-%subplot(5,2,7:10)
-subplot(3,2,3:6)
+
+%subplot(3,2,3:6)
 
 currentcenters= centers(1:thresholdindex);
 currentnormspike = normspike(1:thresholdindex);
-scatter(currentcenters, currentnormspike);
+scatter(currentcenters, currentnormspike, '.k');
 hold on
-plot(x, y, 'LineWidth', 2) % best fit line
+if pval <= .05
+  plot(x, y, 'r', 'LineWidth', 1.5) % best fit line
+else
+  plot(x, y, 'black', 'LineWidth', 1.5) % best fit line
+end
 %str1 = {'slope' slope, 'p value' pval, 'r2 value' rsquared};
 str1 = {'p value' pval, 'r2 value' rsquared};
-text(25,max(currentnormspike)*.9,str1,'FontSize',12);
-title('Firing Rate as a function of |Velocity| within 99% Occupancy','FontSize',16)
-xlabel('|Velocity| (cm/s)','FontSize',14)
-ylabel('Spike Rate (spikes/sec)','FontSize',14)
-set(gca,'TickDir','out');
+%text(25,max(currentnormspike)*.9,str1,'FontSize',12);
+%title('Firing Rate as a function of |Velocity| within 99% Occupancy','FontSize',16)
+%xlabel('|Velocity| (cm/s)','FontSize',14)
+%ylabel('Spike Rate (spikes/sec)','FontSize',14)
+%set(gca,'TickDir','out');
 
 f = [slope; rsquared; pval];

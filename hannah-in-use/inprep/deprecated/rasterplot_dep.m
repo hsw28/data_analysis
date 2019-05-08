@@ -1,4 +1,4 @@
-function f = rasterplot(spikematrix, start_time, end_time, num)
+function f = rasterplotdep(spikematrix, start_time, end_time, num)
 % num =1 if putting in a structure, num = 2 if putting in a spike matrix. matrix should be a matrix where [num of cells, spike times]. can make using padcat
 
 

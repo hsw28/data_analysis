@@ -10,7 +10,18 @@ spikenum = length(spikenames);
 
 output = {'cluster name'; '# spikes'; 'neg slope'; 'neg r2'; 'neg p value'; 'pos slope'; 'pos r2'; 'pos p value'; 'all slope'; 'all r2'; 'all p value'};
 
+figure
 for k = 1:spikenum
+    columns = 1;
+    rows = spikenum;
+    %if rem(spikenum,4) < rem(spikenum,3)
+    %  rows = spikenum./4;
+    %  columns = spikenum./rows;
+    %else
+    %  rows = spikenum./3;
+    %  columns = ceil(spikenum./rows);
+    %end
+
     name = char(spikenames(k))
     % get date of spike
     date = strsplit(name,'cluster_'); %splitting at year
@@ -66,7 +77,8 @@ for k = 1:spikenum
     % does the thing
     % want to decide on output-- maybe number of spikes, slope, and r2 value
     spikename = char(spikenames(k));
-    set(0,'DefaultFigureVisible', 'off');
+    %set(0,'DefaultFigureVisible', 'off');
+    subplot(ceil(columns), ceil(rows), k)
     accvrate = accelVsFiringRateNew((time.*conversion), (posstructure.(accformateddate).*conversion), (spikestructure.(spikename).*conversion), binsize);
 
 

@@ -198,11 +198,15 @@ if isempty(Hd)
         9.08466204519207e-09 0]);
 end
 
+
 d = step(Hd,x);
 delay = mean(grpdelay(Hd));
 d(1:delay) = [];
 %y = abs(hilbert(d));
 y = d;
 
+%y = step(Hd,x);
+%delay = mean(grpdelay(Hd));
+%y(1:delay) = [];
 
 % [EOF]

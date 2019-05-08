@@ -40,7 +40,7 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 	events = zeros(ybins,xbins);
 	xstep = xmax/xbins;
 	ystep = ymax/ybins;
-	tstep = 1/30;
+	tstep = (posData(end,1)-posData(1,1))./length(posData);
 
 
 	for i = 1:xbins
@@ -75,7 +75,7 @@ rate = events./(time*tstep); %time*tstep is occupancy
 
 
 %heat map stuff
-figure
+%figure
 [nr,nc] = size(rate);
 colormap('parula');
 %lower and higher three percent of firing sets bounds

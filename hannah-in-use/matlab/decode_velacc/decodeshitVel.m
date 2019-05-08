@@ -1,4 +1,4 @@
-function [values probs] = decodeshitVel(timevector, clusters, vel, tdecode, t)
+function [values probs vbin] = decodeshitVel(timevector, clusters, vel, tdecode, t)
 
 % TYPE: put 0 to divide vel by occupancy, 1 to divide vel into equal binsize
 %decodes velocity  based on cell firing. t is bins in seconds
@@ -15,6 +15,7 @@ function [values probs] = decodeshitVel(timevector, clusters, vel, tdecode, t)
 % temp = binning(assvel(1,:)', ceil(length(assvel)/length(decoded.probs)));
 % temp = temp/ceil(length(assvel)/length(decoded.probs));
 % plot(temp, 'LineWidth',1.5, 'Color', 'w');
+
 
 type = 1;
 tic
@@ -40,7 +41,7 @@ asstime = assvel(2,:);
 
 %find number of clusters
 clustname = (fieldnames(clusters));
-numclust = length(clustname)
+numclust = length(clustname);
 
 
 
@@ -76,7 +77,7 @@ if type == 0
   numswewant = floor(length(vel)*(1/binnum));
   [N,EDGES] = histcounts(vel(1,:),1000);
   vbin = 0;
-  numstart = 0
+  numstart = 0;
   for k = 1:length(N)
     numstart = numstart + N(k);
     if numstart >= numswewant & EDGES(k+1)>=1
@@ -106,7 +107,7 @@ while percentsum<.05
 end
 totbin = k+1;
 %if totbin<=7 && totbin>5
-vbin = [0:binnum:totbin*binnum]
+vbin = [0:binnum:totbin*binnum];
 %elseif totbin>7
 %vbin = [0:binnum:maxbin];
 %else
@@ -115,11 +116,9 @@ vbin = [0:binnum:totbin*binnum]
 
 end
 
-%7 with .05 is best so far
 
 
-
-vbin
+vbin;
 
 
 
@@ -134,19 +133,19 @@ while j <= numclust
     j = j+1;
 end
 
-fxmatrix
+fxmatrix;
 
 
  %find prob the animal is each velocity DONT NEED BUT CAN BE USEFUL
 
-probatvelocity = zeros(length(vbin),1);
-binnedV = binVel(asstime, vel, t/2000, vbin);
-legitV = find(binnedV<100);
-for k = 1:length(vbin)
-    numvel = find(binnedV == (k));
-    probatvelocity(k) = length(numvel)./length(legitV);
-end
-probatvelocity
+%probatvelocity = zeros(length(vbin),1);
+%binnedV = binVel(asstime, vel, t/2000, vbin);
+%legitV = find(binnedV<100);
+%for k = 1:length(vbin)
+%    numvel = find(binnedV == (k));
+%    probatvelocity(k) = length(numvel)./length(legitV);
+%end
+%probatvelocity;
 
 
 
@@ -286,7 +285,7 @@ values = [v; times; binnum; perc];
 toc
 
 
-velerror(values, vel);
+%velerror(values, vel);
 
 %if abs(length(values)-length(binnedV))<3
 %  figure

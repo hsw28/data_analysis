@@ -1,4 +1,4 @@
-function f = velerror(decodedvel, vel)
+function [values median_is mean_is] = velerror(decodedvel, vel)
 %returns an error in cm/s for each decoded time. can also use for decoded acc
 
 time = decodedvel(2,:);
@@ -23,20 +23,27 @@ closevel = [];
 for i=1:length(time)
   [c index] = (min(abs(time(i)-vel(2,:))));
   closevel(end+1) = vel(1,index);
-  diff = abs(decodedvel(i)-vel(1,index));
+
+  %%for one section
+  if vel(1,index)>10 & vel(1,index)<30
+    diff = abs(decodedvel(i)-vel(1,index)); %%KEEP IN
+  else
+    diff = NaN;
+  end
+
   if closevel(end)<=lim
     alldiff(end+1) = diff;
   else
     alldiff(end+1) = NaN;
   end
 end
+alldiff
 realvel = closevel;
-f = [alldiff; realvel; time];
+values = [alldiff; realvel; time];
 
-temp2 = f(1,:);
-t = ~isnan(temp2);
-temp2 = temp2(t);
-mean_is = mean(temp2)
-median_is = median(temp2)
+temp2 = values(1,:);
+
+mean_is = nanmean(temp2);
+median_is = nanmedian(temp2);
 
 %f = closevel;
