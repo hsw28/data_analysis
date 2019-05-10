@@ -1,6 +1,6 @@
 function [f notes] = MASSthetaphase_mid(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
-  %finds theta phase for choice versus free in middle arm
+  %finds theta phase for choice versus free in middle arm (directional)
 
 
 

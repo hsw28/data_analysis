@@ -1,20 +1,13 @@
-function f = MASSspiketrainCC(structureofspikes, structurespikestocompare, timestructure)
-%time can be anyformat, just used to establish start and end times, so can insert velocity
-%sums all spikes from one dat in structurespikestocompare, compares to individual clusters in same day in structure of spikes
-%CROSS Correlation
+function [f notes] = MASS_MUArate(structureofspikes, posstructure)
 
-HPCspikestructure = structurespikestocompare;
-hpcspikenames = fieldnames(HPCspikestructure);
-hpcspikenum = length(hpcspikenames);
+%combines all spiking for a day and gets spike rate
+set(0,'DefaultFigureVisible', 'off');
+output = {'day'; 'overallrate'; 'rate1'; 'rate2'; 'rate3'};
 
 spikenames = fieldnames(structureofspikes);
 spikenum = length(spikenames);
 
-%plots = ceil(spikenum./3);
-output = {'cluster name'; '# spikes'; 'CC'};
-
 previousdate = 0;
-
 maxcc = [];
 for k=1:spikenum
     name = char(spikenames(k));
@@ -58,36 +51,47 @@ for k=1:spikenum
       newdate = char(newdate(1,2));
       newdate = str2num(newdate);
 
-      if newdate ~= previousdate & (isfield(timestructure, (timeformateddate))==1 | isfield(timestructure, (velformateddate))==1)
-        hpcall = [];
+      if newdate ~= previousdate
+        if k>1 | k==spikenum
+          rate = normalizePosData(spikeall, oldpos , 4);
+
+          overallrate = nanmean(reshape(rate, [size(rate,1)*size(rate,2), 1]));
+          rate1 = nanmean(reshape(rate(19:23, 31:41), [55, 1]));
+          rate2 = nanmean(reshape(rate(19:23, 41:52), [60, 1]));
+          rate3 = nanmean(reshape(rate(19:23, 52:62), [55, 1]));
+
+          newdata = {olddate; overallrate; rate1; rate2; rate3};
+          output = horzcat(output, newdata);
+        end
+
+        spikeall = [];
         disp('new date!')
         previousdate =  newdate;
         goodmax = [];
-        for z = 1:hpcspikenum
-          hpcname = char(hpcspikenames(z));
-          if contains(hpcname,newdatechar) == 1
-            currentclusterhpc = HPCspikestructure.(hpcname);
-            hpcall = vertcat(hpcall, currentclusterhpc);
+        for z = 1:spikenum
+          name = char(spikenames(z));
+          if contains(name,newdatechar) == 1
+            currentcluster = structureofspikes.(name);
+            spikeall = vertcat(spikeall, currentcluster);
             end
         end
-        hpcall = sort(hpcall);
+      elseif k==spikenum
+        rate = normalizePosData(spikeall, oldpos , 4);
 
-        if (isfield(timestructure, (timeformateddate)) > isfield(timestructure, (velformateddate))==1)
-          time = [timestructure.(timeformateddate)];
-        else
-          time = [timestructure.(velformateddate)];
-          time = time(2,:);
-        end
+        overallrate = nanmean(reshape(rate, [size(rate,1)*size(rate,2), 1]));
+        rate1 = nanmean(reshape(rate(19:23, 31:41), [55, 1]));
+        rate2 = nanmean(reshape(rate(19:23, 41:52), [60, 1]));
+        rate3 = nanmean(reshape(rate(19:23, 52:62), [55, 1]));
 
-        spikestocompare= spiketrain(hpcall, time, .005);
-      end
-
-        clusterST= spiketrain(currentcluster, time, .005);
-        x = crosscorr(spikestocompare, clusterST, 'NumLags', 200);
-        maxcc = max(x(170:230));
-
-        newdata = {name; length(currentcluster); maxcc};
+        newdata = {olddate; overallrate; rate1; rate2; rate3};
         output = horzcat(output, newdata);
+
+      end
+        spikeall = sort(spikeall);
+
+        olddate = newdatechar;
+        oldpos = [posstructure.(posformateddate)];
+
 end
 
 f = output';

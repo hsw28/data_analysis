@@ -126,5 +126,7 @@ end
 
 
 %notabletimes = [starts; peaks; ends];
-notabletimes = [starts; ends];
+
+%notabletimes = [starts; ends];
+notabletimes = peaks;
 all = alltimes;

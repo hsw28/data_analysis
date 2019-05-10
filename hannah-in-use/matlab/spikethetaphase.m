@@ -1,8 +1,13 @@
-function f = spikethetaphase(cluster, lfp, time)
+function f = spikethetaphase(cluster, lfp, time, filt)
+  %put 1 if already filtered, 0 if need to filter
+
   [time,ia,ic] = unique(time);
   lfp = lfp(ia);
 
+if filt==0
 lfp = thetafilt412(lfp);
+end
+
 f = lfp;
 hilly = hilbert(lfp);
 f = hilly;

@@ -1,4 +1,4 @@
-function [f notes] = MASSthetaphase_mid3(structureofspikes, posstructure, timestructure, lfpstructure)
+2000function [f notes] = MASSthetaphase_mid3(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
   %finds theta phase for choice versus free in middle arm
 
@@ -89,7 +89,7 @@ for k=1:spikenum
           z = z+2;
       end
 
-      if length(newlfp)>175 & length(newcluster)>4
+      if length(newlfp)>2000 & length(newcluster)>8
       torewardkappa1(end+1) = spikethetaphase(newcluster, newlfp, newtime);
       else
         torewardkappa1(end+1) = NaN;
@@ -148,7 +148,7 @@ for k=1:spikenum
           z = z+2;
       end
 
-      if length(newlfp)>175 & length(newcluster)>4
+      if length(newlfp)>2000 & length(newcluster)>8
       torewardkappa2(end+1) = spikethetaphase(newcluster, newlfp, newtime);
       else
         torewardkappa2(end+1) = NaN;
@@ -207,7 +207,7 @@ for k=1:spikenum
           z = z+2;
       end
 
-      if length(newlfp)>175 & length(newcluster)>4
+      if length(newlfp)>2000 & length(newcluster)>8
       torewardkappa3(end+1) = spikethetaphase(newcluster, newlfp, (newtime));
 
       else
