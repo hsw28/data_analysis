@@ -1,6 +1,8 @@
-function [LSpeak kappavec] = MASS_spikethetaphase(LSspikestructure, HPCspikestructure, lfpstructure, timestructure)
+function [LSpeak kappavec] = MASS_spikethetaphase(LSspikestructure, HPCspikestructure, timestructure, lfpstructure, filter, varargin)
+  %for filter, put 0 if need to filter, 1 if don't need to. if you have already filtered it MUST ALSO BE HILBERT TRANSFORMED
+%varargin is if you already know hpc shift, you can put it in here
+shift = cell2mat(varargin);
 
-  figure
   hpcspikenames = fieldnames(HPCspikestructure);
   hpcspikenum = length(hpcspikenames);
 
@@ -54,54 +56,74 @@ function [LSpeak kappavec] = MASS_spikethetaphase(LSspikestructure, HPCspikestru
 
 
       if newdate ~= previousdate & isfield(timestructure, (timeformateddate))==1 & isfield(lfpstructure, (lfpformateddate))==1
+
         disp('new date!')
         previousdate =  newdate;
+
         time = [timestructure.(timeformateddate)];
           lfp = [lfpstructure.(lfpformateddate)];
+          if filter==0
           lfp = thetafilt412(lfp);
-          f = lfp;
-          hilly = hilbert(lfp);
+          lfp = hilbert(lfp);
+          end
 
+
+%%%%%%%%%%%%
+      if length(shift)<1
           %getting HPC
           goodmax = [];
           for z = 1:hpcspikenum
             hpcname = char(hpcspikenames(z));
             if contains(hpcname,newdatechar) == 1
               currentclusterhpc = HPCspikestructure.(hpcname);
-              hpctheta_phase = interp1(time(1:length(hilly)), unwrap(angle(hilly)), currentclusterhpc);
+              hpctheta_phase = interp1(time(1:length(lfp)), unwrap(angle(lfp)), currentclusterhpc);
               rad = limit2pi(hpctheta_phase(~isnan(hpctheta_phase)));
+              if length(rad)>1
               kappa = circ_kappa(rad);
-              if kappa>.1
-                histcounts(rad2deg(rad), [0:10:360]);
-                [M,I] = max(histcounts(rad2deg(rad), [0:10:360]));
-                goodmax(end+1) = (I*10)-5;
+              %if kappa>.1
+                histcounts(rad2deg(rad), [0:5:360]);
+                [M,I] = max(histcounts(rad2deg(rad), [0:5:360]));
+                goodmax(end+1) = (I*5)-2.5;
+              else
+                goodmax = NaN;
               end
             end
           end
+
+            goodmax = goodmax(~isnan(goodmax));
             maxrad = meanangle(goodmax); %this is max spiking
             maxrad = deg2rad(maxrad);
             %let us define that as phase 0-- so you subtract that phase from all others
+      else
+          maxrad = shift(1);
+      end
+%%%%%%%%%%%%%%%%%%%%%%%
 
           spikename = char(spikenames(k))
           currentcluster = LSspikestructure.(spikename);
-          theta_phase = interp1(time(1:length(hilly)), unwrap(angle(hilly)), currentcluster);
+          theta_phase = interp1(time(1:length(lfp)), unwrap(angle(lfp)), currentcluster);
           %f = theta_phase;
-          size(maxrad)
+
           theta_phase = theta_phase-maxrad(1); %subtracting for HPC
           rad = limit2pi(theta_phase(~isnan(theta_phase)));
+
           if length(rad)>1
+
             kappa = circ_kappa(rad);
             rayleigh = circ_rtest(rad);
             newdata = {spikename; length(LSspikestructure.(spikename)); kappa; rayleigh};
             output = horzcat(output, newdata);
             %figure
             %histogram(rad2deg(rad), 'BinWidth', 20, 'Normalization', 'probability')
+          else
+            kappa = NaN;
           end
+
       elseif newdate == previousdate
         disp('same date! will not refilter')
         spikename = char(spikenames(k))
         currentcluster = LSspikestructure.(spikename);
-        theta_phase = interp1(time(1:length(hilly)), unwrap(angle(hilly)), currentcluster);
+        theta_phase = interp1(time(1:length(lfp)), unwrap(angle(lfp)), currentcluster);
         theta_phase = theta_phase-maxrad; %subtracting for HPC
         rad = limit2pi(theta_phase(~isnan(theta_phase)));
         if length(rad)>1
@@ -111,17 +133,19 @@ function [LSpeak kappavec] = MASS_spikethetaphase(LSspikestructure, HPCspikestru
         output = horzcat(output, newdata);
         %figure
         %histogram(rad2deg(rad), 'BinWidth', 20, 'Normalization', 'probability')
+        else
+          kappa = NaN;
         end
       end
 
-
+%kappa
 
 %if kappa>=.3
-      kappavec(end+1) = kappa;
-    %  plot(histcounts(rad2deg(rad), [0:10:360], 'Normalization', 'probability'));
-    %  hold on
-      [M,I] = max(histcounts(rad2deg(rad), [0:10:360]));
-      LSpeak(end+1) = (I*10)-5;
+%      kappavec(end+1) = kappa;
+%      plot(histcounts(rad2deg(rad), [0:10:360], 'Normalization', 'probability'));
+%      hold on
+      [M,I] = max(histcounts(rad2deg(rad), [0:5:360]));
+      LSpeak(end+1) = (I*5)-2.5;
 %end
 
 

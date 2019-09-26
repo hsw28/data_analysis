@@ -26,7 +26,7 @@ tfxfy = [t x y fx fy];
 
 % go through and find times, assign fx fy values and position
 
-eventsize = size(event,2);
+eventsize = length(event);
 at = size(tfxfy);
 
 timevector = [];
@@ -72,17 +72,13 @@ while i <= eventsize
 			if m(end)>m(end-1)
 				break
 			end
-		end	
+		end
 	end
 
 i=i+1;
 
 end
 
-figure
-quiver(xposvector, yposvector, fxvector, fyvector)
+%figure
+%quiver(xposvector, yposvector, fxvector, fyvector)
 v = [timevector; xposvector; yposvector; fxvector; fyvector];
-
-
-
-

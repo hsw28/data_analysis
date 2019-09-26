@@ -1,23 +1,23 @@
-function [f notes] = MASSthetaphase_mid(structureofspikes, posstructure, timestructure, lfpstructure)
+function [f notes] = MASSthetaphase_mid_peak(structureofspikes, hpcspikesstructure, posstructure, timestructure, lfpstructure)
   %unfilted LFP
-  %combines all times in one direction then finds kappa, does NOT find for each trial individually
-  %finds kappa for choice versus free in middle arm (directional)
+  %finds theta phase for choice versus free in middle arm (directional)
 
 
 
+
+    hpcspikenames = fieldnames(hpcspikesstructure);
+    hpcspikenum = length(hpcspikenames);
 
 spikenames = fieldnames(structureofspikes);
 spikenum = length(spikenames);
 
 %plots = ceil(spikenum./3);
-output = {'cluster name'; 'length'; 'mean kappa to reward'; 'mean kappa away from reward'; 'mean phase to'; 'mean phase away'; 'std to'; 'std away'};
+output = {'cluster name'; 'length'; 'mean phase to'; 'mean phase away'};
 
 numpoint = [];
 allcaps =[];
 previousdate = 0;
 maxcc = [];
-allto = [];
-allaway = [];
 for k=1:spikenum
     name = char(spikenames(k))
     currentcluster = structureofspikes.(name);
@@ -58,11 +58,44 @@ for k=1:spikenum
       newdate = strsplit(newdate,'rat');
       newdate = char(newdate(1,2));
       newdate = str2num(newdate);
-
-      %if newdate ~= previousdate & isfield(timestructure, (timeformateddate))==1 & isfield(posstructure, (posformateddate))==1 & isfield(lfpstructure, (lfpformateddate))==1
-
       currentpos = posstructure.(posformateddate);
-      currentlfp = lfpstructure.(lfpformateddate);
+
+%%%%%%%%%%%%%
+      %find HPC amount to subtract for each date
+      if newdate ~= previousdate & isfield(timestructure, (timeformateddate))==1 & isfield(lfpstructure, (lfpformateddate))==1
+        disp('new date!')
+        previousdate =  newdate;          %getting HPC
+        time = [timestructure.(timeformateddate)];
+          lfp = [lfpstructure.(lfpformateddate)];
+          lfp = thetafilt412(lfp);
+          lfp = hilbert(lfp);
+
+          goodmax = [];
+          for z = 1:hpcspikenum
+            hpcname = char(hpcspikenames(z));
+          if contains(hpcname,newdatechar) == 1
+            currentclusterhpc = hpcspikesstructure.(hpcname);
+            hpctheta_phase = interp1(time(1:length(lfp)), unwrap(angle(lfp)), currentclusterhpc);
+            rad = limit2pi(hpctheta_phase(~isnan(hpctheta_phase)));
+            if length(rad)>1
+            kappa = circ_kappa(rad);
+            %if kappa>.1
+              histcounts(rad2deg(rad), [0:5:360]);
+              [M,I] = max(histcounts(rad2deg(rad), [0:5:360]));
+              goodmax(end+1) = (I*5)-2.5;
+            else
+              goodmax = NaN;
+            end
+          end
+        end
+          goodmax = goodmax(~isnan(goodmax));
+          maxrad = meanangle(goodmax); %this is max spiking
+          maxrad = deg2rad(maxrad);
+
+          [toreward, awayreward] = middletimes(currentpos, 1);
+    end
+%%%%%%%%%%%%%
+      currentlfp = lfp;
       currenttime = timestructure.(timeformateddate);
       currentcluster = structureofspikes.(name);
 
@@ -70,7 +103,7 @@ for k=1:spikenum
         warning('your time must be same as your lfp')
       end
 
-      [toreward, awayreward] = middletimes(currentpos, 1);
+
 
       torewardkappa = [];
       z=1;
@@ -95,14 +128,20 @@ for k=1:spikenum
       end
 
       if length(newlfp)>2000 & length(newcluster)>12
-      [torewardkappa(end+1) meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+      current_LS.(name) = newcluster;
+      current_LFP.(lfpformateddate) = newlfp;
+      current_TIME.(timeformateddate) = newtime;
+      meanphasetowards(end+1) = MASS_spikethetaphase(current_LS, hpcspikesstructure, current_TIME, current_LFP, 1, maxrad);
+      %[torewardkappa(end+1) meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+      current_LS = rmfield(current_LS, (name));
+      current_LFP = rmfield(current_LFP, (lfpformateddate));
+      current_TIME = rmfield(current_TIME, (timeformateddate));
       else
         torewardkappa(end+1) = NaN;
         meanphasetowards(end+1) = NaN;
         devtowards(end+1) = NaN;
       end
       numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa(end);
 
       %now away from reward
       awayrewardkappa = [];
@@ -112,7 +151,6 @@ for k=1:spikenum
       newcluster = [];
       meanphaseaway = [];
       devaway = [];
-
       while z<=length(awayreward)
           [cc indexmin] = min(abs(awayreward(z)-currenttime));
           [cc indexmax] = min(abs(awayreward(z+1)-currenttime));
@@ -129,20 +167,26 @@ for k=1:spikenum
       end
 
       if length(newlfp)>2000 & length(newcluster)>12
-      [awayrewardkappa(end+1) meanphaseaway(end+1) devaway(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+        current_LS.(name) = newcluster;
+        current_LFP.(lfpformateddate) = newlfp;
+        current_TIME.(timeformateddate) = newtime;
+        meanphaseaway(end+1) = MASS_spikethetaphase(current_LS, hpcspikesstructure, current_TIME, current_LFP, 1, maxrad);
+      %[awayrewardkappa(end+1) meanphaseaway(end+1) devaway(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+      current_LS = rmfield(current_LS, (name));
+      current_LFP = rmfield(current_LFP, (lfpformateddate));
+      current_TIME = rmfield(current_TIME, (timeformateddate));
       else
       awayrewardkappa(end+1) = NaN;
       meanphaseaway(end+1) = NaN;
       devaway(end+1) = NaN;
       end
       numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa(end);
 
       %av_to_reward = mean(torewardkappa(~isnan(torewardkappa)));
       %av_away_reward = mean(awayrewardkappa(~isnan(awayrewardkappa)));
 
       dif = torewardkappa-awayrewardkappa;
-      newdata = {name; length(currentcluster); torewardkappa; awayrewardkappa; meanphasetowards; meanphaseaway; devtowards; devaway};
+      newdata = {name; length(currentcluster); meanphasetowards; meanphaseaway};
       output = horzcat(output, newdata);
   end
 

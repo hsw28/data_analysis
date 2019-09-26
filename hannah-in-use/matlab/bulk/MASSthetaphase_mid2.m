@@ -1,6 +1,6 @@
-function [f notes] = MASSthetaphase_mid(structureofspikes, posstructure, timestructure, lfpstructure)
+function [f allto allaway] = MASSthetaphase_mid2(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
-  %combines all times in one direction then finds kappa, does NOT find for each trial individually
+  %combines all times in one direction then finds kappa, DOES find for each trial individually
   %finds kappa for choice versus free in middle arm (directional)
 
 
@@ -10,7 +10,7 @@ spikenames = fieldnames(structureofspikes);
 spikenum = length(spikenames);
 
 %plots = ceil(spikenum./3);
-output = {'cluster name'; 'length'; 'mean kappa to reward'; 'mean kappa away from reward'; 'mean phase to'; 'mean phase away'; 'std to'; 'std away'};
+output = {'cluster name'; 'length'; 'mean kappa to reward'; 'mean kappa away from reward'; 'mean phase to'; 'mean phase away'};
 
 numpoint = [];
 allcaps =[];
@@ -79,30 +79,33 @@ for k=1:spikenum
       newcluster = [];
       meanphasetowards = [];
       devtowards = [];
+
       while z<=length(toreward)
           [cc indexmin] = min(abs(toreward(z)-currenttime));
           [cc indexmax] = min(abs(toreward(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = currentlfp(indexmin:indexmax);
+          newtime = currenttime(indexmin:indexmax);
 
           [cc indexmin] = min(abs(toreward(z)-currentcluster));
           [cc indexmax] = min(abs(toreward(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
-          end
 
+          newcluster = currentcluster(indexmin:indexmax);
+
+          if length(newlfp)>1000 & length(newcluster)>6 %good with 6
+          [torewardkappa(end+1) meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+          allto(end+1) = torewardkappa(end);
+          else
+            torewardkappa(end+1) = NaN;
+            meanphasetowards(end+1) = NaN;
+            devtowards = NaN;
+            allto(end+1) = NaN;
+          end
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>12
-      [torewardkappa(end+1) meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
-      else
-        torewardkappa(end+1) = NaN;
-        meanphasetowards(end+1) = NaN;
-        devtowards(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa(end);
+      torewardkappa = nanmean(torewardkappa);
+      meanphasetowards = nanmean(meanphasetowards);
+
 
       %now away from reward
       awayrewardkappa = [];
@@ -116,36 +119,33 @@ for k=1:spikenum
       while z<=length(awayreward)
           [cc indexmin] = min(abs(awayreward(z)-currenttime));
           [cc indexmax] = min(abs(awayreward(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = currentlfp(indexmin:indexmax);
+          newtime = currenttime(indexmin:indexmax);
 
           [cc indexmin] = min(abs(awayreward(z)-currentcluster));
           [cc indexmax] = min(abs(awayreward(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = currentcluster(indexmin:indexmax);
+          if length(newlfp)>500 & length(newcluster)>6 %good with 6
+          [awayrewardkappa(end+1) meanphaseaway(end+1) devaway(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+          allaway(end+1) = awayrewardkappa(end);
+          else
+            awayrewardkappa(end+1) = NaN;
+            meanphaseaway(end+1) = NaN;
+            devaway = NaN;
+            allaway(end+1) = NaN;
           end
-
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>12
-      [awayrewardkappa(end+1) meanphaseaway(end+1) devaway(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
-      else
-      awayrewardkappa(end+1) = NaN;
-      meanphaseaway(end+1) = NaN;
-      devaway(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa(end);
+      awayrewardkappa = nanmean(awayrewardkappa);
+      meanphaseaway = nanmean(meanphaseaway);
 
-      %av_to_reward = mean(torewardkappa(~isnan(torewardkappa)));
-      %av_away_reward = mean(awayrewardkappa(~isnan(awayrewardkappa)));
 
       dif = torewardkappa-awayrewardkappa;
-      newdata = {name; length(currentcluster); torewardkappa; awayrewardkappa; meanphasetowards; meanphaseaway; devtowards; devaway};
+      newdata = {name; length(currentcluster); torewardkappa; awayrewardkappa; meanphasetowards; meanphaseaway};
       output = horzcat(output, newdata);
   end
 
   f = output';
-    save('kappa_mid_prefphase.mat','f')
+    save('kappa_mid_prefphase2.mat','f')
   notes = [numpoint; allcaps];

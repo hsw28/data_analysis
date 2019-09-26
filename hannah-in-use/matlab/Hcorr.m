@@ -12,6 +12,7 @@ twonorm = two-mean(two);
 
 [cor, lag] = xcorr(onenorm, twonorm, 'coeff');
 
+lag = (lag)./30;
 %plot(lag./2, cor)
 plot(lag, cor)
 

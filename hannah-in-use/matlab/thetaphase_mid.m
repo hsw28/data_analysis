@@ -1,5 +1,6 @@
 function [torewardkappa, awayrewardkappa] = thetaphase_mid(cluster, pos, time, lfp)
   %unfilted LFP
+  %returns the mean kappa away from and towards reward
 
 if length(lfp)~=length(time)
   error('your time must be same as your lfp')

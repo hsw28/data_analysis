@@ -14,13 +14,13 @@ function [mu ul ll] = circ_mean(alpha, w, dim)
 %   Output:
 %     mu		mean direction
 %     ul    upper 95% confidence limit
-%     ll    lower 95% confidence limit 
+%     ll    lower 95% confidence limit
 %
 % PHB 7/6/2008
 %
 % References:
 %   Statistical analysis of circular data, N. I. Fisher
-%   Topics in circular statistics, S. R. Jammalamadaka et al. 
+%   Topics in circular statistics, S. R. Jammalamadaka et al.
 %   Biostatistical Analysis, J. H. Zar
 %
 % Circular Statistics Toolbox for Matlab
@@ -32,15 +32,19 @@ if nargin < 3
   dim = 1;
 end
 
+alpha = alpha(~isnan(alpha));
+
+
 if nargin < 2 || isempty(w)
   % if no specific weighting has been specified
   % assume no binning has taken place
 	w = ones(size(alpha));
 else
-  if size(w,2) ~= size(alpha,2) || size(w,1) ~= size(alpha,1) 
+  if size(w,2) ~= size(alpha,2) || size(w,1) ~= size(alpha,1)
     error('Input dimensions do not match');
-  end 
+  end
 end
+
 
 % compute weighted sum of cos and sin of angles
 r = sum(w.*exp(1i*alpha),dim);

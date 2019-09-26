@@ -1,4 +1,4 @@
-2000function [f notes] = MASSthetaphase_mid3(structureofspikes, posstructure, timestructure, lfpstructure)
+function f  = MASSthetaphase_mid3(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
   %finds theta phase for choice versus free in middle arm
 
@@ -69,7 +69,8 @@ for k=1:spikenum
 
       [toreward1, awayreward1, toreward2, awayreward2, toreward3, awayreward3] = middletimes3(currentpos);
 
-      torewardkappa1 = [];
+
+      torewardkappa1temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -77,28 +78,26 @@ for k=1:spikenum
       while z<=length(toreward1)
           [cc indexmin] = min(abs(toreward1(z)-currenttime));
           [cc indexmax] = min(abs(toreward1(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(toreward1(z)-currentcluster));
           [cc indexmax] = min(abs(toreward1(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+
+          if length(newcluster)>6 && length(newlfp)>300
+          torewardkappa1temp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+          torewardkappa1temp(end+1) = NaN;
           end
 
           z = z+2;
       end
+      torewardkappa1 = nanmean(torewardkappa1temp);
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      torewardkappa1(end+1) = spikethetaphase(newcluster, newlfp, newtime);
-      else
-        torewardkappa1(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa1(end);
 
       %now away from reward
-      awayrewardkappa1 = [];
+      awayrewardkappa1temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -106,29 +105,28 @@ for k=1:spikenum
       while z<=length(awayreward1)
           [cc indexmin] = min(abs(awayreward1(z)-currenttime));
           [cc indexmax] = min(abs(awayreward1(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(awayreward1(z)-currentcluster));
           [cc indexmax] = min(abs(awayreward1(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = currentcluster(indexmin:indexmax);
+
+          if length(newcluster)>6 && length(newlfp)>300
+          awayrewardkappa1temp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+          awayrewardkappa1temp(end+1) = NaN;
           end
 
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      awayrewardkappa1(end+1) = spikethetaphase(newcluster, newlfp, newtime);
-      else
-      awayrewardkappa1(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa1(end);
+      awayrewardkappa1 = nanmean(awayrewardkappa1temp);
+
 
       %%%%%%%%%%%%%%%%%
 
-      torewardkappa2 = [];
+      torewardkappa2temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -136,28 +134,27 @@ for k=1:spikenum
       while z<=length(toreward2)
           [cc indexmin] = min(abs(toreward2(z)-currenttime));
           [cc indexmax] = min(abs(toreward2(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(toreward2(z)-currentcluster));
           [cc indexmax] = min(abs(toreward2(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+
+          if length(newcluster)>6 && length(newlfp)>300
+          torewardkappa2temp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+          torewardkappa2temp(end+1) = NaN;
           end
 
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      torewardkappa2(end+1) = spikethetaphase(newcluster, newlfp, newtime);
-      else
-        torewardkappa2(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa2(end);
+      torewardkappa2 = nanmean(torewardkappa2temp);
+
 
       %now away from reward
-      awayrewardkappa2 = [];
+      awayrewardkappa2temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -165,29 +162,28 @@ for k=1:spikenum
       while z<=length(awayreward2)
           [cc indexmin] = min(abs(awayreward2(z)-currenttime));
           [cc indexmax] = min(abs(awayreward2(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(awayreward2(z)-currentcluster));
           [cc indexmax] = min(abs(awayreward2(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
-          end
+          newcluster = [currentcluster(indexmin:indexmax)];
 
+          if length(newcluster)>6 && length(newlfp)>300
+          awayrewardkappa2temp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+          awayrewardkappa2temp(end+1) = NaN;
+          end
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      awayrewardkappa2(end+1) = spikethetaphase(newcluster, newlfp, newtime);
-      else
-      awayrewardkappa2(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa2(end);
+      awayrewardkappa2 = nanmean(awayrewardkappa2temp);
+
+
 
       %%%%%%%%%%%%%%%%%
 
-      torewardkappa3 = [];
+      torewardkappa3temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -195,29 +191,27 @@ for k=1:spikenum
       while z<=length(toreward3)
           [cc indexmin] = min(abs(toreward3(z)-currenttime));
           [cc indexmax] = min(abs(toreward3(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(toreward3(z)-currentcluster));
           [cc indexmax] = min(abs(toreward3(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+
+          if length(newcluster)>6 && length(newlfp)>300
+          torewardkappa3temp(end+1) = spikethetaphase(newcluster, newlfp, (newtime), 0);
+          else
+            torewardkappa3temp(end+1) = NaN;
           end
 
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      torewardkappa3(end+1) = spikethetaphase(newcluster, newlfp, (newtime));
+      torewardkappa3 = nanmean(torewardkappa3temp);
 
-      else
-        torewardkappa3(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa3(end);
 
       %now away from reward
-      awayrewardkappa3 = [];
+      awayrewardkappa3temp = [];
       z=1;
       newlfp = [];
       newtime = [];
@@ -225,25 +219,24 @@ for k=1:spikenum
       while z<=length(awayreward3)
           [cc indexmin] = min(abs(awayreward3(z)-currenttime));
           [cc indexmax] = min(abs(awayreward3(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(awayreward3(z)-currentcluster));
           [cc indexmax] = min(abs(awayreward3(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+
+          if length(newcluster)>6 && length(newlfp)>300
+          awayrewardkappa3temp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+          awayrewardkappa3temp(end+1) = NaN;
           end
 
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>8
-      awayrewardkappa3(end+1) = spikethetaphase(newcluster, newlfp, newtime);
-      else
-      awayrewardkappa3(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa3(end);
+      awayrewardkappa3 = nanmean(awayrewardkappa3temp);
+
 
       %%%%%%%%%%
 
@@ -252,4 +245,5 @@ for k=1:spikenum
   end
 
   f = output';
-  notes = [numpoint; allcaps];
+
+  save('kappa3.mat','f')

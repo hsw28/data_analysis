@@ -9,13 +9,18 @@ if size(powerdata,1)<size(powerdata,2)
 end
 
 
+
 powerdata = powerdata';
-tme = posData(:,1);
-%Power = assignvelOLD(tme, powerdata);
+tme = powerdata(2,:);
+posData = assignpos(tme, posData);
 Power = powerdata(1,:);
-Power = Power';
-posData = posData(1:length(Power), :);
-size(Power);
+%Power = Power';
+
+maxtime = max(posData(:,1));
+posData = [posData(1:end-2, :); [maxtime+.03, 0, 0]; [maxtime+.06, 1500, 1500]];
+
+
+
 
 psize = 3.5 * dim; %some REAL ratio of pixels to cm
 xmax = max(posData(:,2));
@@ -39,6 +44,10 @@ for i = 1:xbins
 
 		end
 end
+
+
+rate = avpower;
+
 
 %heat map stuff
 figure

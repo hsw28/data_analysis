@@ -24,4 +24,4 @@ end
 
 
 a = [accvector; timevector];
-size(a)
+size(a);

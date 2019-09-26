@@ -5,7 +5,7 @@ function med = circ_median(alpha,dim)
 %
 %   Input:
 %     alpha	sample of angles in radians
-%     [dim  compute along this dimension, default is 1, must 
+%     [dim  compute along this dimension, default is 1, must
 %           be either 1 or 2 for circ_median]
 %
 %   Output:
@@ -28,6 +28,8 @@ if nargin < 2
   dim = 1;
 end
 
+alpha = alpha(~isnan(alpha));
+
 M = size(alpha);
 med = NaN(M(3-dim),1);
 for i=1:M(3-dim)
@@ -38,7 +40,7 @@ for i=1:M(3-dim)
   else
     error('circ_median only works along first two dimensions')
   end
-  
+
   beta = mod(beta,2*pi);
   n = size(beta,1);
 
@@ -63,7 +65,7 @@ for i=1:M(3-dim)
   if abs(circ_dist(circ_mean(beta),md)) > abs(circ_dist(circ_mean(beta),md+pi))
     md = mod(md+pi,2*pi);
   end
-  
+
   med(i) = md;
 end
 

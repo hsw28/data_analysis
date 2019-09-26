@@ -32,9 +32,11 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 %only find occupancy map if one hasn't been provided
 
 	xmax = max(posData(:,2));
+	xmin = min(posData(:,2));
 	ymax = max(posData(:,3));
-	xbins = ceil(xmax/psize);
-	ybins = ceil(ymax/psize);
+	ymin = min(posData(:,3));
+	xbins = ceil((xmax)/psize);
+	ybins = ceil((ymax)/psize);
 
 	time = zeros(ybins,xbins);
 	events = zeros(ybins,xbins);
@@ -92,5 +94,5 @@ set(gca, 'ydir', 'reverse');
 if minratefive ~= maxratefive
 		set(gca, 'clim', [minratefive*1.5, maxratefive*.75]);
 end
-axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
+%axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
 colorbar;

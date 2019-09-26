@@ -1,10 +1,8 @@
-function f= veltimes(vel, pos, v, l)
+function f= veltimes(vel, v, l)
 
   % tells you the time animal was below a particular velocity v
   % l is time in seconds you want animal to have to be in end to have it count
 
-x = pos(:, 2);
-y = pos(:, 3);
 
 t = vel(2,:);
 vel = vel(1,:);
@@ -14,9 +12,10 @@ n = 0;
 nn = 0;
 rewardentrance = [];
 rewardlengths = [];
+rewardexit =[];
 while k<=length(vel)
     % find when animal is at reward areas
-    if (vel(k)<v) && x(k) < 750 | (y(k) < 560 && y(k) > 180)
+    if (vel(k)<v)
 
       % looks to see when animal leaves area
       i = k;
@@ -33,6 +32,7 @@ while k<=length(vel)
           nn = nn + (t(i)-t(k)); %adding up how much time animal spends there
           rewardlengths(end+1) = (t(i)-t(k));
           rewardentrance(end+1) = t(k);
+          rewardexit(end+1) = t(i);
       end
       k = i;
     end
@@ -40,8 +40,8 @@ while k<=length(vel)
 k = k+1;
 end
 
-reward_entrances = n
-reward_average_time = nn/n
+times_in_vel = n
+average_time = nn/n
 
 
-f = [rewardentrance' rewardlengths'];
+f = [rewardentrance' rewardexit' rewardlengths'];

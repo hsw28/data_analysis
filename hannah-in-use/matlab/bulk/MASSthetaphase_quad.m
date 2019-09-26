@@ -1,14 +1,13 @@
-function [f notes] = MASSthetaphase_quad(structureofspikes, posstructure, timestructure, lfpstructure)
+function f  = MASSthetaphase_quad(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
   %finds theta phase for forced arms versus middle versus reward arms vs choice points
-
 
 
 
 spikenames = fieldnames(structureofspikes);
 spikenum = length(spikenames);
 
-output = {'cluster name'; 'length'; 'forcedarms kappa'; 'forcedpoint'; 'middle'; 'choicearms'; 'freepoint'};
+output = {'cluster name'; 'length'; 'forcedarms kappa'; 'middle'; 'choicearms'};
 %output = {'cluster name'; 'length'; 'forcedarms kappa'; 'middle'; 'choicearms'};
 
 numpoint = [];
@@ -74,72 +73,35 @@ for k=1:spikenum
       end
 
 
-
-      forcedarmskappa = [];
       z=1;
       newlfp = [];
       newtime = [];
       newcluster = [];
+      forcedarmskappatemp = [];
       while z<=length(forcedarms)
           [cc indexmin] = min(abs(forcedarms(z)-currenttime));
           [cc indexmax] = min(abs(forcedarms(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(forcedarms(z)-currentcluster));
           [cc indexmax] = min(abs(forcedarms(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+          if length(newcluster)>6
+            forcedarmskappatemp(end+1) = spikethetaphase(newcluster, newlfp, newtime, 1);
+          else
+            forcedarmskappatemp(end+1) = NaN;
           end
-
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>12
-      forcedarmskappa(end+1) = spikethetaphase(newcluster, newlfp, newtime, 1);
-      else
-        forcedarmskappa(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = forcedarmskappa(end);
+      forcedarmskappa = nanmean(forcedarmskappatemp);
 
 
 %%%%%%%%%%%%
 
-
-      %now away from reward
-      forcedpointkappa = [];
-      z=1;
-      newlfp = [];
-      newtime = [];
-      newcluster = [];
-      while z<=length(forcedpoint)
-          [cc indexmin] = min(abs(forcedpoint(z)-currenttime));
-          [cc indexmax] = min(abs(forcedpoint(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
-
-          [cc indexmin] = min(abs(forcedpoint(z)-currentcluster));
-          [cc indexmax] = min(abs(forcedpoint(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
-          end
-
-          z = z+2;
-      end
-
-      if length(newlfp)>2000 & length(newcluster)>8
-      forcedpointkappa(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
-      else
-      forcedpointkappa(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =forcedpointkappa(end);
-
-%%%%%%%%%%%%
-
-%now away from reward
-middlekappa = [];
+%now middle
+middlekappatemp = [];
 z=1;
 newlfp = [];
 newtime = [];
@@ -147,29 +109,26 @@ newcluster = [];
 while z<=length(middle)
     [cc indexmin] = min(abs(middle(z)-currenttime));
     [cc indexmax] = min(abs(middle(z+1)-currenttime));
-    newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-    newtime = [newtime, currenttime(indexmin:indexmax)];
+    newlfp = [currentlfp(indexmin:indexmax)];
+    newtime = [currenttime(indexmin:indexmax)];
 
     [cc indexmin] = min(abs(middle(z)-currentcluster));
     [cc indexmax] = min(abs(middle(z+1)-currentcluster));
-    if length(currentcluster)>=1
-    newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+    newcluster = [currentcluster(indexmin:indexmax)];
+    if length(newcluster)>6
+    middlekappatemp(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
+    else
+    middlekappatemp(end+1) = NaN;
     end
-
     z = z+2;
 end
 
-if length(newlfp)>2000 & length(newcluster)>8
-middlekappa(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
-else
-middlekappa(end+1) = NaN;
-end
-numpoint(end+1) = length(newcluster);
-allcaps(end+1) =middlekappa(end);
+middlekappa = nanmean(middlekappatemp);
+
 
 %%%%%%%%%%%%
 %now away from reward
-choicearmskappa = [];
+choicearmskappatemp = [];
 z=1;
 newlfp = [];
 newtime = [];
@@ -177,60 +136,24 @@ newcluster = [];
 while z<=length(choicearms)
     [cc indexmin] = min(abs(choicearms(z)-currenttime));
     [cc indexmax] = min(abs(choicearms(z+1)-currenttime));
-    newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-    newtime = [newtime, currenttime(indexmin:indexmax)];
+    newlfp = [currentlfp(indexmin:indexmax)];
+    newtime = [currenttime(indexmin:indexmax)];
 
     [cc indexmin] = min(abs(choicearms(z)-currentcluster));
     [cc indexmax] = min(abs(choicearms(z+1)-currentcluster));
-    if length(currentcluster)>=1
-    newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+    newcluster = currentcluster(indexmin:indexmax);
+    if length(newcluster)>6
+    choicearmskappatemp(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
+    else
+    choicearmskappatemp(end+1) = NaN;
     end
-
     z = z+2;
 end
-
-if length(newlfp)>2000 & length(newcluster)>8
-choicearmskappa(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
-else
-choicearmskappa(end+1) = NaN;
-end
-numpoint(end+1) = length(newcluster);
-allcaps(end+1) =choicearmskappa(end);
-
-%%%%%%%%%%%%
-%now away from reward
-
-freepointkappa = [];
-z=1;
-newlfp = [];
-newtime = [];
-newcluster = [];
-while z<=length(freepoint)
-    [cc indexmin] = min(abs(freepoint(z)-currenttime));
-    [cc indexmax] = min(abs(freepoint(z+1)-currenttime));
-    newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-    newtime = [newtime, currenttime(indexmin:indexmax)];
-
-    [cc indexmin] = min(abs(freepoint(z)-currentcluster));
-    [cc indexmax] = min(abs(freepoint(z+1)-currentcluster));
-    if length(currentcluster)>=1
-    newcluster = [newcluster; currentcluster(indexmin:indexmax)];
-    end
-
-    z = z+2;
-end
-
-if length(newlfp)>2000 & length(newcluster)>8
-freepointkappa(end+1) = spikethetaphase(newcluster, newlfp, newtime,1);
-else
-freepointkappa(end+1) = NaN;
-end
-numpoint(end+1) = length(newcluster);
-allcaps(end+1) =freepointkappa(end);
+    choicearmskappa = nanmean(choicearmskappatemp);
 
 %%%%%%%%%%%%
 
-      newdata = {name; length(currentcluster); forcedarmskappa; forcedpointkappa; middlekappa; choicearmskappa; freepointkappa};
+      newdata = {name; length(currentcluster); forcedarmskappa; middlekappa; choicearmskappa};
 %      newdata = {name; length(currentcluster); forcedarmskappa; middlekappa; choicearmskappa};
 
       output = horzcat(output, newdata);
@@ -238,5 +161,7 @@ allcaps(end+1) =freepointkappa(end);
 previousdate =  newdate;
   end
 
+
   f = output';
+    save('kappa_quad.mat','f')
   notes = [numpoint; allcaps];

@@ -1,7 +1,6 @@
-function [f notes] = MASSthetaphase_mid(structureofspikes, posstructure, timestructure, lfpstructure)
+function f = MASSthetaphase_trials(structureofspikes, posstructure, timestructure, lfpstructure)
   %unfilted LFP
-  %combines all times in one direction then finds kappa, does NOT find for each trial individually
-  %finds kappa for choice versus free in middle arm (directional)
+  %finds kappa for choice direction on middle stem by trial, so you can compare correct and incorrect trials
 
 
 
@@ -9,15 +8,17 @@ function [f notes] = MASSthetaphase_mid(structureofspikes, posstructure, timestr
 spikenames = fieldnames(structureofspikes);
 spikenum = length(spikenames);
 
+posnames = fieldnames(posstructure);
+posnum = length(posnames);
+
 %plots = ceil(spikenum./3);
-output = {'cluster name'; 'length'; 'mean kappa to reward'; 'mean kappa away from reward'; 'mean phase to'; 'mean phase away'; 'std to'; 'std away'};
+%output = {'cluster name'; 'length'; 'mean kappa to reward'; 'mean kappa away from reward'; 'mean phase to'; 'mean phase away'; 'std to'; 'std away'};
 
 numpoint = [];
 allcaps =[];
 previousdate = 0;
 maxcc = [];
-allto = [];
-allaway = [];
+
 for k=1:spikenum
     name = char(spikenames(k))
     currentcluster = structureofspikes.(name);
@@ -48,104 +49,95 @@ for k=1:spikenum
       % formats date to be same as in time structure: date_2015_08_01_position
       posformateddate = strcat(date, '_position');
       posformateddate = strcat('date_', posformateddate);
+
+      newdatechar = char(posformateddate);
       % formats lfp to be same as in lfp structure: date_2015_08_01_position
       lfpformateddate = strcat(date, '_lfp');
       lfpformateddate = strcat('date_', lfpformateddate);
 
-      newdatechar = date;
+      newdatechar = strcat(date, '_lfp');
       newdate = {date};
       newdate = char(strrep(newdate,'_',''));
       newdate = strsplit(newdate,'rat');
-      newdate = char(newdate(1,2));
-      newdate = str2num(newdate);
 
-      %if newdate ~= previousdate & isfield(timestructure, (timeformateddate))==1 & isfield(posstructure, (posformateddate))==1 & isfield(lfpstructure, (lfpformateddate))==1
+      newdatechar2 = char(newdate(1,2));
+      newdate = str2num(newdatechar2);
+    %  newdatechar = char(strcat('date_', char(newdate)));
 
       currentpos = posstructure.(posformateddate);
       currentlfp = lfpstructure.(lfpformateddate);
       currenttime = timestructure.(timeformateddate);
       currentcluster = structureofspikes.(name);
 
+
+      if newdate ~= previousdate
+
+        previousdate = newdate;
+        if k>1
+        %MyStruct.(previousdatechar) = [nanmean(MyStruct.(previousdatechar)); toreward([1:2:end])];
+        MyStruct.(previousdatechar) = MyStruct.(previousdatechar)(1:dayspikecount-1, :);
+        fprintf('new date')
+        end
+        [toreward, awayreward] = middletimes(currentpos, 1);
+        dayspikecount = 1;
+        %MyStruct.newdate = newdatechar;
+        MyStruct.(newdatechar) = NaN(50, length(toreward)./2);
+      end
+
+      previousdatechar = newdatechar;
+
       if length(currentlfp)~=length(currenttime)
         warning('your time must be same as your lfp')
       end
 
-      [toreward, awayreward] = middletimes(currentpos, 1);
 
-      torewardkappa = [];
       z=1;
       newlfp = [];
       newtime = [];
       newcluster = [];
       meanphasetowards = [];
       devtowards = [];
+
+      %%%
+
       while z<=length(toreward)
           [cc indexmin] = min(abs(toreward(z)-currenttime));
           [cc indexmax] = min(abs(toreward(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
+          newlfp = [currentlfp(indexmin:indexmax)];
+          newtime = [currenttime(indexmin:indexmax)];
 
           [cc indexmin] = min(abs(toreward(z)-currentcluster));
           [cc indexmax] = min(abs(toreward(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
+          newcluster = [currentcluster(indexmin:indexmax)];
+
+          if length(newlfp)>1000 & length(newcluster)>6
+          [torewardkappa meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
+          else
+            torewardkappa = NaN;
+            meanphasetowards = NaN;
+            devtowards = NaN;
           end
+
+
+          %MyStruct.(newdatechar)(dayspikecount, (z+1)/2, k) = torewardkappa;
+          MyStruct.(newdatechar)(dayspikecount, (z+1)/2) = torewardkappa;
+
 
           z = z+2;
       end
 
-      if length(newlfp)>2000 & length(newcluster)>12
-      [torewardkappa(end+1) meanphasetowards(end+1) devtowards(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
-      else
-        torewardkappa(end+1) = NaN;
-        meanphasetowards(end+1) = NaN;
-        devtowards(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) = torewardkappa(end);
+      dayspikecount = dayspikecount+1;
 
-      %now away from reward
-      awayrewardkappa = [];
-      z=1;
-      newlfp = [];
-      newtime = [];
-      newcluster = [];
-      meanphaseaway = [];
-      devaway = [];
-
-      while z<=length(awayreward)
-          [cc indexmin] = min(abs(awayreward(z)-currenttime));
-          [cc indexmax] = min(abs(awayreward(z+1)-currenttime));
-          newlfp = [newlfp; currentlfp(indexmin:indexmax)];
-          newtime = [newtime, currenttime(indexmin:indexmax)];
-
-          [cc indexmin] = min(abs(awayreward(z)-currentcluster));
-          [cc indexmax] = min(abs(awayreward(z+1)-currentcluster));
-          if length(currentcluster)>=1
-          newcluster = [newcluster; currentcluster(indexmin:indexmax)];
-          end
-
-          z = z+2;
-      end
-
-      if length(newlfp)>2000 & length(newcluster)>12
-      [awayrewardkappa(end+1) meanphaseaway(end+1) devaway(end+1)] = spikethetaphase(newcluster, newlfp, newtime, 0);
-      else
-      awayrewardkappa(end+1) = NaN;
-      meanphaseaway(end+1) = NaN;
-      devaway(end+1) = NaN;
-      end
-      numpoint(end+1) = length(newcluster);
-      allcaps(end+1) =awayrewardkappa(end);
-
-      %av_to_reward = mean(torewardkappa(~isnan(torewardkappa)));
-      %av_away_reward = mean(awayrewardkappa(~isnan(awayrewardkappa)));
-
-      dif = torewardkappa-awayrewardkappa;
-      newdata = {name; length(currentcluster); torewardkappa; awayrewardkappa; meanphasetowards; meanphaseaway; devtowards; devaway};
-      output = horzcat(output, newdata);
+    %  newdata = {name; length(currentcluster); torewardkappa; awayrewardkappa; meanphasetowards; meanphaseaway; devtowards; devaway};
+    %  output = horzcat(output, newdata);
   end
 
-  f = output';
-    save('kappa_mid_prefphase.mat','f')
-  notes = [numpoint; allcaps];
+MyStruct.(newdatechar) = MyStruct.(newdatechar)(1:dayspikecount-1, :);
+
+%MyStruct.(newdatechar) = [nanmean(MyStruct.(newdatechar)); toreward([1:2:end])];
+
+f = MyStruct;
+
+%  f = output';
+%    save('kappa_mid_prefphase.mat','f')
+%  notes = [numpoint; allcaps];

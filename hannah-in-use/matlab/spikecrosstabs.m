@@ -35,9 +35,10 @@ m = {'compare'; 'Chi p value'; 'Fisher Test p value'; 'Fisher Odds Ratio'};
 while q <= numattributes
   poppercentbelow = length(find(infomatrix(:,q)=='b'))/numcells;
   for z =  q+1:numattributes
-      z
-      (infomatrix(:,z));
+    infomatrix(:,q)
+
       [tbl,chi2,p,labels] = crosstab(infomatrix(:,q), infomatrix(:,z));
+
       [h,tp,stats] = fishertest(tbl);
       % convert to percents
       %tbl = tbl./numcells;

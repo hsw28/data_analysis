@@ -1,4 +1,6 @@
-function f = MASSnormalizePosData(spikestructure, posstructure, dim)
+function f = MASSnormalizePosDataSUMMED(spikestructure, posstructure, dim)
+
+%sums accross all inputted data
 
 %This function bins event data based on a user input bin size and
 %normalizes based on total time spent in bin
@@ -46,75 +48,75 @@ for k = 1:spikenum
     posformateddate = strcat(date, '_position');
     posformateddate = strcat('date_', posformateddate);
 
-    chart = normalizePosData(spikestructure.(name), posstructure.(posformateddate), dim);
+    currentpos = posstructure.(posformateddate);
+    maxtime = max(currentpos(:,1));
+
+    currentpos = [currentpos; [maxtime+.03, 0, 0]; [maxtime+.06, 1500, 1500]];
+
+    chart = normalizePosData(spikestructure.(name), currentpos, dim);
 
     sigma = 1; % set sigma to the value you need
-    sz = 2*ceil(2.6 * sigma) + 1; % See note below
+    %sz = 2*ceil(2.6 * sigma) + 1; % See note below
+    sz = 3;
     mask = fspecial('gauss', sz, sigma);
-    chart = nanconv(chart, mask, 'same');
+    %chart = nanconv(chart, mask, 'same');
     [maxValue, linearIndexesOfMaxes] = max(chart(:));
+    %[colsOfMaxes rowsOfMaxes] = find(smoothchart == maxValue);
 
-    [colsOfMaxes rowsOfMaxes] = find(chart == maxValue);
-    if length(rowsOfMaxes) >1
-      v = randi(length(rowsOfMaxes));
-      rowsOfMaxes = rowsOfMaxes(v);
-      colsOfMaxes = colsOfMaxes(v);
+    chart = chart./nanmean(chart, 'all');
+    %chart = chart./maxValue;
+    if k == 1
+      endchart = zeros(size(chart));
     end
+    chart(isnan(chart))=0;
+    endchart = endchart + chart;
 
-
-    psize = 3.5 * dim;
-    xmax = max(posstructure.(posformateddate)(:,2));
-    xbins = ceil(xmax/psize);
-    xstep = xmax/xbins;
-    xcoord(end+1) = rowsOfMaxes * xstep;
-
-    ymax = max(posstructure.(posformateddate)(:,3));
-    ybins = ceil(ymax/psize);
-    ystep = ymax/ybins;
-    ycoord(end+1) = colsOfMaxes * ystep;
+    %[colsOfMaxes rowsOfMaxes] = find(chart == maxValue);
 
 
 
-    %newName = strrep(spikename,'_',' ');
-    %title(['spike is ' newName ])
+    %if length(rowsOfMaxes) >1
+    %  v = randi(length(rowsOfMaxes));
+    %  rowsOfMaxes = rowsOfMaxes(v);
+    %  colsOfMaxes = colsOfMaxes(v);
+    %end
+
+
+    %psize = 3.5 * dim;
+    %xmax = max(posstructure.(posformateddate)(:,2));
+    %xbins = ceil(xmax/psize);
+    %xstep = xmax/xbins;
+    %xcoord(end+1) = rowsOfMaxes * xstep;
+
+    %ymax = max(posstructure.(posformateddate)(:,3));
+    %ybins = ceil(ymax/psize);
+    %ystep = ymax/ybins;
+    %ycoord(end+1) = colsOfMaxes * ystep;
+
+
 end
 
-xlimmin = [000 000 000 000 000 450 750 780 828 780 780];
-xlimmax = [505 450 450 505 505 850 1500 1500 1500 1500 1500];
-ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
-ylimmax = [1500 545 422 320 170 440 1500 575 420 339 182];
-%position 1: end of left forced
-%position 2: left forced
-%position 3: forced choice point
-%position 4: right forced
-%position 5: end of right forced
-%position 6: middle stem
-%position 7: end of left choice
-%position 8 left choice arm
-%position 9: free choice point
-%position 10: right choice arm
-%position 11: end of right choice arm
+endchart(endchart==0) = NaN;
+endchart = endchart(size(endchart,2)-70:end, 1:100);
 
-posQuad = zeros(length(xcoord), 3);
-posQuad(:,2) = xcoord;
-posQuad(:,3) = ycoord;
+%plot endchart
+set(0,'DefaultFigureVisible', 'on');
+figure
+[nr,nc] = size(endchart);
+colormap('parula');
+%lower and higher three percent of firing sets bounds
+numendchart = endchart(~isnan(endchart));
+numendchart = sort(numendchart(:),'descend');
+maxendchartfive = min(numendchart(1:ceil(length(numendchart)*0.03)));
+numendchart = sort(numendchart(:),'ascend');
+minendchartfive = max(numendchart(1:ceil(length(numendchart)*0.03)));
 
-for k=1:length(xlimmin)
-  inX = find(xcoord > xlimmin(k) & xcoord <=xlimmax(k));
-  inY = find(ycoord > ylimmin(k) & ycoord <=ylimmax(k));
-  inboth = intersect(inX, inY);
-
-  if (k == 2 | k== 4 | k == 1 | k==5)         %forced arm
-    posQuad(inboth, 1) = 1;
-  elseif k == 3                               %forced  point
-    posQuad(inboth, 1) = 2;
-  elseif k == 6                        %middle
-    posQuad(inboth, 1) = 3;
-  elseif (k == 8 | k== 10 | k==7 | k==11)                          % choice arm
-    posQuad(inboth, 1) = 4;
-  elseif k == 9                                    % choicepoint
-    posQuad(inboth) = 5;
-  end
+pcolor([endchart nan(nr,1); nan(1,nc+1)]);
+shading flat;
+set(gca, 'ydir', 'reverse');
+%set(gca,'clim',[0,lim]);
+if minendchartfive ~= maxendchartfive
+		set(gca, 'clim', [minendchartfive*1.2, maxendchartfive*1]);
 end
-
-f = posQuad;
+axis([16 (size(endchart, 2)+5) -4 (size(endchart,1))]);
+colorbar;

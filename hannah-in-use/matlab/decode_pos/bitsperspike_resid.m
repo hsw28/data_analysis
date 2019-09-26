@@ -1,6 +1,8 @@
-function f = bitsperspike(posstructure, clusters, dim, tdecode)
+function f = bitsperspike_resid(posstructure, clusters, dim, tdecode)
+%NOT WORKING BC NOT SURE HOW TO DO THIS WITH NEGATIVE RESIDUALS
 
 
+set(0,'DefaultFigureVisible', 'off');
 %determine how many spikes & pos files
 
 bigXall = [];
@@ -20,6 +22,7 @@ end
 output = {'cluster name'; 'bits/spike'};
 
 for z = 1:length(pnames)
+
   currentname = char(pnames(z))
   posData = posstructure.(currentname);
   posData = fixpos(posData);
@@ -30,30 +33,54 @@ for z = 1:length(pnames)
   date = char(date(1,1));
 
   %Sum of (occprobs * mean firing rate per bin / overall mean rate) * log2 (mean firing rate per bin / overall mean rate)
-  psize = 3.5 * dim;
-  xvals = posData(:,2);
-  yvals = posData(:,3);
-  xmin = min(posData(:,2));
-  ymin = min(posData(:,3));
-  xmax = max(posData(:,2));
-  ymax = max(posData(:,3));
+  currentclusts = struct;
+  cnames = {};
+
+  cstart = 0;
+  cend = 100000000;
+
+  for c = 1:(spikenum)
+    name = char(clustspikenames(c));
+    date;
+    if contains(name, date)==1 & cstart==0
+      [currentclusts(:).(name)] = deal(clusters.(name));
+    end
+  end
+
+  currentclustname = (fieldnames(currentclusts));
+  currentnumclust = length(currentclustname);
+
+  if currentnumclust>0
 
 
-  xbins = ceil((xmax-xmin)/psize); %number of x
-  ybins = ceil((ymax-ymin)/psize); %number of y
-
-
-  xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
-  yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
   velthreshold = 12;
   vel = velocity(posData);
+  acc = accel(posData);
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
+  acc(1,:) = smoothdata(acc(1,:), 'gaussian', 30);
   fastvel = find(vel(1,:) > velthreshold);
   totaltime = length(fastvel)./30;
   posDataFast = posData(fastvel, :);
   xvalsFast = posDataFast(:,2);
   yvalsFast = posDataFast(:,3);
+
+  maxtime = max(posDataFast(:,1));
+  currentpos = [posDataFast; [maxtime+.03, 0, 0]; [maxtime+.06, 1500, 1500]];
+
+  psize = 3.5 * dim;
+  xvals = currentpos(:,2);
+  yvals = currentpos(:,3);
+  xmin = min(currentpos(:,2));
+  ymin = min(currentpos(:,3));
+  xmax = max(currentpos(:,2));
+  ymax = max(currentpos(:,3));
+  xbins = ceil((xmax-xmin)/psize); %number of x
+  ybins = ceil((ymax-ymin)/psize); %number of y
+  xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
+  yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
+
+
 
   %occupancy
   occ = zeros(xbins, ybins);
@@ -86,29 +113,20 @@ numocc = occ(~isnan(occ));
 occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
 
+
 %Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
 
 %spike rates
-cnames = {};
 
-cstart = 0;
-cend = 100000000;
 
-currentclusts = struct;
-for c = 1:(spikenum)
-  name = char(clustspikenames(c));
-  date;
-  if contains(name, date)==1 & cstart==0
-    [currentclusts(:).(name)] = deal(clusters.(name));
-  end
-end
 
-currentclustname = (fieldnames(currentclusts));
-currentnumclust = length(currentclustname);
+%fxmatrix = firingPerPos(posData, currentclusts, dim, tdecode, 30);
 
-if currentnumclust>0
+veldata = vel;
+accdata = abs(acc);
 
-fxmatrix = firingPerPos(posData, currentclusts, dim, tdecode, 30);
+velpowerchart = powermap(veldata, posData, dim, 0, 50);
+accpowerchart = powermap(accdata, posData, dim, 0, 50);
 
 for c = 1:(currentnumclust)
   name = char(currentclustname(c));
@@ -119,9 +137,47 @@ for c = 1:(currentnumclust)
 
     assvel = assignvelOLD(clust, vel);
     fastspikeindex = find(assvel > velthreshold);
-    meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
+    %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
-    fxclust = fxmatrix.(name);
+%%%%%%%%%%%%%
+
+maxtime = max(posDataFast(:,1));
+currentpos = [posDataFast; [maxtime+.03, 0, 0]; [maxtime+.06, 1500, 1500]];
+
+xvals = currentpos(:,2);
+yvals = currentpos(:,3);
+xmin = min(currentpos(:,2));
+ymin = min(currentpos(:,3));
+xmax = max(currentpos(:,2));
+ymax = max(currentpos(:,3));
+xbins = ceil((xmax)/psize); %number of x
+ybins = ceil((ymax)/psize); %number of y
+xinc = (0:xbins)*psize; %makes a vectors of all the x values at each increment
+yinc = (0:ybins)*psize; %makes a vector of all the y values at each increment
+
+assvel = assignvelOLD(clust, vel);
+fastspikeindex = find(assvel > velthreshold);
+
+spikechart = normalizePosData(clust(fastspikeindex), currentpos, dim);
+
+reshapesize = size(accpowerchart);
+%multiple linear regression of the responses in vector y on the predictors in matrix X.
+
+size(spikechart);
+size(velpowerchart);
+size(accpowerchart);
+[b,bint,resid] = regress(spikechart(:),[velpowerchart(:), accpowerchart(:)]);
+resid(find(resid<0)) = realmin;
+chart = reshape(resid, reshapesize);
+
+fxclust = chart;
+
+%Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
+
+
+meanrate = nanmean(fxclust(:));
+
+%%%%%%%%%%%%%
 
     oldbits = 0;
     newbits = 0;
@@ -131,18 +187,17 @@ for c = 1:(currentnumclust)
     for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
       for y = (1:ybins)
         if occprobs(x,y)>0 & ~isnan(fxclust(x,y))==1
-
         newbits = (occprobs(x,y) .* (fxclust(x,y) ./ meanrate) * log2((fxclust(x,y) ./ meanrate)));
         bitsper = bitsper + newbits; %if you want per location, assign this to a matrix
-        if newbits > oldbits
-          oldbits = newbits;
+        %if newbits > oldbits
+        %  oldbits = newbits;
 
-          xbins = ceil((xmax-xmin)/psize);
-          ybins = ceil((ymax-ymin)/psize);
+        %  xbins = ceil((xmax-xmin)/psize);
+        %  ybins = ceil((ymax-ymin)/psize);
 
-          bigX = (xmax-xmin)./xbins * x + xmin;
-          bigY = (ymax-ymin)./ybins * y + ymin;
-        end
+        %  bigX = (xmax-xmin)./xbins * x + xmin;
+        %  bigY = (ymax-ymin)./ybins * y + ymin;
+        %end
 
 
 
@@ -151,9 +206,9 @@ for c = 1:(currentnumclust)
     end
 
 
-    bigXall = [bigXall, bigX];
-    bigYall = [bigYall, bigY];
-    if meanrate <.05
+  %  bigXall = [bigXall, bigX];
+  %  bigYall = [bigYall, bigY];
+    if length(fastspikeindex)./(totaltime) <.05
       bitsper = NaN;
     end
     newdata = {name; bitsper};
@@ -164,6 +219,6 @@ end
 end
 
 end
-
-
 f = output';
+
+set(0,'DefaultFigureVisible', 'on');

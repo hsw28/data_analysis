@@ -10,6 +10,7 @@ function x = spiketrain(spike, tm, binwidth);
 [c indexmax] = (min(abs(spike-tm(end))));
 spike = spike(indexmin:indexmax);
 
+
 %making sure no spikes fall outside of time
 [c index] = min(abs(spike-tm(1)));
 if tm(1)-c < 0 % then closest value is before start time
@@ -25,4 +26,5 @@ else
 end
 
 
+spike;
 x = histcounts(spike, [tm(1):binwidth:tm(end)])';

@@ -1,4 +1,4 @@
-function f = bitsperspike(posstructure, clusters, dim, tdecode)
+function f = bitspersec(posstructure, clusters, dim, tdecode)
 
 
 %determine how many spikes & pos files
@@ -29,7 +29,7 @@ for z = 1:length(pnames)
   date = strsplit(date,'_position'); %rat12_2018_08_20
   date = char(date(1,1));
 
-  %Sum of (occprobs * mean firing rate per bin / overall mean rate) * log2 (mean firing rate per bin / overall mean rate)
+  %Sum of (occprobs * mean firing rate per bin) * log2 (mean firing rate per bin / overall mean rate)
   psize = 3.5 * dim;
   xvals = posData(:,2);
   yvals = posData(:,3);
@@ -86,7 +86,6 @@ numocc = occ(~isnan(occ));
 occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
 
-%Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
 
 %spike rates
 cnames = {};
@@ -128,11 +127,15 @@ for c = 1:(currentnumclust)
     bitsper = 0;
     bigX = 0;
     bigY = 0;
+
+    %bits/spike: Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
+    %bits/sec: Sum of (occprobs * mean firing rate per bin) * log2 (mean firing rate per bin / meanrate)
+
     for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
       for y = (1:ybins)
         if occprobs(x,y)>0 & ~isnan(fxclust(x,y))==1
 
-        newbits = (occprobs(x,y) .* (fxclust(x,y) ./ meanrate) * log2((fxclust(x,y) ./ meanrate)));
+        newbits = (occprobs(x,y) .* (fxclust(x,y)) * log2((fxclust(x,y) ./ meanrate)));
         bitsper = bitsper + newbits; %if you want per location, assign this to a matrix
         if newbits > oldbits
           oldbits = newbits;

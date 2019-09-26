@@ -17,7 +17,7 @@ ypos = ypos';
   xmid3 = find(xpos>=(716.66) & xpos<850);
 
 
-ymiddle = find(ypos>350 & ypos<370);
+ymiddle = find(ypos>330 & ypos<420);
 %find indices that appear in both
 bothindex1 = intersect(xmid1, ymiddle);
 bothindex2 = intersect(xmid2, ymiddle);
@@ -35,8 +35,8 @@ timemiddle3 = tme(bothindex3);
 xmiddle3 = xpos(bothindex3);
 ymiddle3 = ypos(bothindex3);
 
-timemiddle = padcat(timemiddle1, timemiddle2, timemiddle3);
-size(timemiddle)
+timemiddle = padcat(sort(timemiddle1), sort(timemiddle2), sort(timemiddle3));
+
 
 
 %now can seperate into runs basically based on the amount of time between points
@@ -46,6 +46,7 @@ index = 1;
 i=2;
 zz = 1;
 for zz=1:size(timemiddle,1)
+runnum = timemiddle(zz,1);
 while i <= length(find(isnan(timemiddle(zz,:))==0))
 		if timemiddle(zz,i)-timemiddle(zz,i-1) > 3
 				%index(end+1) = i-1;
@@ -58,7 +59,6 @@ end
 
 %then add the finishing point
 runnum(end+1) = timemiddle(zz,end);
-
 % check to make sure every foray into the middle is >.5 seconds like (takes ~2 seconds to run through middle)
 i = 2;
 while i <=size(runnum,2)
@@ -83,10 +83,10 @@ awayreward1 = [];
 while i <=size(mids,1)
 	[cc startmid] = min(abs(mids(i-1)-tme));
   [cc endmid] = min(abs(mids(i)-tme));
-	if xpos(endmid)-xpos(startmid) > 0 %towards reward
+	if xpos(endmid)-xpos(startmid) > 0 & endmid>startmid  %towards reward
 			toreward1(end+1) = tme(startmid);
 			toreward1(end+1) = tme(endmid);
-	else
+	elseif xpos(endmid)-xpos(startmid) < 0 & endmid>startmid
 		awayreward1(end+1) = tme(startmid);
 		awayreward1(end+1) = tme(endmid);
 	end
@@ -101,10 +101,10 @@ awayreward2 = [];
 while i <=size(mids,1)
   [cc startmid] = min(abs(mids(i-1)-tme));
   [cc endmid] = min(abs(mids(i)-tme));
-	if xpos(endmid)-xpos(startmid) > 0 %towards reward
+	if xpos(endmid)-xpos(startmid) > 0 & endmid>startmid %towards reward
 			toreward2(end+1) = tme(startmid);
 			toreward2(end+1) = tme(endmid);
-	else
+	elseif xpos(endmid)-xpos(startmid) < 0 & endmid>startmid
 		awayreward2(end+1) = tme(startmid);
 		awayreward2(end+1) = tme(endmid);
 	end
@@ -119,10 +119,13 @@ awayreward3 = [];
 while i <=size(mids,1)
   [cc startmid] = min(abs(mids(i-1)-tme));
   [cc endmid] = min(abs(mids(i)-tme));
-	if xpos(endmid)-xpos(startmid) > 0 %towards reward
+
+
+
+	if xpos(endmid)-xpos(startmid) > 0 & endmid>startmid %towards reward
 			toreward3(end+1) = tme(startmid);
 			toreward3(end+1) = tme(endmid);
-	else
+	elseif xpos(endmid)-xpos(startmid) < 0 & endmid>startmid
 		awayreward3(end+1) = tme(startmid);
 		awayreward3(end+1) = tme(endmid);
 	end
@@ -131,3 +134,10 @@ end
 end
 
 end
+
+length(toreward1);
+length(awayreward1);
+length(toreward2);
+length(awayreward2);
+length(toreward3);
+length(awayreward3);
