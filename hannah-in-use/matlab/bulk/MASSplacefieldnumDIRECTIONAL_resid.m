@@ -345,15 +345,15 @@ for c = 1:(currentnumclust)
         end
         flatmean = flatmean./countersum;
 
-        flatmom = 0;
-        for kk = 1:length(flattened)
-          if flattened(kk)>0
-            kk-flatmean;
-          flatmom = flatmom+((kk-flatmean)^3)*flattened(kk);
-          end
-        end
+        %flatmom = 0;
+        %for kk = 1:length(flattened)
+        %  if flattened(kk)>0
+        %    kk-flatmean;
+        %  flatmom = flatmom+((kk-flatmean)^3)*flattened(kk);
+        %  end
+        %end
 
-        %flatmom = flatmom./counter;
+        flatmom = moment(flattened(~isnan(flattened)), 3);
 
 
         flatstd = 0;
