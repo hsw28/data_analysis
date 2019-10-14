@@ -141,6 +141,7 @@ for c = 1:(currentnumclust)
     %should have only one peak
 
     meanrate = nanmean(chart(:));
+
     maxrate = max(chart(:));
     chart(isnan(chart)) = 0;
 

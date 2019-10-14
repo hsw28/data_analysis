@@ -11,6 +11,7 @@ allcenterXmax = [];
 allcenterYmax = [];
 allskew = [];
 alldir = [];
+alldirskew = [];
 clustspikenames = (fieldnames(clusters));
 spikenum = length(clustspikenames);
 
@@ -24,7 +25,7 @@ for s = 1:posnum
 end
 
 %output = {'cluster name'; 'cluster size'; 'direction'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'skewness'};
-output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'};
+output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'};
 
 for z = 1:length(pnames)
   currentname = char(pnames(z))
@@ -225,7 +226,7 @@ for c = 1:(currentnumclust)
     yinc = (0:ybins)*psize; %makes a vector of all the y values at each increment
 
 
-    spikechart = normalizePosData(spikestochart, currentpos, 5);
+    spikechart = normalizePosData(spikestochart, currentpos, dim);
 
     reshapesize = size(accpowerchart);
     %multiple linear regression of the responses in vector y on the predictors in matrix X.
@@ -256,7 +257,7 @@ for c = 1:(currentnumclust)
 
     %finds areas where firing > 3x mean. those are marked with a 1 on the chart
     chart;
-    wanted = meanrate+(3.5*std(chart(:)));
+    wanted = meanrate+(3*std(chart(:)));
     [I,J] = find(chart>=wanted);
     chartmax = zeros(size(chart));
     for p=1:length(I)
@@ -300,80 +301,196 @@ for c = 1:(currentnumclust)
         [centerYmax, centerXmax] = find(newchart==M);
         centerYmax = ybins-centerYmax; %here?
         newchart(find(newchart==0))=NaN;
+
         centerXmax = (xmax)./xbins * centerXmax;
         centerYmax = (ymax)./ybins * centerYmax;
 
-
+        centerXmean = nanmean(centerX);
+        centerYmean = nanmean(centerY);
+        centerYmean = ybins-centerYmean;
+        centerXmean = (xmax)./xbins * centerXmean;
+        centerYmean = (ymax)./ybins * centerYmean;
 
         %The skewness was defined, in dimensionless units, as the ratio of the third
         %moment of the place field firing rate distribution divided by the cube of the
         %standard deviation (Spiegel 1994).
 
-        xlimmin = [300 300  750 780 430];
-        xlimmax = [505 505  950 950 870];
-        ylimmin = [370 000  380 000 300];
-        ylimmax = [700 370  700 380 440];
+        xlimmin = [300 300  750 780 ];
+        xlimmax = [505 505  950 950 ];
+        ylimmin = [370 000  380 000 ];
+        ylimmax = [700 370  700 380 ];
 
 
-        if centerXmax>430 & centerXmax<870 & centerYmax>300 & centerYmax<440 %this means center stem
-          %second dimension is x, so if its the center we want along second dimension
-          flattened = nanmean(newchart,1);
-        else
-          flattened = nanmean(newchart,2)'; %need this directional
-          %need to flip right forced and left choice
-          if centerXmax>300 & centerXmax<505 & centerYmax>0 & centerYmax<370
-            flattened = flip(flattened);
-          elseif centerXmax>750 & centerXmax<950 & centerYmax>380 & centerYmax<700
-            flattened = flip(flattened);
+        for k=1:length(xlimmin)
+          if centerYmean<380 & centerYmean>340 & size(newchart,2)>size(newchart,1)%center area so place field could go horizontally or vertically
+                k=5;
+                flattened = nanmean(newchart,1);
+                newflattened = flattened;
+
+              else
+                inX = find(centerXmean > xlimmin(k) & centerXmean <=xlimmax(k)); %check to make sure correct indexing
+                inY = find(centerYmean > ylimmin(k) & centerYmean <=ylimmax(k));
+                inboth = intersect(inX, inY);
+                if length(inboth)>0
+                  flattened = nanmean(newchart,2)'; %need this directional
+                  %need to flip right forced and left choice
+                  if (k == 1 | k== 4)
+                    newflattened = flattened;
+                  elseif (k == 2 | k== 3)
+                    newflattened = flip(flattened);
+                  end
+                end
+              end
           end
-        end
 
-        flatstart = (find(flattened>0));
-        flattened = flattened(flatstart(1):end);
+
+
+
+        flatstart = (find(newflattened>0));
+        newflattened = newflattened(flatstart(1):end);
 
 
         counter = 0;
         flatmean = 0;
         countersum = 0;
 
-        for kk = 1:length(flattened)
-          if flattened(kk)>0
-          flatmean = flatmean+(kk*flattened(kk));
+        for kk = 1:length(newflattened)
+          if newflattened(kk)>0
+          flatmean = flatmean+(kk*newflattened(kk));
           counter = counter+1;
-          countersum = countersum+flattened(kk);
+          countersum = countersum+newflattened(kk);
           end
         end
         flatmean = flatmean./countersum;
 
-        %flatmom = 0;
-        %for kk = 1:length(flattened)
-        %  if flattened(kk)>0
-        %    kk-flatmean;
-        %  flatmom = flatmom+((kk-flatmean)^3)*flattened(kk);
-        %  end
-        %end
+        flatmom = 0;
+        for kk = 1:length(newflattened)
+          if newflattened(kk)>0
+            kk-flatmean;
+          flatmom = flatmom+((kk-flatmean)^3)*newflattened(kk);
+          end
+        end
 
-        flatmom = moment(flattened(~isnan(flattened)), 3);
+        %flatmom = moment(flattened(~isnan(flattened)), 3);
 
 
         flatstd = 0;
-        for kk = 1:length(flattened)
-          if flattened(kk)>0
-          flatstd = flatstd+((kk-flatmean)^2)*flattened(kk);
+        for kk = 1:length(newflattened)
+          if newflattened(kk)>0
+          flatstd = flatstd+((kk-flatmean)^2)*newflattened(kk);
         end
         end
 
         flatstd = sqrt(flatstd);
 
+        if length(newflattened(~isnan(newflattened)))>2
+          skewness = flatmom./(flatstd^3);
+        else
+          skewness = NaN;
+        end
 
-        skewness = flatmom./(flatstd^3);
+        %%%%%%%%%%%%%%%%
+        %%here to find directional skewness, positive means skewed in the direction of travel
 
-        %here it messes up
 
-        centerXmean = nanmean(centerX);
-        centerYmean = nanmean(centerY);
-        centerYmean = ybins-centerYmean;
+                        %   1   2   3   4   5
+                        xlimmin = [300 300  750 780 ];
+                        xlimmax = [505 505  950 950 ];
+                        ylimmin = [370 000  380 000 ];
+                        ylimmax = [700 370  700 380 ];
+                %position 1: left forced
+                %position 2: right forced
+                %position 3: left choice arm
+                %position 4: right choice arm
+                %position 5: middle stem
 
+
+                  toreward = [];
+                  awayreward = [];
+                  for k=1:length(xlimmin)
+                    if centerYmean<380 & centerYmean>340 & size(newchart,2)>size(newchart,1)%center area so place field could go horizontally or vertically
+                        k=5;
+                        if currentdir == 1
+                          newflattened = flattened;
+                        elseif currentdir == 2
+                          newflattened = flip(flattened);
+                        end
+
+              else
+                inX = find(centerXmean > xlimmin(k) & centerXmean <=xlimmax(k)); %check to make sure correct indexing
+                inY = find(centerYmean > ylimmin(k) & centerYmean <=ylimmax(k));
+                inboth = intersect(inX, inY);
+                if length(inboth)>0
+                  flattened = nanmean(newchart,2)'; %need this directional
+                  %need to flip right forced and left choice
+                  if (k == 1 | k== 4)
+                    if currentdir == 1
+                      newflattened = flattened;
+                    elseif currentdir == 2
+                      newflattened = flip(flattened);
+                    end
+                  elseif (k == 2 | k== 3)
+                    if currentdir == 1
+                      newflattened = flip(flattened);
+                    elseif currentdir == 2
+                      newflattened = flattened;
+                    end
+                  end
+                end
+              end
+          end
+
+
+                  flatstart = (find(newflattened>0));
+                  newflattened = newflattened(flatstart(1):end);
+
+
+
+
+                  counter = 0;
+                  flatmean = 0;
+                  countersum = 0;
+
+
+                  for kk = 1:length(newflattened)
+                    if newflattened(kk)>0
+                    flatmean = flatmean+(kk*newflattened(kk));
+                    counter = counter+1;
+                    countersum = countersum+newflattened(kk);
+                    end
+                  end
+                  flatmean = flatmean./countersum;
+
+
+                  flatmom = 0;
+                  temp = [];
+                  for kk = 1:length(newflattened)
+                    if newflattened(kk)>0
+                      kk-flatmean;
+                      temp(end+1)= ((kk-flatmean)^3)*newflattened(kk);
+                    flatmom = flatmom+((kk-flatmean)^3)*newflattened(kk);
+                    end
+                  end
+
+
+                  %flatmom = moment(flattened(~isnan(flattened)), 3);
+
+                  flatstd = 0;
+                  for kk = 1:length(newflattened)
+                    if newflattened(kk)>0
+                    flatstd = flatstd+((kk-flatmean)^2)*newflattened(kk);
+                  end
+                  end
+
+                  flatstd = sqrt(flatstd);
+
+                  if length(newflattened(~isnan(newflattened)))>2
+                    dirskewness = flatmom./(flatstd^3);
+                  else
+                    dirskewness = NaN;
+                  end
+
+                  %%%%%%%
 
 
         centermax(end+1:end+2) = [centerXmax(1), centerYmax(1)];
@@ -389,6 +506,7 @@ for c = 1:(currentnumclust)
         allcenterYmax(end+1) = centerYmax(1);
         allskew(end+1) = skewness;
         alldir(end+1) = currentdir;
+        alldirskew(end+1) = dirskewness;
 
         if maxrate < .5
           numfields = NaN;
@@ -400,8 +518,9 @@ for c = 1:(currentnumclust)
           allcenterYmax(end+1) = NaN;
           allskew(end+1) = NaN;
           alldir(end+1) = currentdir;
+          alldirskew(end+1) = NaN;
         end
-        newdata = {name; clustsize; dir; alldir(end); allsizes(end); allcenterXmax(end); allcenterYmax(end); allskew(end)};
+        newdata = {name; clustsize; dir; alldir(end); allsizes(end); allcenterXmax(end); allcenterYmax(end); allskew(end); alldirskew(end)};
         output = horzcat(output, newdata);
       end
 
@@ -422,4 +541,4 @@ end
 
 f = output';
 
-allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew]';
+allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew]';

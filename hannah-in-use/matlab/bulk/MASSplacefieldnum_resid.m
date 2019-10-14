@@ -213,7 +213,7 @@ for c = 1:(currentnumclust)
     %finds areas where firing > 3x mean
     chart;
 
-    wanted = meanrate+(3.5*std(chart(:)));
+    wanted = meanrate+(3*std(chart(:)));
 
     [I,J] = find(chart>=wanted);
     chartmax = zeros(size(chart));
