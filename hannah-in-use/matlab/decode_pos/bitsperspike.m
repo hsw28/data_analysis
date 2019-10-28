@@ -1,7 +1,8 @@
-function f = bitsperspike(posstructure, clusters, dim, tdecode)
+function f = bitsperspike(posstructure, clusters, dim)
 
 
 %determine how many spikes & pos files
+tic
 
 bigXall = [];
 bigYall = [];
@@ -20,7 +21,7 @@ end
 output = {'cluster name'; 'bits/spike'};
 
 for z = 1:length(pnames)
-  currentname = char(pnames(z))
+  currentname = char(pnames(z));
   posData = posstructure.(currentname);
   posData = fixpos(posData);
   % get date of spike
@@ -108,7 +109,8 @@ currentnumclust = length(currentclustname);
 
 if currentnumclust>0
 
-fxmatrix = firingPerPos(posData, currentclusts, dim, tdecode, 30);
+
+fxmatrix = firingPerPos(posData, currentclusts, dim, 1, 30, occ);
 
 for c = 1:(currentnumclust)
   name = char(currentclustname(c));
@@ -119,9 +121,14 @@ for c = 1:(currentnumclust)
 
     assvel = assignvelOLD(clust, vel);
     fastspikeindex = find(assvel > velthreshold);
-    meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
+    %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
+
 
     fxclust = fxmatrix.(name);
+    meanrate = nanmean(fxclust(:));
+    fxclust = ndnanfilter(fxclust, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+
+
 
     oldbits = 0;
     newbits = 0;
@@ -132,8 +139,15 @@ for c = 1:(currentnumclust)
       for y = (1:ybins)
         if occprobs(x,y)>0 & ~isnan(fxclust(x,y))==1
 
+
         newbits = (occprobs(x,y) .* (fxclust(x,y) ./ meanrate) * log2((fxclust(x,y) ./ meanrate)));
+      %  if newbits>5
+      %    x
+      %    y
+      %  end
         bitsper = bitsper + newbits; %if you want per location, assign this to a matrix
+
+
         if newbits > oldbits
           oldbits = newbits;
 

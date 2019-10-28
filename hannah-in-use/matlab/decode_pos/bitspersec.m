@@ -1,4 +1,4 @@
-function f = bitspersec(posstructure, clusters, dim, tdecode)
+function f = bitspersec(posstructure, clusters, dim)
 
 
 %determine how many spikes & pos files
@@ -82,6 +82,7 @@ for z = 1:length(pnames)
   end
   end
 
+
 numocc = occ(~isnan(occ));
 occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
@@ -105,9 +106,11 @@ end
 currentclustname = (fieldnames(currentclusts));
 currentnumclust = length(currentclustname);
 
+
 if currentnumclust>0
 
-fxmatrix = firingPerPos(posData, currentclusts, dim, tdecode, 30);
+fxmatrix = firingPerPos(posData, currentclusts, dim, 1, 30, occ);
+
 
 for c = 1:(currentnumclust)
   name = char(currentclustname(c));
@@ -118,9 +121,11 @@ for c = 1:(currentnumclust)
 
     assvel = assignvelOLD(clust, vel);
     fastspikeindex = find(assvel > velthreshold);
-    meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
+    %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
     fxclust = fxmatrix.(name);
+    meanrate = nanmean(fxclust(:));
+    fxclust = ndnanfilter(fxclust, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
 
     oldbits = 0;
     newbits = 0;

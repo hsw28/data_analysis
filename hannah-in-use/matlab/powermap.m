@@ -7,10 +7,22 @@ function rate = powermap(powerdata,posData, dim, limlow, limhigh)
 if size(powerdata,1)<size(powerdata,2)
 	powerdata=powerdata';
 end
-
-
-
 powerdata = powerdata';
+
+if size(posData,2)>size(posData,1)
+	posData = posData';
+end
+
+if size(powerdata,1)==1
+	powerdata(2,:) = 1:length(powerdata);
+	posData(:,2:3) = posData;
+	posData(:,1) = 1:length(powerdata);
+end
+
+
+
+
+
 tme = powerdata(2,:);
 posData = assignpos(tme, posData);
 Power = powerdata(1,:);

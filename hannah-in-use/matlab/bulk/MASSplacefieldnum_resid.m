@@ -180,10 +180,7 @@ for c = 1:(currentnumclust)
     %%%%%%%%%%%%%%%%%%%
 
 
-    sigma = 2; % two std deviations
-    mask = fspecial('gauss', 1, sigma);
-
-    chart = nanconv(chart, mask, 'same');
+    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
 
   %  set(0,'DefaultFigureVisible', 'on');
   %  figure
@@ -193,9 +190,7 @@ for c = 1:(currentnumclust)
   %  set(0,'DefaultFigureVisible', 'off');
 
 
-    %divided into 5cm by 5cm bins
-    %place fields are 5 or more adjacent picels with a firing rate >3xmean unit rate
-    %should have only one peak
+
 
     meanrate = nanmean(chart(:));
     maxrate = max(chart(:));
@@ -232,8 +227,36 @@ for c = 1:(currentnumclust)
 
   if find(f(:)==1)>0;
     for z=1:length(CC.PixelIdxList)
-      if length(cell2mat(CC.PixelIdxList(z)))>=5
-        fieldsize(end+1) = length(cell2mat(CC.PixelIdxList(z)))*dim*dim;
+      [Yindex, Xindex] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+      YM = length(unique(Yindex));
+      XM = length(unique(Xindex));
+
+        [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+        yvals_real = ybins-centerY;
+        yvals_real = (ymax)./ybins * yvals_real;
+        xvals_real = (xmax)./xbins * centerX;
+
+        %corner points
+        C1 = [417, 365];
+        C2 = [854, 380];
+        dis = 100;
+        for x=1:length(yvals_real);
+          disnew1 = pdist([C1; xvals_real(x), yvals_real(x)]);
+          disnew2 = pdist([C2; xvals_real(x), yvals_real(x)]);
+          disnew = min(disnew1, disnew2);
+          if disnew<dis
+            dis = disnew;
+          end
+        end
+        if dis*dim/3.5<5
+          fsize = YM+XM;
+        else
+          fsize = max([YM; XM]);
+        end
+
+
+        if fsize>=15
+        fieldsize(end+1) = fsize*dim;
         %areaind = cell2mat(CC.PixelIdxList(z)); %linear indices of area
         %numfields = numfields+(length(intersect(areaind, linearmax)))
         numfields = numfields+1;

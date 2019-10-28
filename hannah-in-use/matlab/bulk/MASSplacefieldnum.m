@@ -129,10 +129,7 @@ for c = 1:(currentnumclust)
 
     chart = normalizePosData(clust(fastspikeindex), posDataFast, dim);
 
-    sigma = 2; % two std deviations
-    %sz = 2*ceil(2.6 * sigma) + 1; % See note below
-    mask = fspecial('gauss', 1, sigma);
-    chart = nanconv(chart, mask, 'same');
+    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
 
 
 
@@ -173,10 +170,37 @@ for c = 1:(currentnumclust)
 
 
     for z=1:length(CC.PixelIdxList)
-      if length(cell2mat(CC.PixelIdxList(z)))>=5
-        fieldsize(end+1) = length(cell2mat(CC.PixelIdxList(z)))*dim*dim;
-        %areaind = cell2mat(CC.PixelIdxList(z)); %linear indices of area
-        %numfields = numfields+(length(intersect(areaind, linearmax)))
+      [Yindex, Xindex] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+      YM = length(unique(Yindex));
+      XM = length(unique(Xindex));
+
+        [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+        yvals_real = ybins-centerY;
+        yvals_real = (ymax)./ybins * yvals_real;
+        xvals_real = (xmax)./xbins * centerX;
+
+        %corner points
+        C1 = [417, 365];
+        C2 = [854, 380];
+        dis = 100;
+        for x=1:length(yvals_real);
+          disnew1 = pdist([C1; xvals_real(x), yvals_real(x)]);
+          disnew2 = pdist([C2; xvals_real(x), yvals_real(x)]);
+          disnew = min(disnew1, disnew2);
+          if disnew<dis
+            dis = disnew;
+          end
+        end
+        if dis*dim/3.5<5
+          fsize = YM+XM;
+        else
+          fsize = max([YM; XM]);
+        end
+
+
+        if fsize>=15
+        fieldsize(end+1) = fsize*dim;
+
         numfields = numfields+1;
         [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
 

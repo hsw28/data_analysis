@@ -14,6 +14,8 @@ alldir = [];
 alldirskew = [];
 clustspikenames = (fieldnames(clusters));
 spikenum = length(clustspikenames);
+allavpfrate = [];
+allmaxpfrate = [];
 
 posnames = (fieldnames(posstructure));
 posnum = length(posnames);
@@ -25,7 +27,7 @@ for s = 1:posnum
 end
 
 %output = {'cluster name'; 'cluster size'; 'direction'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'skewness'};
-output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'};
+output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'; 'av field rate'; 'max field rate'};
 
 for z = 1:length(pnames)
   currentname = char(pnames(z))
@@ -201,9 +203,8 @@ for c = 1:(currentnumclust)
 
 
     %smoothing spiking normalization
-    sigma = 2; % two std deviations
-    mask = fspecial('gauss', 1, sigma);
-    chart = nanconv(chart, mask, 'same');
+    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+
 
     %divided into 5cm by 5cm bins
     %place fields are 5 or more adjacent picels with a firing rate >3xmean unit rate
@@ -235,8 +236,36 @@ for c = 1:(currentnumclust)
 
 
     for z=1:length(CC.PixelIdxList)
-      if length(cell2mat(CC.PixelIdxList(z)))>=5 %this is a place field
+      [Yindex, Xindex] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+      YM = length(unique(Yindex));
+      XM = length(unique(Xindex));
 
+        [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+        yvals_real = ybins-centerY;
+        yvals_real = (ymax)./ybins * yvals_real;
+        xvals_real = (xmax)./xbins * centerX;
+
+        %corner points so can find distance around the bend
+        C1 = [417, 365];
+        C2 = [854, 380];
+        dis = 100;
+        for x=1:length(yvals_real);
+          disnew1 = pdist([C1; xvals_real(x), yvals_real(x)]);
+          disnew2 = pdist([C2; xvals_real(x), yvals_real(x)]);
+          disnew = min(disnew1, disnew2);
+          if disnew<dis
+            dis = disnew;
+          end
+        end
+        if dis*dim/3.5<5
+          fsize = YM+XM;
+        else
+          fsize = max([YM; XM]);
+        end
+
+
+        if fsize>=15 %then its a place field
+        fieldsize(end+1) = fsize*dim;
         %find all instances where animal goes through place field
 
         %finds indices of place fields
@@ -245,12 +274,14 @@ for c = 1:(currentnumclust)
         realX = (xmax)./xbins .* centerX;
         realY = (ymax)./ybins .* centerY;
 
+        currentrates = chart(centerY, centerX);
+        avpfrate = nanmean(currentrates(:));
+        maxpfrate = max(currentrates(:));
 
 
 
 
 
-        fieldsize(end+1) = length(cell2mat(CC.PixelIdxList(z)))*dim*dim;
         numfields = numfields+1;
         [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
 
@@ -366,111 +397,11 @@ for c = 1:(currentnumclust)
 
 %%%%%%%%%%%%%%%%
 %%here to find directional skewness, positive means skewed in the direction of travel
-
-
-                %   1   2   3   4   5
-                xlimmin = [300 300  750 780 ];
-                xlimmax = [505 505  950 950 ];
-                ylimmin = [370 000  380 000 ];
-                ylimmax = [700 370  700 380 ];
-        %position 1: left forced
-        %position 2: right forced
-        %position 3: left choice arm
-        %position 4: right choice arm
-        %position 5: middle stem
-
-          toreward = [];
-          awayreward = [];
-
-          for k=1:length(xlimmin)
-            if centerYmean<380 & centerYmean>340 & size(newchart,2)>size(newchart,1)%center area so place field could go horizontally or vertically
-                k=5;
-                if currentdir == 1
-                  newflattened = flattened;
-                elseif currentdir == 2
-                  newflattened = flip(flattened);
-                end
-
-      else
-        inX = find(centerXmean > xlimmin(k) & centerXmean <=xlimmax(k)); %check to make sure correct indexing
-        inY = find(centerYmean > ylimmin(k) & centerYmean <=ylimmax(k));
-        inboth = intersect(inX, inY);
-        if length(inboth)>0
-          flattened = nanmean(newchart,2)'; %need this directional
-          %need to flip right forced and left choice
-          if (k == 1 | k== 4)
-            if currentdir == 1
-              newflattened = flattened;
-            elseif currentdir == 2
-              newflattened = flip(flattened);
-            end
-          elseif (k == 2 | k== 3)
-            if currentdir == 1
-              newflattened = flip(flattened);
-            elseif currentdir == 2
-              newflattened = flattened;
-            end
-          end
-        end
+      if currentdir == 1
+        dirskewness = skewness;
+      elseif currentdir ==2
+        dirskewness = skewness.*-1;
       end
-  end
-
-
-
-          flatstart = (find(newflattened>0));
-          newflattened = newflattened(flatstart(1):end);
-
-
-
-
-          counter = 0;
-          flatmean = 0;
-          countersum = 0;
-
-
-          for kk = 1:length(newflattened)
-            if newflattened(kk)>0
-            flatmean = flatmean+(kk*newflattened(kk));
-            counter = counter+1;
-            countersum = countersum+newflattened(kk);
-            end
-          end
-          flatmean = flatmean./countersum;
-
-
-          flatmom = 0;
-          temp = [];
-          for kk = 1:length(newflattened)
-            if newflattened(kk)>0
-              kk-flatmean;
-              temp(end+1)= ((kk-flatmean)^3)*newflattened(kk);
-            flatmom = flatmom+((kk-flatmean)^3)*newflattened(kk);
-            end
-          end
-
-
-          %flatmom = moment(flattened(~isnan(flattened)), 3);
-
-          flatstd = 0;
-          for kk = 1:length(newflattened)
-            if newflattened(kk)>0
-            flatstd = flatstd+((kk-flatmean)^2)*newflattened(kk);
-          end
-          end
-
-          flatstd = sqrt(flatstd);
-
-          if length(newflattened(~isnan(newflattened)))>2
-            dirskewness = flatmom./(flatstd^3);
-          else
-            dirskewness = NaN;
-          end
-
-
-
-          %%%%%%%
-
-
 
 
 
@@ -485,6 +416,7 @@ for c = 1:(currentnumclust)
         centermean(end+1:end+2) = [centerXmean, centerYmean];
 
 
+        if maxrate >= .5 %& centerYmean < 580 & centerYmean > 190
         allsizes(end+1) = fieldsize(end);
         allcenterXmean(end+1) = centerXmean;
         allcenterYmean(end+1) = centerYmean;
@@ -493,8 +425,9 @@ for c = 1:(currentnumclust)
         allskew(end+1) = skewness;
         alldir(end+1) = currentdir;
         alldirskew(end+1) = dirskewness;
-
-        if maxrate < .5 | centerYmean > 580 | centerYmean < 190 
+        allavpfrate(end+1) = avpfrate;
+        allmaxpfrate(end+1) = maxpfrate;
+      else
           numfields = NaN;
           fieldsize = NaN;
           allsizes(end+1) = NaN;
@@ -505,8 +438,11 @@ for c = 1:(currentnumclust)
           allskew(end+1) = NaN;
           alldir(end+1) = currentdir;
           alldirskew(end+1) = NaN;
+          allavpfrate(end+1) = NaN;
+          allmaxpfrate(end+1) = NaN;
         end
-        newdata = {name; clustsize; dir; alldir(end); allsizes(end); allcenterXmax(end); allcenterYmax(end); allskew(end); alldirskew(end)};
+
+        newdata = {name; clustsize; dir; alldir(end); allsizes(end); allcenterXmax(end); allcenterYmax(end); allskew(end); alldirskew(end); avpfrate(end); maxpfrate(end)};
         output = horzcat(output, newdata);
       end
 
@@ -527,4 +463,4 @@ end
 
 f = output';
 
-allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew]';
+allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew; allavpfrate; allmaxpfrate]';
