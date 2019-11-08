@@ -42,7 +42,8 @@ psize = 3.5 * dim; %some REAL ratio of pixels to cm
 	events = zeros(ybins,xbins);
 	xstep = xmax/xbins;
 	ystep = ymax/ybins;
-	tstep = (posData(end,1)-posData(1,1))./length(posData);
+	%tstep = (posData(end,1)-posData(1,1))./length(posData);
+	tstep = 1/30;
 
 
 	for i = 1:xbins
@@ -68,7 +69,6 @@ for i = 1:xbins
         events(ybins+1-j,i) = sum(C); %set the matrix cell for that bin to the number of rows that satisfy both
     end
 end
-
 
 
 rate = events./(time*tstep); %time*tstep is occupancy

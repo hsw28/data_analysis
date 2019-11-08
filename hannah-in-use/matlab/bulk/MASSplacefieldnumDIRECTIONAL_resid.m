@@ -27,7 +27,7 @@ for s = 1:posnum
 end
 
 %output = {'cluster name'; 'cluster size'; 'direction'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'skewness'};
-output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'};
+output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'; 'av field rate'; 'max field rate'};
 
 for z = 1:length(pnames)
   currentname = char(pnames(z))
@@ -58,9 +58,10 @@ for z = 1:length(pnames)
 
 
   if currentnumclust>0
+
   acc = accel(posData);
   vel = velocity(posData);
-  velthreshold = 12;
+velthreshold = 12;
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
   acc(1,:) = smoothdata(acc(1,:), 'gaussian', 30);
   fastvel = find(vel(1,:) > velthreshold);
@@ -211,7 +212,10 @@ for c = 1:(currentnumclust)
     accdata = abs(acc);
 
     velpowerchart = powermap(veldata, posData, dim, 0, 50);
+    velpowerchart = chartinterp(velpowerchart);
     accpowerchart = powermap(accdata, posData, dim, 0, 50);
+    accpowerchart = chartinterp(accpowerchart);
+
 
     maxtime = max(posDataFast(:,1));
     currentpos = [posDataFast; [maxtime+.03, 0, 0]; [maxtime+.06, 1500, 1500]];
@@ -229,6 +233,7 @@ for c = 1:(currentnumclust)
 
 
     spikechart = normalizePosData(spikestochart, currentpos, dim);
+    spikechart = chartinterp(spikechart);
 
     reshapesize = size(accpowerchart);
     %multiple linear regression of the responses in vector y on the predictors in matrix X.
@@ -241,7 +246,14 @@ for c = 1:(currentnumclust)
 
 
     %smoothing spiking normalization
-    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+    chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    chartlin = sort(chart(:));
+    chartlin = chartlin(~isnan(chartlin));
+    chartnozero = mean(chartlin(find(chartlin>0)));
+    chartlinstd = std(chartlin);
+    chartlinmedian = median(chartlin);
+    chartlinmean = mean(chartlin);
+    [I,J] = find(chart>=2.5*chartlinmean);
 
 
 
@@ -257,9 +269,8 @@ for c = 1:(currentnumclust)
     linearmax = sub2ind(size(actualmax), I, J); %linear indices
 
     %finds areas where firing > 3x mean. those are marked with a 1 on the chart
-    chart;
-    wanted = meanrate+(3*std(chart(:)));
-    [I,J] = find(chart>=wanted);
+
+    [I,J] = find(chart>=chartlinmean+(1*(chartlinstd)));
     chartmax = zeros(size(chart));
     for p=1:length(I)
       chartmax(I(p),J(p)) = 1;
@@ -295,14 +306,19 @@ for c = 1:(currentnumclust)
           end
         end
         if dis*dim/3.5<5
+          wantedY = find(yvals_real>345 | yvals_real<388); %these are in the arms
+          wantedX = find(yvals_real<=345 | yvals_real>=388); %this is center. finding with Y but these are the X values
+          YM = length(unique(yvals_real(wantedY)));
+          XM = length(unique(xvals_real(wantedX)));
           fsize = YM+XM;
         else
           fsize = max([YM; XM]);
         end
 
-
-        if fsize>=15
-        fieldsize(end+1) = fsize*dim;
+        fsize = fsize*dim;
+        curr = (chart(Yindex, Xindex));
+        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+        fieldsize(end+1) = fsize;
 
         %find all instances where animal goes through place field
 

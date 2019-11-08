@@ -1,6 +1,6 @@
-function [f allsizescenters] = MASSplacefieldnum(clusters,posstructure, dim)
+function [f allsizescenters tempz] = MASSplacefieldnum(clusters,posstructure, dim)
 
-      set(0,'DefaultFigureVisible', 'off');
+     set(0,'DefaultFigureVisible', 'off');
 
 %determine how many spikes & pos files
 
@@ -10,8 +10,14 @@ allcenterYmean = [];
 allcenterXmax = [];
 allcenterYmax = [];
 allskew = [];
+fieldmeanrate = [];
+allmeanratetet = [];
 clustspikenames = (fieldnames(clusters));
 spikenum = length(clustspikenames);
+allmaxrate = [];
+tetmean = [];
+porp = [];
+tempz = [];
 
 posnames = (fieldnames(posstructure));
 posnum = length(posnames);
@@ -22,7 +28,8 @@ for s = 1:posnum
   end
 end
 
-output = {'cluster name'; 'cluster size'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'};
+output = {'cluster name'; 'cluster size'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'meanrate'};
+
 
 for z = 1:length(pnames)
   currentname = char(pnames(z))
@@ -37,9 +44,24 @@ for z = 1:length(pnames)
   %Sum of (occprobs * mean firing rate per bin / overall mean rate) * log2 (mean firing rate per bin / overall mean rate)
 
 
+  currentclusts = struct;
+  cstart = 0;
+  cend = 100000000;
+  for c = 1:(spikenum)
+    name = char(clustspikenames(c));
+    date;
+    if contains(name, date)==1 & cstart==0
+      [currentclusts(:).(name)] = deal(clusters.(name));
+    end
+  end
+
+  currentclustname = (fieldnames(currentclusts));
+  currentnumclust = length(currentclustname);
+
+  if currentnumclust>0
 
 
-  velthreshold = 12;
+velthreshold = 12;
   vel = velocity(posData);
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
   fastvel = find(vel(1,:) > velthreshold);
@@ -99,19 +121,6 @@ cnames = {};
 cstart = 0;
 cend = 100000000;
 
-currentclusts = struct;
-for c = 1:(spikenum)
-  name = char(clustspikenames(c));
-  date;
-  if contains(name, date)==1 & cstart==0
-    [currentclusts(:).(name)] = deal(clusters.(name));
-  end
-end
-
-currentclustname = (fieldnames(currentclusts));
-currentnumclust = length(currentclustname);
-
-if currentnumclust>0
 
 
 for c = 1:(currentnumclust)
@@ -127,9 +136,20 @@ for c = 1:(currentnumclust)
     %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
 
-    chart = normalizePosData(clust(fastspikeindex), posDataFast, dim);
 
-    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+    chart = normalizePosData(clust(fastspikeindex), posDataFast, dim);
+    chart = chartinterp(chart);
+    %chart = ndnanfilter(chart, 'gausswin', [floor(10./(2*dim)), floor(10./(2*dim))], 2, {}, {'replicate'}, 1);
+    chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
+
+    chartlin = sort(chart(:));
+    chartlin = chartlin(~isnan(chartlin));
+    chartnozero = mean(chartlin(find(chartlin>0)));
+    chartlinstd = std(chartlin);
+    chartlinmedian = median(chartlin);
+    chartlinmean = mean(chartlin);
+
 
 
 
@@ -138,12 +158,13 @@ for c = 1:(currentnumclust)
     %should have only one peak
 
     meanrate = nanmean(chart(:));
-
     maxrate = max(chart(:));
+
+
     chart(isnan(chart)) = 0;
 
-
-
+    %tempz(:,end+1) = [chartnozero, chartlinmean, chartlinmedian, chartlinstd];
+    %tempz = chartlin;
     %finds maxes
     actualmax = imregionalmax(chart); %maxes are where there is a 1 on this chart
 
@@ -152,8 +173,16 @@ for c = 1:(currentnumclust)
     linearmax = sub2ind(size(actualmax), I, J); %linear indices
 
     %finds areas where firing > 3x mean
-    chart;
-    [I,J] = find(chart>=3*meanrate);
+    %[I,J] = find(chart>=3*meanrate);
+      %[I,J] = find(chart>=2.5*chartlinmean);
+      %[I,J] = find(chart>=2.75*chartlinmean); %TRYING
+      [I,J] = find(chart>=chartlinmean+(1*(chartlinstd)));
+
+
+
+
+
+    meanrates = meanrate;
     chartmax = zeros(size(chart));
     for p=1:length(I)
       chartmax(I(p),J(p)) = 1;
@@ -170,11 +199,13 @@ for c = 1:(currentnumclust)
 
 
     for z=1:length(CC.PixelIdxList)
+
       [Yindex, Xindex] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
       YM = length(unique(Yindex));
       XM = length(unique(Xindex));
 
         [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+
         yvals_real = ybins-centerY;
         yvals_real = (ymax)./ybins * yvals_real;
         xvals_real = (xmax)./xbins * centerX;
@@ -192,17 +223,35 @@ for c = 1:(currentnumclust)
           end
         end
         if dis*dim/3.5<5
+          wantedY = find(yvals_real>345 | yvals_real<388); %these are in the arms
+          wantedX = find(yvals_real<=345 | yvals_real>=388); %this is center. finding with Y but these are the X values
+          YM = length(unique(yvals_real(wantedY)));
+          XM = length(unique(xvals_real(wantedX)));
           fsize = YM+XM;
         else
           fsize = max([YM; XM]);
         end
 
+        fsize = fsize*dim;
 
-        if fsize>=15
-        fieldsize(end+1) = fsize*dim;
+        curr = (chart(Yindex, Xindex));
+
+        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+        fieldsize(end+1) = fsize;
 
         numfields = numfields+1;
         [centerY, centerX] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
+
+
+        %converts indices to actual values
+
+        realX = (xmax)./xbins .* centerX;
+        realY = (ymax)./ybins .* centerY;
+        currentrates = chart(centerY, centerX);
+        fieldmeanrate(end+1)= nanmean(currentrates(:));
+
+
+
 
         xbins = ceil((xmax)/psize);
         ybins = ceil((ymax)/psize);
@@ -224,19 +273,18 @@ for c = 1:(currentnumclust)
         stddev = nanstd(newchart(~isnan(newchart)), 0,'all').^3;
         skewness = mom./stddev;
 
+        porp(end+1) = (nanmean(currentrates(:)))./maxrate;
 
 
 
-
-
-        centerXmean = nanmean(centerX);
-        centerYmean = nanmean(centerY);
-        centerYmean = ybins-centerYmean;
 
         centerXmax = (xmax)./xbins * centerXmax;
         centerYmax = (ymax)./ybins * centerYmax;
         centermax(end+1:end+2) = [centerXmax(1), centerYmax(1)];
 
+        centerXmean = nanmean(centerX);
+        centerYmean = nanmean(centerY);
+        centerYmean = ybins-centerYmean;
         centerXmean = (xmax)./xbins * centerXmean;
         centerYmean = (ymax)./ybins * centerYmean;
         centermean(end+1:end+2) = [centerXmean, centerYmean];
@@ -248,6 +296,9 @@ for c = 1:(currentnumclust)
         allcenterXmax(end+1) = centerXmax(1);
         allcenterYmax(end+1) = centerYmax(1);
         allskew(end+1) = skewness;
+        allmeanratetet(end+1) = meanrate;
+        allmaxrate(end+1) = maxrate;
+
 
         if maxrate < .5
           numfields = NaN;
@@ -258,6 +309,7 @@ for c = 1:(currentnumclust)
           allcenterXmax(end+1) = NaN;
           allcenterYmax(end+1) = NaN;
           allskew(end+1) = NaN;
+          tetmean(end+1) = NaN;
 
 
         end
@@ -274,7 +326,7 @@ for c = 1:(currentnumclust)
     numfields;
 
     quad = NaN;
-    newdata = {name; clustsize; numfields; fieldsize; centermean; centermax};
+    newdata = {name; clustsize; numfields; fieldsize; centermean; centermax; meanrates};
     output = horzcat(output, newdata);
 
 end
@@ -357,7 +409,9 @@ for k=1:length(xlimmin)
   end
 end
 
-allsizescenters = [allsizes; allcenterXmax; allcenterYmax; posQuadmax'; allcenterXmean; allcenterYmean; posQuadmean'; allskew]';
+
+
+allsizescenters = [allsizes; allcenterXmax; allcenterYmax; posQuadmax'; allcenterXmean; allcenterYmean; posQuadmean'; allskew; allmaxrate; fieldmeanrate; porp]';
 %for k=1:length(posQuad)
 %output(6, k+1) = mat2cell(posQuad(k), 1, 1);
 %end

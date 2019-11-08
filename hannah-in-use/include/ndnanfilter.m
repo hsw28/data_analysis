@@ -12,16 +12,16 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %   Input:
 %     X      - Data to be filtered with/without NaNs.
 %     HWIN   - Window function handle (or name) or numeric multidimensional
-%              window to be used (without NaNs). See WINDOW for details.   
+%              window to be used (without NaNs). See WINDOW for details.
 %              Default:   @rectwin  or 'rectwin' (moving average).
 %     F      - A vector specifying the semi-width of the window for each
-%              dimension. The final window's width will be 2*F+1. 
+%              dimension. The final window's width will be 2*F+1.
 %              Default: 3 (i.e. a 1-dimensional window of width 6).
 %     DIM    - If F is a single scalar, the window will be applied through
-%              this dimension; otherwise, this will be ignored. 
+%              this dimension; otherwise, this will be ignored.
 %              Default: columns (or the first non-singleton dimension).
 %     WINOPT - Cell array specifying optional arguments for the window
-%              function HWIN (in addition to the width). 
+%              function HWIN (in addition to the width).
 %              Default: {} (window's defaults).
 %     PADOPT - Cell array specifying the optional arguments for the
 %              PADARRAY MATLAB's function (in addition to the array X and
@@ -31,8 +31,8 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %              Default: {'replicate'} (repeats border elements of X).
 %              Default: {0} (pads with zeros if PADARRAY not found).
 %     WNAN   - Integer indicating NaNs treatment and program behaviour!:
-%              0: Filters data and interpolates NaNs         (default). 
-%              1: Filters data but do not interpolates NaNs 
+%              0: Filters data and interpolates NaNs         (default).
+%              1: Filters data but do not interpolates NaNs
 %              2: "Do not filters data" but interpolates NaNs!
 %              See the NOTEs below
 %
@@ -62,9 +62,9 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %     treated smoothly. When PADARRAY is not found, the program performs
 %     zero-padding.
 %
-%   Notes: 
+%   Notes:
 %     * The use of semi-widths F's is to force the generated window to be
-%       even and, therefore, the change of phase is null.  
+%       even and, therefore, the change of phase is null.
 %     * The window function HWIN should output an even function, otherwise,
 %       it won't generate an error but the user should be aware that this
 %       program will consider only the last half of it.
@@ -72,7 +72,7 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %       result, this restriction is because I try to avoid the use of FZERO
 %       function, for example, to find the expanding/shrinking factors.
 %     * If the user has an already generated window, it can be used in HWIN
-%       instead of a function handle or name. 
+%       instead of a function handle or name.
 %     * Accepts empty value for any input. When X is empty, the program can
 %       be used as a N-dimensional window generator.
 %     * NaNs elements surrounded by no-NaNs elements (which will depend on
@@ -101,23 +101,23 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %     [Z0,W] = ndnanfilter(Y,FWIN,F);                   % filters
 %     Z1 = Z0; Z2 = Y; inan = isnan(Y);
 %     Z1(inan) = NaN;
-%     Z2(inan) = Z0(inan);  
+%     Z2(inan) = Z0(inan);
 %     subplot(231), imagesc(X), clim = caxis; axis equal tight
 %                   title('Original data')
-%     subplot(232), imagesc(Y),  caxis(clim), axis equal tight 
+%     subplot(232), imagesc(Y),  caxis(clim), axis equal tight
 %                   title('Data + NOISE + NaNs')
-%     subplot(234), imagesc(Z0), caxis(clim), axis equal tight 
+%     subplot(234), imagesc(Z0), caxis(clim), axis equal tight
 %                   title('FILTERS + NaNs interpolation')
-%     subplot(235), imagesc(Z1), caxis(clim), axis equal tight 
+%     subplot(235), imagesc(Z1), caxis(clim), axis equal tight
 %                   title('FILTERS ignoring NaNs')
-%     subplot(236), imagesc(Z2), caxis(clim), axis equal tight 
+%     subplot(236), imagesc(Z2), caxis(clim), axis equal tight
 %                   title('GAP-filling with interpolated NaNs')
-%     subplot(233), imagesc(-F(1):F(1),-F(2):F(2),W), axis equal tight, 
-%                    title([upper(FWIN) ' 2D window']), view(2) 
+%     subplot(233), imagesc(-F(1):F(1),-F(2):F(2),W), axis equal tight,
+%                    title([upper(FWIN) ' 2D window']), view(2)
 %
 %   See also: FILTER, FILTER2 and CONVN; WINDOW from the Signal Processing
 %   Toolbox; and FWIND1, FWIND2, FSPECIAL, IMFILTER and PADARRAY from the
-%   Image Processing Toolbox. 
+%   Image Processing Toolbox.
 
 %   Copyright 2008 Carlos Adrian Vargas Aguilera
 %   $Revision: 1.2 $  $Date: 2008/06/30 18:00:00 $
@@ -125,7 +125,7 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %   Written by
 %   M.S. Carlos Adrian Vargas Aguilera
 %   Physical Oceanography PhD candidate
-%   CICESE 
+%   CICESE
 %   Mexico, 2008
 %   nubeobscura@hotmail.com
 %
@@ -134,14 +134,15 @@ function [Y,W] = ndnanfilter(X,HWIN,F,DIM,WINOPT,PADOPT,WNAN)
 %   tType=author&objectId=1093874
 
 %   1.0    Release (2008/06/23 10:30:00)
-%   1.1    Fixed Bug adding an extra dimension of unitary width. 
+%   1.1    Fixed Bug adding an extra dimension of unitary width.
 %   1.2    Fixed Bug with ynan.
 
 % Use the IMFILTER function? (faster than CONVN):
 yimfilter = (exist('imfilter','file')==2);
 
-% Use the PADARRAY function (or zero padding): 
+% Use the PADARRAY function (or zero padding):
 ypadarray = (exist('padarray','file')==2);
+ypadarray = 0; %BYE PADDING
 
 % Check inputs and sets defaults of principal arguments:
 if nargin<3 || nargin>7
@@ -177,7 +178,7 @@ if nargin<7 || isempty(WNAN)
  WNAN = 0;
 end
 
-% Selects the 1-dimensional filter or set a row vector: 
+% Selects the 1-dimensional filter or set a row vector:
 if N==1
  a = zeros(1,DIM);
  a(DIM) = F;
@@ -241,7 +242,8 @@ else                                        % Use CONVN
  % Pads the borders:
  if ypadarray
   ind    = padarray(false(S),F2,true     );    % Index of the padding.
-  Y      = padarray(X       ,F2,PADOPT{:});
+  %Y      = padarray(X       ,F2,PADOPT{:});
+  y = array_padd(X, F2, 0, 0, 'blackman');
  elseif length(PADOPT{1})==1
   ind2 = cell(N,1);
   for n = 1:N
@@ -253,7 +255,7 @@ else                                        % Use CONVN
     Y(ind2{:}) = X;
  else % No padding at all
   Y    = X;
-  ind  = repmat(false,S); 
+  ind  = repmat(false,S);
   warning('Ndnanfilter:PaddingOption','Do not perfom any padding.')
  end
  % Convolutes both arrays:
@@ -264,7 +266,7 @@ else                                        % Use CONVN
  end
  %  Eliminates the padding:
  Y(ind) = [];
- Y      = reshape(Y,S);   
+ Y      = reshape(Y,S);
 end
 
 % Estimates the averages when NaNs are present:
@@ -274,6 +276,7 @@ if ynan
  else
   if ypadarray
    factor      = padarray(~inan,F2,PADOPT{:});
+   factor = array_padd(~inan, F2, 0, 0, 'blackman'); %NEW
   elseif length(PADOPT{1})==1 % (won't work properly with NaNs at borders)
    factor          = ind;
    factor(ind2{:}) = ~inan;
@@ -293,7 +296,7 @@ if     WNAN == 1       % Leave NaNs elements untouched!
 elseif WNAN == 2       % Leave no-NaNs elements untouched!!!
  X(inan) = Y(inan);
  Y = X;
-end  
+end
 
 
 function W = ndwind(HWIN,F,varargin)
@@ -308,7 +311,7 @@ function W = ndwind(HWIN,F,varargin)
 %            uses: @rectwin (a rectangular window).
 %     F    - A vector specifying the semiwidth of the window for each
 %            dimension. The window's width will be 2*F+1. By default uses:
-%            3 (i.e. a window of width 6). 
+%            3 (i.e. a window of width 6).
 %     OPT  - Cell array specifying optional arguments for the window
 %            function. By default uses: {[]} (window's defaults).
 %
@@ -321,19 +324,19 @@ function W = ndwind(HWIN,F,varargin)
 %     That is, they are defined by the same window function but have
 %     different widths. So, this program creates another widther window (at
 %     least 201 points), with the same definition, and finds how much the
-%     former windows should be expanded in order to fit the latter one. 
+%     former windows should be expanded in order to fit the latter one.
 %
 %     Afterwards, the coordinates of every point are expanded accordingly
 %     and the value of the window in those points are found by linear
-%     interpolation with the bigger window. 
+%     interpolation with the bigger window.
 %
 %     In resume, it is like rotating this big window through every
 %     dimension and then shrinking it through each of its axes to fix the
 %     specified widths.
 %
-%   Notes: 
+%   Notes:
 %     * Because of the use of the semi-widths F's, all the generated
-%       windows are even. Therefore the change of phase is null. 
+%       windows are even. Therefore the change of phase is null.
 %     * The window function HWIN should output an even function, otherwise,
 %       it won't generate an error but this program will consider only the
 %       last half of it.
@@ -346,7 +349,7 @@ function W = ndwind(HWIN,F,varargin)
 %     W = ndwind(@hamming,[3 2])
 %     % Results:
 %     W =
-%     
+%
 %              0         0    0.0800         0         0
 %              0    0.1417    0.3100    0.1417         0
 %              0    0.3966    0.7700    0.3966         0
@@ -365,7 +368,7 @@ function W = ndwind(HWIN,F,varargin)
 %   Written by
 %   M.S. Carlos Adrian Vargas Aguilera
 %   Physical Oceanography PhD candidate
-%   CICESE 
+%   CICESE
 %   Mexico, 2008
 %   nubeobscura@hotmail.com
 %
@@ -374,7 +377,7 @@ function W = ndwind(HWIN,F,varargin)
 %   tType=author&objectId=1093874
 
 %   1.0    Release (2008/06/23 10:30:00)
-%   1.1    Fixed Bug adding an extra dimension of unitary width.  
+%   1.1    Fixed Bug adding an extra dimension of unitary width.
 
 % Check inputs:
 if nargin<1 || isempty(HWIN)
@@ -401,10 +404,10 @@ rBIGw        = 0:FBIG;   % Window argument (distance).
 
 % Axial windows widths:
 N  = numel(F);
-F  = reshape(F,1,N); 
+F  = reshape(F,1,N);
 F  = [F 0];             % BUG fixed by adding an extra dimension.
 N  = N+1;
-F2 = 2*F+1;
+F2 = F+1;
 
 
 % Pre-allocates the final window and the expanded axis:
@@ -414,10 +417,10 @@ Ae = An;
 
 % Generates the index and expanded axes:
 for n = 1:N
- 
+
  % Generate temporally the window in the n-axis:
  wn = feval(HWIN,F2(n),varargin{:});
- 
+
  % Finds the expansion factors (Note: the window should tends to zero):
  if F(n)
   piv = wn(end);
@@ -437,11 +440,11 @@ for n = 1:N
  else
   Ef = 1;
  end
- 
+
  % Reversed index and expanded n-axis (for the following grid):
  An{n} = (F(n):-1:0);
  Ae{n} = An{n}*Ef;
- 
+
 end
 
 % Estimates the expanded distances outside the axes (only at the 1st
@@ -473,7 +476,7 @@ for n = 1:N
  ip(ini:step:np) = n;
 end
 
-% Fills the N-D window by flipping W4 and the index: 
+% Fills the N-D window by flipping W4 and the index:
 ones4       = repmat(false,F2);    % Avoids using new FALSE function
 ones4(ind4) = true;
 W(ones4)    = W4;

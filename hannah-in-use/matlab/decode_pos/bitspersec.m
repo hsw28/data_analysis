@@ -29,6 +29,24 @@ for z = 1:length(pnames)
   date = strsplit(date,'_position'); %rat12_2018_08_20
   date = char(date(1,1));
 
+  cstart = 0;
+  cend = 100000000;
+
+  currentclusts = struct;
+  for c = 1:(spikenum)
+    name = char(clustspikenames(c));
+    date;
+    if contains(name, date)==1 & cstart==0
+      [currentclusts(:).(name)] = deal(clusters.(name));
+    end
+  end
+
+  currentclustname = (fieldnames(currentclusts));
+  currentnumclust = length(currentclustname);
+
+
+  if currentnumclust>0
+    
   %Sum of (occprobs * mean firing rate per bin) * log2 (mean firing rate per bin / overall mean rate)
   psize = 3.5 * dim;
   xvals = posData(:,2);
@@ -46,7 +64,7 @@ for z = 1:length(pnames)
   xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
   yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
-  velthreshold = 12;
+velthreshold = 12;
   vel = velocity(posData);
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
   fastvel = find(vel(1,:) > velthreshold);
@@ -86,30 +104,16 @@ for z = 1:length(pnames)
 numocc = occ(~isnan(occ));
 occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
+occprobs = chartinterp(occprobs);
 
 
 %spike rates
 cnames = {};
 
-cstart = 0;
-cend = 100000000;
 
-currentclusts = struct;
-for c = 1:(spikenum)
-  name = char(clustspikenames(c));
-  date;
-  if contains(name, date)==1 & cstart==0
-    [currentclusts(:).(name)] = deal(clusters.(name));
-  end
-end
-
-currentclustname = (fieldnames(currentclusts));
-currentnumclust = length(currentclustname);
-
-
-if currentnumclust>0
 
 fxmatrix = firingPerPos(posData, currentclusts, dim, 1, 30, occ);
+
 
 
 for c = 1:(currentnumclust)
@@ -124,8 +128,11 @@ for c = 1:(currentnumclust)
     %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
     fxclust = fxmatrix.(name);
+    fxclust = chartinterp(fxclust);
     meanrate = nanmean(fxclust(:));
-    fxclust = ndnanfilter(fxclust, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+    fxclust = ndnanfilter(fxclust, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    neg = find(fxclust(:)<0);
+    fxclust(neg) = eps;
 
     oldbits = 0;
     newbits = 0;

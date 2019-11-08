@@ -1,6 +1,6 @@
 function [f allsizescenters] = MASSplacefieldnumDIRECTIONAL(clusters,posstructure, dim)
 
-      set(0,'DefaultFigureVisible', 'off');
+      %set(0,'DefaultFigureVisible', 'off');
 
 %determine how many spikes & pos files
 
@@ -59,7 +59,7 @@ for z = 1:length(pnames)
 
   if currentnumclust>0
 
-  velthreshold = 12;
+velthreshold = 12;
   vel = velocity(posData);
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
   fastvel = find(vel(1,:) > velthreshold);
@@ -129,8 +129,8 @@ for c = 1:(currentnumclust)
     %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
 
-    %finding directionality per spike
 
+    %finding directionality per spike
     dirinfo = direction(clust(fastspikeindex), posData); %outputs [timevector; xposvector; yposvector; fxvector; fyvector];
 
     %if left forced or right choice is negative in y direction, toward reward
@@ -177,7 +177,10 @@ for c = 1:(currentnumclust)
       testing = intersect(toreward, awayreward);
       dirinfo(:, testing)';
       torewardspikes = dirinfo(1,toreward);
+      size(torewardspikes);
       awayrewardspikes = dirinfo(1,awayreward);
+      size(awayrewardspikes);
+
 
       %%%%%%%%%%%%
 
@@ -199,11 +202,22 @@ for c = 1:(currentnumclust)
       continue
     end
 
+
     chart = normalizePosData(spikestochart, posDataFast, dim);
+    chart = chartinterp(chart);
 
 
     %smoothing spiking normalization
-    chart = ndnanfilter(chart, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+
+    chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
+    chartlin = sort(chart(:));
+    chartlin = chartlin(~isnan(chartlin));
+    chartnozero = mean(chartlin(find(chartlin>0)));
+    chartlinstd = std(chartlin);
+    chartlinmedian = median(chartlin);
+    chartlinmean = mean(chartlin);
+
 
 
     %divided into 5cm by 5cm bins
@@ -221,9 +235,14 @@ for c = 1:(currentnumclust)
     linearmax = sub2ind(size(actualmax), I, J); %linear indices
 
     %finds areas where firing > 3x mean. those are marked with a 1 on the chart
-    chart;
-    [I,J] = find(chart>=3*meanrate);
+      [I,J] = find(chart>=chartlinmean+(1*(chartlinstd)));
+
+    %[I,J] = find(chart>=3*meanrate);
+
+
     chartmax = zeros(size(chart));
+
+
     for p=1:length(I)
       chartmax(I(p),J(p)) = 1;
     end
@@ -258,14 +277,20 @@ for c = 1:(currentnumclust)
           end
         end
         if dis*dim/3.5<5
+          wantedY = find(yvals_real>345 | yvals_real<388); %these are in the arms
+          wantedX = find(yvals_real<=345 | yvals_real>=388); %this is center. finding with Y but these are the X values
+          YM = length(unique(yvals_real(wantedY)));
+          XM = length(unique(xvals_real(wantedX)));
           fsize = YM+XM;
         else
           fsize = max([YM; XM]);
         end
 
+        fsize = fsize*dim;
 
-        if fsize>=15 %then its a place field
-        fieldsize(end+1) = fsize*dim;
+        curr = (chart(Yindex, Xindex));
+        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+        fieldsize(end+1) = fsize;
         %find all instances where animal goes through place field
 
         %finds indices of place fields
@@ -296,8 +321,7 @@ for c = 1:(currentnumclust)
         centerYmax = ybins-centerYmax; %here?
         newchart(find(newchart==0))=NaN;
 
-        centerXmax = (xmax)./xbins * centerXmax;
-        centerYmax = (ymax)./ybins * centerYmax;
+
 
         centerXmean = nanmean(centerX);
         centerYmean = nanmean(centerY);
@@ -404,13 +428,13 @@ for c = 1:(currentnumclust)
       end
 
 
+        centerXmax = (xmax)./xbins * centerXmax;
+        centerYmax = (ymax)./ybins * centerYmax;
+        centermax(end+1:end+2) = [centerXmax(1), centerYmax(1)];
 
         centerXmean = nanmean(centerX);
         centerYmean = nanmean(centerY);
         centerYmean = ybins-centerYmean;
-
-
-        centermax(end+1:end+2) = [centerXmax(1), centerYmax(1)];
         centerXmean = (xmax)./xbins * centerXmean;
         centerYmean = (ymax)./ybins * centerYmean;
         centermean(end+1:end+2) = [centerXmean, centerYmean];

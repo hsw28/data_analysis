@@ -35,6 +35,8 @@ yposvector = [];
 fxvector = [];
 fyvector = [];
 
+
+%{
 i = 1;
 newn = 1;
 while i <= eventsize
@@ -81,4 +83,7 @@ end
 
 %figure
 %quiver(xposvector, yposvector, fxvector, fyvector)
-v = [timevector; xposvector; yposvector; fxvector; fyvector];
+
+%}
+v = tfxfy';
+%v = [timevector; xposvector; yposvector; fxvector; fyvector];

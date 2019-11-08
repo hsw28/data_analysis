@@ -1,5 +1,5 @@
 function f = bitsperspike(posstructure, clusters, dim)
-
+%outputs name, bits per spike, and mean firing rate normalized by position
 
 %determine how many spikes & pos files
 tic
@@ -18,17 +18,36 @@ for s = 1:posnum
   end
 end
 
-output = {'cluster name'; 'bits/spike'};
+output = {'cluster name'; 'bits/spike'; 'mean rate'};
 
 for z = 1:length(pnames)
   currentname = char(pnames(z));
   posData = posstructure.(currentname);
+
+  cstart = 0;
+  cend = 100000000;
+
+
+
   posData = fixpos(posData);
   % get date of spike
   date = strsplit(currentname,'date_'); %splitting at year rat12_2018_08_20_time
   date = char(date(1,2));
   date = strsplit(date,'_position'); %rat12_2018_08_20
   date = char(date(1,1));
+
+  currentclusts = struct;
+  for c = 1:(spikenum)
+    name = char(clustspikenames(c));
+    if contains(name, date)==1 & cstart==0
+      [currentclusts(:).(name)] = deal(clusters.(name));
+    end
+  end
+
+  currentclustname = (fieldnames(currentclusts));
+  currentnumclust = length(currentclustname);
+
+  if currentnumclust>0
 
   %Sum of (occprobs * mean firing rate per bin / overall mean rate) * log2 (mean firing rate per bin / overall mean rate)
   psize = 3.5 * dim;
@@ -86,31 +105,18 @@ for z = 1:length(pnames)
 numocc = occ(~isnan(occ));
 occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
+occprobs = chartinterp(occprobs);
 
 %Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
 
 %spike rates
 cnames = {};
 
-cstart = 0;
-cend = 100000000;
 
-currentclusts = struct;
-for c = 1:(spikenum)
-  name = char(clustspikenames(c));
-  date;
-  if contains(name, date)==1 & cstart==0
-    [currentclusts(:).(name)] = deal(clusters.(name));
-  end
-end
-
-currentclustname = (fieldnames(currentclusts));
-currentnumclust = length(currentclustname);
-
-if currentnumclust>0
 
 
 fxmatrix = firingPerPos(posData, currentclusts, dim, 1, 30, occ);
+
 
 for c = 1:(currentnumclust)
   name = char(currentclustname(c));
@@ -125,9 +131,12 @@ for c = 1:(currentnumclust)
 
 
     fxclust = fxmatrix.(name);
+    fxclust = chartinterp(fxclust);
     meanrate = nanmean(fxclust(:));
-    fxclust = ndnanfilter(fxclust, 'gausswin', 10./2*dim, 2, {}, {'replicate'}, 1);
+    fxclust = ndnanfilter(fxclust, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
 
+    neg = find(fxclust(:)<0);
+    fxclust(neg) = eps;
 
 
     oldbits = 0;
@@ -137,7 +146,7 @@ for c = 1:(currentnumclust)
     bigY = 0;
     for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
       for y = (1:ybins)
-        if occprobs(x,y)>0 & ~isnan(fxclust(x,y))==1
+        if occprobs(x,y)>0 & ~isnan(fxclust(x,y))==1 & ~isnan(occprobs(x,y))==1
 
 
         newbits = (occprobs(x,y) .* (fxclust(x,y) ./ meanrate) * log2((fxclust(x,y) ./ meanrate)));
@@ -145,6 +154,7 @@ for c = 1:(currentnumclust)
       %    x
       %    y
       %  end
+
         bitsper = bitsper + newbits; %if you want per location, assign this to a matrix
 
 
@@ -170,7 +180,7 @@ for c = 1:(currentnumclust)
     if meanrate <.05
       bitsper = NaN;
     end
-    newdata = {name; bitsper};
+    newdata = {name; bitsper; meanrate};
 
     output = horzcat(output, newdata);
 

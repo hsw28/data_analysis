@@ -3,10 +3,14 @@ function f = assignposOLD(time, pos)
 % assigns position to all timepoints based on nearest point(no upsampling)
 % input time vector and position
 % ap = assignpos(time, pos)
+
 postime = pos(:,1);
+time = sort(time);
 [c timestart] = min(abs(time-postime(1)));
 [c timeend] = min(abs(postime(end)-time));
 
+timestart;
+timeend;
 time = time(timestart:timeend);
 
 
@@ -49,7 +53,5 @@ size(ycord);
 xcord = assignvelOLD(time, xcord);
 ycord = assignvelOLD(time, ycord);
 
-size(time);
-size(xcord);
-size(ycord);
-f = [time(1:length(xcord))'; xcord; ycord]';
+
+f = [time(1:length(xcord)); xcord; ycord]';
