@@ -1,5 +1,5 @@
 
-function varargout=psth(seconds, bins, varargin)
+function varargout=psth(varargin)
 %PSTH peri-stimulus time histogram
 %
 % all inputs must be in columns
