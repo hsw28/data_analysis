@@ -55,7 +55,7 @@ for z = 1:length(pnames)
     end
   end
 
-  currentclustname = (fieldnames(currentclusts));
+  currentclustname = (fieldnames(currentclusts))
   currentnumclust = length(currentclustname);
 
   if currentnumclust>0
@@ -137,18 +137,19 @@ for c = 1:(currentnumclust)
 
 
 
+    figure
     chart = normalizePosData(clust(fastspikeindex), posDataFast, dim);
-    chart = chartinterp(chart);
-    %chart = ndnanfilter(chart, 'gausswin', [floor(10./(2*dim)), floor(10./(2*dim))], 2, {}, {'replicate'}, 1);
-    chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
+      chart = chartinterp(chart);
+      chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
 
 
-    chartlin = sort(chart(:));
-    chartlin = chartlin(~isnan(chartlin));
-    chartnozero = mean(chartlin(find(chartlin>0)));
-    chartlinstd = std(chartlin);
-    chartlinmedian = median(chartlin);
-    chartlinmean = mean(chartlin);
+      chartlin = sort(chart(:));
+      chartlin = chartlin(~isnan(chartlin));
+      chartnozero = mean(chartlin(find(chartlin>0)));
+      chartlinstd = std(chartlin);
+      chartlinmedian = median(chartlin);
+      chartlinmean = mean(chartlin);
 
 
 
@@ -289,7 +290,6 @@ for c = 1:(currentnumclust)
         centerYmean = (ymax)./ybins * centerYmean;
         centermean(end+1:end+2) = [centerXmean, centerYmean];
 
-
         allsizes(end+1) = fieldsize(end);
         allcenterXmean(end+1) = centerXmean;
         allcenterYmean(end+1) = centerYmean;
@@ -299,6 +299,84 @@ for c = 1:(currentnumclust)
         allmeanratetet(end+1) = meanrate;
         allmaxrate(end+1) = maxrate;
 
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                %5 used to be 440 820 340 420
+                xlimmin = [300 300  750 780 ];
+                xlimmax = [505 505  950 950 ];
+                ylimmin = [370 000  380 000 ];
+                ylimmax = [700 370  700 380 ];
+
+
+                for k=1:length(xlimmin)
+                  if centerYmean<380 & centerYmean>340 & size(newchart,2)>size(newchart,1)%center area so place field could go horizontally or vertically
+                        k=5;
+                        flattened = nanmean(newchart,1);
+                        newflattened = flattened;
+
+                    else
+                        inX = find(centerXmean > xlimmin(k) & centerXmean <=xlimmax(k)); %check to make sure correct indexing
+                        inY = find(centerYmean > ylimmin(k) & centerYmean <=ylimmax(k));
+                        inboth = intersect(inX, inY);
+                        if length(inboth)>0
+                          flattened = nanmean(newchart,2)'; %need this directional
+                          %need to flip right forced and left choice
+                          if (k == 1 | k== 4)
+                            newflattened = flattened;
+                          elseif (k == 2 | k== 3)
+                            newflattened = flip(flattened);
+                          end
+
+
+                      end
+                  end
+                end
+
+                flatstart = (find(newflattened>0));
+                newflattened = newflattened(flatstart(1):end);
+
+                counter = 0;
+                flatmean = 0;
+                countersum = 0;
+
+
+                for kk = 1:length(newflattened)
+                  if newflattened(kk)>0
+                  flatmean = flatmean+(kk*newflattened(kk));
+                  counter = counter+1;
+                  countersum = countersum+newflattened(kk);
+                  end
+                end
+                flatmean = flatmean./countersum;
+
+                flatmom = 0;
+                temp = [];
+                for kk = 1:length(newflattened)
+                  if newflattened(kk)>0
+                    kk-flatmean;
+                    temp(end+1)= ((kk-flatmean)^3)*newflattened(kk);
+                  flatmom = flatmom+((kk-flatmean)^3)*newflattened(kk);
+                  end
+                end
+
+
+                flatstd = 0;
+                for kk = 1:length(newflattened)
+                  if newflattened(kk)>0
+                  flatstd = flatstd+((kk-flatmean)^2)*newflattened(kk);
+                end
+                end
+
+                flatstd = sqrt(flatstd);
+
+                if length(newflattened(~isnan(newflattened)))>2
+                  skewness = flatmom./(flatstd^3)
+                else
+                  skewness = NaN;
+                end
+
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         if maxrate < .5
           numfields = NaN;

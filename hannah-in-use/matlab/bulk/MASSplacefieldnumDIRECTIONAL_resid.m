@@ -270,7 +270,7 @@ for c = 1:(currentnumclust)
 
     %finds areas where firing > 3x mean. those are marked with a 1 on the chart
 
-    [I,J] = find(chart>=chartlinmean+(1*(chartlinstd)));
+    [I,J] = find(chart>=chartlinmean+(2*(chartlinstd)));
     chartmax = zeros(size(chart));
     for p=1:length(I)
       chartmax(I(p),J(p)) = 1;
@@ -317,7 +317,7 @@ for c = 1:(currentnumclust)
 
         fsize = fsize*dim;
         curr = (chart(Yindex, Xindex));
-        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+        if fsize>=15 & max(curr(:))>=chartlinmean+(3*(chartlinstd))
         fieldsize(end+1) = fsize;
 
         %find all instances where animal goes through place field

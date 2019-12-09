@@ -22,7 +22,7 @@ for s = 1:posnum
   end
 end
 
-output = {'cluster name'; 'cluster size'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'};
+output = {'cluster name'; 'cluster size'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'r2 V'; 'r2 A'; 'r2 VA'};
 
 for z = 1:length(pnames)
   currentname = char(pnames(z))
@@ -178,8 +178,40 @@ for c = 1:(currentnumclust)
     reshapesize = size(accpowerchart);
     %multiple linear regression of the responses in vector y on the predictors in matrix X.
 
-    [b,bint,resid] = regress(spikechart(:),[velpowerchart(:), accpowerchart(:)]);
-    chart = reshape(resid, reshapesize);
+    onechart = ones(length(velpowerchart(:)),1);
+    velpowerchart = ndnanfilter(velpowerchart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    accpowerchart = ndnanfilter(accpowerchart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    spikechart = ndnanfilter(spikechart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
+statsV = NaN;
+statsA = NaN;
+    %predictorsV = [onechart velpowerchart(:)];
+    %predictorsA = [onechart accpowerchart(:)];
+    predictorsVA = [onechart velpowerchart(:) accpowerchart(:)];
+    %[b,bint,residV,rint,statsV] = regress(spikechart(:), predictorsV);
+    %[b,bint,residA,rint,statsA] = regress(spikechart(:), predictorsA);
+    [b,bint,residVA,rint,statsVA] = regress(spikechart(:), predictorsVA);
+
+    if statsVA(1) >=.5
+
+      chart = reshape(residVA, reshapesize);
+    else
+      numfields = NaN;
+      fieldsize = NaN;
+      allsizes(end+1) = NaN;
+      allcenterXmean(end+1) = NaN;
+      allcenterYmean(end+1) = NaN;
+      allcenterXmax(end+1) = NaN;
+      allcenterYmax(end+1) = NaN;
+      centermean = NaN;
+      centermax = NaN;
+      allskew(end+1) = NaN;
+      quad = NaN;
+      newdata = {name; clustsize; numfields; fieldsize; centermean; centermax; statsV(1); statsA(1); statsVA(1)};
+      output = horzcat(output, newdata);
+      continue
+    end
+
 
 
     %%%%%%%%%%%%%%%%%%%
@@ -222,7 +254,7 @@ for c = 1:(currentnumclust)
 
     %finds areas where firing > 3x mean. those are marked with a 1 on the chart
 
-    [I,J] = find(chart>=chartlinmean+(1*(chartlinstd)));
+    [I,J] = find(chart>=chartlinmean+(2*(chartlinstd)));
     chartmax = zeros(size(chart));
     for p=1:length(I)
       chartmax(I(p),J(p)) = 1;
@@ -272,7 +304,7 @@ for c = 1:(currentnumclust)
 
         fsize = fsize*dim;
         curr = (chart(Yindex, Xindex));
-        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+        if fsize>=15 & max(curr(:))>=chartlinmean+(3*(chartlinstd))
         fieldsize(end+1) = fsize;
         %areaind = cell2mat(CC.PixelIdxList(z)); %linear indices of area
         %numfields = numfields+(length(intersect(areaind, linearmax)))
@@ -333,9 +365,9 @@ for c = 1:(currentnumclust)
           allcenterXmax(end+1) = NaN;
           allcenterYmax(end+1) = NaN;
           allskew(end+1) = NaN;
-
-
         end
+
+
 
       end
 
@@ -346,10 +378,13 @@ for c = 1:(currentnumclust)
 
 
 end
+
+
+
     numfields;
 
     quad = NaN;
-    newdata = {name; clustsize; numfields; fieldsize; centermean; centermax};
+    newdata = {name; clustsize; numfields; fieldsize; centermean; centermax; statsV(1); statsA(1); statsVA(1)};
     output = horzcat(output, newdata);
 
 end

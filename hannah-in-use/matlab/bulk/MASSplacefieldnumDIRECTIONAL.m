@@ -29,8 +29,8 @@ end
 %output = {'cluster name'; 'cluster size'; 'direction'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'skewness'};
 output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'; 'av field rate'; 'max field rate'};
 
-for z = 1:length(pnames)
-  currentname = char(pnames(z))
+for zzzz = 1:length(pnames)
+  currentname = char(pnames(zzzz));
   posData = posstructure.(currentname);
   posData = fixpos(posData);
   % get date of spike
@@ -59,7 +59,7 @@ for z = 1:length(pnames)
 
   if currentnumclust>0
 
-velthreshold = 12;
+  velthreshold = 12;
   vel = velocity(posData);
   vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
   fastvel = find(vel(1,:) > velthreshold);
@@ -115,14 +115,14 @@ occprobs = occ./(occtotal);
 
 %spike rates
 
-
 for c = 1:(currentnumclust)
-  name = char(currentclustname(c));
+    name = char(currentclustname(c))
     clust = currentclusts.(name);
     clustsize = length(clust);
     [clustmin indexmin] = min(abs(posData(1,1)-clust));
     [clustmax indexmax] = min(abs(posData(end,1)-clust));
     clust = clust(indexmin:indexmax);
+
 
     assvel = assignvelOLD(clust, vel);
     fastspikeindex = find(assvel > velthreshold);
@@ -132,7 +132,7 @@ for c = 1:(currentnumclust)
 
     %finding directionality per spike
     dirinfo = direction(clust(fastspikeindex), posData); %outputs [timevector; xposvector; yposvector; fxvector; fyvector];
-
+    size(dirinfo);
     %if left forced or right choice is negative in y direction, toward reward
     %if right forced or left choice is positive in y direction, toward reward
     %if middle is positive in x direction, toward reward
@@ -186,8 +186,8 @@ for c = 1:(currentnumclust)
 
     %NOW DO CHARTS AND EVERYTHING FOR BOTH
     %spiking normalization chart
-    for z=1:2;
-      if z ==1;
+  for zdir=1:2;
+      if zdir ==1;
         spikestochart = torewardspikes;
         dir = 'to';
         currentdir = 1;
@@ -196,6 +196,7 @@ for c = 1:(currentnumclust)
         dir = 'away';
         currentdir = 2;
       end
+
 
     spikestochart = cutclosest(posDataFast(1,1), posDataFast(end,1), spikestochart, spikestochart);
     if length(spikestochart)<2
@@ -289,7 +290,7 @@ for c = 1:(currentnumclust)
         fsize = fsize*dim;
 
         curr = (chart(Yindex, Xindex));
-        if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
+      if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
         fieldsize(end+1) = fsize;
         %find all instances where animal goes through place field
 
@@ -487,4 +488,52 @@ end
 
 f = output';
 
-allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew; allavpfrate; allmaxpfrate]';
+%if you want seperate choice points
+xlimmin = [300 300 320 320 320 450 750 780 828 780 780];
+xlimmax = [505 450 450 505 505 850 950 950 950 950 950];
+ylimmin = [545 422 320 170 000 300 575 420 339 182 000];
+ylimmax = [700 545 422 320 170 440 700 575 420 339 182];
+%position 1: end of left forced
+%position 2: left forced
+%position 3: forced choice point
+%position 4: right forced
+%position 5: end of right forced
+%position 6: middle stem
+%position 7: end of left choice
+%position 8 left choice arm
+%position 9: free choice point
+%position 10: right choice arm
+%position 11: end of right choice arm
+
+%1 = 1, 2 and 4,5 grouped as forced arms
+%2 = 3 is forced point
+%3 = 6 is middle stem
+%4 = 7,8 and 10,11 grouped as choice arms
+%5 = 9 is free choice point
+posQuadmax = zeros(length(allcenterXmax), 1);
+for k=1:length(xlimmin)
+  inX = find(allcenterXmax > xlimmin(k) & allcenterXmax <=xlimmax(k));
+  inY = find(allcenterYmax > ylimmin(k) & allcenterYmax <=ylimmax(k));
+  inboth = intersect(inX, inY);
+  if (k == 2 | k== 4)        %|k== 1 | k== 5 %& vel(inboth(z))>threshold
+    posQuadmax(inboth) = 1;
+  elseif k == 3                                 %& vel(inboth(z))>threshold
+    posQuadmax(inboth) = 2;
+  elseif (k== 1 | k== 5)
+    posQuadmax(inboth) = 0;
+  elseif k == 6                        %& vel(inboth(z))>threshold
+    posQuadmax(inboth) = 3;
+  elseif (k == 8 | k== 10 )                %| k== 7 | k== 11          %& vel(inboth(z))>threshold
+    posQuadmax(inboth) = 5;
+  elseif (k== 7 | k== 11)
+    posQuadmax(inboth) = 6;
+  elseif k == 9                                    %& vel(inboth(z))>threshold
+    posQuadmax(inboth) = 4;
+  else
+    posQuadmax(inboth) = NaN;
+  end
+end
+
+size(allmaxpfrate)
+size(posQuadmax)
+allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew; allavpfrate; allmaxpfrate; posQuadmax']';

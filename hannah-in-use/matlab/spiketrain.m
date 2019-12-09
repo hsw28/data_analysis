@@ -3,7 +3,7 @@ function x = spiketrain(spike, tm, binwidth);
 % makes a spike train where 0 is no spike, 1 is a spike
 % input spike times and session times
 % can insert a matrix of spike data
-%
+%binwidth is in seconds
 % ex: spiketrain(spiketime, lfp.timestamp);
 
 [c indexmin] = (min(abs(spike-tm(1))));

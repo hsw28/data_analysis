@@ -12,12 +12,12 @@ twonorm = two-mean(two);
 
 [cor, lag] = xcorr(onenorm, twonorm, 'coeff');
 
-lag = (lag)./30;
+%lag = (lag)./30;
 %plot(lag./2, cor)
 plot(lag, cor)
 
-size(cor);
-size(lag);
-ylabel('Correlation')
-xlabel('Lag (Sec.)')
-x = [cor; lag];
+%size(cor);
+%size(lag);
+%ylabel('Correlation')
+%xlabel('Lag (Sec.)')
+%x = [cor; lag];

@@ -21,7 +21,7 @@ end
 output = {'cluster name'; 'bits/spike'; 'mean rate'};
 
 for z = 1:length(pnames)
-  currentname = char(pnames(z));
+  currentname = char(pnames(z))
   posData = posstructure.(currentname);
 
   cstart = 0;
@@ -107,12 +107,19 @@ occtotal = sum(((numocc)), 'all');
 occprobs = occ./(occtotal);
 occprobs = chartinterp(occprobs);
 
+
+
+%if length(~isnan(chart(:))==1)>12000
+
 %Sum of (occprobs * mean firing rate per bin / meanrate) * log2 (mean firing rate per bin / meanrate)
 
 %spike rates
 cnames = {};
 
 
+chart = normalizePosData([1], posDataFast, 5);
+length(~isnan(chart(:))==1)
+if length(~isnan(chart(:))==1)>=1950
 
 
 fxmatrix = firingPerPos(posData, currentclusts, dim, 1, 30, occ);
@@ -125,12 +132,15 @@ for c = 1:(currentnumclust)
     [clustmax indexmax] = min(abs(posData(end,1)-clust));
     clust = clust(indexmin:indexmax);
 
+
+
     assvel = assignvelOLD(clust, vel);
     fastspikeindex = find(assvel > velthreshold);
     %meanrate = length(fastspikeindex)./(totaltime); %WANT ONLY AT HIGH VEL
 
 
     fxclust = fxmatrix.(name);
+    length(~isnan(fxclust(:))==1);
     fxclust = chartinterp(fxclust);
     meanrate = nanmean(fxclust(:));
     fxclust = ndnanfilter(fxclust, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
@@ -180,11 +190,26 @@ for c = 1:(currentnumclust)
     if meanrate <.05
       bitsper = NaN;
     end
+
     newdata = {name; bitsper; meanrate};
 
     output = horzcat(output, newdata);
 
+
 end
+
+else
+  for c = 1:(currentnumclust)
+    name = char(currentclustname(c));
+      clust = currentclusts.(name);
+  bitsper = NaN;
+  meanrate = NaN;
+  newdata = {name; bitsper; meanrate};
+  output = horzcat(output, newdata);
+end
+end
+
+
 end
 
 end

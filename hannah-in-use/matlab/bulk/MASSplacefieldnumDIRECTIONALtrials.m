@@ -3,11 +3,15 @@ function [f mindistall]= MASSplacefieldnumDIRECTIONALtrials(clusters,posstructur
 %fieldchart is output from MASSplacefieldnumDIRECTIONAL
 %output is:
 % f is a structure for each place cell with each structure (a,b,c) where a is each spike, c is the lap number, and b is time, x pos, y pos, velocity
-% mindistall is a (:,2) matrix where column one is the time the animal passes by center, and column 2 is the distance from the center
+% mindistall is a (:,4) matrix where columns:
+  %1 is the time the animal passes by center as defined by MASSplacefieldnumDIRECTIONAL
+  %2 is the distance from the center
+  %3 is the X of max spiking for that lap
+  %4 is the Y of max spiking for that lap
 
 
 
-
+set(0,'DefaultFigureVisible', 'off');
 %determine how many spikes & pos files
 allsizes = [];
 allcenterXmean = [];
@@ -38,13 +42,11 @@ fieldoutput = fieldchart(2:end, :);
 fieldchart= fieldchart(2:end, :);
 size(fieldoutput);
 
-%output = {'cluster name'; 'cluster size'; 'direction'; 'num of fields'; 'field size in cm'; 'centermax'; 'centermean'; 'skewness'};
 output = {'cluster name'; 'cluster size'; 'direction'; '1=to, 2=away'; 'field size in cm'; 'centermax X'; 'centermax Y'; 'skewness'; 'dir skewness'; 'av field rate'; 'max field rate'};
 
 for z = 1:size(fieldoutput,1)
 
   fieldname = char(cell2mat(fieldoutput(z,1)))
-
   currentclusts = struct;
   for w=1:length(clustspikenames)
     currclust = char(clustspikenames(w)); %determining cluster
@@ -128,7 +130,7 @@ for z = 1:size(fieldoutput,1)
 
 
       torewardpos = dirinfo(1:3,toreward);
-      awayrewardpos = dirinfo(1:3,toreward);
+      awayrewardpos = dirinfo(1:3,awayreward);
 
 
       velthreshold = 12;
@@ -184,10 +186,6 @@ for z = 1:size(fieldoutput,1)
     end
 
 
-    %spike rates
-
-
-
 
     clustsize = length(clust);
     [clustmin indexmin] = min(abs(posData(1,1)-clust));
@@ -199,10 +197,7 @@ for z = 1:size(fieldoutput,1)
 
 
 
-%%%
-
-%dirinfo = direction(clust(fastspikeindex), posData); %outputs [timevector; xposvector; yposvector; fxvector; fyvector];
-dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvector; fxvector; fyvector];
+      dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvector; fxvector; fyvector];
 
 
       toreward = [];
@@ -231,13 +226,12 @@ dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvecto
         end
       end
 
-      testing = intersect(toreward, awayreward);
-      dirinfo(:, testing)';
+
       torewardspikes = dirinfo(1,toreward);
       awayrewardspikes = dirinfo(1,awayreward);
 
 
-
+      currentdir = cell2mat(fieldchart((z),4));
         if cell2mat(fieldchart((z),4)) == 1 %towards reward
           usespikes = torewardspikes;
           usespos = torewardpos;
@@ -260,24 +254,29 @@ dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvecto
         disty(end+1) = pdist([usecenterX, usecenterY; usespos(2,qq), usespos(3,qq)]); %finds distance to center
         end
 
-        distyclose = find((disty)<(20)); %indices of times when close (less than 15 pixels from center)
+        distyclose = find((disty)<(15*3.5)); %indices of times when close (less than 15 pixels from center)
         distyclosetimes = usespos(1,distyclose); %times close to field
         distyclosedist = disty(distyclose); %distances close to field
 
 
         %find spiking in 2 second increments
         %diff does second minus first
-        differences = abs(diff(distyclose));
+        differences = abs(diff(distyclosetimes));
         newpass = 1;
-        newpass = [newpass, find(differences > usecentersize*1.5/10+2)]; %if more than two seconds apart, a different pass
+        newpass = [newpass, find(differences > 2)]; %if more than two seconds apart, a different pass
+
+
         %NEW PASS IS THE INDICES FOR EACH NEW PASS, FROM DIFFERENCES (which had indices of distyclose), NOT TIMES OR POSITIONS
 
         mindist = [];
         mintime = [];
         for np=1:length(newpass)-1
-          [val minindex] = min(distyclosedist(newpass(np):newpass(np+1)));
-          mindist(end+1) = distyclosedist(minindex); %minimum distance
-          mintime(end+1) = distyclosetimes(minindex); %minimum time
+          currdistyclosedist = distyclosedist(newpass(np):newpass(np+1));
+          currdistyclosetimes = distyclosetimes(newpass(np):newpass(np+1));
+          [val minindex] = min(currdistyclosedist);
+        currdistyclosetimes(minindex);
+          mindist(end+1) = currdistyclosedist(minindex); %minimum distance
+          mintime(end+1) = currdistyclosetimes(minindex); %minimum time
         end
 
         %newpass is the indices of passes
@@ -285,105 +284,183 @@ dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvecto
         numpass = 1;
         goodfield = NaN(500, 4);
         for qqq=1:length(mintime) %going through passes
-           %passtimes = find(abs(usespos(1,:)-usespos(1,newpass(qqq)))<(usecentersize*3.5./10*1.5)); %you get 1.5s for every cm of field size
            if length(newpass)>2 & length(distyclose)>0
+
            mintime(qqq); %time closest to field
            mindist(qqq); %distance closest to field
 
 
-           %this shouldnt be time, it should be animal's distance
+           %find all spikes within 30cm of center
            [closetime closeindex] = min(abs(posData(:,1)-mintime(qqq)));
            db = closeindex;
            currdist = 0;
-           while currdist<30*3.5 & db>0 %finding before 20cm
+           while currdist<20*3.5 & db>0 %finding before 20cm
              currdist = pdist([posData(db,2), posData(db,3); usecenterX, usecenterY]);
              db = db-1;
            end
+
            da = closeindex;
            currdist = 0;
-           while currdist<30*3.5 & db<length(posData) %finding after 20cm
+
+           while currdist<20*3.5 & da<length(posData) %finding after 20cm
              currdist = pdist([posData(da,2), posData(da,3); usecenterX, usecenterY]);
              da = da+1;
            end
+
            if db==0
              db = 1;
            end
            if da==length(posData)
              da = da-1;
-          end
+           end
            passstart = posData(db,1);
            passend = posData(da,1);
 
 
            if passstart~=oldpassstart
-             oldpassstart = passstart;
-           %passtimes = usespos(:,passtimes); %times and positions around current pass
+            oldpassstart = passstart;
            passspikes1 = find(usespikes>=passstart);
            passspikes2 = find(usespikes<=passend);
            passspikes = intersect(passspikes1, passspikes2); %spike indices windows
            passspikes = sort(usespikes(passspikes)); %actual spikes times in window
 
+
             if length(passspikes)>0 %if there are any spikes in the window, assign positions to them
 
               passpos = assignposOLD(passspikes, posData); %positions assigned to spikes
-
-
                 currvel = assignvelOLD(passspikes, vel);
                 currvel = currvel(1:size(passpos,1));
                 if qqq==1
-                  goodfield(1:length(currvel),:,(end)) = [passpos, currvel'];
-                else
+                  goodfield(1:length(currvel),:,(qqq)) = [passpos, currvel'];
+                elseif length(find(passpos(1,1,1)==goodfield(1,1,:)))<1
                   goodfield(1:length(currvel),:,(end+1)) = [passpos, currvel'];
                 end
-                mindistall =  [mindistall; mintime(qqq), mindist(qqq)./3.5];
+
+                chart = normalizePosData(passspikes, posData, dim);
+                chart = chartinterp(chart);
+                chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
+                psize = 3.5 * dim;
+                xvals = posData(:,2);
+                yvals = posData(:,3);
+                xmin = min(posData(:,2));
+                ymin = min(posData(:,3));
+                xmax = max(posData(:,2));
+                ymax = max(posData(:,3));
+                xbins = ceil((xmax)/psize); %number of x
+                ybins = ceil((ymax)/psize); %number of y
+
+                M = max(chart, [], 'all');
+                [centerYmax, centerXmax] = find(chart==M);
+                centerYmax = centerYmax(1);
+                centerXmax = centerXmax(1);
+                centerYmax = ybins-centerYmax;
+                centerXmax = (xmax)./xbins * centerXmax;
+                centerYmax = (ymax)./ybins * centerYmax;
+                compcentdist = pdist([usecenterX,usecenterY; centerXmax, centerYmax]);
+
+
 
 
                 numpass = numpass+1;
+
+                %%%%%%%%%%%%%SKEWWWWWWWW
+                        xlimmin = [300 300  750 780 ];
+                        xlimmax = [505 505  950 950 ];
+                        ylimmin = [370 000  380 000 ];
+                        ylimmax = [700 370  700 380 ];
+
+
+                        for k=1:length(xlimmin)
+                          if centerYmax<380 & centerYmax>340 & size(chart,2)>size(chart,1)%center area so place field could go horizontally or vertically
+                                k=5;
+                                flattened = nanmean(chart,1);
+                                newflattened = flattened;
+                            else
+                                inX = find(centerXmax > xlimmin(k) & centerXmax <=xlimmax(k)); %check to make sure correct indexing
+                                inY = find(centerYmax > ylimmin(k) & centerYmax <=ylimmax(k));
+                                inboth = intersect(inX, inY);
+                                if length(inboth)>0
+                                  flattened = nanmean(chart,2)'; %need this directional
+                                  %need to flip right forced and left choice
+                                  if (k == 1 | k== 4)
+                                    newflattened = flattened;
+                                  elseif (k == 2 | k== 3)
+                                    newflattened = flip(flattened);
+                                  end
+                              end
+                          end
+                        end
+
+                        flatstart = (find(newflattened>0));
+                        newflattened = newflattened(flatstart(1):end);
+
+                        newflattened(isnan(newflattened)) = 0;
+                        newflattened(find(newflattened<.001)) = 0;
+
+
+                        zpos = find(~[0 newflattened 0]);
+                        [~, grpidx] = max(diff(zpos));
+                        newflattened = newflattened(zpos(grpidx):zpos(grpidx+1)-2);
+
+                        counter = 0;
+                        flatmean = 0;
+                        countersum = 0;
+
+                        for kk = 1:length(newflattened)
+                          if newflattened(kk)>0
+                          flatmean = flatmean+(kk*newflattened(kk));
+                          counter = counter+1;
+                          countersum = countersum+newflattened(kk);
+                          end
+                        end
+                        flatmean = flatmean./countersum;
+
+                        flatmom = 0;
+                        temp = [];
+                        for kk = 1:length(newflattened)
+                          if newflattened(kk)>0
+                            kk-flatmean;
+                            temp(end+1)= ((kk-flatmean)^3)*newflattened(kk);
+                          flatmom = flatmom+((kk-flatmean)^3)*newflattened(kk);
+                          end
+                        end
+
+                        flatstd = 0;
+                        for kk = 1:length(newflattened)
+                          if newflattened(kk)>0
+                          flatstd = flatstd+((kk-flatmean)^2)*newflattened(kk);
+                        end
+                        end
+
+                        flatstd = sqrt(flatstd);
+
+                        if length(newflattened(~isnan(newflattened)))>2
+                          skewness = flatmom./(flatstd^3);
+                        else
+                          skewness = NaN;
+                        end
+
+                        if currentdir == 1
+                          dirskewness = skewness;
+                        elseif currentdir ==2
+                          dirskewness = skewness.*-1;
+                        end
+
+
+                        if dirskewness>20
+                          dirskewness
+                        newflattened
+                      end
+
+
+                %%%%%%%%%%%%%SKEWWWWWWWW
+                [size(mindistall), size(mintime(qqq)), size(mindist(qqq)./3.5), size(centerXmax), size(centerYmax), size(compcentdist./3.5), size(cell2mat(fieldchart((z),4))), size(dirskewness)];
+
+                mindistall =  [mindistall; mintime(qqq), mindist(qqq)./3.5, centerXmax, centerYmax, compcentdist./3.5, cell2mat(fieldchart((z),4)), dirskewness]; % put time and min distance in vector for output
+
             end
           end
-
-
-            %passdist = [];
-            % for xxx=1:size(passpos,1)
-            %  passdist(end+1) = pdist([passpos(xxx,2), passpos(xxx,3); usecenterX, usecenterY]); %distance from points to center of field
-            %end
-
-            %if length(passdist>2)
-
-              %endfield = min(find(passdist(minspikeindex:end)>=20)); %20cm after
-              %startfield = max(find(passdist(1:minspikeindex)>=20)); %20cm before
-
-            %  currvel = assignvelOLD(passspikes(startfield:endfield), vel);
-            %  goodfield(1:length(currvel),:,qqq) = [passpos(startfield:endfield,:), currvel'];
-
-
-              %[pks,maxlocs] = findpeaks(passdist);
-              %maxlocs = [1,maxlocs,length(passdist)];
-              %peakabove = find(maxlocs>minspikeindex); %peaks above closest
-              %peakbelow = find(maxlocs<minspikeindex);
-              %peakabove = min(peakabove); %index in maxlocs
-              %peakbelow = max(peakbelow);
-              %distpeakabove = passdist(maxlocs(peakabove)); %distance value
-              %distpeakbelow = passdist(maxlocs(peakbelow));
-              %currvel = assignvelOLD(passspikes(maxlocs(peakbelow):maxlocs(peakabove)), vel);
-              %goodfield(1:length(currvel),:,qqq) = [passpos(maxlocs(peakbelow):maxlocs(peakabove),:), currvel'];
-          %  else
-            %  goodfield(1,:,qqq) = NaN
-          %  end
-
-
-            %have to translate above into spike indices
-
-
-
-              %if abs(passdist)<=30*3.5 %radius of place field + 10cm buffer
-              %    currvel = assignvelOLD(passpos(xxx,1), vel);
-              %      goodfield(nummy,:,qqq) = [passpos(xxx,:), currvel];
-              %      nummy=nummy+1;
-              %  end
-
-
-          %  end
           end
           end
 
@@ -395,7 +472,7 @@ dirinfo = direction(clust, posData); %outputs [timevector; xposvector; yposvecto
 
 test = test+size(goodfield,3);
 if size(mindistall,1)~=test
-  mindistall =  [mindistall;NaN, NaN];
+  mindistall =  [mindistall;NaN, NaN, NaN, NaN, NaN, NaN, NaN];
 end
 
 end
