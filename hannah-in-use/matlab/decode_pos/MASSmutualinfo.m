@@ -96,8 +96,9 @@ for z = 1:length(pnames)
         fxmatrix = normalizePosData(clust,posDataFast,dim);
         fxmatrix = chartinterp(fxmatrix);
         fxmatrix = ndnanfilter(fxmatrix, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
-  
+
         MI(end+1) = mutualinfo(fxmatrix);
+
       end
   else
     MI(end+1) = NaN;

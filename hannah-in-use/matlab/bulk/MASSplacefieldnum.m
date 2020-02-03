@@ -155,7 +155,7 @@ for c = 1:(currentnumclust)
 
 
     %divided into 5cm by 5cm bins
-    %place fields are 5 or more adjacent picels with a firing rate >3xmean unit rate
+    %place fields are 5 or more adjacent pix
     %should have only one peak
 
     meanrate = nanmean(chart(:));

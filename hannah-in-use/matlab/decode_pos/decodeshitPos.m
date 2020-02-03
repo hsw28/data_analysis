@@ -1,18 +1,29 @@
 function f = decodeshitPos(time, pos, clusters, tdecode, dim)
-%decodes position and outputs decoded x, y, confidence(in percents), and time. if you want to filter spiking for veloctity you put velocity in varargin
+%decodes position and outputs decoded x, y, confidence(in percents), and time.
+%if you want to filter spiking for veloctity you put velocity in varargin
+%dim is bin sie in cm
+%tdecode is decoding in seconds
+
+velthreshold = 12;
+
 tic
 posData = pos;
 posData = fixpos(posData);
-timevector = time;
 
 
-%[cc indexmin] = min(abs(posData(1,1)-timevector));
-%[cc indexmax] = min(abs(posData(end,1)-timevector));
-%timevector = timevector(indexmin:indexmax);
+[cc indexmin] = min(abs(posData(1,1)-time));
+[cc indexmax] = min(abs(posData(end,1)-time));
+timevector = time(indexmin:indexmax);
+time = timevector;
 %posData = assignpos(timevector, posData);
 
+
+vel = velocity(posData);
+vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
+goodvel = find(vel>=velthreshold);
+pos = posData(goodvel); %pos is all vels, posData is only good vels
+
 tdecodesec = tdecode;
-%t = round((length(timevector)./(timevector(end)-timevector(1)))*tdecode)
 t = 2000*tdecode;
 
 
@@ -37,9 +48,21 @@ xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each incre
 yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
 
+
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(pos, clusters, dim, tdecodesec, 30);
-size(fxmatrix)
+fxmatrix = firingPerPos(posData, clusters, dim, tdecodesec, 30, 0);
+names = (fieldnames(fxmatrix));
+for k=1:length(names)
+  curname = char(names(k))
+  fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
+  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [20/dim, 20/dim], 2, {}, {'replicate'}, 1);
+
+end
+
+
+%fx = chartinterp(fx);
+%fx = ndnanfilter(fx, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+
 %outputs a structure of rates
 
 maxprob = [];
@@ -82,6 +105,10 @@ n =0;
 nivector = zeros((numclust),1);
 tm = 1;
 while tm < (length(timevector)-t)
+  goodvel = find(vel(2,:)>=timevector(tm) & vel(2,:)<timevector(tm+t));
+
+%  if nanmean((vel(1,goodvel)))>velthreshold & nanmedian((vel(1,goodvel)))>velthreshold
+  if length(find(vel(1,goodvel)>velthreshold)) >= length(goodvel)*.75
    %find spikes in each cluster for time
    nivector = zeros((numclust),1);
    for c=1:numclust   %permute through cluster
@@ -107,6 +134,8 @@ while tm < (length(timevector)-t)
               ni = nivector(c);
               name = char(clustname(c));
               fx = fxmatrix.(name);
+
+
               fx = (fx(x, y));
               productme = productme + (ni)*log(fx);  %IN
               expme = (expme) + (fx);
@@ -149,17 +178,26 @@ while tm < (length(timevector)-t)
             end
 
 
+    else
+      %means vel is too low
+      maxx(end+1) = NaN;
+      maxy(end+1) = NaN;
+      percents(end+1) = NaN;
+    end
 
         times(end+1) = timevector(tm);
 
-
-    if tdecodesec>=.25
+    %if want overlap
+    if tdecodesec>=.5
       tm = tm+(t/2);
     else
       tm = tm+t;
     end
-    %tm = tm+(t/2); %for overlap?
-    n = n+1 
+
+    n = n+1;
+    if rem(n,500)==0
+      n
+    end
 end
 
 warning('your probabilities were the same')

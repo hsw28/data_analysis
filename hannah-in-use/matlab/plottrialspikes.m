@@ -5,7 +5,7 @@ fieldoutput = fieldoutput(2:end, :);
 
 trialnames = (fieldnames(trialoutput));
 
-bins = 20;
+bins = 40;
 
 totalcounts = zeros(1,bins);
 totalcountsnum = 0;
@@ -32,14 +32,25 @@ firstnumserror = [];
 lastnumserror = [];
 totalskewto = [];
 totalskewaway = [];
+skew = [];
+totskew = [];
+firstskew = [];
+lastskew = [];
+currquad = [];
 %length(trialnames) %254
 for k = 1:length(trialnames) %this is field
 
   currentname = char(trialnames(k));
   currenttrial = trialoutput.(currentname);
+
   centerX = fieldoutput(k, 6);
   centerY = fieldoutput(k, 7);
   fieldsize = fieldoutput(k, 1);
+  if size(fieldoutput,2)>11
+    fieldquad = fieldoutput(k, 12);
+  else
+    fieldquad = {1};
+  end
 
   closer = NaN(size(currenttrial,3),1);
 
@@ -62,8 +73,8 @@ for k = 1:length(trialnames) %this is field
       nowdist = pdist([cell2mat(centerX),cell2mat(centerY); currenttrial(z,2,j), currenttrial(z,3,j)]);
       nowdist = nowdist./3.5;
 
-      currdist(z,1,j) = (nowdist-min_dist(actnum,2));
-      %currdist(z,1,j) = (nowdist);
+      %currdist(z,1,j) = (nowdist-min_dist(actnum,2));
+      currdist(z,1,j) = (nowdist);
 
       if nowdist < dist
       closer(j) = currenttrial(z,1,j);
@@ -73,8 +84,10 @@ for k = 1:length(trialnames) %this is field
       end
     end
 
-      skew = skew+min_dist(actnum,7); %SKEW
+      skews = skew+min_dist(actnum,7); %SKEW
+      skew(j) = min_dist(actnum,7);
       skewcount = skewcount+1;
+      currquad(j) = cell2mat(fieldquad);
     end
 
 
@@ -83,7 +96,7 @@ for k = 1:length(trialnames) %this is field
     compcentdist = compcentdist./3.5-min_dist(actnum,2);
 
     if nanmean(currenttrial((1:end),1,:))>=3;
-      lapcenterdist = [lapcenterdist; j, compcentdist];
+      lapcenterdist = [lapcenterdist; j, compcentdist, cell2mat(fieldquad)];
 
     end
 
@@ -91,9 +104,9 @@ for k = 1:length(trialnames) %this is field
 
     actnum = actnum+1;
     if min_dist(actnum-1,6)==1
-      totalskewto(end+1) = skew./skewcount;
+      %totalskewto(end+1) = skews./skewcount;
     else
-    totalskewaway(end+1) = skew./skewcount;
+    %totalskewaway(end+1) = skews./skewcount;
     end
 
     end
@@ -118,48 +131,73 @@ indynumsstart = 0;
 indynumsend = 0;
 haveaddedfirst = 1;
 haveaddedlast = 1;
-if length(find(disindex>0))>=9
+  c = 1;
+if length(find(disindex>0))>=6
   wantedindex = find(disindex>0);
+  templast1 = nan(1,bins);
+  tempskew = nan(1,3);
+
   for p = 1:length(disindex)
 
   centerin = disindex(p); %index in center
+
     if centerin>0
 
-      currdist(1:centerin,1,p) = currdist(1:centerin,1,p)*-1;
+      %currdist(1:centerin,1,p) = currdist(1:centerin,1,p)*-1;
+      currdist(1:centerin,1,p) = currdist(1:centerin,1,p)*-1+min_dist(actnum,2);
+      currdist(centerin:end,1,p) = currdist(centerin:end,1,p)-min_dist(actnum,2);
 
       currdist(~isnan(currdist(:,1,p)),1,p);
       notnan = ~isnan(currdist(:,1,p));
       whatwewant = currdist(notnan,1,p);
       whatwewant = whatwewant(find(whatwewant>=-20 & whatwewant<=20));
-      [N,edges] = histcounts(whatwewant, [-20:2:20], 'Normalization', 'probability');
-      [Nums,edges] = histcounts(whatwewant, [-20:2:20]);
+      [N,edges] = histcounts(whatwewant, [-20:40/bins:20], 'Normalization', 'probability');
+      [Nums,edges] = histcounts(whatwewant, [-20:40/bins:20]);
 
 
         if mean(~isnan(N))==1
         currentcount = currentcount+1;
+        indynums = indynums+Nums;
+        indycount = indycount+1;
+        totskew(end+1) = skew(p);
+
         totalcountsnum = totalcountsnum+1;
         totalnums = totalnums+Nums;
         totalnumserror = [totalnumserror; Nums];
-        indynums = indynums+Nums;
-        indycount = indycount+1;
 
 
-        if haveaddedfirst == 1;
+        if haveaddedfirst <= 3
           firstcountsnum = firstcountsnum+1;
           firstnums = firstnums+Nums;
           firstnumserror = [firstnumserror; Nums];
-          haveaddedfirst = 2;
+          haveaddedfirst = haveaddedfirst+1;
+          haveaddedfirst;
+          firstskew(end+1) = skew(p);
         end
-        templast1 = Nums;
+
+
+        templast1(c,:) = Nums;
+        tempskew(c) = skew(p);
+        c=c+1;
+        if c == 4
+          c = 1;
+        end
+
+
         end
       end
     end
 
-if lastcountsnum == firstcountsnum-1
-lastcountsnum = lastcountsnum+1;
-lastnums = lastnums+templast1;
+
+if haveaddedfirst>3
+lastcountsnum = lastcountsnum+size(templast1,1);
+lastnums = lastnums+sum(templast1);
 lastnumserror = [lastnumserror; templast1];
+lastskew = [lastskew, tempskew];
+
 end
+
+
 
   %lastcountsnum = lastcountsnum+2;
   %lastnums = lastnums+templast1+templast2+templast3;
@@ -168,12 +206,20 @@ end
 end
 
 
-
 figure
 subplot(2,1,1)
 histogram(totalskewto, 'BinWidth', .2)
+nanmean(totalskewto)
+nanmedian(totalskewto)
 subplot(2,1,2)
 histogram(totalskewaway, 'BinWidth', .2)
+nanmean(totalskewaway)
+nanmedian(totalskewaway)
+
+totskewmean = nanmean(totskew)
+firstskewmean = nanmean(firstskew)
+lastskewmean = nanmean(lastskew)
+diffskew = nanmean(abs(lastskew-firstskew))
 
 
 %THIS IS DOING ALL AVERAGING TOGETHER
@@ -203,34 +249,38 @@ for c = 1:size(totalnumserror,2)
 
   [m p n stats] = ttest(firstnumserror(:,c), lastnumserror(:,c), 'Tail', 'left');
     ttresults(end+1) = p;
-  [m p n stats] = ttest2(firstnumserror(:,c), lastnumserror(:,c), 'Tail', 'left');
-    ttresults2(end+1) = p;
-  [m p n stats] = ttest2(firstnumserror(:,c), totalnumserror(:,c), 'Tail', 'left');
-    ttresults3(end+1) = p;
+    if p<0.05
+      fl = c
+      fl = p
+    end
     [m p n stats4] = ttest(firstnumserror(:,c), mean(totalnumserror(:,c)), 'Tail', 'left');
       ttresults4(end+1) = p;
-      [m p n stats] = ttest(lastnumserror(:,c), mean(totalnumserror(:,c)));
-        ttresults5(end+1) = p;
-  %if c == bins./2+1
-  if c == 11
-    mean(firstnumserror(:,c))./2
-    mean(lastnumserror(:,c))./2
-    mean(totalnumserror(:,c))./2
-    std(firstnumserror(:,c)./2)
-    std((lastnumserror(:,c)./2))
-    std((totalnumserror(:,c)./2))
+      if p<0.05
+        fa = c
+        fa = p
+      end
 
-    stats
-    stats4
+  %if c == bins./2+1
+  if c == bins/2+1
+    mean(firstnumserror(:,c))./2;
+    mean(lastnumserror(:,c))./2;
+    mean(totalnumserror(:,c))./2;
+    std(firstnumserror(:,c)./2);
+    std((lastnumserror(:,c)./2));
+    std((totalnumserror(:,c)./2));
+
+
   end
 end
 
 
-ttresults
+ttresults;
 %ttresults2
 %ttresults3
-ttresults4
+ttresults4;
 %ttresults5
+
+
 
 %errorbar(edges(1:end-1), indytotal2./firstcountsnum, std(indytotal2error)./size(indytotal2error,1), 'Color', 'black')
 %size(indytotal2error,1)
@@ -243,6 +293,7 @@ ttresults4
 
 
 toplot = [];
+
 for z=1:max(lapcenterdist(:,1))
   found = find(lapcenterdist(:,1)==z);
   meandist = nanmean(lapcenterdist(found,2));
@@ -255,7 +306,7 @@ wanted = find(toplot(:,3)>=5);
 wanted = max(wanted)
 x = toplot(1:wanted,1);
 y = toplot(1:wanted,2)./3.5;
-[k, yInf, y0, yFit] = fitExponential(x, y)
+[k, yInf, y0, yFit] = fitExponential(x, y);
 k = k
 yInf = yInf
 y0 = y0
@@ -268,12 +319,52 @@ xlabel('Lap')
 ylabel('Average distance of lap place field center from overall center (cm)')
 
 
+
+%lapcenterdist = [j, compcentdist, fieldquad];
+
+toplot = [];
+figure
+
+for m=1:3
+  toplot = []
+  if m==1 %forced
+    wantedquad = [0,1];
+  elseif m==2 %middle
+    wantedquad = [3,3];
+elseif m==3 %choice
+    wantedquad = [5,6];
+  end
+
+  for z=1:max(lapcenterdist(:,1))
+    found1 = find(lapcenterdist(:,1)==z);
+    found2 = find(lapcenterdist(:,3)==wantedquad(1) | lapcenterdist(:,3)==wantedquad(2));
+    found = intersect(found1,found2);
+    meandist = nanmean(lapcenterdist(found,2));
+    stderrorlap = nanstd(lapcenterdist(found,2)./3.5)./sqrt(length(found));
+    toplot = [toplot; z, meandist, length(found), stderrorlap];
+  end
+  wanted = find(toplot(:,3)>=5);
+  wanted = max(wanted);
+  x = toplot(1:wanted,1);
+  y = toplot(1:wanted,2)./3.5;
+  hold on
+  scatter(x,y)
+  errorbar(x, y, toplot(1:wanted,4), 'LineStyle','none');
+  [k, yInf, y0, yFit] = fitExponential(x, y);
+  plot(x, yFit);
+  yInf;
+end
+
+
+
+%figure
+
 %fitlm(x,y)
 %[fitobject,gof] = fit(x,y,'exp1')
 
 
-
-totalcountsnum
-
-f = lapcenterdist;
-%f = [edges(1:end-1)+1;firstcounts; lastcounts; totalcounts];
+%size(nanmean(firstnumserror'))
+%size((mean(totalnumserror)))
+%[m p n stats] = ttest(nanmean(firstnumserror'), nanmean(lastnumserror'))
+%[m p n stats] = ttest2(nanmean(firstnumserror'), mean((totalnumserror')))
+%f = lapcenterdist;

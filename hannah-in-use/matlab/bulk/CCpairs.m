@@ -1,4 +1,4 @@
-function [f fnot] = CCpairs(fieldchartHPC_dir, fieldchartLS_dir, HPCclusters, LSclusters, posstructure)
+function f  = CCpairs(fieldchartHPC_dir, fieldchartLS_dir, HPCclusters, LSclusters, posstructure)
 %if lag is positive, then Y is delayed relative to x
 test = 0;
 
@@ -37,8 +37,29 @@ notplusaverage = [];
 notmaxes = [];
 maxtime = [];
 allcors = [];
+startcors = [];
+midcors = [];
+endcors = [];
+
+startallaverage = [];
+startminusaverage = [];
+startplusaverage = [];
+startmaxes = [];
+startmaxtime = [];
+
+midallaverage = [];
+midminusaverage = [];
+midplusaverage = [];
+midmaxes = [];
+midmaxtime = [];
+
+endallaverage = [];
+endminusaverage = [];
+endplusaverage = [];
+endmaxes = [];
+endmaxtime = [];
 for q = 1:length(pnames)
-  currentname = char(pnames(q));
+  currentname = char(pnames(q))
   posData = posstructure.(currentname);
   posData = fixpos(posData); %positions, not sure if needed
   posTime = posData(:,1);
@@ -81,7 +102,7 @@ for q = 1:length(pnames)
       end
     end
 
-
+if length((currentLSfields(:)))>1
 for k = 1:size(currentHPCfields,1) %going through HPC pairs
   currentdir = cell2mat(currentHPCfields(k,4));
   currentxHPC = cell2mat(currentHPCfields(k,6));
@@ -139,25 +160,78 @@ for k = 1:size(currentHPCfields,1) %going through HPC pairs
   currentHPCclust = HPCclusters.(clusternameHPC);
   currentLSclust = LSclusters.(clusternameLS);
 
-  HPCtrain = spiketrain(currentHPCclust, posTime, .01);
-  LStrain = spiketrain(currentLSclust, posTime, .01);
-  [CC,lags,bounds] = crosscorr(HPCtrain, LStrain, 'NumLags', .1/.01); %bins are 10ms, so 100ms is 10 on each side
+  div = floor(length(posTime)./3);
 
-test = test+1;
+  %binsize = .01
+  binsize = .25;
 
-  allcors = [allcors, CC];
-
-
-
+  %ALL
+  HPCtrain = spiketrain(currentHPCclust, posTime, binsize);
+  LStrain = spiketrain(currentLSclust, posTime, binsize);
+  [CC,lags,bounds] = crosscorr(HPCtrain, LStrain, 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+  allcors = [allcors, CC-CCshuffled];
   allaverage(end+1) = nanmean(CC);
   minusaverage(end+1) = nanmean(CC(1:10));
   plusaverage(end+1) = nanmean(CC(10:end));
   [Y,I] = max(CC);
   maxes(end+1) = Y;
-  maxtime(end+1) = lags(I)*.01;
-  dir(end+1) = currentdir;
+  maxtime(end+1) = lags(I)*binsize;
 
-  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', .1/.01); %bins are 10ms, so 100ms is 10 on each side
+  div = floor(length(posTime)./3);
+
+  %START
+  HPCtrain = spiketrain(currentHPCclust, posTime(1:div), binsize);
+  LStrain = spiketrain(currentLSclust, posTime(1:div), binsize);
+  [CC,lags,bounds] = crosscorr(HPCtrain, LStrain, 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+
+  startcors = [allcors, CC];
+  %startallaverage(end+1) = nanmean(CC)-nanmean(CCshuffled);
+  startallaverage(end+1) = nanmean(CC);
+
+  startminusaverage(end+1) = nanmean(CC(1:10));
+  startplusaverage(end+1) = nanmean(CC(10:end));
+  [Y,I] = max(CC);
+  startmaxes(end+1) = Y;
+  startmaxtime(end+1) = lags(I)*binsize;
+
+  %MIDDLE
+  HPCtrain = spiketrain(currentHPCclust, posTime(div:(2*div)), binsize);
+  LStrain = spiketrain(currentLSclust, posTime(div:(2*div)), binsize);
+  [CC,lags,bounds] = crosscorr(HPCtrain, LStrain, 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+
+  midcors = [allcors, CC];
+  midallaverage(end+1) = nanmean(CC)-nanmean(CCshuffled);
+  midminusaverage(end+1) = nanmean(CC(1:10));
+  midplusaverage(end+1) = nanmean(CC(10:end));
+  [Y,I] = max(CC);
+  midmaxes(end+1) = Y;
+  midmaxtime(end+1) = lags(I)*binsize;
+
+  %END
+  HPCtrain = spiketrain(currentHPCclust, posTime((2*div):end), binsize);
+  LStrain = spiketrain(currentLSclust, posTime((2*div):end), binsize);
+  [CC,lags,bounds] = crosscorr(HPCtrain, LStrain, 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
+
+  endcors = [allcors, CC];
+  endallaverage(end+1) = nanmean(CC)-nanmean(CCshuffled);
+  endminusaverage(end+1) = nanmean(CC(1:10));
+  endplusaverage(end+1) = nanmean(CC(10:end));
+  [Y,I] = max(CC);
+  endmaxes(end+1) = Y;
+  endmaxtime(end+1) = lags(I)*binsize;
+
+  test = test+1;
+
+
+
+
+
+  dir(end+1) = currentdir;
+  CCshuffled = crosscorr(HPCtrain, LStrain(randperm(length(LStrain))), 'NumLags', 10); %bins are 10ms, so 100ms is 10 on each side
   notallaverage(end+1) = nanmean(CCshuffled);
   notminusaverage(end+1) = nanmean(CCshuffled(1:10));
   notplusaverage(end+1) = nanmean(CCshuffled(10:end));
@@ -167,7 +241,7 @@ test = test+1;
 
 %no close matches
 else
-    test = test+1;
+  test = test+1;
   dir(end+1) = NaN;
   allaverage(end+1) = NaN;
   minusaverage(end+1) = NaN;
@@ -179,12 +253,16 @@ else
   notmaxes(end+1) = NaN;
   maxtime(end+1) = NaN;
   allcors = [allcors, NaN(21,1)];
+  startallaverage(end+1)= NaN;
+  midallaverage(end+1)= NaN;
+  endallaverage(end+1)= NaN;
 
 end %this end is for no close matches
 
 
 
 end %this end is for going through hpc pairs
+end
 end %this end is for the for loop going through positions
 
 posQuadmax = NaN(length(Xes),1);
@@ -219,11 +297,18 @@ end
 
 
 val = ~isnan(dir);
+%f = [dir(val); allaverage(val); minusaverage(val); plusaverage(val); maxes(val); posQuadmax(val)'; maxtime(val)]';
+%fnot = [dir(val); notallaverage(val); notminusaverage(val); notplusaverage(val); notmaxes(val); posQuadmax(val)']';
+
+size(dir)
+size(allaverage)
+size(startallaverage)
+size(midallaverage)
+size(endallaverage)
+
+f = [dir(val); allaverage(val); startallaverage(val); midallaverage(val); endallaverage(val); posQuadmax(val)']';
 
 
-f = [dir(val); allaverage(val); minusaverage(val); plusaverage(val); maxes(val); posQuadmax(val)'; maxtime(val)]';
-
-fnot = [dir(val); notallaverage(val); notminusaverage(val); notplusaverage(val); notmaxes(val); posQuadmax(val)']';
 
 allcors = allcors(:,val);
 Pos0 = find(f(:,6)==0);
@@ -247,7 +332,19 @@ errorbar(-100:10:100,nanmean((allcors(:,[Pos3]))'), std((allcors(:,[Pos3]))')./s
 errorbar(-100:10:100, nanmean((allcors(:,[Pos5; Pos6]))'), std((allcors(:,[Pos5; Pos6]))')./sqrt(length([Pos5;Pos6])), 'Color','blue');
 
 
+endfirst = [];
+for k=1:length([-100:10:100])
+  [h,p,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos0;Pos1]))
+endfirst(end+1) = p;
+end
 
+endmid = [];
+for k=1:length([-100:10:100])
+  [h,p,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos3]))
+endmid(end+1) = p;
+end
 
+endfirst
+endmid
 
 %output distance from reward, distance from eachother, and cross corr all, +100, and -100, max

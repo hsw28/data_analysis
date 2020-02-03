@@ -1,8 +1,12 @@
 function f = firingPerPos(posData, clusters, dim, tdecode, pos_samp_per_sec, varargin)
 %returns firing per position. dim is number of centimeters for binning
 
-
+if length(varargin)>1
+  velthreshold = cell2mat(varargin)
+else
 velthreshold = 12;
+end
+
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);
 
@@ -54,8 +58,9 @@ posDataFast = posData(fastvel, :);
 
 
 %defiding position
-if length(varargin)>1
-  timecells = cell2mat(varargin)
+%if length(varargin)>1
+%  timecells = cell2mat(varargin)
+if 0==1
 else
   for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
     for y = (1:ybins)
