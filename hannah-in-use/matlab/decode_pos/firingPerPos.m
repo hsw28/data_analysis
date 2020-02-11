@@ -93,7 +93,6 @@ for k = 1:spikenum
     events(:)=NaN;
     spikename = char(spikenames(k))
     unit = clusters.(spikename);
-
     [m firstspike] = min(abs(unit-mintime));
     [m lastspike] = min(abs(unit-maxtime));
     unit = unit(firstspike:lastspike);

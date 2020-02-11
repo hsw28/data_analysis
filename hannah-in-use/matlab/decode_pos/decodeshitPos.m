@@ -4,7 +4,7 @@ function f = decodeshitPos(time, pos, clusters, tdecode, dim)
 %dim is bin sie in cm
 %tdecode is decoding in seconds
 
-velthreshold = 12;
+velthreshold = 10;
 
 tic
 posData = pos;
