@@ -4,7 +4,7 @@ function f = decodeshitPos(time, pos, clusters, tdecode, dim)
 %dim is bin sie in cm
 %tdecode is decoding in seconds
 
-velthreshold = 10;
+velthreshold = 12;
 
 tic
 posData = pos;
@@ -21,7 +21,6 @@ time = timevector;
 vel = velocity(posData);
 vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
 goodvel = find(vel>=velthreshold);
-pos = posData(goodvel); %pos is all vels, posData is only good vels
 
 tdecodesec = tdecode;
 t = 2000*tdecode;
@@ -50,12 +49,12 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 % for each cluster,find the firing rate at esch velocity range
-fxmatrix = firingPerPos(posData, clusters, dim, tdecodesec, 30, 0);
+fxmatrix = firingPerPos(posData, clusters, dim, tdecodesec, 30, velthreshold);
 names = (fieldnames(fxmatrix));
 for k=1:length(names)
   curname = char(names(k))
   fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
-  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [20/dim, 20/dim], 2, {}, {'replicate'}, 1);
+  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
 
 end
 

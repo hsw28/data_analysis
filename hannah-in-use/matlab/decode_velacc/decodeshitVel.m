@@ -1,4 +1,4 @@
-function [values probs vbin] = decodeshitVel(timevector, clusters, vel, tdecode, t)
+function [values probs vbin median_is mean_is] = decodeshitVel(timevector, clusters, vel, tdecode, t, type)
 
 % TYPE: put 0 to divide vel by occupancy, 1 to divide vel into equal binsize
 %decodes velocity  based on cell firing. t is bins in seconds
@@ -15,9 +15,11 @@ function [values probs vbin] = decodeshitVel(timevector, clusters, vel, tdecode,
 % temp = binning(assvel(1,:)', ceil(length(assvel)/length(decoded.probs)));
 % temp = temp/ceil(length(assvel)/length(decoded.probs));
 % plot(temp, 'LineWidth',1.5, 'Color', 'w');
+%
 
+%type = 1;
+velthreshold = 12;
 
-type = 1;
 tic
 tsec = t;
 t = 2000*t;
@@ -31,13 +33,17 @@ maxtime = vel(2,end);
 [c indexmin] = (min(abs(timevector-mintime)));
 [c indexmax] = (min(abs(timevector-maxtime)));
 decodetimevector = timevector(indexmin:indexmax);
+if length(decodetimevector)<3
+  decodetimevector = [mintime:1/2000:maxtime];
+else
+  timevector = decodetimevector;
+end
 
-%%%%%%%%%%COMMENT THIS OUT IF YOUR DECODED TIME IS DIFFERENT THAN YOUR MAZE TIME%%%%
-timevector = decodetimevector;
-%%%%%%%%%%%%%%%%%
-
+vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
 assvel = assignvel(decodetimevector, vel);
+assvel(1,find(assvel(1,:)<velthreshold)) = NaN;
 asstime = assvel(2,:);
+
 
 %find number of clusters
 clustname = (fieldnames(clusters));
@@ -95,8 +101,8 @@ if type == 0
 %%%% TO MAKE BINS ALL SAME SIZE
 elseif type ==1
 binnum = 7;
-maxbin = 42;
-minbin = 35;
+%maxbin = 42;
+%minbin = 35;
 binnedVelo = histcounts(avg_accel, 'BinWidth', binnum);
 binnedVelo = binnedVelo./sum(binnedVelo);
 k = length(binnedVelo);
@@ -107,7 +113,7 @@ while percentsum<.05
 end
 totbin = k+1;
 %if totbin<=7 && totbin>5
-vbin = [0:binnum:totbin*binnum];
+vbin = [velthreshold:binnum:totbin*binnum];
 %elseif totbin>7
 %vbin = [0:binnum:maxbin];
 %else
@@ -130,6 +136,8 @@ while j <= numclust
     name = char(clustname(j));
     firingdata = clusters.(name);
     fxmatrix(j,:) = firingPerVel(asstime, assvel, clusters.(name), tsec, vbin, avg_accel);
+    %fxmatrix(j,:) = smoothdata(fxmatrix(j,:), 'gausswin')
+
     j = j+1;
 end
 
@@ -280,10 +288,17 @@ end
 k = k-1;
 end
 
+size(v)
+size(times)
+size(binnum)
+size(perc)
 values = [v; times; binnum; perc];
 
 toc
 
+[z median_is mean_is]=velerror(values, vel);
+median_is;
+mean_is;
 
 %velerror(values, vel);
 

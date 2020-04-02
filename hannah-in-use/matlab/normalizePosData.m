@@ -1,4 +1,4 @@
-function rate = normalizePosData(eventData,posData,dim)
+function [rate totspikes totstime] = normalizePosData(eventData,posData,dim)
 %TO DO: add figure saving
 
 %This function bins event data based on a user input bin size and
@@ -72,12 +72,17 @@ end
 
 
 rate = events./(time*tstep); %time*tstep is occupancy
+
+totspikes = events;
+totstime = (time*tstep);
 %rate = rate(:, 15:end-20);
 
 
 
 %heat map stuff
 %figure
+
+%{
 [nr,nc] = size(rate);
 colormap('parula');
 %lower and higher three percent of firing sets bounds
@@ -90,9 +95,8 @@ minratefive = max(numrate(1:ceil(length(numrate)*0.03)));
 pcolor([rate nan(nr,1); nan(1,nc+1)]);
 shading flat;
 set(gca, 'ydir', 'reverse');
-%set(gca,'clim',[0,lim]);
 if minratefive ~= maxratefive
 		set(gca, 'clim', [minratefive*1.5, maxratefive*.75]);
 end
-%axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
 colorbar;
+%}

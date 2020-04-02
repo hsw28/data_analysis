@@ -3,6 +3,7 @@ function thingy = firingPerVel_temp(time, accelORvel, firingdata, t, vbin, avg_a
 % outputs average firing rate per velocity/acc
 % ASSIGN VELOCITY BEFORE THIS FUNCTION
 
+
 if size(time, 2) < size(time, 1)
 	time = time';
 end

@@ -38,15 +38,19 @@ firstskew = [];
 lastskew = [];
 currquad = [];
 %length(trialnames) %254
+
 for k = 1:length(trialnames) %this is field
 
-  currentname = char(trialnames(k));
+
+  currentname = char(trialnames(k))
   currenttrial = trialoutput.(currentname);
 
+%try without this
   centerX = fieldoutput(k, 6);
   centerY = fieldoutput(k, 7);
   fieldsize = fieldoutput(k, 1);
-  if size(fieldoutput,2)>11
+  size(fieldoutput,2);
+  if size(fieldoutput,2)==12
     fieldquad = fieldoutput(k, 12);
   else
     fieldquad = {1};
@@ -59,21 +63,18 @@ for k = 1:length(trialnames) %this is field
   disindex = [];
   skew = 0;
   skewcount = 0;
-
+size(currenttrial,3);
   for j=1:size(currenttrial,3) %this is lap
 
     dist = 100000;
     currenttrial(:,1,j);
     nonan = find(currenttrial(:,1,j)>0);
-      %added
     if length(nonan)>0
-    %if abs(currenttrial(nonan(end),1,j)-currenttrial(nonan(1),1,j))<4 %length of 40cm should take about 4 seconds max
     for z=1:size(currenttrial,1) %this is spikes in lap
       if currenttrial(z,4,j)>5
       nowdist = pdist([cell2mat(centerX),cell2mat(centerY); currenttrial(z,2,j), currenttrial(z,3,j)]);
       nowdist = nowdist./3.5;
 
-      %currdist(z,1,j) = (nowdist-min_dist(actnum,2));
       currdist(z,1,j) = (nowdist);
 
       if nowdist < dist
@@ -84,16 +85,22 @@ for k = 1:length(trialnames) %this is field
       end
     end
 
-      skews = skew+min_dist(actnum,7); %SKEW
-      skew(j) = min_dist(actnum,7);
-      skewcount = skewcount+1;
+    %  skews = skew+min_dist(actnum,7); %SKEW
+    %  skew(j) = min_dist(actnum,7);
+    %  skewcount = skewcount+1;
+
       currquad(j) = cell2mat(fieldquad);
     end
 
 
+cell2mat(centerX);
+cell2mat(centerY);
+min_dist(actnum,3);
+min_dist(actnum,4);
     compcentdist = pdist([cell2mat(centerX),cell2mat(centerY); min_dist(actnum,3),min_dist(actnum,4)]);
+    compcentdist = (compcentdist./3.5)-min_dist(actnum,2);
 
-    compcentdist = compcentdist./3.5-min_dist(actnum,2);
+    %compcentdist = min_dist(actnum,5)-min_dist(actnum,2);
 
     if nanmean(currenttrial((1:end),1,:))>=3;
       lapcenterdist = [lapcenterdist; j, compcentdist, cell2mat(fieldquad)];
@@ -102,14 +109,17 @@ for k = 1:length(trialnames) %this is field
 
 
 
-    actnum = actnum+1;
-    if min_dist(actnum-1,6)==1
-      %totalskewto(end+1) = skews./skewcount;
-    else
-    %totalskewaway(end+1) = skews./skewcount;
-    end
 
-    end
+  %  if min_dist(actnum-1,6)==1
+      %totalskewto(end+1) = skews./skewcount;
+  %  else
+    %totalskewaway(end+1) = skews./skewcount;
+  %  end
+
+
+%TAKING OUT
+%actnum = actnum+1;
+%    end
 
 
 
@@ -118,6 +128,8 @@ for k = 1:length(trialnames) %this is field
 %end MAYBE??
 
 
+
+actnum;
 
 
 
@@ -132,7 +144,7 @@ indynumsend = 0;
 haveaddedfirst = 1;
 haveaddedlast = 1;
   c = 1;
-if length(find(disindex>0))>=6
+if length(find(disindex>0))>=15
   wantedindex = find(disindex>0);
   templast1 = nan(1,bins);
   tempskew = nan(1,3);
@@ -144,6 +156,7 @@ if length(find(disindex>0))>=6
     if centerin>0
 
       %currdist(1:centerin,1,p) = currdist(1:centerin,1,p)*-1;
+
       currdist(1:centerin,1,p) = currdist(1:centerin,1,p)*-1+min_dist(actnum,2);
       currdist(centerin:end,1,p) = currdist(centerin:end,1,p)-min_dist(actnum,2);
 
@@ -159,29 +172,30 @@ if length(find(disindex>0))>=6
         currentcount = currentcount+1;
         indynums = indynums+Nums;
         indycount = indycount+1;
-        totskew(end+1) = skew(p);
+      %  totskew(end+1) = skew(p);
 
         totalcountsnum = totalcountsnum+1;
         totalnums = totalnums+Nums;
         totalnumserror = [totalnumserror; Nums];
 
 
-        if haveaddedfirst <= 3
+        if haveaddedfirst <= 5
           firstcountsnum = firstcountsnum+1;
           firstnums = firstnums+Nums;
           firstnumserror = [firstnumserror; Nums];
           haveaddedfirst = haveaddedfirst+1;
           haveaddedfirst;
-          firstskew(end+1) = skew(p);
+        %  firstskew(end+1) = skew(p);
         end
 
-
+        if isnan(Nums)==0
         templast1(c,:) = Nums;
-        tempskew(c) = skew(p);
+      %  tempskew(c) = skew(p);
         c=c+1;
-        if c == 4
+        if c == 5 & isnan(Nums)==0
           c = 1;
         end
+      end
 
 
         end
@@ -189,7 +203,7 @@ if length(find(disindex>0))>=6
     end
 
 
-if haveaddedfirst>3
+if haveaddedfirst>5
 lastcountsnum = lastcountsnum+size(templast1,1);
 lastnums = lastnums+sum(templast1);
 lastnumserror = [lastnumserror; templast1];
@@ -199,10 +213,20 @@ end
 
 
 
+
   %lastcountsnum = lastcountsnum+2;
   %lastnums = lastnums+templast1+templast2+templast3;
     %lastnumserror = [lastnumserror; templast1; templast2; templast3];
 end
+actnum = actnum+1;
+   end
+
+end
+
+if actnum ~= length(min_dist)
+  actnum = actnum
+  length(min_dist)
+  warning('measurements dont line up')
 end
 
 
@@ -216,10 +240,10 @@ histogram(totalskewaway, 'BinWidth', .2)
 nanmean(totalskewaway)
 nanmedian(totalskewaway)
 
-totskewmean = nanmean(totskew)
-firstskewmean = nanmean(firstskew)
-lastskewmean = nanmean(lastskew)
-diffskew = nanmean(abs(lastskew-firstskew))
+%totskewmean = nanmean(totskew)
+%firstskewmean = nanmean(firstskew)
+%lastskewmean = nanmean(lastskew)
+%diffskew = nanmean(abs(lastskew-firstskew))
 
 
 %THIS IS DOING ALL AVERAGING TOGETHER
@@ -228,16 +252,38 @@ figure
 hold on
 
 
+%{
+totalnumserrorminus = totalnumserror;
+[row, ~] = ismember(firstnumserror,totalnumserrorminus);
+totalnumserrorminus(col) = [];
+[col, ~] = ismember(lastnumserror,totalnumserrorminus);
+totalnumserrorminus(col) = [];
+totalnumserrorminusnums = length(totalnumserrorminus);
+%}
+
+totalnumserrorminus = totalnumserror;
+[ia, ib] = ismember(totalnumserrorminus, firstnumserror, 'rows');
+totalnumserrorminus(ia, :) = []
+totalnumserrorminus = totalnumserror;
+[ia, ib] = ismember(totalnumserrorminus, lastnumserror, 'rows');
+totalnumserrorminus(ia, :) = []
+totalnumserrorminusnums = length(totalnumserrorminus);
+
 
 
 errorbar(edges(1:end-1)+1, firstnums./firstcountsnum./2, std(firstnumserror./2)./sqrt(firstcountsnum),'Color', 'red');
-errorbar(edges(1:end-1)+1, lastnums./lastcountsnum./2, std(lastnumserror./2)./sqrt(lastcountsnum), 'Color', 'cyan');
-errorbar(edges(1:end-1)+1, totalnums./totalcountsnum./2, std(totalnumserror./2)./sqrt(totalcountsnum), 'Color','black');
-legend('Average of all first runs through all fields', 'Average of all last runs through all fields', 'All runs through all fields')
+%errorbar(edges(1:end-1)+1, nansum(totalnumserrorminus)./totalnumserrorminusnums./2, std(totalnumserrorminus./2)./sqrt(totalnumserrorminusnums), 'Color','black');
+errorbar(edges(1:end-1)+1, lastnums./lastcountsnum./2, std(lastnumserror./2)./sqrt(lastcountsnum), 'Color', 'black');
+%errorbar(edges(1:end-1)+1, totalnums./totalcountsnum./2, std(totalnumserror./2)./sqrt(totalcountsnum), 'Color','black');
+
+legend('Average of all first runs through all fields', 'Average of all last runs through all fields')
 %legend('Average of all first runs through all fields', 'Average of all last runs through all fields')
 title('Spiking as a function of location around place field center, all trials and all fields')
 ylabel('Average spikes at location (spikes/cm)')
 xlabel('cm from place field center')
+
+%figure
+%plot(edges(1:end-1)+1, totalnumserror)
 
 
 ttresults = [];
@@ -245,39 +291,43 @@ ttresults2 = [];
 ttresults3 = [];
 ttresults4 = [];
 ttresults5 = [];
-for c = 1:size(totalnumserror,2)
 
-  [m p n stats] = ttest(firstnumserror(:,c), lastnumserror(:,c), 'Tail', 'left');
+
+
+for c = 1:size(firstnumserror,2)
+
+  [m p n stats] = ttest2(firstnumserror(:,c), lastnumserror(:,c));
     ttresults(end+1) = p;
     if p<0.05
-      fl = c
-      fl = p
+      fl = c;
+      fl = p;
     end
-    [m p n stats4] = ttest(firstnumserror(:,c), mean(totalnumserror(:,c)), 'Tail', 'left');
-      ttresults4(end+1) = p;
-      if p<0.05
-        fa = c
-        fa = p
-      end
+    %[m p n stats4] = ttest(firstnumserror(:,c), mean(totalnumserror(:,c)));
+    %  ttresults4(end+1) = p;
+    %  if p<0.05
+    %    fa = c;
+    %    fa = p;
+    %  end
 
   %if c == bins./2+1
-  if c == bins/2+1
-    mean(firstnumserror(:,c))./2;
-    mean(lastnumserror(:,c))./2;
-    mean(totalnumserror(:,c))./2;
-    std(firstnumserror(:,c)./2);
-    std((lastnumserror(:,c)./2));
-    std((totalnumserror(:,c)./2));
+%  if c == bins/2+1
+%    mean(firstnumserror(:,c))./2;
+%    mean(lastnumserror(:,c))./2;
+%    mean(totalnumserror(:,c))./2;
+%    std(firstnumserror(:,c)./2);
+%    std((lastnumserror(:,c)./2));
+%    std((totalnumserror(:,c)./2));
 
 
-  end
+%  end
 end
+%}
 
-
-ttresults;
+fprintf('GOT HERE')
+ttresults
 %ttresults2
 %ttresults3
-ttresults4;
+
 %ttresults5
 
 
@@ -297,50 +347,69 @@ toplot = [];
 for z=1:max(lapcenterdist(:,1))
   found = find(lapcenterdist(:,1)==z);
   meandist = nanmean(lapcenterdist(found,2));
-  stderrorlap = nanstd(lapcenterdist(found,2)./3.5)./sqrt(length(found));
+  stderrorlap = nanstd(lapcenterdist(found,2))./sqrt(length(found));
   toplot = [toplot; z, meandist, length(found), stderrorlap];
 end
+
+
 figure
 
-wanted = find(toplot(:,3)>=5);
-wanted = max(wanted)
+wanted = find(toplot(:,3)>=30);
+wanted = max(wanted);
 x = toplot(1:wanted,1);
-y = toplot(1:wanted,2)./3.5;
-[k, yInf, y0, yFit] = fitExponential(x, y);
-k = k
-yInf = yInf
-y0 = y0
+y = toplot(1:wanted,2);
+%[k, yInf, y0, yFit] = fitL(x, y);
+%k = k
+%yInf = yInf
+%y0 = y0
+
+fitlm(x,y);
 scatter(x,y);
 hold on
 errorbar(x, y, toplot(1:wanted,4), 'LineStyle','none');
-plot(x, yFit)
+
+coefficients = polyfit(x, y, 1);
+xFit = linspace(min(x), max(x), 1000);
+yFit = polyval(coefficients , xFit);
+hold on;
+%plot(xFit, yFit, 'r-', 'LineWidth', 2);
+
+%plot(x, yFit)
 title('Place field centers converge with experience')
 xlabel('Lap')
 ylabel('Average distance of lap place field center from overall center (cm)')
 
 
 
-%lapcenterdist = [j, compcentdist, fieldquad];
 
-toplot = [];
+
+%toplot = [];
+
+
 figure
 
 for m=1:3
-  toplot = []
+  toplot = [];
   if m==1 %forced
     wantedquad = [0,1];
+    color = [1,0,0];
   elseif m==2 %middle
     wantedquad = [3,3];
-elseif m==3 %choice
+    color = [0,0,1];
+  elseif m==3 %choice
     wantedquad = [5,6];
+    color = [.58,0,.83];
   end
 
+
+  toplot =[];
   for z=1:max(lapcenterdist(:,1))
     found1 = find(lapcenterdist(:,1)==z);
     found2 = find(lapcenterdist(:,3)==wantedquad(1) | lapcenterdist(:,3)==wantedquad(2));
     found = intersect(found1,found2);
     meandist = nanmean(lapcenterdist(found,2));
     stderrorlap = nanstd(lapcenterdist(found,2)./3.5)./sqrt(length(found));
+
     toplot = [toplot; z, meandist, length(found), stderrorlap];
   end
   wanted = find(toplot(:,3)>=5);
@@ -348,11 +417,12 @@ elseif m==3 %choice
   x = toplot(1:wanted,1);
   y = toplot(1:wanted,2)./3.5;
   hold on
-  scatter(x,y)
-  errorbar(x, y, toplot(1:wanted,4), 'LineStyle','none');
-  [k, yInf, y0, yFit] = fitExponential(x, y);
-  plot(x, yFit);
-  yInf;
+  scatter(x,y,[], color)
+  coefficients = polyfit(x, y, 1);
+  f = polyval(coefficients,x);
+  plot(x,f, 'Color', color)
+
+
 end
 
 
@@ -363,8 +433,9 @@ end
 %[fitobject,gof] = fit(x,y,'exp1')
 
 
+
 %size(nanmean(firstnumserror'))
 %size((mean(totalnumserror)))
 %[m p n stats] = ttest(nanmean(firstnumserror'), nanmean(lastnumserror'))
 %[m p n stats] = ttest2(nanmean(firstnumserror'), mean((totalnumserror')))
-%f = lapcenterdist;
+f = lapcenterdist;

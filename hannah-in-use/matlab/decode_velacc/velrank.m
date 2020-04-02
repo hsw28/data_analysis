@@ -1,9 +1,10 @@
-function f = velrank(posData, vel, dimX, dimY)
+function f = velrank(posData, vel, dimX, dimY, confidencethreshold, varargin)
 %posData should be in the format (time,x,y) or (x,y,prob,time)
 %vel should be in (vel, time, varargin)
 %MAKE SURE CONFIDENCE THRESHOLD IS LIKE .3 AND NOT 30%
 
-confidencethreshold = 0;
+
+
 psizeX = 3.5 * dimX; %some REAL ratio of pixels to cm
 psizeY = 3.5 * dimY;
 
@@ -14,18 +15,12 @@ if size(posData,2) == 3 %this means non decoded
   timepos = posData(:,1);
   X = (posData(:,2));
   Y = (posData(:,3));
-%  if size(vel,1) >2 %means vel was decoded-- we will interpolate up position so sampling is equal
-%    timeMAZEinc = mintime:.0333:maxtime;
-%    X = interp1(timepos, X, timeMAZEinc, 'pchip');
-%    Y = interp1(timepos, Y, timeMAZEinc, 'pchip');
-%    timepos = timeMAZEinc;
-%  end
+
 elseif size(posData,1)==4 %means decoded continuous
 
-  %%%%%%%%%%%%%%%FOR TESTING: USE ONLY CONFIDENCES ABOVE 30%
+
   highprobpos = find(posData(3,:)>confidencethreshold);
   posData = posData(:,highprobpos);
-  %%ENDDDDD
 
   mintimepos = min(posData(4,:));
   maxtimepos = max(posData(4,:));
@@ -45,7 +40,11 @@ end
 
 %set velocities
 %%%%%%%%%%%%%%%FOR TESTING: USE ONLY CONFIDENCES ABOVE 30%
+
+
+
 if size(vel,1)==4
+
   highprobvel = find(vel(4,:)>confidencethreshold);
   vel = vel(:,highprobvel);
   mintimevel = min(vel(2,:));
@@ -53,6 +52,7 @@ if size(vel,1)==4
   timevel = vel(2,:);
   vel = vel(1,:);
 
+%THIS MIGHT NEED REVISING
 elseif size(vel,1)==5
   highprobvel = find(vel(3,:)>confidencethreshold);
   vel = vel(:,highprobvel);
@@ -61,6 +61,7 @@ elseif size(vel,1)==5
   maxtimevel = max(vel(5,:));
   timevel = (vel(4,:));
   vel = vel(1,:);
+  %%%%%
 
 else
   mintimevel = min(vel(2,:));
@@ -86,6 +87,7 @@ elseif mintimepos<mintimevel
   Y = Y(indexmin:end);
 end
 
+
 if maxtimepos >maxtimevel
   %cut pos end
   [c indexmin] = (min(abs(timepos-maxtimevel)));
@@ -100,14 +102,45 @@ elseif maxtimepos < maxtimevel
 end
 
 posData = [timepos, X, Y];
+timesforvel = placeevent(timevel, posData) %vectortxy = [time'; xposvector; yposvector];
+timesforvel = timesforvel';
+
+
+all = 0;
 
 %putting in approx values here for now, just want them to always be same i think
+if length(varargin)>0 %linear decoding
+    bounds = varargin{:};
+    bounds = cell2mat(bounds);
+    xbins = length(bounds);
+    ybins = length(bounds);
+    for xy = (1:length(bounds)) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
+
+        inX = find(timesforvel(:,2)>=bounds(xy,1) & timesforvel(:,2)<bounds(xy,2));
+        inY = find(timesforvel(:,3)>=bounds(xy,3) & timesforvel(:,3)<bounds(xy,4));
+        inboth = intersect(inX, inY); %inboth is the velocity index for cells in that bin
+  
+        if length(inboth)>0
+          velinboth = vel(inboth);
+          avinboth = nanmean(velinboth);
+          averagecells(xy) = avinboth;
+          numincells(xy) = length(inboth);
+          all = all+length(inboth);
+        else
+          averagecells(xy) = NaN;
+          numincells(xy) = NaN;
+        end
+
+      end
+
+linearmean = averagecells;
+linearnum = numincells;
+else
+  %nonlinear
 xmin = 360;
 ymin = 70;
 xmax = 920;
 ymax = 675;
-
-
 xbins = ceil((xmax-xmin)/psizeX); %number of x
 ybins = ceil((ymax-ymin)/psizeY); %number of y
 xstep = xmax/xbins;
@@ -115,13 +148,8 @@ ystep = ymax/ybins;
 xinc = xmin +(0:xbins)*psizeX; %makes a vectors of all the x values at each increment
 yinc = ymin +(0:ybins)*psizeY; %makes a vector of all the y values at each increment
 
-
-timesforvel = placeevent(timevel, posData); %vectortxy = [time'; xposvector; yposvector];
-timesforvel = timesforvel';
-
 averagecells = zeros(xbins, ybins);
 numincells = zeros(xbins,ybins);
-all = 0;
 %defiding position
   for x = (1:xbins) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
     for y = (1:ybins)
@@ -138,10 +166,12 @@ all = 0;
           inX = find(timesforvel(:,2)>=xinc(x));
           inY = find(timesforvel(:,3)>=yinc(y));
         end
+      end
+
         inboth = intersect(inX, inY); %inboth is the velocity index for cells in that bin
         if length(inboth)>0
           velinboth = vel(inboth);
-          avinboth = mean(velinboth);
+          avinboth = nanmean(velinboth);
           averagecells(x, y) = avinboth;
           numincells(x,y) = length(inboth);
           all = all+length(inboth);
@@ -149,16 +179,19 @@ all = 0;
           averagecells(x, y) = NaN;
           numincells(x,y) = NaN;
         end
-
-
       end
-    end
-numincells;
 
-  linearmean = reshape(averagecells,[1 xbins*ybins]);
-  linearnum = reshape(numincells,[1 xbins*ybins]);
+      linearmean = reshape(averagecells,[1 xbins*ybins]);
+      linearnum = reshape(numincells,[1 xbins*ybins]);
+    end
+
+
+
+
+
 
 if all>1000
+  ceil(all*.001);
   low = find(linearnum<=ceil(all*.001));
   linearmean(low) = NaN;
 %else
@@ -171,6 +204,7 @@ if all>1000
 else
   low = find(linearnum<2);
   linearmean(low) = NaN;
+
 end
 %  linearmean(low) = NaN;
   [avs,idx] = sort(linearmean);

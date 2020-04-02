@@ -28,6 +28,7 @@ allmaxpfrate = [];
 pastname = 'aaaaaaaaaaaaaasaaaaaaaaaaa';
 mindistall = [];
 test = 0;
+totsallnumb = 1;
 
 posnames = (fieldnames(posstructure));
 posnum = length(posnames);
@@ -254,7 +255,7 @@ for z = 1:size(fieldoutput,1)
         disty(end+1) = pdist([usecenterX, usecenterY; usespos(2,qq), usespos(3,qq)]); %finds distance to center
         end
 
-        distyclose = find((disty)<(15*3.5)); %indices of times when close (less than 15 pixels from center)
+        distyclose = find((disty)<(15*3.5)); %indices of times when close (less than 15 cm from center)
         distyclosetimes = usespos(1,distyclose); %times close to field
         distyclosedist = disty(distyclose); %distances close to field
 
@@ -263,7 +264,7 @@ for z = 1:size(fieldoutput,1)
         %diff does second minus first
         differences = abs(diff(distyclosetimes));
         newpass = 1;
-        newpass = [newpass, find(differences > 2)]; %if more than two seconds apart, a different pass
+        newpass = [newpass, find(differences > 1)]; %if more than two seconds apart, a different pass
 
 
         %NEW PASS IS THE INDICES FOR EACH NEW PASS, FROM DIFFERENCES (which had indices of distyclose), NOT TIMES OR POSITIONS
@@ -289,8 +290,9 @@ for z = 1:size(fieldoutput,1)
            mintime(qqq); %time closest to field
            mindist(qqq); %distance closest to field
 
+           qqq;
 
-           %find all spikes within 30cm of center
+           %find all spikes within 20cm of center
            [closetime closeindex] = min(abs(posData(:,1)-mintime(qqq)));
            db = closeindex;
            currdist = 0;
@@ -324,17 +326,15 @@ for z = 1:size(fieldoutput,1)
            passspikes = intersect(passspikes1, passspikes2); %spike indices windows
            passspikes = sort(usespikes(passspikes)); %actual spikes times in window
 
+           qqq;
 
             if length(passspikes)>0 %if there are any spikes in the window, assign positions to them
+
 
               passpos = assignposOLD(passspikes, posData); %positions assigned to spikes
                 currvel = assignvelOLD(passspikes, vel);
                 currvel = currvel(1:size(passpos,1));
-                if qqq==1
-                  goodfield(1:length(currvel),:,(qqq)) = [passpos, currvel'];
-                elseif length(find(passpos(1,1,1)==goodfield(1,1,:)))<1
-                  goodfield(1:length(currvel),:,(end+1)) = [passpos, currvel'];
-                end
+
 
                 chart = normalizePosData(passspikes, posData, dim);
                 chart = chartinterp(chart);
@@ -357,10 +357,25 @@ for z = 1:size(fieldoutput,1)
                 centerYmax = ybins-centerYmax;
                 centerXmax = (xmax)./xbins * centerXmax;
                 centerYmax = (ymax)./ybins * centerYmax;
+
                 compcentdist = pdist([usecenterX,usecenterY; centerXmax, centerYmax]);
 
+                totsallnumb;
+                if qqq==1
+
+                  goodfield(1:length(currvel),:,(qqq)) = [passpos, currvel'];
+                  mindistall(totsallnumb,:) =  [mintime(qqq), mindist(qqq)./3.5, centerXmax, centerYmax, compcentdist./3.5, cell2mat(fieldchart((z),4))]; % put time and min distance in vector for output
+                  totsallnumb = totsallnumb+1;
+                else
+
+              %  elseif length(find(passpos(1,1,1)==goodfield(1,1,:)))<1
+                  goodfield(1:length(currvel),:,(end+1)) = [passpos, currvel'];
+
+                  mindistall(totsallnumb,:) =  [mintime(qqq), mindist(qqq)./3.5, centerXmax, centerYmax, compcentdist./3.5, cell2mat(fieldchart((z),4))]; % put time and min distance in vector for output
 
 
+                  totsallnumb = totsallnumb+1;
+                end
 
                 numpass = numpass+1;
 
@@ -455,28 +470,46 @@ for z = 1:size(fieldoutput,1)
 
 
                 %%%%%%%%%%%%%SKEWWWWWWWW
-                [size(mindistall), size(mintime(qqq)), size(mindist(qqq)./3.5), size(centerXmax), size(centerYmax), size(compcentdist./3.5), size(cell2mat(fieldchart((z),4))), size(dirskewness)];
+                %[size(mindistall), size(mintime(qqq)), size(mindist(qqq)./3.5), size(centerXmax), size(centerYmax), size(compcentdist./3.5), size(cell2mat(fieldchart((z),4))), size(dirskewness)];
 
-                mindistall =  [mindistall; mintime(qqq), mindist(qqq)./3.5, centerXmax, centerYmax, compcentdist./3.5, cell2mat(fieldchart((z),4)), dirskewness]; % put time and min distance in vector for output
-
+                %mindistall =  [mindistall; mintime(qqq), mindist(qqq)./3.5, centerXmax, centerYmax, compcentdist./3.5, cell2mat(fieldchart((z),4)), dirskewness]; % put time and min distance in vector for output
+            elseif qqq==1
+              %mindistall(totsallnumb,:) =  [NaN, NaN, NaN, NaN, NaN, NaN];
+              totsallnumb = totsallnumb+1;
             end
           end
           end
           end
 
+
+
+
           goodfield(goodfield==0) = NaN;
+          %mindistall(goodfield==0) =  [NaN, NaN, NaN, NaN, NaN, NaN];
 
           title = strcat(char(fieldname),'_');
           title = strcat(title, char(num2str(z)));
           allfields.(title) = goodfield;
 
+size(goodfield,3);
 test = test+size(goodfield,3);
-if size(mindistall,1)~=test
-  mindistall =  [mindistall;NaN, NaN, NaN, NaN, NaN, NaN, NaN];
+size(mindistall,1);
+
+while size(mindistall,1)<test %& test~=1
+  mindistall =  [mindistall;NaN, NaN, NaN, NaN, NaN, NaN];
+  warning('size is too small')
 end
+if size(mindistall,1)>test
+  error('size is too big')
+end
+
+mindistall;
+totsallnumb = test+1;
 
 end
 
+replace = find(mindistall(:,1)==0)
+mindistall(replace,:)=NaN;
 
   f = allfields;
 mindistall;

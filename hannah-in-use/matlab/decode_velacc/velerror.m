@@ -37,7 +37,7 @@ for i=1:length(time)
     alldiff(end+1) = NaN;
   end
 end
-alldiff
+
 realvel = closevel;
 values = [alldiff; realvel; time];
 

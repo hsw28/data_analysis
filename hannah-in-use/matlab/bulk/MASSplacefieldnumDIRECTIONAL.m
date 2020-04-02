@@ -1,4 +1,4 @@
-function [f allsizescenters] = MASSplacefieldnumDIRECTIONAL(clusters,posstructure, dim)
+function [f allsizescenters shuffledskew] = MASSplacefieldnumDIRECTIONAL(clusters,posstructure, dim)
 
       %set(0,'DefaultFigureVisible', 'off');
 
@@ -16,6 +16,9 @@ clustspikenames = (fieldnames(clusters));
 spikenum = length(clustspikenames);
 allavpfrate = [];
 allmaxpfrate = [];
+shuffledskew = NaN(500, 500);
+totsnum = 0;
+FRAI = [];
 
 posnames = (fieldnames(posstructure));
 posnum = length(posnames);
@@ -116,6 +119,7 @@ occprobs = occ./(occtotal);
 %spike rates
 
 for c = 1:(currentnumclust)
+
     name = char(currentclustname(c))
     clust = currentclusts.(name);
     clustsize = length(clust);
@@ -204,13 +208,18 @@ for c = 1:(currentnumclust)
     end
 
 
-    chart = normalizePosData(spikestochart, posDataFast, dim);
+    [chart spikegraph timegraph] = normalizePosData(spikestochart, posDataFast, dim);
+
     chart = chartinterp(chart);
+    spikegraph = chartinterp(spikegraph);
+    timegraph = chartinterp(timegraph);
 
 
     %smoothing spiking normalization
 
     chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    spikegraph = ndnanfilter(spikegraph, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+    timegraph = ndnanfilter(timegraph, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
 
     chartlin = sort(chart(:));
     chartlin = chartlin(~isnan(chartlin));
@@ -229,6 +238,10 @@ for c = 1:(currentnumclust)
     meanrate = nanmean(chart(:));
     maxrate = max(chart(:));
     chart(isnan(chart)) = 0;
+    spikegraph(isnan(spikegraph)) = 0;
+    timegraph(isnan(timegraph)) = 0;
+
+
 
     %finds maxes
     actualmax = imregionalmax(chart); %maxes are where there is a 1 on this chart
@@ -256,6 +269,8 @@ for c = 1:(currentnumclust)
 
 
     for z=1:length(CC.PixelIdxList)
+
+
       [Yindex, Xindex] = ind2sub(size(chartmax),cell2mat(CC.PixelIdxList(z)));
       YM = length(unique(Yindex));
       XM = length(unique(Xindex));
@@ -289,7 +304,13 @@ for c = 1:(currentnumclust)
 
         fsize = fsize*dim;
 
+
         curr = (chart(Yindex, Xindex));
+        currspikegraph = (spikegraph(Yindex, Xindex));
+        currtimegraph= (timegraph(Yindex, Xindex));
+
+
+
       if fsize>=15 & max(curr(:))>=chartlinmean+(2*(chartlinstd))
         fieldsize(end+1) = fsize;
         %find all instances where animal goes through place field
@@ -301,6 +322,9 @@ for c = 1:(currentnumclust)
         realY = (ymax)./ybins .* centerY;
 
         currentrates = chart(centerY, centerX);
+        %currspikegraph2 = spikegraph(centerY, centerX);
+        %currtimegraph2= timegraph(centerY, centerX);
+
         avpfrate = nanmean(currentrates(:));
         maxpfrate = max(currentrates(:));
 
@@ -321,6 +345,16 @@ for c = 1:(currentnumclust)
         [centerYmax, centerXmax] = find(newchart==M);
         centerYmax = ybins-centerYmax; %here?
         newchart(find(newchart==0))=NaN;
+
+        newspikegraph  = zeros(size(chart));
+        newtimegraph  = zeros(size(chart));
+        newspikegraph(centerY, centerX) = spikegraph(centerY, centerX);
+        newtimegraph(centerY, centerX) = timegraph(centerY, centerX);
+        newspikegraph(find(newspikegraph==0))=NaN;
+        newtimegraph(find(newtimegraph==0))=NaN;
+
+
+
 
 
 
@@ -346,6 +380,8 @@ for c = 1:(currentnumclust)
           if centerYmean<380 & centerYmean>340 & size(newchart,2)>size(newchart,1)%center area so place field could go horizontally or vertically
                 k=5;
                 flattened = nanmean(newchart,1);
+                flattenednewspikegraph = nanmean(newspikegraph,1);
+                flattenednewtimegraph = nanmean(newtimegraph,1);
                 newflattened = flattened;
 
             else
@@ -354,11 +390,15 @@ for c = 1:(currentnumclust)
                 inboth = intersect(inX, inY);
                 if length(inboth)>0
                   flattened = nanmean(newchart,2)'; %need this directional
+                  flattenednewspikegraph = nanmean(newspikegraph,2)';
+                  flattenednewtimegraph = nanmean(newtimegraph,2)';
                   %need to flip right forced and left choice
                   if (k == 1 | k== 4)
                     newflattened = flattened;
                   elseif (k == 2 | k== 3)
                     newflattened = flip(flattened);
+                    flattenednewspikegraph = flip(flattenednewspikegraph);
+                    flattenednewtimegraph = flip(flattenednewtimegraph);
                   end
 
 
@@ -369,7 +409,39 @@ for c = 1:(currentnumclust)
 
 
         flatstart = (find(newflattened>0));
+
         newflattened = newflattened(flatstart(1):end);
+        flattenednewspikegraph = flattenednewspikegraph(flatstart(1):end);
+        flattenednewtimegraph = flattenednewtimegraph(flatstart(1):end);
+
+
+        F1 = 0;
+        F2 = 0;
+        F1t = 0;
+        F2t = 0;
+        for ts=1:length(flattenednewspikegraph)
+          if F1<=(nansum(flattenednewspikegraph)./2) & isnan(flattenednewspikegraph(ts))==0
+            F1 = F1+flattenednewspikegraph(ts);
+            F1t = F1t+flattenednewtimegraph(ts);
+        elseif F1>=(nansum(flattenednewspikegraph)./2) & isnan(flattenednewspikegraph(ts))==0
+            F2 = F2+flattenednewspikegraph(ts);
+            F2t = F2t+flattenednewtimegraph(ts);
+          end
+        end
+
+
+
+
+        FRAItemp = ((F1/F1t)-(F2/F2t)) ./ ((F1/F1t)+(F2/F2t));
+
+
+        %SHUFFLE
+        %SHUFFLE
+        totsnum = totsnum+1;
+        %for sss=1:500 %SHUFFLE
+        %  newflattened = newflattened(~isnan(newflattened)); %SHUFFLE
+        %  newflattened = newflattened(randperm(length(newflattened))); %SHUFFLE
+
 
 
 
@@ -401,7 +473,6 @@ for c = 1:(currentnumclust)
         end
 
 
-        %flatmom = moment(flattened(~isnan(flattened)), 3);
 
         flatstd = 0;
         for kk = 1:length(newflattened)
@@ -424,9 +495,15 @@ for c = 1:(currentnumclust)
 %%here to find directional skewness, positive means skewed in the direction of travel
       if currentdir == 1
         dirskewness = skewness;
+        FRAI(end+1) = FRAItemp;
       elseif currentdir ==2
         dirskewness = skewness.*-1;
+        FRAI(end+1) = FRAItemp.*-1;
       end
+%  if maxrate >= .5 %SHUFFLE
+%    shuffledskew(sss, totsnum) = dirskewness; %SHUFFLE
+%  end %shuffle
+%    end %%SHUFFLE
 
 
         centerXmax = (xmax)./xbins * centerXmax;
@@ -534,6 +611,9 @@ for k=1:length(xlimmin)
   end
 end
 
+want = ~isnan(shuffledskew(1,:));
+shuffledskew = shuffledskew(:,want);
+
 size(allmaxpfrate)
 size(posQuadmax)
-allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew; allavpfrate; allmaxpfrate; posQuadmax']';
+allsizescenters = [alldir; allsizes; allcenterXmax; allcenterYmax; allskew; alldirskew; allavpfrate; allmaxpfrate; posQuadmax'; FRAI]';

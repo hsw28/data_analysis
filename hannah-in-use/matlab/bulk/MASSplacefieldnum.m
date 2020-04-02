@@ -2,6 +2,8 @@ function [f allsizescenters tempz] = MASSplacefieldnum(clusters,posstructure, di
 
      set(0,'DefaultFigureVisible', 'off');
 
+figure
+ha = tight_subplot(6,5,[.01 0],[.1 .01],[.01 .01]);
 %determine how many spikes & pos files
 
 allsizes = [];
@@ -18,6 +20,8 @@ allmaxrate = [];
 tetmean = [];
 porp = [];
 tempz = [];
+clsz = [];
+tots = 0;
 
 posnames = (fieldnames(posstructure));
 posnum = length(posnames);
@@ -124,6 +128,7 @@ cend = 100000000;
 
 
 for c = 1:(currentnumclust)
+  tots = tots+1;
   name = char(currentclustname(c));
     clust = currentclusts.(name);
     clustsize = length(clust);
@@ -137,11 +142,47 @@ for c = 1:(currentnumclust)
 
 
 
-    figure
+    set(0,'DefaultFigureVisible', 'off');
     chart = normalizePosData(clust(fastspikeindex), posDataFast, dim);
+
 
       chart = chartinterp(chart);
       chart = ndnanfilter(chart, 'gausswin', [10/dim, 10/dim], 2, {}, {'symmetric'}, 1);
+      set(0,'DefaultFigureVisible', 'on');
+
+
+      %COMMENT OUT
+      %
+      %hold on
+      %axes(ha(tots))
+      %axis(ha,[25 150, -5 90])
+      %rate= chart;
+      %[nr,nc] = size(rate);
+      %colormap('parula');
+      %lower and higher three percent of firing sets bounds
+      %numrate = rate(~isnan(rate));
+      %numrate = sort(numrate(:),'descend');
+      %maxratefive = min(numrate(1:ceil(length(numrate)*0.03)));
+      %numrate = sort(numrate(:),'ascend');
+      %minratefive = max(numrate(1:ceil(length(numrate)*0.03)));
+      %pcolor([rate nan(nr,1); nan(1,nc+1)]);
+      %shading flat;
+      %set(ha, 'ydir', 'reverse');
+
+      %if minratefive ~= maxratefive
+    %  		set(ha(tots), 'clim', [minratefive, maxratefive*.75]);
+      %end
+      %axis([16 (size(rate, 2)+5) -4 (size(rate,1))]);
+      %cb = colorbar;
+%      colorbar('Ticks',[minratefive*1.5, maxratefive*.75],'TickLabels',[0,maxratefive*.75]);
+%
+%      set(ha,'YTick',[])
+%      set(ha,'XTick',[])
+%      cb = colorbar;
+
+        % cb.Label.String = 'Hz';
+      %%%
+
 
 
       chartlin = sort(chart(:));
@@ -270,6 +311,9 @@ for c = 1:(currentnumclust)
         %The skewness was defined, in dimensionless units, as the ratio of the third
         %moment of the place field firing rate distribution divided by the cube of the
         %standard deviation (Spiegel 1994).
+
+
+
         mom = (moment(newchart(~isnan(newchart)),3,'all'));
         stddev = nanstd(newchart(~isnan(newchart)), 0,'all').^3;
         skewness = mom./stddev;
@@ -388,9 +432,11 @@ for c = 1:(currentnumclust)
           allcenterYmax(end+1) = NaN;
           allskew(end+1) = NaN;
           tetmean(end+1) = NaN;
+          clsz(end+1) = NaN;
 
 
         end
+        clsz(end+1) = clustsize;
 
       end
 
@@ -412,7 +458,7 @@ end
 
 end
 
-allsizescenters = [allsizes; allcenterXmax; allcenterYmax; allcenterXmean; allcenterYmean]';
+allsizescenters = [allsizes; allcenterXmax; allcenterYmax; allcenterXmean; allcenterYmean; clsz]';
 
 
 
@@ -489,7 +535,7 @@ end
 
 
 
-allsizescenters = [allsizes; allcenterXmax; allcenterYmax; posQuadmax'; allcenterXmean; allcenterYmean; posQuadmean'; allskew; allmaxrate; fieldmeanrate; porp]';
+allsizescenters = [allsizes; allcenterXmax; allcenterYmax; posQuadmax'; allcenterXmean; allcenterYmean; posQuadmean'; allskew; allmaxrate; fieldmeanrate; porp; clsz]';
 %for k=1:length(posQuad)
 %output(6, k+1) = mat2cell(posQuad(k), 1, 1);
 %end

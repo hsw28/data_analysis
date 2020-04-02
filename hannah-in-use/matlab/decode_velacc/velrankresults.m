@@ -1,11 +1,40 @@
-function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, REM_YorN)
+function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, confidencethreshold, REM_YorN, varargin)
 %REM_YorN: put 0 if not using REM, 1 if using REM)
+%VARARGIN should be your bounds if using linear decoding
+
+%{
+if size(pos2,2)==4
+  newpos = NaN(length(pos2),3);
+  newpos(:,1) = pos2(4,:);
+  newpos(:,2) = pos2(1,:);
+  newpos(:,3) = pos2(2,:);
+  pos2 = newpos;
+end
+if size(pos1,2)==4
+  newpos = NaN(length(pos1),3);
+  newpos(:,1) = pos1(4,:);
+  newpos(:,2) = pos1(1,:);
+  newpos(:,3) = pos1(2,:);
+  pos1 = newpos;
+end
+
+if size(vel2,1)==3
+  newvel = vel2([1,3],:);
+  vel2 = newvel;
+end
+
+if size(vel1,1)==3
+  newvel = vel1([1,3],:);
+  vel1 = newvel;
+end
+%}
 
 
   if size(vel1,1) == 2
-    vel1(1,:) = smoothdata(vel1(1,:), 'gaussian', 15);
+    vel1(1,:) = smoothdata(vel1(1,:), 'gaussian', 30);
     vel1OLD = vel1;
     vel1 = vel1(:,vel1(1,:)>velthreshold);
+    size(vel1);
     if REM_YorN == 0
       assvel = assignvelOLD(vel2(2,:), vel1OLD);
       goodvel = find(assvel>velthreshold);
@@ -13,13 +42,15 @@ function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, RE
     end
   end
 
-rank1 = velrank(pos1, vel1, dimX, dimY);
-rank2 = velrank(pos2, vel2, dimX, dimY);
-
+rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold, varargin);
+fprintf('HEREEEEEEEEE')
+rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold, varargin);
 
 
 rank1.order = sortrows(rank1.order, 2);
 rank2.order = sortrows(rank2.order, 2);
+
+
 
 if length(rank2.order)==0
   warning('YOU HAVE NO OVERLAP DECODING')
@@ -29,8 +60,8 @@ good = find(~isnan(rank1.order(:, 3)));
 rank1 = rank1.order(good,:);
 rank2 = rank2.order(good,:);
 good = find(~isnan(rank2(:, 3)));
-rank1 = rank1(good,:)
-rank2 = rank2(good,:)
+rank1 = rank1(good,:);
+rank2 = rank2(good,:);
 %good = find(rank1(:,3)>7);
 %rank1 = rank1(good,:);
 %rank2 = rank2(good,:);
@@ -61,7 +92,8 @@ y = rank2(:,1);
 %y = y(good);
 
 f = [rank1, rank2];
-
+size(x)
+size(y)
 [rho,pval] = corr(x,y, 'Type','Spearman')
 
 %coeffs = polyfit(x, y, 1);
@@ -75,4 +107,6 @@ f = [rank1, rank2];
 figure
 scatter(x, y);
 str1 = {'Spearmans rho' rho, 'P value' pval};
+xlabel('Actual Position Rank from Slowest Average Speed to Fastest')
+ylabel('Decoded Position Rank from Slowest Average Decoded Speed to Fastest')
 text(1.2,max(y)*.9,str1);

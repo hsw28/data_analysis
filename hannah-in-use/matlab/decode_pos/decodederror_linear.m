@@ -1,4 +1,4 @@
-function f = decodederror(decoded, pos, decodedinterval)
+function f = decodederror(decoded, pos, decodedinterval, bounds)
 %returns an error in cm for each decoded time
 %decodedinterval is the length of decoding, for ex .5 for half a second
 
@@ -57,8 +57,24 @@ for i=1:length(decoded)
   %if mean(vel(index-decinB:index+decinC))>velabove
   if isnan(X(i))==0 & isnan(Y(i))==0
 
-    pairs = [X(i),Y(i);(pos(index,2)),(pos(index,3))];
+    %pairs = [X(i),Y(i);(pos(index,2)),(pos(index,3))]; %pos is the actual pos
+    %bin pos
+    posinx1 = find(pos(index,2)>=bounds(:,1));
+    posinx2 = find(pos(index,2)<bounds(:,2));
+    posinx = intersect(posinx1,posinx2);
+    posiny1 = find(pos(index,3)>=bounds(:,3));
+    posiny2 = find(pos(index,3)<bounds(:,4));
+    posiny = intersect(posiny1,posiny2);
+    posin = intersect(posinx, posiny); %this is the bin index
+
+    if length(posin)==1
+    posX = mean([bounds(posin,1), bounds(posin,2)]);
+    posY= mean([bounds(posin,3), bounds(posin,4)]);
+    pairs = [X(i),Y(i);posX,posY];
     diff = pdist(pairs,'euclidean');
+  else
+    diff = NaN;
+  end
   else
     diff = NaN;
   end
