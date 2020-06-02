@@ -1,4 +1,4 @@
-function f = decodederror(decoded, pos, decodedinterval, bounds)
+function f = decodederror_linear(decoded, pos, decodedinterval, bounds)
 %returns an error in cm for each decoded time
 %decodedinterval is the length of decoding, for ex .5 for half a second
 
@@ -95,7 +95,9 @@ for i=1:length(decoded)
 
 end
 
-mean(alldiff)./3.5;
+alldiff;
+nanmean(alldiff)./3.5
+nanmedian(alldiff)./3.5
 
 %f = [predT; predX; predY; realT; realX; realY; realV]';
 f = [alldiff/3.5; realT];

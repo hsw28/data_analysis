@@ -79,7 +79,8 @@ for i=1:length(decoded)
 
 end
 
-mean(alldiff)./3.5;
+nanmean(alldiff)./3.5
+nanmedian(alldiff)./3.5
 
 %f = [predT; predX; predY; realT; realX; realY; realV]';
 f = [alldiff/3.5; realT];

@@ -1,4 +1,4 @@
-function f = velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, confidencethreshold, REM_YorN, varargin)
+function [f pval]= velrankresults(pos1, vel1, pos2, vel2, dimX, dimY, velthreshold, confidencethreshold, REM_YorN, varargin)
 %REM_YorN: put 0 if not using REM, 1 if using REM)
 %VARARGIN should be your bounds if using linear decoding
 
@@ -43,13 +43,11 @@ end
   end
 
 rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold, varargin);
-fprintf('HEREEEEEEEEE')
 rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold, varargin);
 
 
 rank1.order = sortrows(rank1.order, 2);
 rank2.order = sortrows(rank2.order, 2);
-
 
 
 if length(rank2.order)==0
@@ -92,9 +90,8 @@ y = rank2(:,1);
 %y = y(good);
 
 f = [rank1, rank2];
-size(x)
-size(y)
-[rho,pval] = corr(x,y, 'Type','Spearman')
+
+
 
 %coeffs = polyfit(x, y, 1);
 %polydata = polyval(coeffs,x);
@@ -104,9 +101,15 @@ size(y)
 %stats = fitlm(x,y);
 %pval = stats.Coefficients.pValue(2)
 
-figure
-scatter(x, y);
+
+%scatter(x, y);
+[rho,pval] = corr(x,y, 'Type','Spearman')
 str1 = {'Spearmans rho' rho, 'P value' pval};
+%[rho,pval] = corr(x,y,'Type','Kendall')
+%str2 = {'Kendalls rho' rho, 'P value' pval};
 xlabel('Actual Position Rank from Slowest Average Speed to Fastest')
 ylabel('Decoded Position Rank from Slowest Average Decoded Speed to Fastest')
 text(1.2,max(y)*.9,str1);
+%text(1.2,max(y)*.7,str2);
+
+%gkgammatst([x,y], .05, 1)

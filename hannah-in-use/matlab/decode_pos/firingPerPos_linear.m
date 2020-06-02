@@ -7,6 +7,7 @@ else
 velthreshold = 12;
 end
 
+
 spikenames = (fieldnames(clusters));
 spikenum = length(spikenames);
 
@@ -79,7 +80,7 @@ bounds;
 
 for k = 1:spikenum
     events(:)=NaN;
-    spikename = char(spikenames(k))
+    spikename = char(spikenames(k));
     unit = clusters.(spikename);
     [m firstspike] = min(abs(unit-mintime));
     [m lastspike] = min(abs(unit-maxtime));
@@ -137,7 +138,7 @@ for k = 1:spikenum
     rate = events./(timecells'*tstep)+eps; %time*tstep is occupancy %want this for all cells
     myStruct.(spikename) = rate;
     else
-    rate = zeros(xbins, ybins);
+    rate = zeros(size(events));
     warning('the cell doesnt have enough points')
     spikename
     end

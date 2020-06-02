@@ -1,5 +1,7 @@
 function f  = CCpairs(fieldchartHPC_dir, fieldchartLS_dir, HPCclusters, LSclusters, posstructure)
 %if lag is positive, then Y is delayed relative to x
+%makes pairs of LS and HPC cells based on place field proximity and finds CC
+
 test = 0;
 
 figure
@@ -59,6 +61,8 @@ endminusaverage = [];
 endplusaverage = [];
 endmaxes = [];
 endmaxtime = [];
+
+disALL = [];
 for q = 1:length(pnames)
   currentname = char(pnames(q))
   posData = posstructure.(currentname);
@@ -125,9 +129,14 @@ for k = 1:size(currentHPCfields,1) %going through HPC pairs
     currentyLS = cell2mat(currentLSfields(currentindex,7));
     dis = pdist([currentxHPC,currentyHPC;currentxLS,currentyLS], 'euclidean'); %distance between centers
     if dis <= 3.5*20 %if distance is less than 16cm, save index
-      potentialLS(end+1) = currentindex;
-    end
-    if dis >= 3.5*100 %if distance is less than 16cm, save index
+     potentialLS(end+1) = currentindex;
+   end
+
+  %  if dis <= 3.5*20 && dis >= 3.5*3 %if distance is less than 16cm, save index
+  %    potentialLS(end+1) = currentindex;
+  %  end
+
+    if dis >= 3.5*100
       notpotentialLS(end+1) = currentindex;
     end
   end
@@ -150,7 +159,7 @@ for k = 1:size(currentHPCfields,1) %going through HPC pairs
 
   DIRECTION = currentdir; %INDLUDE
   DISTANCEBETWEEN = pdist([currentxHPC, currentyHPC; currentxLS, currentyLS]); %INDLUDE
-
+  disALL(end+1) = DISTANCEBETWEEN;
 
 
   %NEED TO GET DISTANCE FROM REWARD OR AT LEAST QUADRANT HERE
@@ -265,6 +274,7 @@ else
   midallaverage(end+1)= NaN;
   endallaverage(end+1)= NaN;
   maxcorr(end+1) = NaN;
+  disALL(end+1) = NaN;
 
 end %this end is for no close matches
 
@@ -314,8 +324,8 @@ size(allaverage)
 size(startallaverage)
 size(midallaverage)
 size(endallaverage)
-
-f = [dir(val); allaverage(val); startallaverage(val); midallaverage(val); endallaverage(val); posQuadmax(val)'; maxcorr(val)]';
+size(disALL)
+f = [dir(val); allaverage(val); startallaverage(val); midallaverage(val); endallaverage(val); posQuadmax(val)'; maxcorr(val); disALL(val)]';
 
 
 
@@ -378,13 +388,13 @@ plot(-100:binzzz:100, (allcors(:,[Pos5; Pos6]))', 'Color',[.5 0 .5]);
 
 endfirst = [];
 for k=1:length([-100:10:100])
-  [h,p,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos0;Pos1]))
+  [h,p,n,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos0;Pos1]))
 endfirst(end+1) = p;
 end
 
 endmid = [];
 for k=1:length([-100:10:100])
-  [h,p,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos3]))
+  [h,p,n,stats] = ttest2(allcors(k,[Pos5; Pos6]), allcors(k,[Pos3]))
 endmid(end+1) = p;
 end
 

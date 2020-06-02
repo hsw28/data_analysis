@@ -1,6 +1,4 @@
-function [f bounds] = decodeshitPos_linear(time, pos, clusters, tdecode, dim, varargin)
-%put anything in varargin for REM
-
+function [f bounds] = test_decodeshitPos_linear(time, pos, clusters, tdecode, dim, fxmatrix)
 %decodes position and outputs decoded x, y, confidence(in percents), and time.
 %if you want to filter spiking for veloctity you put velocity in varargin
 %dim is bin sie in cm
@@ -14,22 +12,19 @@ tic
 posData = pos;
 posData = fixpos(posData);
 
+size(pos);
 
-if length(varargin)<1
-[cc indexmin] = min(abs(posData(1,1)-time));
-[cc indexmax] = min(abs(posData(end,1)-time));
-timevector = time(indexmin:indexmax);
-time = timevector;
-else
-timevector = time;
-end
-
-
+%[cc indexmin] = min(abs(posData(1,1)-time));
+%[cc indexmax] = min(abs(posData(end,1)-time));
+%timevector = time(indexmin:indexmax);
+%time = timevector;
+%posData = assignpos(timevector, posData);
+timevector =time;
 
 vel = velocity(posData);
 vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
 goodvel = find(vel>=velthreshold);
-
+pos = posData(find(goodvel<length(posData)),:);  %pos is only fast vels
 
 
 x = pos(:,2);
@@ -117,7 +112,18 @@ allvec = [leftvect; rightvect; midvect]; %dimesions are [n, 4]
 
 xvals = posData(:,2);
 yvals = posData(:,3);
+%BIN
+%{no longer use
 
+xmin = min(posData(:,2));
+ymin = min(posData(:,3));
+xmax = max(posData(:,2));
+ymax = max(posData(:,3));
+xbins = ceil((xmax-xmin)/psize); %number of x
+ybins = ceil((ymax-ymin)/psize); %number of y
+xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
+yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
+%}
 
 tdecodesec = tdecode;
 t = 2000*tdecode;
@@ -127,15 +133,6 @@ t = 2000*tdecode;
 clustname = (fieldnames(clusters));
 numclust = length(clustname);
 
-% for each cluster,find the firing rate at esch velocity range
-%firingPerPos_linear(posData, clusters, tdecode, pos_samp_per_sec, bounds, varargin)
-fxmatrix = firingPerPos_linear(posData, clusters, tdecodesec, 30, allvec, velthreshold);
-names = (fieldnames(fxmatrix));
-for k=1:length(names)
-  curname = char(names(k));
-  %fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
-  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
-end
 
 
 maxprob = [];
@@ -149,6 +146,7 @@ same = 0;
 
 occ = zeros(length(allvec),1);
 testing = 0;
+
 for xy = (1:size(allvec,1)) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
 
     occx = find(xvals>=allvec(xy,1) & xvals<allvec(xy,2));
@@ -247,7 +245,6 @@ while tm < (length(timevector)-t)
       maxx(end+1) = NaN;
       maxy(end+1) = NaN;
       percents(end+1) = NaN;
-
     end
 
         times(end+1) = timevector(tm);
@@ -260,9 +257,9 @@ while tm < (length(timevector)-t)
     end
 
     n = n+1;
-    if rem(n,5000)==0
-      n
-    end
+    %if rem(n,5000)==0
+    %  n
+    %end
 end
 
 warning('your probabilities were the same')

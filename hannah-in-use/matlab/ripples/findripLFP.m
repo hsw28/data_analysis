@@ -1,5 +1,5 @@
 
-function [notabletimes, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, vel);
+function [notabletimes, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, posData);
 %IF DONT HAVE VELOCITY PUT 0
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
@@ -10,9 +10,23 @@ c = unfilteredLFP;
 d = timevector;
 y = devAboveMean;
 
-if length(vel)>1
-	c = cutclosest(vel(2,1), vel(2,end), d, c);
-	d = cutclosest(vel(2,1), vel(2,end), d, d);
+
+if abs(length(unfilteredLFP)-length(timevector))>10
+	error('YOUR TIME IS NOT THE LFP TIME')
+end
+
+if length(posData)>1
+
+	posData = fixpos(posData);
+	vel = velocity(posData);
+	vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
+
+
+	[timestart start] = min(abs(vel(2,1)-timevector));
+	[timefinish finish] = min(abs(vel(2,end)-timevector));
+	timevector = timevector(start:finish);
+	unfilteredLFP = unfilteredLFP(start:finish);
+
 end
 
 
@@ -24,26 +38,10 @@ filtdata = ripfilt(c);
 h = hilbert(filtdata);
 trans = abs(h);
 d= d(1:length(trans));
-if vel == 0
-	vel = ones(1,length(d));
-	%assvel = assignvelOLD(d, vel);
-	%slow = find(assvel)<12;
-	%slowtrans = trans(slow);
-	slowtrans = trans;
-else
-	vel = assignvel(d, vel);
-	dold = d;
-	d = vel(2,:);
-	assvel = assignvel(d, vel);
-	assvel = assvel(1,:);
-	slow = find(assvel)<12;
-	slowtrans = trans(slow);
-	trans = cutclosest(d(1), d(end), dold, trans);
-end
 
 % finds std devs above mean
-mn = mean(slowtrans);
-st = std(slowtrans);
+mn = mean(trans);
+st = std(trans);
 m = mn + (st.*y); % this is the value LFP must be above
 
 %also finds 6 std dev above mean to rule out huge things
@@ -60,8 +58,8 @@ alltime = [];
 
 % permute through transformed data and find when data is Y std devs above mean
 for k = 1:(size(trans))
-	k;
-	if trans(k)>m && trans(k)<big && vel(k) < 5
+
+	if trans(k)>m && trans(k)<big
 
 		% we've found something above threshold, now need to find surrounding times when it's back at mean
 
@@ -125,8 +123,45 @@ for k = 1:length(starts)
 end
 
 
-%notabletimes = [starts; peaks; ends];
+notabletimes = [starts; peaks; ends];
+
+if length(posData)>1
+velstarts = [];
+velpeaks = [];
+velends = [];
+for k=1:length(starts)
+	[timestart start] = min(abs(vel(2,:)-starts(k)));
+
+
+	if start-30>0 && start+30<=length(vel)
+		if (nanmean(vel(1,start-30:start+30))<5)
+		velstarts(end+1) = starts(k);
+		velpeaks(end+1) = peaks(k);
+		velends(end+1) = ends(k);
+		end
+	elseif start-30<0
+		if (nanmean(vel(1,1:start+30))<5)
+		velstarts(end+1) = starts(k);
+		velpeaks(end+1) = peaks(k);
+		velends(end+1) = ends(k);
+		end
+	elseif start+30>length(vel)
+		if (nanmean(vel(1,start-30:end))<5)
+		velstarts(end+1) = starts(k);
+		velpeaks(end+1) = peaks(k);
+		velends(end+1) = ends(k);
+		end
+	end
+
+
+end
+notabletimes = [velstarts; velpeaks; velends];
+end
+
+
+
+
 
 %notabletimes = [starts; ends];
-notabletimes = peaks;
+%notabletimes = peaks;
 all = alltimes;

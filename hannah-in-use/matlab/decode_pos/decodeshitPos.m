@@ -15,7 +15,7 @@ posData = fixpos(posData);
 [cc indexmax] = min(abs(posData(end,1)-time));
 timevector = time(indexmin:indexmax);
 time = timevector;
-%posData = assignpos(timevector, posData);
+
 
 
 vel = velocity(posData);
@@ -204,5 +204,11 @@ same = same
 maxx = maxx+psize/2;
 maxy = maxy+psize/2;
 values = [maxx; maxy; percents; times];
+
+
 toc
 f = values;
+
+error = decodederror(f, posData, tdecode);
+error_av = nanmean(error(1,:))
+error_med = nanmedian(error(1,:))
