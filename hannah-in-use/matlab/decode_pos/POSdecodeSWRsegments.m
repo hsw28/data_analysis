@@ -8,9 +8,9 @@ if size(SWRstartend,1)>size(SWRstartend,2)
   SWRstartend = SWRstartend';
 end
 
-if size(SWRstartend,1)>1 %means you're inputting start and end times
+if size(SWRstartend,1)==3 %means you're inputting start and end times
   SWRstart = SWRstartend(1,:);
-  SWRend = SWRstartend(2,:);
+  SWRend = SWRstartend(3,:);
 elseif size(SWRstartend,1)==1 %means you're just putting in mid time
   timeshift = cell2mat(varargin);
   SWRstart = SWRstartend-timeshift;
