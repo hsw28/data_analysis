@@ -57,7 +57,7 @@ xtemp = find(xbound<550);
 xtemp = intersect(xtemp, ytemp);
 lrightbound = max(xbound(xtemp)); %rightbound
 %topbound
-xtemp = find(xbound>520);
+xtemp = find(xbound<520);
 ltopbound = max(ybound(xtemp)); %topbound
 %bottombound
 xtemp = find(xbound<520);
