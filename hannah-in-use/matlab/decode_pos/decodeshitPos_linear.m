@@ -59,7 +59,7 @@ rrightbound = max(xbound); %rightbound
 ytemp = find(ybound>420 | ybound<320);
 xtemp = find(xbound>800);
 xtemp = intersect(xtemp, ytemp);
-rleftbound = max(xbound(xtemp)); %rightbound
+rleftbound = min(xbound(xtemp)); %rightbound
 %topbound
 xtemp = find(xbound>740);
 rtopbound = max(ybound(xtemp)); %topbound
