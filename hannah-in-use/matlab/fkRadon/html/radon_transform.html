@@ -1,0 +1,42 @@
+<html><head><title>fkRadon - radon_transform</title></head><body><table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr><td>fkRadon reference pages</td><td align="right"><a href="radon_peaks_dx.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;<a href="fkRadon_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;<a href="general_radon_c.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table><h2>radon_transform</h2>
+<h3>synopsis</h3>
+computes radon transform
+<h3>syntax</h3><pre>
+    r=RADON_TRANSFORM(m)
+    r=RADON_TRANSFORM(m,theta)
+    r=RADON_TRANSFORM(m,theta,rho)
+    r=RADON_TRANSFORM(...,parm1,val1,...)
+</pre>
+<h3>description</h3>
+<p>
+r=RADON_TRANSFORM(m) computes radon transform of matrix m using
+default options.
+</p>
+<p>
+r=RADON_TRANSFORM(m,theta) computes the radon transform at the
+specified angles.
+</p>
+<p>
+r=RADON_TRANSFORM(m,theta,rho) computes the radon transform at the
+specified angles and rho values.
+</p>
+<p>
+r=RADON_TRANSFORM(...,parm1,val1,...) specifies optional
+parameters. Valid options are:
+<dl>
+<dt>dx</dt><dd>sample size in row dimension (default=1)</dd>
+<dt>dy</dt><dd>sample size in column dimension (default=1)</dd>
+<dt>interp</dt><dd>interpolation method: 'nearest' or 'linear' (default='nearest')</dd>
+<dt>method</dt><dd>method of how matrix elements are combined: 'integral', 'sum', 'mean', 'product', 'slice' (default='integral'). If method is 'slice', then for each theta,rho pair the projection along the line defined by this pair is returned.</dd>
+<dt>valid</dt><dd>0/1 compute radon for all possible lines or for valid lines only. Valid lines span the complete width and/or height of matrix m. (default=0)</dd>
+<dt>rho_x</dt><dd>0/1 indicates whether rho specifies the distance to the origin or the intercept on the horizontal axis. (default=0)</dd>
+<dt>constraint</dt><dd>'none'/'x'/'y', combine matrix elements in x or y direction only, or decide based on angle of line (default='none')</dd>
+<dt>theta_range</dt><dd>range of theta values (in case no theta values are specified) (default=[-0.5 0.5]*pi). Theta values are sampled optimally within this range.</dd>
+<dt>dtheta</dt><dd>theta sampling interval; in combination with theta_range this defines the angles at which to compute the radon transform (only used if no theta values are specifed). If empty, the optimal interval is computed.(default=[])</dd>
+<dt>rho_range</dt><dd>range of rho values (in case no rho values are specified). If empty, the range of rho values is computed based on the size of the matrix and the theta range. (default=[])</dd>
+<dt>drho</dt><dd>rho sampling interval; in combination with rho_range this defines the rho values at which to compute the radon transform (only used if no rho values are specified). If empty, the optimal interval is computed (default=[])</dd>
+</dl>
+</p>
+
+
+<table bgcolor="#e7ebf7" border=0 width="100%" cellpadding=0 cellspacing=0><tr valign=top><td align=left width="33%"><a href="radon_peaks_dx.html"><img src="prev.gif" alt="Previous page" border=0 align=bottom></a>&nbsp;&nbsp;radon_peaks_dx</td><td align=center width="34%"><a href="fkRadon_product_page.html"><img src="up.gif" alt="Parent page" border=0 align=bottom></a>&nbsp;&nbsp;Toolbox page</td><td align=right>general_radon_c&nbsp;&nbsp;<a href="general_radon_c.html"><img src="next.gif" alt="Next page" border=0 align=bottom></a></td></tr></table></body></html>

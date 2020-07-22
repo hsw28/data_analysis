@@ -1,14 +1,23 @@
 
-function [notabletimes, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, posData);
+function [notabletimes, all] = findripLFP(unfilteredLFP, timevector, devAboveMean, posData, varargin);
 %IF DONT HAVE VELOCITY PUT 0
+%varargin = min ripple length
 % finds ripples from eeg data by bandpass filtering, transforming, and then looking for signals >y dev above mean. returns a vector [ripple start; ripplepeak]
 % uses position to only get ripples from when animal is not moving
 % ex:
 % function p = findrip(unfilteredLFP, timevector, devAboveMean, pos);
+%CLIPS RIPPLES TO BE FROM MAZE STARTING TO 40 MIN AFTER MAZE
 
 c = unfilteredLFP;
 d = timevector;
 y = devAboveMean;
+
+if cell2mat(varargin) > 0
+	minriplength = cell2mat(varargin);
+else
+minriplength = .03
+end
+
 
 
 if abs(length(unfilteredLFP)-length(timevector))>10
@@ -20,7 +29,7 @@ if length(posData)>1
 	posData = fixpos(posData);
 	vel = velocity(posData);
 	vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
-
+	vel = [vel, [vel(2,end)+.1; 0]];
 
 	[timestart start] = min(abs(vel(2,1)-timevector));
 	[timefinish finish] = min(abs(vel(2,end)-timevector));
@@ -29,8 +38,13 @@ if length(posData)>1
 
 end
 
+posDataOld = posData;
+
+
+
 
 filtdata = ripfilt(c);
+
 
 % filters data with bandpass filter between 100-300hz
 
@@ -38,6 +52,10 @@ filtdata = ripfilt(c);
 h = hilbert(filtdata);
 trans = abs(h);
 d= d(1:length(trans));
+
+trans = smoothdata(trans,'gaussian', 8);
+
+
 
 % finds std devs above mean
 mn = mean(trans);
@@ -83,7 +101,7 @@ for k = 1:(size(trans))
 
 		%only include events longer than 30ms
 
-		if i>0 && d(j)-d(i) > .03 && d(j)-d(i) < .1
+		if i>0 && d(j)-d(i) >= minriplength && d(j)-d(i) <= 1.018
 			%making a vector with all the data points of the ripple
 			pt=[];
 
@@ -158,7 +176,22 @@ end
 notabletimes = [velstarts; velpeaks; velends];
 end
 
+if length(notabletimes)>=1
 
+posData = posDataOld;
+SWRstart = notabletimes(1,:);
+SWRend = notabletimes(3,:);
+
+posstart = posData(1,1);
+posend = posData(end,1);
+
+[c startindex] = min(abs(SWRstart-posstart));
+[c endindex] = min(abs(SWRend-(posend+40*60))); %40 min after run
+
+notabletimes = notabletimes(:, startindex:endindex);
+else
+	notabletimes = NaN;
+end
 
 
 

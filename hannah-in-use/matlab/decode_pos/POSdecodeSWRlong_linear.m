@@ -1,5 +1,6 @@
-function f = POSdecodeSWRsegments_linear(SWRstartend, pos, clusters, dim, tdecode, varargin)
-%decodes position in each SWR seperately. input the output for findripMUA.m
+function f = POSdecodeSWRlong_linear(SWRstartend, pos, clusters, dim, tdecode, varargin)
+%decodes ripples in 20ms chunks
+%input the output for findripMUA.m
 %if inputting in only peak time, use varargin to specify seconds around peak time
 
 %%%%%%FILL IN
@@ -190,7 +191,22 @@ n =0;
 nivector = zeros((numclust),1);
 
 
+all_decoded = NaN(5,10, length(SWRstart));
 for r=1:(length(SWRstart))
+
+  currend = SWRstart(r);
+  newend = currend;
+  maxx = [];
+  maxy= [];
+  percents= [];
+  currstart_vec = [];
+  currend_vec = [];
+
+  while newend < SWRend(r)
+    currstart = currend;
+      currend = newend;
+
+
   %dont need to make sure the animal is moving bc ripple
 
   %while tm < (floor(SWRend(r) - SWRstart(r))./tdecode)
@@ -199,7 +215,7 @@ for r=1:(length(SWRstart))
    nivector = zeros((numclust),1);
    for c=1:numclust   %permute through cluster
      name = char(clustname(c));
-     nivector(c) = length(find(clusters.(name)>=SWRstart(r) & clusters.(name)<SWRend(r)));
+     nivector(c) = length(find(clusters.(name)>=currstart & clusters.(name)<currend));
    end
 
       %for the cluster, permute through the different conditions
@@ -231,7 +247,7 @@ for r=1:(length(SWRstart))
         end
         numcel(end+1) = (ni);
         % now have all cells at that location
-        tmm = SWRend(r)-SWRstart(r);
+        tmm = currend-currstart;
 
 
       endprob(xy) = (productme) + (-tmm.*expme); %IN
@@ -261,6 +277,9 @@ for r=1:(length(SWRstart))
 
       end
 
+      currstart_vec(end+1) = currstart;
+      currend_vec(end+1) = currend;
+
           if length(maxval) <1
             maxx(end+1) = NaN;
             maxy(end+1) = NaN;
@@ -269,14 +288,27 @@ for r=1:(length(SWRstart))
             maxy(end+1) = mean([allvec(maxval,3), allvec(maxval,4)]);
           end
 
-            %r = r+1
+        if (currend+.02) <= SWRend(r)
+          newend = currend+.02;
+        elseif (currend+.15) <= SWRend(r)
+          newend = currend+.15
+        else
+          newend = currend+.02;
+        end
+
+      end
+
+      maxx = maxx+psize/2;
+      maxy = maxy+psize/2;
+      values = [maxx; maxy; percents; currstart_vec; currend_vec];
+      all_decoded(:,1:length(values),r)= values;
 
 end
 
-warning('your probabilities were the same')
-same = same
-maxx = maxx+psize/2;
-maxy = maxy+psize/2;
-values = [maxx; maxy; percents; SWRstart; SWRend];
+%warning('your probabilities were the same')
+%same = same
+%maxx = maxx+psize/2;
+%maxy = maxy+psize/2;
+%values = [maxx; maxy; percents; SWRstart; SWRend];
 
-f = values';
+f = all_decoded;
