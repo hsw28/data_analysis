@@ -1,10 +1,14 @@
-function f = testclusts(time, pos, clusters, tdecode, dim)
+function f = testclusts(time, pos, clusters, tdecode, dim, varargin)
+
 
 clustname = (fieldnames(clusters));
 numclust = length(clustname);
 clustlist = [1:1:numclust];
 
+
 output = {'cluster name'; 'median'; 'mean'};
+
+
 figure
 
 for k = 0:numclust

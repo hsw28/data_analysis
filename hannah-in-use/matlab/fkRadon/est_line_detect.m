@@ -1,5 +1,6 @@
-function [slope, intercept, score, projection] = est_line_detect( x, y, est, varargin )
+function [slope, intercept, score, projection] = est_line_detect(x, y, est_colPOS_rowTIME, varargin )
 %EST_LINE_DETECT detect line in time series of 1D PDFs
+%COLUMNS ARE POSITIONS, ROWS ARE TIMES
 %
 %  [slope,intercept,score,projection]=EST_LINE_DETECT(x,y,estimate)
 %
@@ -14,6 +15,14 @@ function [slope, intercept, score, projection] = est_line_detect( x, y, est, var
 %
 
 %  Copyright 2009 Fabian Kloosterman
+
+%IF NOT WORKING, TRY COMPILING SOURCES AS SO:
+%>> makesources '-compatibleArrayDims'
+%>> cd src
+%>> mex -compatibleArrayDims general_radon_c.c
+%>> mex -compatibleArrayDims radon_transform_c.c
+
+est = est_colPOS_rowTIME;
 
 radon_options = struct( 'method', 'sum', ... %radon transform method: 'sum','product','logsum'
                         'interp', 'nearest', ... %interpolation: 'linear','nearest'
@@ -33,25 +42,42 @@ smooth_options = parseArgs( remainder, smooth_options );
 
 radon_options = cat(2, struct2param( radon_options ), struct2param( radon_options_fixed ) );
 
-if nargin<3
-    help(mfilename)
-    return
-end
+%if nargin<3
+%    help(mfilename)
+%    return
+%end
 
 if ~isnumeric(est) || ndims(est)~=2
     error('est_line_detect:invalidArgument', 'Invalid estimate')
 end
 
+
+
 if isempty(x)
     x = 1:size(est,2);
-elseif ~isnumeric(x) || ~isvector(x) || numel(x)~=size(est,2) || ~ismonotonic(x,1,'i')
-    error('est_line_detect:invalidArgument', 'Invalid time vector')
+elseif ~isnumeric(x)
+  error('est_line_detect:invalidArgument', 'Invalid time vector, not numeric')
+elseif ~isvector(x)
+  error('est_line_detect:invalidArgument', 'Invalid time vector, not a vector')
+elseif numel(x)~=size(est,2)
+  numel(x)
+  size(est,2)
+  error('est_line_detect:invalidArgument', 'Invalid time vector, ~=size(est,2)')
+elseif ~ismonotonic(x,1,'i')
+    error('est_line_detect:invalidArgument', 'Invalid time vector, ~ismonotonic(x,1,i')
 end
 
 if isempty(y)
     y = 1:size(est,1);
-elseif ~isnumeric(y) || ~isvector(y) || numel(y)~=size(est,1) || ~ismonotonic(y,1,'i')
-    error('est_line_detect:invalidArgument', 'Invalid position vector')
+  elseif ~isnumeric(y)
+    error('est_line_detect:invalidArgument', 'Invalid position vector, not numeric')
+  elseif ~isvector(y)
+    error('est_line_detect:invalidArgument', 'Invalid position vector, not a vector')
+  elseif numel(y)~=size(est,1)
+    error('est_line_detect:invalidArgument', 'Invalid position vector, ~=size(est,1)')
+  elseif ~ismonotonic(y,1,'i')
+      error('est_line_detect:invalidArgument', 'Invalid position vector, ~ismonotonic(y,1,i')
+
 end
 
 %smooth

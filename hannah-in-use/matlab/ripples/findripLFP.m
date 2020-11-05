@@ -143,6 +143,7 @@ end
 
 notabletimes = [starts; peaks; ends];
 
+
 if length(posData)>1
 velstarts = [];
 velpeaks = [];
@@ -176,7 +177,7 @@ end
 notabletimes = [velstarts; velpeaks; velends];
 end
 
-if length(notabletimes)>=1
+if length(notabletimes)>=1 & length(posData)>1
 
 posData = posDataOld;
 SWRstart = notabletimes(1,:);
@@ -189,7 +190,7 @@ posend = posData(end,1);
 [c endindex] = min(abs(SWRend-(posend+40*60))); %40 min after run
 
 notabletimes = notabletimes(:, startindex:endindex);
-else
+elseif length(posData)>1
 	notabletimes = NaN;
 end
 

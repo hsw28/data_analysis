@@ -138,6 +138,7 @@ for k = 1:spikenum
     rate = events./(timecells'*tstep)+eps; %time*tstep is occupancy %want this for all cells
     myStruct.(spikename) = rate;
     else
+
     rate = zeros(size(events));
     warning('the cell doesnt have enough points')
     spikename

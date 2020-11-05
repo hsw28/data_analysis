@@ -9,7 +9,9 @@ function f = POSdecodeSWRlong_linear(SWRstartend, pos, clusters, dim, tdecode, v
 %  SWRstartend = SWRstartend';
 %end
 
-
+if tdecode>.1
+  error('tdecode should be in fractions of seconds. for ex .02 for 20ms')
+end
 
 size(SWRstartend,1);
 
@@ -22,30 +24,8 @@ elseif size(SWRstartend,1)==1 %means you're just putting in mid time
   SWRend = SWRstartend+timeshift;
 end
 
-%posstart = pos(1,1);
-%posend = pos(end,1);
-
-%[c startindex] = min(abs(SWRstart-posstart));
-%[c endindex] = min(abs(SWRend-(posend+40*60))); %40 min after run
-
-%SWRstart = SWRstart(startindex:endindex);
-%SWRend = SWRend(startindex:endindex);
 
 
-
-
-SWRstart;
-SWRend;
-
-posData = pos;
-posData = fixpos(posData);
-
-%timevector = time;
-
-
-%t = tdecode;
-%t = 2000*t;
-%tm = 1;
 
 %find number of clusters
 clustname = (fieldnames(clusters));
@@ -53,93 +33,14 @@ numclust = length(clustname);
 
 velthreshold = 12;
 vel = velocity(posData);
+posData = pos;
+posData = fixpos(posData);
 vel(1,:) = smoothdata(vel(1,:), 'gaussian', 30); %originally had this at 30, trying with 15 now
 goodvel = find(vel>=velthreshold);
 
 
 
-x = pos(:,2);
-y = pos(:,3);
-bound = boundary(x,y);
-xbound = x(bound);
-ybound = y(bound); %these are the outline coordinates
-
-%FOR LEFT COLUMN
-lleftbound = min(xbound); %leftbound
-%rightbound
-ytemp = find(ybound>410 | ybound<310);
-xtemp = find(xbound<550);
-xtemp = intersect(xtemp, ytemp);
-lrightbound = max(xbound(xtemp)); %rightbound
-%topbound
-xtemp = find(xbound<520);
-ltopbound = max(ybound(xtemp)); %topbound
-%bottombound
-xtemp = find(xbound<520);
-lbottombound = min(ybound(xtemp)); %topbound
-%bounds on left arm: lleftbound, lrightbound, ltopbound, lbottombound
-
-%FOR RIGHT COLUMN
-rrightbound = max(xbound); %rightbound
-%leftbound
-ytemp = find(ybound>420 | ybound<320);
-xtemp = find(xbound>800);
-xtemp = intersect(xtemp, ytemp);
-rleftbound = min(xbound(xtemp)); %rightbound
-%topbound
-xtemp = find(xbound>740);
-rtopbound = max(ybound(xtemp)); %topbound
-%bottombound
-xtemp = find(xbound>740);
-rbottombound = min(ybound(xtemp)); %topbound
-%bounds on left arm: rleftbound, rrightbound, rtopbound, rbottombound
-
-%FOR MIDDLE
-%is between lrightbound and rleftbound
-xtemp = find(xbound>lrightbound & xbound<rrightbound);
-mtopbound = max(ybound(xtemp));
-mbottombound = min(ybound(xtemp));
-mleftbound = lrightbound;
-mrightbound = rleftbound;
-%bounds on bottom: mleftbound, mrightbound, mtopbound, mbottombound
-
-%BIN
-psize = 3.5 * dim;
-
-%want to make a vector of all the increments
-%LEFT ARM
-bottomvec = [];
-topvec = [];
-for lb = 0:floor((ltopbound-lbottombound)./psize)
-  bottomvec(end+1) = lbottombound+(lb*psize);
-  topvec(end+1) = lbottombound+((lb+1)*psize);
-end
-leftvectemp1 = ones((length(bottomvec)),1)*lleftbound;
-leftvectemp2 = ones((length(bottomvec)),1)*lrightbound;
-leftvect = [leftvectemp1, leftvectemp2, bottomvec', topvec']; %LEFT ARM
-
-%right ARM
-bottomvec = [];
-topvec = [];
-for rb = 0:floor((rtopbound-rbottombound)./psize)
-  bottomvec(end+1) = rbottombound+(rb*psize);
-  topvec(end+1) = rbottombound+((rb+1)*psize);
-end
-rightvectemp1 = ones((length(bottomvec)),1)*rleftbound;
-rightvectemp2 = ones((length(bottomvec)),1)*rrightbound;
-rightvect = [rightvectemp1, rightvectemp2, bottomvec', topvec']; %RIGHT ARM
-%MIDDLE ARM
-leftvec = [];
-rightvec = [];
-for rb = 0:floor((mrightbound-mleftbound)./psize)
-  leftvec(end+1) = mleftbound+(rb*psize);
-  rightvec(end+1) = mleftbound+((rb+1)*psize);
-end
-topvectemp1 = ones((length(leftvec)),1)*mtopbound;
-bottomvectemp2 = ones((length(leftvec)),1)*mbottombound;
-midvect = [leftvec', rightvec', bottomvectemp2, topvectemp1]; %MIDDLE ARM
-
-allvec = [leftvect; rightvect; midvect]; %dimesions are [n, 4]
+allvec = findlinearbounds(posData);
 
 xvals = posData(:,2);
 yvals = posData(:,3);
@@ -158,7 +59,7 @@ names = (fieldnames(fxmatrix));
 for k=1:length(names)
   curname = char(names(k));
   %fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
-  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
+  fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [2,2], 2, {}, {'replicate'}, 1);
 end
 
 maxprob = [];
@@ -208,8 +109,6 @@ for r=1:(length(SWRstart))
 
 
   %dont need to make sure the animal is moving bc ripple
-
-  %while tm < (floor(SWRend(r) - SWRstart(r))./tdecode)
 
    %find spikes in each cluster for time
    nivector = zeros((numclust),1);
@@ -288,13 +187,9 @@ for r=1:(length(SWRstart))
             maxy(end+1) = mean([allvec(maxval,3), allvec(maxval,4)]);
           end
 
-        if (currend+.02) <= SWRend(r)
-          newend = currend+.02;
-        elseif (currend+.15) <= SWRend(r)
-          newend = currend+.15
-        else
-          newend = currend+.02;
-        end
+
+          newend = currend+tdecode;
+
 
       end
 

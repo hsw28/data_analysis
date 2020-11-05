@@ -1,7 +1,7 @@
-Summary: fkRadon Toolbox
-Name: fkRadon
+Summary: fkReplay Toolbox
+Name: fkReplay
 Version: 0.1
-Release: 3
+Release: 2
 License: GPL
 Group: MWL
 Prefix: /opt/matlabR14
@@ -53,7 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 
 #make directory and copy everything over
 mkdir -p $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}
-cp -rf $RPM_BUILD_DIR/fkRadon/* $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}
+cp -rf $RPM_BUILD_DIR/fkReplay/* $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}
 
 #make help directory and copy help files over, remove original help directory
 mkdir -p $RPM_BUILD_ROOT/opt/matlabR14/help/toolbox/%{name}
@@ -61,17 +61,17 @@ mv -f $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/html/* $RPM_BUILD_ROOT/opt/m
 rm -rf $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/html
 
 #change help file location in info.xml
-sed -i -e "s/\(<help_location>\).*\(<\/help_location>\)/\1\$docroot\/toolbox\/fkRadon\2/" $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/info.xml
+sed -i -e "s/\(<help_location>\).*\(<\/help_location>\)/\1\$docroot\/toolbox\/fkReplay\2/" $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/info.xml
 
 #change start menu item to use doc instead of help
-sed -i -e "s/help\( fkRadon\)/doc\1/" $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/info.xml
+sed -i -e "s/help\( fkReplay\)/doc\1/" $RPM_BUILD_ROOT/opt/matlabR14/toolbox/%{name}/info.xml
 
 
 #### POST-INSTALL
 %post
 if [ "$1" = "1" ] ; then  # first install
 #  cp /opt/matlabR14/toolbox/local/pathdef.m /opt/matlabR14/toolbox/local/pathdef.m.backup
-  sed -i -e "s/[ ]\{4,\}[.]\{3\}/matlabroot,'\/toolbox\/fkRadon:',...\n     .../g" $RPM_INSTALL_PREFIX/toolbox/local/pathdef.m
+  sed -i -e "s/[ ]\{4,\}[.]\{3\}/matlabroot,'\/toolbox\/fkReplay:',...\n     .../g" $RPM_INSTALL_PREFIX/toolbox/local/pathdef.m
 fi
 
 
@@ -82,7 +82,7 @@ fi
 #### POST-UNINSTALL
 %postun
 if [ "$1" = "0" ] ; then  # last uninstall
-  sed -i -e "/fkRadon/d" $RPM_INSTALL_PREFIX/toolbox/local/pathdef.m
+  sed -i -e "/fkReplay/d" $RPM_INSTALL_PREFIX/toolbox/local/pathdef.m
 fi
 
 %clean

@@ -102,7 +102,7 @@ f = [rank1, rank2];
 %pval = stats.Coefficients.pValue(2)
 
 
-%scatter(x, y);
+scatter(x, y);
 [rho,pval] = corr(x,y, 'Type','Spearman')
 str1 = {'Spearmans rho' rho, 'P value' pval};
 %[rho,pval] = corr(x,y,'Type','Kendall')

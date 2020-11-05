@@ -1,21 +1,21 @@
-function f = POSdecodeSWRsegments(SWRstartend, pos, clusters, dim, tdecode, varargin)
+function z = POSdecodeSWRsegments(SWRstartend, pos, clusters, dim, tdecode, varargin)
 %decodes position in each SWR seperately. input the output for findripMUA.m
 %if inputting in only peak time, use varargin to specify seconds around peak time
 
 %%%%%%FILL IN
 
-if size(SWRstartend,1)>size(SWRstartend,2)
-  SWRstartend = SWRstartend';
-end
+%if size(SWRstartend,1)>size(SWRstartend,2)
+%  SWRstartend = SWRstartend';
+%end
 
-if size(SWRstartend,1)==3 %means you're inputting start and end times
+%if size(SWRstartend,1)==3 %means you're inputting start and end times
   SWRstart = SWRstartend(1,:);
   SWRend = SWRstartend(3,:);
-elseif size(SWRstartend,1)==1 %means you're just putting in mid time
-  timeshift = cell2mat(varargin);
-  SWRstart = SWRstartend-timeshift;
-  SWRend = SWRstartend+timeshift;
-end
+%elseif size(SWRstartend,1)==1 %means you're just putting in mid time
+%  timeshift = cell2mat(varargin);
+%  SWRstart = SWRstartend-timeshift;
+%  SWRend = SWRstartend+timeshift;
+%end
 
 posData = pos;
 %timevector = time;
@@ -45,8 +45,9 @@ xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each incre
 yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increment
 
 
-% for each cluster,find the firing rate at esch velocity range
+% for each cluster,find the firing rate at esch pos range
 fxmatrix = firingPerPos(pos, clusters, dim, tdecode);
+z = fxmatrix;
 %outputs a structure of rates
 
 maxprob = [];

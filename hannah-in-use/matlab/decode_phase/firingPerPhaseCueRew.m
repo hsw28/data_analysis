@@ -11,14 +11,19 @@ foodEnd = foodOn+8;
 cueOnindex=[];
 foodOnindex=[];
 foodEndindex=[];
+cueOnnum = [];
+foodOnnum = [];
 for k=1:length(cueOn)
-    [c cueindex] = min(abs(time-cueOn(k)));
-    [c foodindex] = min(abs(time-foodOn(k)));
+    [cuenum cueindex] = min(abs(time-cueOn(k)));
+    [foodnum foodindex] = min(abs(time-foodOn(k)));
     [c endindex] = min(abs(time-foodEnd(k)));
     cueOnindex(end+1) = cueindex;
+    cueOnnum(end+1) = time(cueindex);
     foodOnindex(end+1) = foodindex;
+    foodOnnum(end+1) = time(foodindex);
     foodEndindex(end+1) = endindex;
 end
+
 
 
 %t is the number of seconds you want to divide cue and reward INTO
@@ -37,17 +42,23 @@ while k <=segments
 	spikesegmentRew = 0;
 	while j <=length(cueOnindex)
 
-    
-		currentCueTime = time(cueOnindex(j)+(interval*(k-1)):(cueOnindex(j)+(interval*k)));
-		currentRewTime = time(foodOnindex(j)+(interval*(k-1)):(foodOnindex(j)+(interval*k)));
-		spikesCue = intersect(currentCueTime, spike);
-		spikesRew = intersect(currentRewTime, spike);
+    spikesCue1 = find(spike>(cueOnnum(j)+t*(k-1)));
+    spikesCue2 = find(spike<(cueOnnum(j)+t*(k)));
+    spikesCue = intersect(spikesCue1, spikesCue2);
+    spikesRew = (find(spike>(foodOnnum(j)+t*(k-1)) & spike<(foodOnnum(j)+t*(k))));
+		%currentCueTime = time(cueOnindex(j)+(interval*(k-1)):(cueOnindex(j)+(interval*k)));
+		%currentRewTime = time(foodOnindex(j)+(interval*(k-1)):(foodOnindex(j)+(interval*k)));
+		%spikesCue = intersect(currentCueTime, spike);
+		%spikesRew = intersect(currentRewTime, spike);
 		spikesegmentCue = spikesegmentCue+length(spikesCue);
 		spikesegmentRew = spikesegmentRew+length(spikesRew);
 		j = j+1;
 	end
-	cueRates(1,k) = spikesegmentCue./(t*length(cueOn));
-	rewRates(1,k) = spikesegmentRew./(t*length(cueOn));
+  spikesegmentCue;
+  spikesegmentRew;
+  (t*length(cueOnindex));
+	cueRates(1,k) = spikesegmentCue./(t*length(cueOnindex))+eps;
+	rewRates(1,k) = spikesegmentRew./(t*length(cueOnindex))+eps;
 	k = k+1;
 end
 

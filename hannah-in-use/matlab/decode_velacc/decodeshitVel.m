@@ -180,19 +180,18 @@ while tm <= length(timevector)-(rem(length(timevector), tdecode)) & (tm+tdecode)
           c = 1;
 
           while c <= numclust
-              size(numclust);
+
               name = char(clustname(c));
               ni = find(clusters.(name)>timevector(tm) & clusters.(name)<=timevector(tm+tdecode)); % finds index (number) of spikes in range time
               fx = (fxmatrix(c, k));  %should be the rate for cell c at vel k.
 
-              if fx ~= 0
-                productme = productme + length(ni)*log(fx);  %IN
-              else
-                fx = .00000000000000000000001;
-                productme = productme + length(ni)*log(fx);
-              end
-              %fxni = (fx^length(ni)); OLD
-              %productme = productme*fxni; OLD
+  %            if fx ~= 0
+  %              productme = productme + length(ni)*log(fx);  %IN
+  %            else
+  %              fx = .00000000000000000000001;
+  %              productme = productme + length(ni)*log(fx);
+  %            end
+
 
                productme = (productme + length(ni)*log(fx));
               %productme = productme + log((fx^length(ni)));

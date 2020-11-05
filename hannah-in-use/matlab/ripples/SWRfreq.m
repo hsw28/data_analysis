@@ -26,4 +26,4 @@ for k=1:length(ripplematrix)
 
 end
 
-f = total_ripav_freq;
+f = total_ripav_freq';

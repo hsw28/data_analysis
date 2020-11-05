@@ -50,11 +50,13 @@ ybins = ceil((ymax-ymin)/psize); %number of y
 
 %only uses data that is >15cm/s -- first smooths for length of bin
 vel = velocity(posData);
-size(vel)
+
+posData = fixpos(posData);
+
 vel(1,:) = smoothdata(vel(1,:), 'gaussian', pos_samp_per_sec); %originally had this at 30, trying with 15 now
-size(vel)
+
 fastvel = find(vel(1,:) > velthreshold);
-fastvel(end)
+
 %posData = fixpos(posData);
 size(posData)
 posDataFast = posData(fastvel, :);
