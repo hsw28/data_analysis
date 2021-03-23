@@ -71,7 +71,15 @@ for i = 1:xbins
 end
 
 
+
+events = imgaussfilt(events);
 rate = events./(time*tstep); %time*tstep is occupancy
+
+%[x,y] = find(isinf(rate)==1);
+rate(isinf(rate)) = NaN;
+
+
+
 
 totspikes = events;
 totstime = (time*tstep);
@@ -82,7 +90,7 @@ totstime = (time*tstep);
 %heat map stuff
 %figure
 
-%{
+
 [nr,nc] = size(rate);
 colormap('parula');
 %lower and higher three percent of firing sets bounds
@@ -99,4 +107,3 @@ if minratefive ~= maxratefive
 		set(gca, 'clim', [minratefive*1.5, maxratefive*.75]);
 end
 colorbar;
-%}

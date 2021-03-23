@@ -1,5 +1,6 @@
-function f = raster(spiketrain, starttime, endtime)
+function f = raster(spiketrain_of_times, starttime, endtime)
 
+spiketrain = spiketrain_of_times;
 % Create a figure with axes
 ax = gca;
 
@@ -8,8 +9,8 @@ ax = gca;
 oldunits = get(ax,'Units');
 set(ax,'Units','Pixels');
 pos = get(ax,'Position')
-%xpixels = floor(pos(3));               % Number of pixels on x axes
-xpixels = (endtime-starttime)*70;
+xpixels = floor(pos(3));               % Number of pixels on x axes
+%xpixels = (endtime-starttime)*70;
 ypixels = floor(pos(4));               % Number of pixels on y axes
 set(ax,'Units',oldunits)
 % need to input number of clusters/tetrodes/MUA channels to be drawn as
@@ -55,6 +56,7 @@ for ii = 1:nrasters
 end
 
 % Draw the image on axes
+
 image('Xdata',xvector,'YData',0:nrasters+1,'CData',RGBgrid,'Parent',ax);
 % Adjust image to occupy entire axes area
 set(ax,'xlim',twin,'ylim',[0 nrasters+1])

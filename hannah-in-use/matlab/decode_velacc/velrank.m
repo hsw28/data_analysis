@@ -201,13 +201,15 @@ end
 
 
 if all>1000
-  ceil(all*.001);
-  low = find(linearnum<=ceil(all*.001));
+
+  low = find(linearnum<=ceil(all*.005));
   linearmean(low) = NaN;
 else
-  low = find(linearnum<2);
+  low = find(linearnum<=2);
   linearmean(low) = NaN;
 end
+
+length(linearmean)-length(low)
 
 %  linearmean(low) = NaN;
   [avs,idx] = sort(linearmean);

@@ -25,7 +25,7 @@ for k = 0:numclust
 
   else
 
-  ridname = clustname(k)
+  ridname = clustname(k);
 
   newclusts = rmfield(clusters,char(ridname));
 
@@ -49,12 +49,12 @@ for k = 0:numclust
   error_lin_av = nanmean(error(1,:));
   error_lin_med = nanmedian(error(1,:));
 
-  [ranks pval]= velrankresults(pos4rank, vel4rank, decoded, vel4rank, 8, 8, 12, 0, 0, bounds);
+  [ranks pval]= velrankresults(pos4rank, vel4rank, decoded, vel4rank, dim, dim, 12, 0, 0, bounds);
 
-  numpoint = length(ranks)
+  numpoint = length(ranks);
 
   if length(cell2mat(varargin))>1
-  [ranks pvalvel]= velrankresults(pos4rank, vel4rank, decoded, cell2mat(varargin), 8, 8, 12, 0, 0, bounds);
+  [ranks pvalvel]= velrankresults(pos4rank, vel4rank, decoded, cell2mat(varargin), dim, dim, 12, 0, 0, bounds);
   newdata = {ridname; error_av; error_med; error_lin_av; error_lin_med; pval; numpoint; pvalvel};
   output = horzcat(output, newdata);
   else

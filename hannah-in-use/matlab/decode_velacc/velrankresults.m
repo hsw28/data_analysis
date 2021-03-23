@@ -103,7 +103,7 @@ f = [rank1, rank2];
 
 
 scatter(x, y);
-[rho,pval] = corr(x,y, 'Type','Spearman')
+[rho,pval] = corr(x,y, 'Type','Spearman');
 str1 = {'Spearmans rho' rho, 'P value' pval};
 %[rho,pval] = corr(x,y,'Type','Kendall')
 %str2 = {'Kendalls rho' rho, 'P value' pval};

@@ -1,4 +1,4 @@
-function f = decodeshitPos(time, pos, clusters, tdecode, dim)
+function f = decodeshitPos(timee, pos, clusters, tdecode, dim)
 %decodes position and outputs decoded x, y, confidence(in percents), and time.
 %if you want to filter spiking for veloctity you put velocity in varargin
 %dim is bin sie in cm
@@ -11,10 +11,19 @@ posData = pos;
 posData = fixpos(posData);
 
 
-[cc indexmin] = min(abs(posData(1,1)-time));
-[cc indexmax] = min(abs(posData(end,1)-time));
-timevector = time(indexmin:indexmax);
-time = timevector;
+
+[cc indexmin] = min(abs(posData(1,1)-timee));
+[cc indexmax] = min(abs(posData(end,1)-timee));
+decodetimevector = timee(indexmin:indexmax);
+if length(decodetimevector)<10
+  timevector = timee;
+else
+  timevector = decodetimevector;
+end
+
+
+
+
 
 
 
