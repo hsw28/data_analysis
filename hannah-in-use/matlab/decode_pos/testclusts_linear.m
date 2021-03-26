@@ -10,7 +10,7 @@ numclust = length(clustname);
 clustlist = [1:1:numclust];
 
 if length(cell2mat(varargin))>1
-output = {'cluster name'; 'mean'; 'median'; 'linear_mean'; 'linear_median'; 'rank'; 'num'; 'p w ranked vel'};
+output = {'cluster name'; 'mean'; 'median'; 'linear_mean'; 'linear_median'; 'rank'; 'num'; 'p w ranked vel'; 'mean confidence'; 'med confidence'};
 else
 output = {'cluster name'; 'mean'; 'median'; 'linear_mean'; 'linear_median'; 'rank'; 'num'};
 end
@@ -21,7 +21,8 @@ for k = 0:numclust
   if k == 0
   ridname = 'none'
   [decoded bounds] = decodeshitPos_linear(time, pos, clusters, tdecode, dim);
-
+  meancon = nanmean(decoded(3,:));
+  medcon = nanmedian(decoded(3,:));
 
   else
 
@@ -36,6 +37,8 @@ for k = 0:numclust
   %
 
   [decoded bounds] = decodeshitPos_linear(time, pos, newclusts, tdecode, dim);
+  meancon = nanmean(decoded(3,:));
+  medcon = nanmedian(decoded(3,:));
 
   end
 
@@ -55,7 +58,7 @@ for k = 0:numclust
 
   if length(cell2mat(varargin))>1
   [ranks pvalvel]= velrankresults(pos4rank, vel4rank, decoded, cell2mat(varargin), dim, dim, 12, 0, 0, bounds);
-  newdata = {ridname; error_av; error_med; error_lin_av; error_lin_med; pval; numpoint; pvalvel};
+  newdata = {ridname; error_av; error_med; error_lin_av; error_lin_med; pval; numpoint; pvalvel; meancon; medcon};
   output = horzcat(output, newdata);
   else
   newdata = {ridname; error_av; error_med; error_lin_av; error_lin_med; pval; numpoint};

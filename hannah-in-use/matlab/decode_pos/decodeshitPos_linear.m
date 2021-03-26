@@ -111,10 +111,29 @@ for k=1:length(names)
   curname = char(names(k));
   %fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
   fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
+
+  currclust = clusters.(curname);
+  intime = find(currclust>=(time(1)) & currclust<=time(end));
+  clusters.(curname) = currclust(intime);
+
+  if tdecodesec>=.5 %FOR TRAIN
+      [clusttrain edges] = histcounts(clusters.(curname), [timevector(1):.5:timevector(end)]); %FOR TRAIN
+      train.(curname) = clusttrain; %FOR TRAIN
+      train.(curname) = smoothdata(clusttrain,'gaussian', 3); %3 is 1.5 seconds for a 1 second window
+
+  else
+      clusttrain = histcounts(clusters.(curname), [timevector(1):.5:timevector(end)]); %FOR TRAIN
+      train.(curname) = smoothdata(clusttrain,'gaussian', 3); %3 is 1.5 seconds for a 1 second window
+
+  end
+
+
   current = fxmatrix.(curname);
   current(isnan(current)) = eps;
   fxmatrix.(curname) = current;
 end
+
+
 maxprob = [];
 spikenum = 1;
 times = [];
@@ -138,17 +157,31 @@ occ;
 n =0;
 nivector = zeros((numclust),1);
 tm = 1;
+
+trainnum = 1;
+
+timevector = [timevector(1):1/2000:timevector(end)]; %FOR TRAIN
 while tm < (length(timevector)-t)
+
   goodvel = find(vel(2,:)>=timevector(tm) & vel(2,:)<timevector(tm+t));
 %  if nanmean((vel(1,goodvel)))>velthreshold & nanmedian((vel(1,goodvel)))>velthreshold
+
   if length(find(vel(1,goodvel)>velthreshold)) >= length(goodvel)*.75
+
    %find spikes in each cluster for time
    nivector = zeros((numclust),1);
+   nivectortest = zeros((numclust),1);
    for c=1:numclust   %permute through cluster
      name = char(clustname(c));
      %find number of cells that fire during each period
      nivector(c) = length(find(clusters.(name)>=timevector(tm) & clusters.(name)<timevector(tm+t)));
+
+     %%%%%%NEWWWWWWWW%%%%%%%%%%%%
+     curtrain = train.(name); %FOR TRAIN
+     nivector(c) = (curtrain(trainnum)+curtrain(trainnum+1)); %FOR TRAIN
    end
+
+
       %for the cluster, permute through the different positions
     endprob = zeros(length(allvec),1);
       for xy = (1:size(allvec,1)) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
@@ -199,18 +232,24 @@ while tm < (length(timevector)-t)
       maxy(end+1) = NaN;
       percents(end+1) = NaN;
     end
+
         times(end+1) = timevector(tm);
     %if want overlap
     if tdecodesec>=.5
       tm = tm+(t/2);
+      trainnum = trainnum +1;
     else
       tm = tm+t;
+      trainnum = trainnum +1;
     end
+
     n = n+1;
     if rem(n,5000)==0
-      n
+      n;
     end
 end
+
+
 warning('your probabilities were the same')
 same = same
 %maxx = maxx+psize/2;
