@@ -115,12 +115,13 @@ timesforvel = timesforvel';
 
 
 all = 0;
-
-
+varargin = cell2mat(varargin);
+varargin
 %putting in approx values here for now, just want them to always be same i think
-if length(varargin)>1 %linear decoding
-    bounds = varargin{:};
-    bounds = cell2mat(bounds);
+if length(varargin)>1
+    fprintf('THIS MEANS LINEAR')
+    bounds = varargin;
+    %bounds = cell2mat(bounds);
     xbins = length(bounds);
     ybins = length(bounds);
     for xy = (1:length(bounds)) %WANT TO PERMUTE THROUGH EACH SQUARE OF SPACE SKIPPING NON OCCUPIED SQUARES. SO EACH BIN SHOULD HAVE TWO COORDINATES
@@ -144,7 +145,9 @@ if length(varargin)>1 %linear decoding
 
 linearmean = averagecells;
 linearnum = numincells;
+
 else
+  fprintf('THIS MEANS NOT LINEAR')
   %nonlinear
 xmin = 360;
 ymin = 70;

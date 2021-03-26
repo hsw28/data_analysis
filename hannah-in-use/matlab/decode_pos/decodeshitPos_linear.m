@@ -111,6 +111,9 @@ for k=1:length(names)
   curname = char(names(k));
   %fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
   fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
+  current = fxmatrix.(curname);
+  current(isnan(current)) = eps;
+  fxmatrix.(curname) = current;
 end
 maxprob = [];
 spikenum = 1;

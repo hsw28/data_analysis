@@ -136,10 +136,14 @@ while j <= numclust
     name = char(clustname(j));
     firingdata = clusters.(name);
     fxmatrix(j,:) = firingPerVel(asstime, assvel, clusters.(name), tsec, vbin, avg_accel);
+    dontwant = isnan(fxmatrix(j,:));
+    fxmatrix(j,dontwant) = eps;
     %fxmatrix(j,:) = smoothdata(fxmatrix(j,:), 'gausswin')
 
     j = j+1;
 end
+
+
 
 fxmatrix;
 

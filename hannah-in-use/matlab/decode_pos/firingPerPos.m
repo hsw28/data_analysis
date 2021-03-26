@@ -38,6 +38,9 @@ ymax = max(posData(:,3));
 
 xbins = ceil((xmax-xmin)/psize); %number of x
 ybins = ceil((ymax-ymin)/psize); %number of y
+if ybins==0
+  ybins = 1;
+end
   timecells = zeros(xbins, ybins); %used to be time
   events = zeros(xbins,ybins);
   xstep = xmax/xbins;

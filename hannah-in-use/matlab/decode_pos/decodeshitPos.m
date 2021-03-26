@@ -1,14 +1,15 @@
-function f = decodeshitPos(timee, pos, clusters, tdecode, dim)
+function f = decodeshitPos(timee, pos, clusters, tdecode, dim, varargin)
 %decodes position and outputs decoded x, y, confidence(in percents), and time.
-%if you want to filter spiking for veloctity you put velocity in varargin
 %dim is bin sie in cm
 %tdecode is decoding in seconds
+%auto detects of REM based on time input
 
-velthreshold = 12;
+velthreshold = 10;
 
 tic
 posData = pos;
 posData = fixpos(posData);
+
 
 
 
@@ -50,6 +51,9 @@ xmax = max(posData(:,2));
 ymax = max(posData(:,3));
 xbins = ceil((xmax-xmin)/psize); %number of x
 ybins = ceil((ymax-ymin)/psize); %number of y
+if ybins ==0
+  ybins = 1;
+end
 
 
 xinc = xmin +(0:xbins)*psize; %makes a vectors of all the x values at each increment
@@ -61,9 +65,18 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 fxmatrix = firingPerPos(posData, clusters, dim, tdecodesec, 30, velthreshold);
 names = (fieldnames(fxmatrix));
 for k=1:length(names)
-  curname = char(names(k))
+  curname = char(names(k));
+
+  if size(fxmatrix.(curname),2)>1
   fxmatrix.(curname) = chartinterp(fxmatrix.(curname));
   fxmatrix.(curname) = ndnanfilter(fxmatrix.(curname), 'gausswin', [dim*2/dim, dim*2/dim], 2, {}, {'replicate'}, 1);
+
+  end
+
+  current = fxmatrix.(curname);
+  current(isnan(current)) = eps;
+  fxmatrix.(curname) = current;
+
 
 end
 
@@ -106,7 +119,7 @@ for x = (1:xbins)
     end
 end
 end
-occ;
+
 
 
 n =0;
@@ -157,6 +170,9 @@ while tm < (length(timevector)-t)
         endprob(x, y) = (productme) + (-tmm.*expme); %IN
         end
         end
+
+
+
         [maxvalx, maxvaly] = find(endprob == max(endprob(:)));
 
         mp = max(endprob(:))-12;

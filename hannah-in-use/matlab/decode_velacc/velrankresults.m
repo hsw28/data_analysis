@@ -36,14 +36,24 @@ end
     vel1 = vel1(:,vel1(1,:)>velthreshold);
     size(vel1);
     if REM_YorN == 0
-      assvel = assignvelOLD(vel2(2,:), vel1OLD);
-      goodvel = find(assvel>velthreshold);
-      vel2 = vel2(:,goodvel);
+      vel2 = vel2(:,vel2(1,:)>velthreshold);
+
+      %assvel = assignvelOLD(vel2(2,:), vel1OLD);
+      %goodvel = find(assvel>velthreshold);
+      %vel2 = vel2(:,goodvel);
     end
   end
 
-rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold, varargin);
-rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold, varargin);
+bounded = cell2mat(varargin);
+
+if length(bounded)>1
+
+rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold, bounded);
+rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold, bounded);
+else
+  rank1 = velrank(pos1, vel1, dimX, dimY, confidencethreshold);
+  rank2 = velrank(pos2, vel2, dimX, dimY, confidencethreshold);
+end
 
 
 rank1.order = sortrows(rank1.order, 2);
