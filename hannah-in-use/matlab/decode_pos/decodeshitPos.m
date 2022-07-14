@@ -61,7 +61,7 @@ yinc = ymin +(0:ybins)*psize; %makes a vector of all the y values at each increm
 
 
 
-% for each cluster,find the firing rate at esch velocity range
+% for each cluster,find the firing rate at esch position 
 fxmatrix = firingPerPos(posData, clusters, dim, tdecodesec, 30, velthreshold);
 names = (fieldnames(fxmatrix));
 for k=1:length(names)
