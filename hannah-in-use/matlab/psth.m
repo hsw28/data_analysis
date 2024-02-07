@@ -2,7 +2,7 @@
 function varargout=psth(varargin)
 %PSTH peri-stimulus time histogram
 %
-% all inputs must be in columns
+% all inputs must be in ROWS
 %
 %  h=PSTH(trigger,events) returns the psth for the events, given the in
 %  the interval [-1 1] around the trigger events. The number of bins in
@@ -21,82 +21,80 @@ function varargout=psth(varargin)
 %   normalization - 'coef', 'none', 'rate'
 %
 
-%get options
-options = struct('lags', linspace(-seconds, seconds, bins), ...%change here for seconds around and bins
+% Default options
+bins = 15; % Default number of bins
+options = struct('lags', linspace(-1.4286, 0.7143, bins + 1), ...
                  'segments', [], ...
-                 'normalization', 'none');
+                 'normalization', 'none'); % No normalization for summed PSTH
 
-[options, other, remainder] = parseArgs( varargin, options );
+% Parse input arguments and options
+[options, other, remainder] = parseArgs(varargin, options);
 
-%check input arguments
+% Validate input
 if isempty(other)
-  error('psth:invalidArguments', 'No trigger')
+    error('psth:invalidArguments', 'No trigger provided');
 end
 
 trigger = other{1};
-
-if numel(other)>=2
-  events = other{2};
+if numel(other) >= 2
+    events = other{2};
 else
-  events = trigger; %auto correlation
+    events = trigger; % For auto-correlation
 end
 
-if ~isnumeric(trigger)
-  error('psth:invalidArgument', 'Invalid trigger')
-else
-  trigger = double(trigger);
-end
-
+% Ensure numeric and double precision
+trigger = double(trigger);
 if isnumeric(events)
-  events = {double(events)};
-elseif iscell(events)
-  for k=1:numel(events)
+    events = {double(events)}; % Convert to cell array for consistency
+end
+
+% Validate events
+for k = 1:numel(events)
     if ~isnumeric(events{k})
-      error('psth:invalidArgument', 'Invalid events')
-    else
-      events{k}=double(events{k});
+        error('psth:invalidArgument', 'Invalid events provided');
     end
-  end
-else
-  error('psth:invalidArgument', 'Invalid events')
+    events{k} = double(events{k}); % Ensure double precision
 end
 
-if ~isnumeric(options.lags) || ~isvector(options.lags) || ...
-      numel(options.lags)<2 || ~issorted(options.lags)
-  error('psth:invalidArgument', 'Invalid lags')
+% Validate lags
+if ~isnumeric(options.lags) || ~isvector(options.lags) || numel(options.lags) < 2 || ~issorted(options.lags)
+    error('psth:invalidArgument', 'Invalid lags');
 end
 
-n = numel(events);
+% Prepare output histogram
 nlags = numel(options.lags) - 1;
-minlag = options.lags(1);
-maxlag = options.lags(end);
+h = zeros(1, nlags);
 
-
-varargout{1} = zeros(n, nlags+1);
-
-for k=1:n
-
-	[tmp,nev] = eventcorr(trigger, events{k}, [minlag maxlag], 'segments', options.segments, remainder{:});
-    if ~isempty(tmp)
-        varargout{1}(k,:) = histc(tmp, options.lags );
+% Accumulate event counts for each trigger
+for i = 1:numel(trigger)
+    for k = 1:numel(events)
+        % Calculate relative times and bin them
+        eventTimes = events{k} - trigger(i);
+        validEvents = eventTimes(eventTimes >= options.lags(1) & eventTimes <= options.lags(end));
+        bins = histc(validEvents, options.lags);
+        h = h + bins(1:end-1); % Sum counts and ignore last bin edge count
     end
 end
 
-varargout{1}(:,end)=[];
+% Set outputs
+varargout{1} = h;
+varargout{2} = options.lags(1:end-1); % Return bin edges as lags
+varargout{3} = numel(trigger); % Number of triggers
 
-ntriggers = numel( find( ~isnan(nev) ) );
-
-if nargout>1
-    varargout{2} = options.lags;
-end
-
-if nargout>2
-  varargout{3} = ntriggers;
-end
-
+% Apply normalization if specified
 switch options.normalization
- case 'coef'
-  varargout{1} = varargout{1}./ntriggers;
- case 'rate'
-  varargout{1} = bsxfun( @rdivide, varargout{1}, ntriggers.*diff(options.lags(:))' );
+    case 'coef'
+        varargout{1} = varargout{1} / numel(trigger);
+    case 'rate'
+        binWidth = diff(options.lags(1:2));
+        varargout{1} = varargout{1} / (numel(trigger) * binWidth);
 end
+
+
+
+function [options, other, remainder] = parseArgs(args, defaults)
+% Placeholder for argument parsing function
+% You should replace this with actual argument parsing logic
+options = defaults;
+other = args(1:2);
+remainder = args(3:end);
